@@ -30,28 +30,33 @@
 </div>
 
 <script>
-    // วางลิงก์ CSV จาก Google Sheets ของคุณตรงนี้
+    // ใช้ลิงก์เดิมของคุณ
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y/gviz/tq?tqx=out:csv';
 
     async function loadDeals() {
         try {
             const response = await fetch(SHEET_URL);
             const data = await response.text();
-            const rows = data.split('\n').slice(1); // ข้ามแถวหัวข้อ
+            
+            // แยกแถวโดยรองรับทั้ง \n และ \r
+            const rows = data.split(/\r?\n/).slice(1); 
             const container = document.getElementById('product-container');
             document.getElementById('loading').style.display = 'none';
+            container.innerHTML = ''; // ล้างค่าว่างก่อนเติมข้อมูล
 
             rows.forEach(row => {
-                const cols = row.split(',');
-                if (cols.length >= 4) {
+                // แยกคอลัมน์และลบเครื่องหมายคำพูด (") ที่หัว-ท้ายออก
+                const cols = row.split(',').map(item => item.replace(/^"|"$/g, '').trim());
+                
+                if (cols.length >= 4 && cols[0] !== "") {
                     const html = `
                         <div class="deal-card">
                             <div class="deal-badge">${cols[4] || 'HOT'}</div>
-                            <img class="deal-img" src="${cols[1]}">
+                            <img class="deal-img" src="${cols[1]}" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
                             <div class="deal-info">
                                 <h3 class="deal-title">${cols[0]}</h3>
                                 <div class="deal-price">฿${cols[2]}</div>
-                                <a href="${cols[3]}" class="btn-deal" target="_blank">สั่งซื้อ</a>
+                                <a href="${cols[3]}" class="btn-deal" target="_blank" rel="noopener noreferrer">สั่งซื้อ</a>
                             </div>
                         </div>
                     `;
@@ -60,11 +65,9 @@
             });
         } catch (error) {
             console.error('Error:', error);
-            document.getElementById('loading').innerText = 'ไม่สามารถโหลดข้อมูลได้';
+            document.getElementById('loading').innerText = 'ไม่สามารถโหลดข้อมูลได้ หรือสิทธิ์การเข้าถึงถูกจำกัด';
         }
     }
     loadDeals();
 </script>
 
-</body>
-</html>
