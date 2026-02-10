@@ -21,6 +21,38 @@
         #loading { text-align: center; padding: 50px; color: var(--dark); }
     </style>
 </head>
+    <div class="category-filter" id="category-menu">
+    <button class="cat-btn active" onclick="filterProduct('all')">ทั้งหมด</button>
+    </div>
+
+<style>
+    .category-filter { 
+        display: flex; 
+        gap: 10px; 
+        padding: 10px 15px; 
+        overflow-x: auto; 
+        background: white;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    .cat-btn {
+        background: #eee;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-family: 'Kanit', sans-serif;
+        font-size: 13px;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+    .cat-btn.active {
+        background: var(--gold);
+        color: var(--dark);
+        font-weight: 500;
+    }
+</style>
+
 <body>
 
 <div class="app-container">
