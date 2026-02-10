@@ -6,100 +6,147 @@
     <title>Phaendin | Auto Deals</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --dark: #1a1a1a; --cream: #fdfbf7; }
+        :root { --gold: #d4af37; --dark: #1a1a1a; --cream: #fdfbf7; --gray: #333; }
         body { font-family: 'Kanit', sans-serif; background-color: var(--cream); margin: 0; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 480px; background: white; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 480px; background: white; min-height: 100vh; position: relative; }
+        
         header { background: var(--dark); padding: 25px 15px; text-align: center; color: var(--gold); }
+        header h1 { margin: 0; font-weight: 600; letter-spacing: 2px; }
+        header p { margin: 5px 0 0 0; font-size: 10px; opacity: 0.8; }
+
+        /* ส่วนของหมวดหมู่ */
+        .category-container { 
+            display: flex; 
+            gap: 10px; 
+            padding: 15px; 
+            overflow-x: auto; 
+            background: white; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            border-bottom: 1px solid #eee;
+        }
+        .category-container::-webkit-scrollbar { display: none; } /* ซ่อนแถบเลื่อน */
+        
+        .cat-btn {
+            background: var(--dark);
+            color: #fff;
+            border: 1px solid var(--gold);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .cat-btn.active {
+            background: var(--gold);
+            color: var(--dark);
+            font-weight: 600;
+        }
+
         .deal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
         .deal-card { background: var(--dark); border: 1px solid var(--gold); border-radius: 12px; overflow: hidden; position: relative; display: flex; flex-direction: column; }
-        .deal-badge { position: absolute; top: 0; left: 0; background: var(--gold); color: var(--dark); font-size: 9px; font-weight: 600; padding: 2px 8px; border-bottom-right-radius: 8px; }
+        .deal-badge { position: absolute; top: 0; left: 0; background: var(--gold); color: var(--dark); font-size: 9px; font-weight: 600; padding: 2px 8px; border-bottom-right-radius: 8px; z-index: 1; }
         .deal-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
         .deal-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .deal-title { font-size: 12px; color: #eee; margin: 0 0 5px 0; height: 32px; overflow: hidden; }
+        .deal-title { font-size: 12px; color: #eee; margin: 0 0 5px 0; height: 32px; overflow: hidden; line-height: 1.4; }
         .deal-price { color: var(--gold); font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-        .btn-deal { background: var(--gold); color: var(--dark); text-decoration: none; text-align: center; padding: 7px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-        #loading { text-align: center; padding: 50px; color: var(--dark); }
+        .btn-deal { background: var(--gold); color: var(--dark); text-decoration: none; text-align: center; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 600; transition: 0.2s; }
+        .btn-deal:active { transform: scale(0.95); }
+        
+        #loading { text-align: center; padding: 50px; color: var(--dark); font-size: 14px; }
     </style>
 </head>
-    <div class="category-filter" id="category-menu">
-    <button class="cat-btn active" onclick="filterProduct('all')">ทั้งหมด</button>
-    </div>
-
-<style>
-    .category-filter { 
-        display: flex; 
-        gap: 10px; 
-        padding: 10px 15px; 
-        overflow-x: auto; 
-        background: white;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-    }
-    .cat-btn {
-        background: #eee;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-family: 'Kanit', sans-serif;
-        font-size: 13px;
-        white-space: nowrap;
-        cursor: pointer;
-    }
-    .cat-btn.active {
-        background: var(--gold);
-        color: var(--dark);
-        font-weight: 500;
-    }
-</style>
-
 <body>
 
 <div class="app-container">
     <header><h1>PHAENDIN</h1><p>THE ART OF SELECTION</p></header>
-    <div id="loading">กำลังดึงดีลเด็ดล่าสุด...</div>
+    
+    <div class="category-container" id="category-menu">
+        <button class="cat-btn active" onclick="filterProduct('all', this)">ทั้งหมด</button>
+    </div>
+
+    <div id="loading">กำลังดึงข้อมูลล่าสุด...</div>
     <div class="deal-grid" id="product-container"></div>
 </div>
 
 <script>
-    // ใช้ลิงก์เดิมของคุณ
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y/gviz/tq?tqx=out:csv';
+    let allProducts = [];
 
     async function loadDeals() {
         try {
             const response = await fetch(SHEET_URL);
             const data = await response.text();
             
-            // แยกแถวโดยรองรับทั้ง \n และ \r
-            const rows = data.split(/\r?\n/).slice(1); 
-            const container = document.getElementById('product-container');
-            document.getElementById('loading').style.display = 'none';
-            container.innerHTML = ''; // ล้างค่าว่างก่อนเติมข้อมูล
+            // แยกบรรทัดและล้างเครื่องหมายคำพูด
+            const rows = data.split(/\r?\n/).slice(1);
+            const menu = document.getElementById('category-menu');
+            let categories = new Set();
 
-            rows.forEach(row => {
-                // แยกคอลัมน์และลบเครื่องหมายคำพูด (") ที่หัว-ท้ายออก
-                const cols = row.split(',').map(item => item.replace(/^"|"$/g, '').trim());
-                
+            allProducts = rows.map(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+                                .map(item => item.replace(/^"|"$/g, '').trim());
                 if (cols.length >= 4 && cols[0] !== "") {
-                    const html = `
-                        <div class="deal-card">
-                            <div class="deal-badge">${cols[4] || 'HOT'}</div>
-                            <img class="deal-img" src="${cols[1]}" onerror="this.src='https://via.placeholder.com/300?text=No+Image'">
-                            <div class="deal-info">
-                                <h3 class="deal-title">${cols[0]}</h3>
-                                <div class="deal-price">฿${cols[2]}</div>
-                                <a href="${cols[3]}" class="btn-deal" target="_blank" rel="noopener noreferrer">สั่งซื้อ</a>
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += html;
+                    if (cols[5]) categories.add(cols[5]); // เก็บหมวดหมู่จากคอลัมน์ F
+                    return cols;
+                }
+                return null;
+            }).filter(p => p !== null);
+
+            // สร้างปุ่มหมวดหมู่จากข้อมูลจริงใน Sheet
+            categories.forEach(cat => {
+                if(cat) {
+                    const btn = document.createElement('button');
+                    btn.className = 'cat-btn';
+                    btn.innerText = cat;
+                    btn.onclick = (e) => filterProduct(cat, e.target);
+                    menu.appendChild(btn);
                 }
             });
+
+            document.getElementById('loading').style.display = 'none';
+            renderProducts(allProducts);
         } catch (error) {
             console.error('Error:', error);
-            document.getElementById('loading').innerText = 'ไม่สามารถโหลดข้อมูลได้ หรือสิทธิ์การเข้าถึงถูกจำกัด';
+            document.getElementById('loading').innerText = 'ไม่สามารถโหลดข้อมูลได้';
         }
     }
+
+    function renderProducts(products) {
+        const container = document.getElementById('product-container');
+        container.innerHTML = '';
+        products.forEach(cols => {
+            const html = `
+                <div class="deal-card">
+                    <div class="deal-badge">${cols[4] || 'HOT'}</div>
+                    <img class="deal-img" src="${cols[1]}" onerror="this.src='https://via.placeholder.com/300?text=Phaendin'">
+                    <div class="deal-info">
+                        <h3 class="deal-title">${cols[0]}</h3>
+                        <div class="deal-price">฿${cols[2]}</div>
+                        <a href="${cols[3]}" class="btn-deal" target="_blank">สั่งซื้อ</a>
+                    </div>
+                </div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    function filterProduct(category, btnElement) {
+        // เปลี่ยนสถานะปุ่มที่เลือก
+        document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        if (category === 'all') {
+            renderProducts(allProducts);
+        } else {
+            const filtered = allProducts.filter(p => p[5] === category);
+            renderProducts(filtered);
+        }
+    }
+
     loadDeals();
 </script>
 
+</body>
+</html>
