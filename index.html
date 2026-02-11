@@ -6,9 +6,8 @@
     <title>Phaendin | Auto Deals</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #d4af37; --dark: #1a1a1a; --cream: #fdfbf7; }
+        :root { --gold: #d4af37; --dark: #1a1a1a; --cream: #fdfbf7; --premium: linear-gradient(45deg, #d4af37, #fdfbf7); }
         body { font-family: 'Kanit', sans-serif; background-color: var(--cream); margin: 0; display: flex; justify-content: center; }
-        
         .app-container { width: 100%; max-width: 480px; background: white; min-height: 100vh; display: flex; flex-direction: column; }
         
         /* Header */
@@ -16,168 +15,138 @@
         header h1 { margin: 0; font-size: 28px; letter-spacing: 3px; font-weight: 600; }
         header p { margin: 5px 0 0 0; font-size: 10px; letter-spacing: 1px; opacity: 0.8; }
 
-        /* Search Bar */
-        .search-section { padding: 15px 15px 5px 15px; background: white; }
+        /* Search & Filter */
+        .sticky-tools { position: sticky; top: 0; z-index: 100; background: white; border-bottom: 1px solid #eee; }
+        .search-section { padding: 10px 15px; }
         #searchInput {
-            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 10px;
-            font-family: 'Kanit', sans-serif; font-size: 14px; box-sizing: border-box; outline: none;
+            width: 100%; padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px;
+            font-family: 'Kanit'; font-size: 14px; box-sizing: border-box; outline: none;
+        }
+        .category-container { display: flex; gap: 10px; padding: 10px 15px; overflow-x: auto; }
+        .category-container::-webkit-scrollbar { display: none; }
+        .cat-btn { background: #f0f0f0; border: none; padding: 6px 15px; border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; font-family: 'Kanit'; }
+        .cat-btn.active { background: var(--dark); color: var(--gold); font-weight: 600; }
+
+        /* Grid */
+        .deal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
+
+        /* Card Styles */
+        .deal-card { 
+            background: var(--dark); border: 1px solid #333; border-radius: 12px; 
+            overflow: hidden; position: relative; display: flex; flex-direction: column;
             transition: 0.3s;
         }
-        #searchInput:focus { border-color: var(--gold); box-shadow: 0 0 8px rgba(212, 175, 55, 0.2); }
 
-        /* Category Menu */
-        .category-container { 
-            display: flex; gap: 10px; padding: 10px 15px; overflow-x: auto; 
-            background: white; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee;
+        /* ✨ Special Style for Recommended (Top 4) */
+        .recommended {
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
         }
-        .category-container::-webkit-scrollbar { display: none; }
-        .cat-btn {
-            background: #f0f0f0; border: none; padding: 7px 18px; border-radius: 20px;
-            font-size: 12px; white-space: nowrap; cursor: pointer; transition: 0.3s; font-family: 'Kanit';
+        .ribbon {
+            position: absolute; top: 10px; right: -25px; background: var(--premium);
+            color: #000; font-size: 9px; font-weight: bold; width: 90px;
+            text-align: center; transform: rotate(45deg); z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .cat-btn.active { background: var(--dark); color: var(--gold); font-weight: 600; border: 1px solid var(--gold); }
 
-        /* Product Grid */
-        .deal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
+        .deal-badge { position: absolute; top: 0; left: 0; background: var(--gold); color: var(--dark); font-size: 9px; font-weight: 600; padding: 3px 8px; border-bottom-right-radius: 8px; z-index: 1; }
+        .deal-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .deal-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .deal-title { font-size: 12px; color: #fff; margin: 0; height: 34px; overflow: hidden; line-height: 1.4; }
+        .deal-price { color: var(--gold); font-size: 16px; font-weight: 600; margin: 5px 0 10px 0; }
+        .btn-deal { background: var(--gold); color: var(--dark); text-decoration: none; text-align: center; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
         
-        .deal-card { 
-            background: var(--dark); border: 1px solid var(--gold); border-radius: 12px; 
-            overflow: hidden; position: relative; display: flex; flex-direction: column;
-            transition: transform 0.3s;
-        }
-        .deal-card:active { transform: scale(0.98); }
-
-        .deal-badge { 
-            position: absolute; top: 0; left: 0; background: var(--gold); color: var(--dark); 
-            font-size: 9px; font-weight: 600; padding: 3px 10px; border-bottom-right-radius: 8px; z-index: 1;
-        }
-
-        .deal-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #222; }
-        
-        .deal-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .deal-title { font-size: 13px; color: #fff; margin: 0 0 8px 0; height: 38px; overflow: hidden; line-height: 1.4; font-weight: 400; }
-        .deal-price { color: var(--gold); font-size: 18px; font-weight: 600; margin-bottom: 10px; }
-        
-        .btn-deal { 
-            background: var(--gold); color: var(--dark); text-decoration: none; text-align: center; 
-            padding: 9px; border-radius: 8px; font-size: 12px; font-weight: 600; transition: 0.2s;
-        }
-
-        #loading { text-align: center; padding: 50px; color: var(--dark); font-size: 14px; }
+        #loading { text-align: center; padding: 50px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <header>
-        <h1>PHAENDIN</h1>
-        <p>THE ART OF SELECTION</p>
-    </header>
+    <header><h1>PHAENDIN</h1><p>THE ART OF SELECTION</p></header>
 
-    <div class="search-section">
-        <input type="text" id="searchInput" placeholder="ค้นหาสินค้าหรือดีล..." onkeyup="handleSearch()">
-    </div>
-    
-    <div class="category-container" id="category-menu">
-        <button class="cat-btn active" onclick="filterProduct('all', this)">ทั้งหมด</button>
+    <div class="sticky-tools">
+        <div class="search-section"><input type="text" id="searchInput" placeholder="ค้นหาดีลรถ..." onkeyup="executeFilter()"></div>
+        <div class="category-container" id="category-menu">
+            <button class="cat-btn active" onclick="filterCategory('all', this)">ทั้งหมด</button>
+        </div>
     </div>
 
-    <div id="loading">กำลังโหลดข้อมูลสุดพรีเมียม...</div>
+    <div id="loading">กำลังคัดสรรดีลที่ดีที่สุด...</div>
     <div class="deal-grid" id="product-container"></div>
 </div>
 
 <script>
-    // URL CSV จาก Google Sheets
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y/gviz/tq?tqx=out:csv';
-    
     let allProducts = [];
-    let currentCategory = 'all';
+    let currentCat = 'all';
 
     async function loadDeals() {
         try {
-            const response = await fetch(SHEET_URL);
-            const data = await response.text();
-            
-            // แยกแถว และ Clean ข้อมูล (ล้างเครื่องหมายคำพูด ")
+            const res = await fetch(SHEET_URL);
+            const data = await res.text();
             const rows = data.split(/\r?\n/).slice(1);
-            const menu = document.getElementById('category-menu');
             let categories = new Set();
 
             allProducts = rows.map(row => {
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
-                                .map(item => item.replace(/^"|"$/g, '').trim());
-                if (cols.length >= 4 && cols[0] !== "") {
-                    if (cols[5]) categories.add(cols[5]); // เก็บหมวดหมู่จากคอลัมน์ F
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
+                if (cols.length >= 4 && cols[0]) {
+                    if (cols[5]) categories.add(cols[5]);
                     return cols;
                 }
                 return null;
-            }).filter(p => p !== null);
+            }).filter(p => p);
 
-            // สร้างปุ่มหมวดหมู่
             categories.forEach(cat => {
-                if(cat) {
-                    const btn = document.createElement('button');
-                    btn.className = 'cat-btn';
-                    btn.innerText = cat;
-                    btn.onclick = (e) => filterProduct(cat, e.target);
-                    menu.appendChild(btn);
-                }
+                const btn = document.createElement('button');
+                btn.className = 'cat-btn';
+                btn.innerText = cat;
+                btn.onclick = (e) => filterCategory(cat, e.target);
+                document.getElementById('category-menu').appendChild(btn);
             });
 
             document.getElementById('loading').style.display = 'none';
             renderProducts(allProducts);
-        } catch (error) {
-            console.error('Error:', error);
-            document.getElementById('loading').innerText = 'ไม่สามารถโหลดข้อมูลได้ โปรดเช็กการตั้งค่าแชร์ไฟล์';
-        }
+        } catch (e) { document.getElementById('loading').innerText = 'โหลดไม่สำเร็จ'; }
     }
 
     function renderProducts(products) {
         const container = document.getElementById('product-container');
         container.innerHTML = '';
-        
-        if(products.length === 0) {
-            container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 20px; color: #888;">ไม่พบสินค้าที่ท่านค้นหา</div>';
-            return;
-        }
 
-        products.forEach(cols => {
-            const html = `
-                <div class="deal-card">
-                    <div class="deal-badge">${cols[4] || 'DEAL'}</div>
-                    <img class="deal-img" src="${cols[1]}" onerror="this.src='https://via.placeholder.com/300?text=Phaendin+Auto'">
+        products.forEach((cols, index) => {
+            // เงื่อนไขสินค้าแนะนำ: 4 ชิ้นแรกของหน้า "ทั้งหมด"
+            const isRec = (index < 4 && currentCat === 'all') ? 'recommended' : '';
+            const ribbon = isRec ? '<div class="ribbon">แนะนำ</div>' : '';
+
+            container.innerHTML += `
+                <div class="deal-card ${isRec}">
+                    ${ribbon}
+                    <div class="deal-badge">${cols[4] || 'HOT'}</div>
+                    <img class="deal-img" src="${cols[1]}" onerror="this.src='https://via.placeholder.com/300?text=Phaendin'">
                     <div class="deal-info">
                         <div>
                             <h3 class="deal-title">${cols[0]}</h3>
                             <div class="deal-price">฿${cols[2]}</div>
                         </div>
-                        <a href="${cols[3]}" class="btn-deal" target="_blank">สั่งซื้อตอนนี้</a>
+                        <a href="${cols[3]}" class="btn-deal" target="_blank">สั่งซื้อ</a>
                     </div>
                 </div>`;
-            container.innerHTML += html;
         });
     }
 
-    function filterProduct(category, btnElement) {
-        currentCategory = category;
-        document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-        btnElement.classList.add('active');
-        executeFilter();
-    }
-
-    function handleSearch() {
+    function filterCategory(cat, btn) {
+        currentCat = cat;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         executeFilter();
     }
 
     function executeFilter() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        
+        const search = document.getElementById('searchInput').value.toLowerCase();
         const filtered = allProducts.filter(p => {
-            const matchesCategory = (currentCategory === 'all' || p[5] === currentCategory);
-            const matchesSearch = p[0].toLowerCase().includes(searchTerm);
-            return matchesCategory && matchesSearch;
+            const matchCat = (currentCat === 'all' || p[5] === currentCat);
+            const matchSearch = p[0].toLowerCase().includes(search);
+            return matchCat && matchSearch;
         });
-
         renderProducts(filtered);
     }
 
@@ -186,3 +155,4 @@
 
 </body>
 </html>
+
