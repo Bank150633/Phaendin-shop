@@ -3,82 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phaendin | Premium Edition</title>
+    <title>Phaendin | Official Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --gold: #b8860b; 
-            --dark-bg: #0a0a0a; 
-            --card-bg: #161616;
-            --text-main: #f0f0f0;
-            --text-muted: #999;
-        }
-
+        :root { --gold: #b8860b; --dark-bg: #0a0a0a; --card-bg: #161616; --text-main: #f0f0f0; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--dark-bg); color: var(--text-main); overflow-x: hidden; }
+        body { font-family: 'Kanit', sans-serif; background: var(--dark-bg); color: var(--text-main); line-height: 1.6; }
 
+        /* Header & Sticky Recommendation Area */
         header { background: #000; color: var(--gold); text-align: center; padding: 20px 0; border-bottom: 1px solid var(--gold); }
-        header h1 { font-size: 22px; letter-spacing: 5px; font-weight: 600; }
+        header h1 { font-size: 24px; letter-spacing: 4px; }
 
-        /* 🌟 สินค้าแนะนำแบบ Sticky & Shrink */
         #rec-area { 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
-            background: rgba(10, 10, 10, 0.95); 
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid var(--gold);
-            transition: all 0.4s ease;
-            padding: 15px 0;
+            position: sticky; top: 0; z-index: 1000; 
+            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--gold); transition: 0.4s ease; padding: 12px 0;
         }
-        
-        /* เมื่อเลื่อนลง จะทำให้ส่วนนี้เล็กลง */
         body.scrolled #rec-area { padding: 5px 0; }
         body.scrolled .section-label { display: none; }
-        body.scrolled .rec-card { min-width: 140px; max-width: 140px; }
-        body.scrolled .rec-info, body.scrolled .rec-tag { display: none; }
+        body.scrolled .rec-card { min-width: 130px; }
+        body.scrolled .rec-info { display: none; }
 
-        .section-label { color: var(--gold); font-size: 13px; font-weight: 600; padding: 0 15px 10px; text-transform: uppercase; }
+        .section-label { color: var(--gold); font-size: 14px; font-weight: 600; text-align: center; margin-bottom: 10px; text-transform: uppercase; }
         .rec-slider { display: flex; gap: 12px; overflow-x: auto; padding: 0 15px 5px; scroll-snap-type: x mandatory; }
         .rec-slider::-webkit-scrollbar { display: none; }
         
-        .rec-card { 
-            min-width: 260px; 
-            background: var(--card-bg); 
-            border: 1px solid #333; 
-            border-radius: 10px; 
-            overflow: hidden; 
-            scroll-snap-align: start;
-            transition: all 0.3s ease;
-        }
-
-        .img-gallery { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; aspect-ratio: 1/1; position: relative; background: #000; }
-        .img-gallery::-webkit-scrollbar { display: none; }
-        .img-gallery img { min-width: 100%; object-fit: cover; scroll-snap-align: center; }
-
+        .rec-card { min-width: 240px; background: var(--card-bg); border: 1px solid #333; border-radius: 12px; overflow: hidden; scroll-snap-align: start; transition: 0.3s; }
+        .img-box { aspect-ratio: 1/1; overflow: hidden; background: #000; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
         .rec-info { padding: 12px; }
-        .rec-title { font-size: 14px; font-weight: 500; height: 40px; overflow: hidden; color: #fff; }
-        .rec-price { font-size: 18px; color: var(--gold); font-weight: 600; margin-top: 5px; }
+        .rec-title { font-size: 13px; height: 38px; overflow: hidden; color: #fff; }
+        .rec-price { font-size: 16px; color: var(--gold); font-weight: 600; margin-top: 5px; }
 
-        /* ค้นหาและหมวดหมู่ */
-        .tools-area { padding: 15px; background: var(--dark-bg); }
-        #searchInput { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #222; color: #fff; margin-bottom: 12px; font-family: 'Kanit'; }
+        /* Search & Filter Bar */
+        .tools-container { padding: 20px 15px; background: var(--dark-bg); }
+        #searchInput { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: #fff; margin-bottom: 15px; font-family: 'Kanit'; outline: none; }
+        #searchInput:focus { border-color: var(--gold); }
         
-        .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+        .cat-bar { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
         .cat-bar::-webkit-scrollbar { display: none; }
-        .cat-btn { background: #222; border: 1px solid #333; padding: 6px 15px; border-radius: 20px; font-size: 12px; color: var(--text-muted); white-space: nowrap; cursor: pointer; }
-        .cat-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+        .cat-btn { background: #222; border: 1px solid #333; padding: 8px 18px; border-radius: 25px; font-size: 12px; color: #999; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+        .cat-btn.active { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 500; }
 
-        /* 📦 Grid สินค้าด้านล่าง */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .card { background: var(--card-bg); border-radius: 8px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; }
-        .card-info { padding: 10px; }
-        .card-title { font-size: 12px; font-weight: 400; color: #ccc; height: 35px; overflow: hidden; }
-        .card-caption { font-size: 10px; color: var(--gold); margin-bottom: 5px; } /* ข้อมูลจากคอลัมน์ E */
-        .card-price { color: #fff; font-weight: 600; font-size: 16px; margin-bottom: 8px; }
-        .btn-buy { display: block; background: transparent; color: var(--gold); text-align: center; padding: 6px; border-radius: 5px; border: 1px solid var(--gold); font-size: 11px; }
+        /* Main Product Grid */
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 15px 30px; }
+        .product-card { background: var(--card-bg); border-radius: 10px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; }
+        .product-info { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+        .product-tag { font-size: 10px; color: var(--gold); font-weight: 500; margin-bottom: 4px; }
+        .product-title { font-size: 12px; font-weight: 400; color: #ccc; height: 35px; overflow: hidden; margin-bottom: 8px; }
+        .product-price { font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 12px; }
+        .buy-link { display: block; background: transparent; color: var(--gold); text-align: center; padding: 8px; border-radius: 6px; border: 1px solid var(--gold); font-size: 12px; text-decoration: none; transition: 0.3s; }
+        .buy-link:active { background: var(--gold); color: #000; }
 
-        #loading { text-align: center; padding: 50px; color: var(--gold); font-size: 14px; }
+        /* Footer */
+        footer { background: #000; color: #666; text-align: center; padding: 40px 20px; border-top: 1px solid #222; margin-top: 20px; }
+        footer p { font-size: 12px; margin-bottom: 8px; }
+        .footer-brand { color: var(--gold); font-weight: 600; letter-spacing: 2px; margin-bottom: 15px; }
+
+        #loader { text-align: center; padding: 50px; color: var(--gold); }
     </style>
 </head>
 <body>
@@ -86,32 +68,36 @@
 <header><h1>PHAENDIN</h1></header>
 
 <div id="rec-area">
-    <div class="section-label">✨ สินค้าแนะนำ</div>
+    <div class="section-label">✨ สินค้าแนะนำประจำสัปดาห์</div>
     <div class="rec-slider" id="rec-list"></div>
 </div>
 
-<div class="tools-area">
-    <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." onkeyup="render()">
+<div class="tools-container">
+    <input type="text" id="searchInput" placeholder="ค้นหาสินค้าที่นี่..." onkeyup="render()">
     <div class="cat-bar" id="cat-list">
-        <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
+        <button class="cat-btn active" onclick="setCat('all', this)">สินค้าทั้งหมด</button>
     </div>
 </div>
 
-<div id="loading">กำลังเรียกข้อมูลพรีเมียม...</div>
-<div class="grid" id="main-list"></div>
+<div id="loader">กำลังเปิดร้าน...</div>
+<div class="main-grid" id="main-list"></div>
+
+<footer>
+    <div class="footer-brand">PHAENDIN</div>
+    <p>© 2026 Phaendin Official Store. All Rights Reserved.</p>
+    <p>คัดสรรสินค้าคุณภาพ เพื่อความมั่นใจในทุกการช้อปปิ้ง</p>
+</footer>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y/gviz/tq?tqx=out:csv';
+    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; //
+    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
     let db = [];
     let currentCat = 'all';
 
-    // ตรวจจับการเลื่อนหน้าจอเพื่อย่อ Header
-    window.onscroll = function() {
-        if (window.pageYOffset > 50) {
-            document.body.classList.add("scrolled");
-        } else {
-            document.body.classList.remove("scrolled");
-        }
+    // ย่อ Header เมื่อเลื่อนหน้าจอ
+    window.onscroll = () => {
+        if (window.pageYOffset > 60) document.body.classList.add("scrolled");
+        else document.body.classList.remove("scrolled");
     };
 
     async function fetchData() {
@@ -123,8 +109,8 @@
 
             db = rows.map(r => {
                 const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                if(c.length >= 6 && c[5]) cats.add(c[5]);
-                return (c.length >= 4 && c[0] !== "") ? c : null;
+                if(c[5]) cats.add(c[5]); // คอลัมน์ F: หมวดหมู่
+                return (c[0]) ? c : null;
             }).filter(x => x);
 
             const catList = document.getElementById('cat-list');
@@ -135,20 +121,9 @@
                 catList.appendChild(btn);
             });
 
-            document.getElementById('loading').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
             render();
-        } catch (e) { document.getElementById('loading').innerText = 'ERROR: ไม่สามารถดึงข้อมูลได้'; }
-    }
-
-    function createGallery(imgString) {
-        if (!imgString) return '<div class="img-gallery"><img src="https://via.placeholder.com/400?text=No+Image"></div>';
-        const imgs = imgString.split(',');
-        let html = `<div class="img-gallery">`;
-        imgs.forEach(url => {
-            html += `<img src="${url.trim()}" loading="lazy" onerror="this.src='https://via.placeholder.com/400?text=Phaendin'">`;
-        });
-        html += `</div>`;
-        return html;
+        } catch (e) { document.getElementById('loader').innerText = 'ไม่สามารถดึงข้อมูลได้ กรุณาเช็กอินเทอร์เน็ต'; }
     }
 
     function setCat(cat, btn) {
@@ -161,27 +136,26 @@
     function render() {
         const search = document.getElementById('searchInput').value.toLowerCase();
         
-        // 1. สินค้าแนะนำ (กรองจากคอลัมน์ G)
-        const recommendedItems = db.filter(p => p[6] && (p[6].includes("แนะนำ") || p[6] === "1"));
-        document.getElementById('rec-list').innerHTML = recommendedItems.map(p => `
+        // ส่วนสินค้าแนะนำ (คอลัมน์ G)
+        const recData = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
+        document.getElementById('rec-list').innerHTML = recData.map(p => `
             <div class="rec-card" onclick="window.open('${p[3]}', '_blank')">
-                ${createGallery(p[1])}
+                <div class="img-box"><img src="${p[1].split(',')[0]}" loading="lazy"></div>
                 <div class="rec-info">
                     <div class="rec-title">${p[0]}</div>
                     <div class="rec-price">฿${p[2]}</div>
                 </div>
             </div>`).join('');
 
-        // 2. สินค้าใน Grid ด้านล่าง (กรองตามหมวดหมู่และการค้นหา)
-        const filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(search));
-        
-        document.getElementById('main-list').innerHTML = filtered.map(p => `
-            <div class="card">
-                ${createGallery(p[1])}
-                <div class="card-info">
-                    <div class="card-caption">${p[4] || ''}</div> <div class="card-title">${p[0]}</div>
-                    <div class="card-price">฿${p[2]}</div>
-                    <a href="${p[3]}" target="_blank" class="btn-buy">ดูรายละเอียด</a>
+        // ส่วน Grid สินค้าหลัก
+        const mainData = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(search));
+        document.getElementById('main-list').innerHTML = mainData.map(p => `
+            <div class="product-card">
+                <div class="img-box"><img src="${p[1].split(',')[0]}" loading="lazy"></div>
+                <div class="product-info">
+                    <div class="product-tag">${p[4] || ''}</div> <div class="product-title">${p[0]}</div>
+                    <div class="product-price">฿${p[2]}</div>
+                    <a href="${p[3]}" target="_blank" class="buy-link">ดูรายละเอียดสินค้า</a>
                 </div>
             </div>`).join('');
     }
@@ -189,4 +163,3 @@
 </script>
 </body>
 </html>
-
