@@ -74,11 +74,12 @@
 <body>
 
 <header>
-    <a href="/" class="logo-link">
-        <svg class="leaf-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M50 10C50 10 30 35 30 55C30 70 40 80 50 80C60 80 70 70 70 55C70 35 50 10 50 10Z" fill="url(#goldGrad)"/>
-            <path d="M25 45C25 45 5 60 5 75C5 85 15 90 25 90C35 90 45 85 45 75C45 60 25 45 25 45Z" fill="url(#goldGrad)"/>
-            <path d="M75 45C75 45 95 60 95 75C95 85 85 90 75 90C65 90 55 85 55 75C55 60 75 45 75 45Z" fill="url(#goldGrad)"/>
+    <header style="background: #000; padding: 20px; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #222;">
+    <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 15px;">
+        <svg width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M40 85V30C40 20 48 15 60 15C72 15 80 23 80 35C80 47 72 55 60 55H40" stroke="url(#goldGrad)" stroke-width="6" stroke-linecap="round"/>
+            <path d="M40 45C30 45 25 35 30 25C35 15 45 20 45 30" stroke="url(#goldGrad)" stroke-width="3" fill="url(#goldGrad)"/>
+            <path d="M40 60C30 60 25 50 30 40C35 30 45 35 45 45" stroke="url(#goldGrad)" stroke-width="3" fill="url(#goldGrad)"/>
             <defs>
                 <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" style="stop-color:#D4AF37" />
@@ -87,9 +88,18 @@
                 </linearGradient>
             </defs>
         </svg>
-        <h1>PHAENDIN</h1>
-        <div class="tagline">CURATED SELECTION</div>
+
+        <div style="text-align: left;">
+            <h1 style="color: #D4AF37; font-size: 24px; letter-spacing: 4px; margin: 0; font-weight: bold; font-family: serif; line-height: 1;">
+                PHAENDIN
+            </h1>
+            <p style="color: #D4AF37; font-size: 9px; letter-spacing: 2px; margin: 4px 0 0; opacity: 0.8; text-transform: uppercase;">
+                CURATED SELECTION
+            </p>
+        </div>
     </a>
+</header>
+
 </header>
 
 <div class="rec-label"><span>✨</span> สินค้าแนะนำพิเศษ</div>
