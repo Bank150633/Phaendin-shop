@@ -10,10 +10,32 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--dark-bg); color: var(--text); }
 
-        /* Header */
-        header { background: #000; padding: 40px 20px 30px; text-align: center; border-bottom: 1px solid #222; }
-        header h1 { font-size: 30px; letter-spacing: 6px; color: var(--gold); font-weight: 600; margin-bottom: 10px; }
-        .story { font-size: 11px; color: #666; font-weight: 300; letter-spacing: 1px; text-transform: uppercase; }
+        /* Premium Header Design */
+        header { 
+            background: #000; 
+            padding: 50px 20px 40px; 
+            text-align: center; 
+            border-bottom: 1px solid #222; 
+        }
+        .logo-link { text-decoration: none; display: inline-block; }
+        .leaf-icon { width: 80px; height: auto; margin-bottom: 15px; }
+        header h1 { 
+            font-size: 32px; 
+            letter-spacing: 7px; 
+            color: var(--gold); 
+            font-weight: 600; 
+            margin: 0; 
+            font-family: 'Times New Roman', serif; 
+        }
+        .tagline { 
+            font-size: 10px; 
+            color: var(--gold); 
+            font-weight: 300; 
+            letter-spacing: 3px; 
+            text-transform: uppercase; 
+            margin-top: 8px; 
+            opacity: 0.8;
+        }
 
         /* Recommendation Label */
         .rec-label { padding: 25px 20px 10px; font-size: 13px; color: var(--gold); letter-spacing: 2px; font-weight: 400; display: flex; align-items: center; gap: 8px; }
@@ -21,8 +43,8 @@
         /* Fixed Recommendation Slider */
         .rec-slider { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 25px; }
         .rec-slider::-webkit-scrollbar { display: none; }
-        .rec-item { min-width: 140px; background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
-        .rec-img { aspect-ratio: 1/1; width: 100%; object-fit: cover; display: block; } /* บังคับรูปเท่ากันเป๊ะ */
+        .rec-item { min-width: 140px; background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #222; cursor: pointer; }
+        .rec-img { aspect-ratio: 1/1; width: 100%; object-fit: cover; display: block; }
         .rec-info { padding: 12px; font-size: 14px; font-weight: 600; color: var(--gold); text-align: center; background: #111; }
 
         /* Sticky Search & Filter */
@@ -30,78 +52,44 @@
         #searchInput { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-family: 'Kanit'; margin-bottom: 15px; outline: none; font-size: 14px; }
         .cat-bar { display: flex; gap: 8px; overflow-x: auto; }
         .cat-bar::-webkit-scrollbar { display: none; }
-        .cat-btn { background: #1a1a1a; border: 1px solid #333; padding: 8px 18px; border-radius: 20px; color: #888; font-size: 12px; white-space: nowrap; transition: 0.3s; }
+        .cat-btn { background: #1a1a1a; border: 1px solid #333; padding: 8px 18px; border-radius: 20px; color: #888; font-size: 12px; white-space: nowrap; transition: 0.3s; cursor: pointer; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: 600; border-color: var(--gold); }
 
-        /* Balanced Main Grid */
+        /* Main Grid */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
-        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid #222; display: flex; flex-direction: column; }
+        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid #222; display: flex; flex-direction: column; cursor: pointer; }
         .card-img { aspect-ratio: 1/1; width: 100%; object-fit: cover; display: block; }
         .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
         .card-tag { font-size: 10px; color: var(--gold); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
         .card-title { font-size: 13px; height: 38px; overflow: hidden; margin-bottom: 12px; color: #ccc; line-height: 1.4; }
         .card-price { font-size: 19px; font-weight: 600; color: #fff; margin-bottom: 15px; }
-        
-        /* CTA Button */
         .buy-btn { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 600; }
-        .buy-btn:active { background: var(--gold); color: #000; }
 
         footer { background: #000; padding: 60px 20px; text-align: center; margin-top: 40px; border-top: 1px solid #222; }
         .footer-logo { font-size: 24px; color: var(--gold); letter-spacing: 5px; margin-bottom: 15px; font-weight: 600; }
         .footer-copy { font-size: 10px; color: #444; letter-spacing: 1px; line-height: 2; }
-
         #loading { text-align: center; padding: 100px; color: var(--gold); letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
 <header>
-     const PhaendinLogo = () => {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px', backgroundColor: '#000' }}>
-      <a href="/" style={{ textDecoration: 'none', textAlign: 'center', display: 'block' }}>
-        {/* ไอคอนใบไม้ 3 แฉกสีทอง */}
-        <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 10C50 10 30 35 30 55C30 70 40 80 50 80C60 80 70 70 70 55C70 35 50 10 50 10Z" fill="url(#gold-grad)"/>
-          <path d="M25 45C25 45 5 60 5 75C5 85 15 90 25 90C35 90 45 85 45 75C45 60 25 45 25 45Z" fill="url(#gold-grad)"/>
-          <path d="M75 45C75 45 95 60 95 75C95 85 85 90 75 90C65 90 55 85 55 75C55 60 75 45 75 45Z" fill="url(#gold-grad)"/>
-          <defs>
-            <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#D4AF37' }} />
-              <stop offset="50%" style={{ stopColor: '#F9E29C' }} />
-              <stop offset="100%" style={{ stopColor: '#B8860B' }} />
-            </linearGradient>
-          </defs>
+    <a href="/" class="logo-link">
+        <svg class="leaf-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 10C50 10 30 35 30 55C30 70 40 80 50 80C60 80 70 70 70 55C70 35 50 10 50 10Z" fill="url(#goldGrad)"/>
+            <path d="M25 45C25 45 5 60 5 75C5 85 15 90 25 90C35 90 45 85 45 75C45 60 25 45 25 45Z" fill="url(#goldGrad)"/>
+            <path d="M75 45C75 45 95 60 95 75C95 85 85 90 75 90C65 90 55 85 55 75C55 60 75 45 75 45Z" fill="url(#goldGrad)"/>
+            <defs>
+                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#D4AF37" />
+                    <stop offset="50%" style="stop-color:#F9E29C" />
+                    <stop offset="100%" style="stop-color:#B8860B" />
+                </linearGradient>
+            </defs>
         </svg>
-
-        {/* ชื่อแบรนด์และสโลแกนสีทอง */}
-        <h1 style={{ 
-          color: '#D4AF37', 
-          fontSize: '28px', 
-          margin: '10px 0 0', 
-          letterSpacing: '5px', 
-          fontWeight: 'bold',
-          fontFamily: 'serif' 
-        }}>
-          PHAENDIN
-        </h1>
-        <p style={{ 
-          color: '#D4AF37', 
-          fontSize: '10px', 
-          margin: '0', 
-          letterSpacing: '3px', 
-          opacity: 0.9,
-          textTransform: 'uppercase'
-        }}>
-          CURATED SELECTION
-        </p>
-      </a>
-    </div>
-  );
-};
-
-export default PhaendinLogo;
-
+        <h1>PHAENDIN</h1>
+        <div class="tagline">CURATED SELECTION</div>
+    </a>
 </header>
 
 <div class="rec-label"><span>✨</span> สินค้าแนะนำพิเศษ</div>
@@ -161,12 +149,9 @@ export default PhaendinLogo;
 
     function render() {
         const search = document.getElementById('searchInput').value.toLowerCase();
-        
-        // 1. กรองและสุ่มสินค้าในรายการหลัก
         let filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(search));
         filtered.sort(() => Math.random() - 0.5);
 
-        // 2. แสดงสินค้าแนะนำ (สไลด์บน) - บังคับรูปสี่เหลี่ยมจัตุรัส
         const recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
         document.getElementById('rec-list').innerHTML = recs.map(p => `
             <div class="rec-item" onclick="window.open('${p[3]}','_blank')">
@@ -174,7 +159,6 @@ export default PhaendinLogo;
                 <div class="rec-info">฿${p[2]}</div>
             </div>`).join('');
 
-        // 3. แสดงรายการหลัก 2 คอลัมน์
         document.getElementById('main-list').innerHTML = filtered.map(p => `
             <div class="card" onclick="window.open('${p[3]}','_blank')">
                 <img src="${p[1].split(',')[0]}" class="card-img" loading="lazy">
