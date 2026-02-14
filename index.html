@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phaendin | Official Store</title>
+    <title>PHAENDIN | Official Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --gold: #D4AF37; --dark-bg: #0a0a0a; --card-bg: #161616; --text: #f0f0f0; }
@@ -11,64 +11,71 @@
         body { font-family: 'Kanit', sans-serif; background: var(--dark-bg); color: var(--text); }
 
         /* Header */
-        header { background: #000; padding: 25px 0; text-align: center; border-bottom: 1px solid #222; }
-        header h1 { font-size: 26px; letter-spacing: 5px; color: var(--gold); font-weight: 600; }
+        header { background: #000; padding: 40px 20px 30px; text-align: center; border-bottom: 1px solid #222; }
+        header h1 { font-size: 30px; letter-spacing: 6px; color: var(--gold); font-weight: 600; margin-bottom: 10px; }
+        .story { font-size: 11px; color: #666; font-weight: 300; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* Recommendation Slider (Keep it clean) */
-        .rec-label { padding: 20px 20px 10px; font-size: 14px; color: var(--gold); letter-spacing: 1px; }
-        .rec-slider { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 20px; }
+        /* Recommendation Label */
+        .rec-label { padding: 25px 20px 10px; font-size: 13px; color: var(--gold); letter-spacing: 2px; font-weight: 400; display: flex; align-items: center; gap: 8px; }
+        
+        /* Fixed Recommendation Slider */
+        .rec-slider { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 25px; }
         .rec-slider::-webkit-scrollbar { display: none; }
-        .rec-item { min-width: 140px; background: var(--card-bg); border-radius: 8px; overflow: hidden; border: 1px solid #222; }
-        .rec-img { aspect-ratio: 1/1; width: 100%; object-fit: cover; }
-        .rec-info { padding: 8px; font-size: 11px; }
+        .rec-item { min-width: 140px; background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #222; }
+        .rec-img { aspect-ratio: 1/1; width: 100%; object-fit: cover; display: block; } /* บังคับรูปเท่ากันเป๊ะ */
+        .rec-info { padding: 12px; font-size: 14px; font-weight: 600; color: var(--gold); text-align: center; background: #111; }
 
-        /* Search & Filter */
-        .sticky-tools { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); padding: 15px 20px; border-bottom: 1px solid #222; }
-        #searchInput { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-family: 'Kanit'; margin-bottom: 12px; }
+        /* Sticky Search & Filter */
+        .sticky-tools { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.95); backdrop-filter: blur(15px); padding: 15px 20px; border-bottom: 1px solid #222; }
+        #searchInput { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: #fff; font-family: 'Kanit'; margin-bottom: 15px; outline: none; font-size: 14px; }
         .cat-bar { display: flex; gap: 8px; overflow-x: auto; }
         .cat-bar::-webkit-scrollbar { display: none; }
-        .cat-btn { background: #222; border: none; padding: 6px 16px; border-radius: 20px; color: #888; font-size: 12px; white-space: nowrap; }
-        .cat-btn.active { background: var(--gold); color: #000; font-weight: 600; }
+        .cat-btn { background: #1a1a1a; border: 1px solid #333; padding: 8px 18px; border-radius: 20px; color: #888; font-size: 12px; white-space: nowrap; transition: 0.3s; }
+        .cat-btn.active { background: var(--gold); color: #000; font-weight: 600; border-color: var(--gold); }
 
-        /* Main Grid (2 Columns - Your Favorite) */
+        /* Balanced Main Grid */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
-        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid #222; display: flex; flex-direction: column; }
-        .card-img { aspect-ratio: 1/1; width: 100%; object-fit: cover; }
-        .card-body { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-tag { font-size: 9px; color: var(--gold); margin-bottom: 4px; font-weight: 600; }
-        .card-title { font-size: 13px; height: 38px; overflow: hidden; margin-bottom: 8px; color: #ccc; line-height: 1.4; }
-        .card-price { font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 12px; }
-        .buy-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); text-align: center; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; }
+        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; border: 1px solid #222; display: flex; flex-direction: column; }
+        .card-img { aspect-ratio: 1/1; width: 100%; object-fit: cover; display: block; }
+        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-tag { font-size: 10px; color: var(--gold); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .card-title { font-size: 13px; height: 38px; overflow: hidden; margin-bottom: 12px; color: #ccc; line-height: 1.4; }
+        .card-price { font-size: 19px; font-weight: 600; color: #fff; margin-bottom: 15px; }
+        
+        /* CTA Button */
+        .buy-btn { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 600; }
         .buy-btn:active { background: var(--gold); color: #000; }
 
-        /* Footer */
-        footer { background: #000; padding: 40px 20px; text-align: center; margin-top: 30px; border-top: 1px solid #222; }
-        .footer-logo { font-size: 20px; color: var(--gold); letter-spacing: 4px; margin-bottom: 10px; }
-        .footer-copy { font-size: 10px; color: #555; letter-spacing: 1px; }
+        footer { background: #000; padding: 60px 20px; text-align: center; margin-top: 40px; border-top: 1px solid #222; }
+        .footer-logo { font-size: 24px; color: var(--gold); letter-spacing: 5px; margin-bottom: 15px; font-weight: 600; }
+        .footer-copy { font-size: 10px; color: #444; letter-spacing: 1px; line-height: 2; }
 
-        #loading { text-align: center; padding: 50px; color: var(--gold); }
+        #loading { text-align: center; padding: 100px; color: var(--gold); letter-spacing: 3px; }
     </style>
 </head>
 <body>
 
-<header><h1>PHAENDIN</h1></header>
+<header>
+    <h1>PHAENDIN</h1>
+    <div class="story">คัดสรรไอเทมคุณภาพ เพื่อไลฟ์สไตล์ที่เหนือระดับ</div>
+</header>
 
-<div class="rec-label">⭐ สินค้าแนะนำ</div>
+<div class="rec-label"><span>✨</span> สินค้าแนะนำพิเศษ</div>
 <div class="rec-slider" id="rec-list"></div>
 
 <div class="sticky-tools">
-    <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." onkeyup="render()">
+    <input type="text" id="searchInput" placeholder="ค้นหาไอเทมที่คุณต้องการ..." onkeyup="render()">
     <div class="cat-bar" id="cat-list">
-        <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
+        <button class="cat-btn active" onclick="setCat('all', this)">รายการทั้งหมด</button>
     </div>
 </div>
 
-<div id="loading">กำลังโหลดข้อมูล...</div>
+<div id="loading">CONNECTING...</div>
 <div class="main-grid" id="main-list"></div>
 
 <footer>
     <div class="footer-logo">PHAENDIN</div>
-    <div class="footer-copy">© 2026 OFFICIAL STORE<br>คัดสรรสิ่งดีๆ เพื่อคุณ</div>
+    <div class="footer-copy">© 2026 OFFICIAL CURATED STORE<br>QUALITY SELECTED FOR YOU</div>
 </footer>
 
 <script>
@@ -98,7 +105,7 @@
             });
             document.getElementById('loading').style.display = 'none';
             render();
-        } catch (e) { document.getElementById('loading').innerText = 'เกิดข้อผิดพลาดในการโหลด'; }
+        } catch (e) { document.getElementById('loading').innerText = 'ERROR LOADING DATA'; }
     }
 
     function setCat(cat, btn) {
@@ -111,23 +118,24 @@
     function render() {
         const search = document.getElementById('searchInput').value.toLowerCase();
         
-        // สินค้าแนะนำ (แถวสไลด์)
+        // 1. กรองและสุ่มสินค้าในรายการหลัก
+        let filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(search));
+        filtered.sort(() => Math.random() - 0.5);
+
+        // 2. แสดงสินค้าแนะนำ (สไลด์บน) - บังคับรูปสี่เหลี่ยมจัตุรัส
         const recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
         document.getElementById('rec-list').innerHTML = recs.map(p => `
             <div class="rec-item" onclick="window.open('${p[3]}','_blank')">
                 <img src="${p[1].split(',')[0]}" class="rec-img">
-                <div class="rec-info">
-                    <div style="color:var(--gold)">฿${p[2]}</div>
-                </div>
+                <div class="rec-info">฿${p[2]}</div>
             </div>`).join('');
 
-        // รายการหลัก (2 คอลัมน์แบบเดิมที่ชอบ)
-        const filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(search));
+        // 3. แสดงรายการหลัก 2 คอลัมน์
         document.getElementById('main-list').innerHTML = filtered.map(p => `
             <div class="card" onclick="window.open('${p[3]}','_blank')">
                 <img src="${p[1].split(',')[0]}" class="card-img" loading="lazy">
                 <div class="card-body">
-                    <div class="card-tag">${p[4] || 'PROMOTION'}</div>
+                    <div class="card-tag">${p[4] || 'SELECT'}</div>
                     <div class="card-title">${p[0]}</div>
                     <div class="card-price">฿${p[2]}</div>
                     <a href="${p[3]}" target="_blank" class="buy-btn">เลือกซื้อสินค้า</a>
