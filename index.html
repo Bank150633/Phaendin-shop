@@ -3,162 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN | Official Store</title>
+    <title>PHAENDIN | Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gold: #FFD700; --dark-bg: #000; --card-bg: #111; --text-gray: #BBB; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--dark-bg); color: #fff; width: 100%; overflow-x: hidden; }
-
-        /* Header จิ๋ว */
-        .header-container { position: sticky; top: 0; z-index: 2000; background: #000; width: 100%; }
-        header { padding: 6px 0; display: flex; justify-content: center; border-bottom: 1px solid #222; }
-        .logo-img { height: 22px; width: auto; }
-
-        /* สินค้าแนะนำขนาดเล็ก */
-        .rec-section { padding: 8px 5px; border-bottom: 1px solid #1a1a1a; transition: all 0.3s ease; }
-        .rec-label { color: var(--gold); font-size: 11px; margin-bottom: 5px; font-weight: bold; }
-        .rec-slider { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
-        .rec-slider::-webkit-scrollbar { display: none; }
-        
-        .rec-card { min-width: 75px; background: var(--card-bg); border-radius: 5px; border: 1px solid #222; overflow: hidden; transition: 0.3s; }
-        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .rec-price { padding: 2px; color: var(--gold); text-align: center; font-weight: 600; font-size: 10px; }
-
-        /* เอฟเฟกต์ย่อสุดๆ ตอนเลื่อน */
-        .shrink .rec-section { padding: 3px 5px; height: 55px; overflow: hidden; }
-        .shrink .rec-label { display: none; }
-        .shrink .rec-card { min-width: 45px; }
-        .shrink .rec-price { display: none; }
-
-        /* หมวดหมู่จิ๋ว */
-        .sticky-tools { padding: 6px 8px; background: rgba(0,0,0,0.95); border-bottom: 1px solid #222; }
-        #searchInput { width: 100%; padding: 6px 10px; border-radius: 5px; border: 1px solid #333; background: #161616; color: #fff; margin-bottom: 6px; font-size: 12px; outline: none; }
-        .cat-bar { display: flex; gap: 5px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: #111; border: 1px solid #333; padding: 3px 10px; border-radius: 15px; color: #777; font-size: 10px; white-space: nowrap; }
-        .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
-
-        /* ✅ ตาราง 3 คอลัมน์เพื่อให้เห็นสินค้าเยอะขึ้น */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 5px; width: 100%; }
-        .product-card { background: var(--card-bg); border-radius: 5px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; }
-        .product-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .product-body { padding: 5px; flex-grow: 1; display: flex; flex-direction: column; }
-
-        .product-tag { font-size: 8px; color: var(--gold); font-weight: 600; margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .product-title { font-size: 10px; color: var(--text-gray); height: 28px; overflow: hidden; margin-bottom: 4px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .product-price { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 5px; }
-
-        /* ปุ่มจิ๋วอัจฉริยะ */
-        .buy-button { 
-            display: flex; align-items: center; justify-content: center; gap: 3px;
-            padding: 5px 2px; border-radius: 4px; text-decoration: none; 
-            font-size: 9px; font-weight: bold; margin-top: auto; background: #222; color: #fff;
+        :root { 
+            --gold: #D4AF37; --yellow: #FFD700; --black: #000000; --card: #0A0A0A; --border: #1C1C1C;
+            --shopee: #ee4d2d; --lazada: #10147e; --tiktok: #000000;
         }
-        .btn-shopee { background: #ee4d2d !important; }
-        .btn-lazada { background: #10147e !important; }
-        .btn-tiktok { background: #000 !important; border: 1px solid #444; }
 
-        #loading { text-align: center; padding: 30px; color: var(--gold); font-size: 12px; }
-        footer { padding: 20px; text-align: center; color: #333; font-size: 9px; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; overflow-x: hidden; }
+
+        /* ส่วนหัวคงที่ */
+        .sticky-top { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 2px solid var(--gold); }
+        header { padding: 15px 0; text-align: center; }
+        .logo { height: 60px; width: auto; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); }
+
+        .section-title { color: var(--yellow); font-size: 16px; font-weight: bold; margin: 10px; border-left: 4px solid var(--gold); padding-left: 10px; }
+
+        /* ส่วนแนะนำ - หดได้เวลาเลื่อน */
+        .rec-scroller { display: flex; gap: 12px; overflow-x: auto; padding: 0 10px 15px 10px; scrollbar-width: none; }
+        .rec-scroller::-webkit-scrollbar { display: none; }
+        .rec-card { min-width: 130px; max-width: 130px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: 0.3s; }
+        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .rec-price { padding: 5px; text-align: center; color: var(--yellow); font-weight: bold; font-size: 16px; }
+
+        /* ส่วนสินค้าทั้งหมด - เลื่อนขึ้นลง */
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #111; }
+        .card-body { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        .p-name { font-size: 13px; color: #ddd; height: 34px; overflow: hidden; line-height: 1.2; margin-bottom: 5px; }
+        .p-price { font-size: 16px; font-weight: bold; color: var(--yellow); margin-bottom: 8px; }
+
+        /* ปุ่มสีตามค่าย */
+        .btn-platform { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 8px 0; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; color: #fff; }
+        .bg-shopee { background-color: var(--shopee) !important; }
+        .bg-lazada { background-color: var(--lazada) !important; }
+        .bg-tiktok { background-color: var(--tiktok) !important; border: 1px solid #444; }
+        .bg-default { background-color: var(--gold) !important; color: #000 !important; }
+
+        .search-box { padding: 10px; }
+        #search { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: #000; color: #fff; font-size: 16px; outline: none; }
+
+        /* สถานะโหลดข้อมูล */
+        #status { text-align: center; padding: 20px; color: var(--yellow); font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div class="header-container" id="main-header">
-    <header><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img"></header>
-    <div class="rec-section" id="rec-area" style="display:none;">
-        <div class="rec-label">✨ แนะนำ</div>
-        <div class="rec-slider" id="rec-list"></div>
-    </div>
-    <div class="sticky-tools">
-        <input type="search" id="searchInput" placeholder="ค้นหา..." oninput="render()">
-        <div class="cat-bar" id="cat-list"><button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button></div>
+<div class="sticky-top">
+    <header><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo"></header>
+    <div class="section-title">✨ แนะนำ (สไลด์ข้าง)</div>
+    <div class="rec-scroller" id="rec-list"></div>
+    <div class="search-box">
+        <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
     </div>
 </div>
 
-<div id="loading">กำลังโหลด...</div>
+<div id="status">กำลังโหลดข้อมูลสินค้า...</div>
+
+<div class="section-title">📦 สินค้าทั้งหมด (เลื่อนขึ้น-ลง)</div>
 <div class="main-grid" id="main-list"></div>
 
-<footer>PHAENDIN STORE</footer>
-
 <script>
+    // ตรวจสอบ SHEET_ID ของคุณให้ถูกต้อง
     const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
-    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+    const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+
     let db = [];
-    let currentCat = 'all';
 
-    window.addEventListener('scroll', () => {
-        const header = document.getElementById('main-header');
-        window.scrollY > 30 ? header.classList.add('shrink') : header.classList.remove('shrink');
-    });
-
-    function getPlatformInfo(url) {
-        const link = url.toLowerCase();
-        if (link.includes('shopee') || link.includes('shope.ee')) return { class: 'btn-shopee', text: 'Shopee', icon: 'fa-shopping-bag' };
-        if (link.includes('lazada') || link.includes('s.lazada')) return { class: 'btn-lazada', text: 'Lazada', icon: 'fa-shopping-cart' };
-        if (link.includes('tiktok')) return { class: 'btn-tiktok', text: 'TikTok', icon: 'fa-tiktok' };
-        return { class: '', text: 'สั่งซื้อ', icon: 'fa-shopping-cart' };
+    function getPlatform(url) {
+        if (!url) return { class: 'bg-default', icon: 'fa-shopping-cart', text: 'สั่งซื้อ' };
+        const u = url.toLowerCase();
+        if (u.includes('shopee')) return { class: 'bg-shopee', icon: 'fa-shopping-bag', text: 'Shopee' };
+        if (u.includes('lazada')) return { class: 'bg-lazada', icon: 'fa-shopping-cart', text: 'Lazada' };
+        if (u.includes('tiktok')) return { class: 'bg-tiktok', icon: 'fa-tiktok', text: 'TikTok' };
+        return { class: 'bg-default', icon: 'fa-shopping-cart', text: 'สั่งซื้อ' };
     }
 
     async function fetchData() {
         try {
-            const res = await fetch(SHEET_URL);
-            const text = await res.text();
-            const rows = text.split(/\r?\n/).slice(1);
-            let cats = new Set();
-            db = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                if(c[5]) cats.add(c[5]);
-                return (c[0]) ? c : null;
-            }).filter(x => x);
-
-            const catList = document.getElementById('cat-list');
-            Array.from(cats).sort().forEach(c => {
-                const btn = document.createElement('button');
-                btn.className = 'cat-btn'; btn.innerText = c;
-                btn.onclick = (e) => setCat(c, e.target);
-                catList.appendChild(btn);
-            });
-            document.getElementById('loading').style.display = 'none';
+            const response = await fetch(URL);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1);
+            db = rows.map(row => {
+                // แยกคอมมาใน CSV
+                const cells = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"|"$/g, '').trim());
+                return cells;
+            }).filter(row => row[0]); // กรองแถวที่ไม่มีชื่อสินค้าออก
+            
+            document.getElementById('status').style.display = 'none';
             render();
-        } catch (e) { document.getElementById('loading').innerText = 'Error'; }
-    }
-
-    function setCat(cat, btn) {
-        currentCat = cat;
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        render();
+        } catch (error) {
+            document.getElementById('status').innerText = '❌ โหลดข้อมูลไม่ได้ (โปรดเช็คการแชร์ไฟล์ Google Sheets)';
+        }
     }
 
     function render() {
-        const search = document.getElementById('searchInput').value.toLowerCase();
-        let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
-        if(recs.length > 0) {
-            document.getElementById('rec-area').style.display = 'block';
-            document.getElementById('rec-list').innerHTML = recs.slice(0, 15).map(p => `
-                <div class="rec-card" onclick="window.open('${p[3]}','_blank')">
-                    <img src="${p[1].split(',')[0]}" class="rec-img">
-                    <div class="rec-price">฿${p[2]}</div>
-                </div>`).join('');
-        }
-        let filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(search));
-        filtered.sort(() => Math.random() - 0.5);
+        const query = document.getElementById('search').value.toLowerCase();
+        
+        // สินค้าแนะนำ
+        const recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
+        document.getElementById('rec-list').innerHTML = recs.map(p => `
+            <div class="rec-card" onclick="window.open('${p[3]}', '_blank')">
+                <img src="${p[1]}" class="rec-img" onerror="this.src='https://via.placeholder.com/150/111/D4AF37?text=No+Image'">
+                <div class="rec-price">฿${p[2]}</div>
+            </div>
+        `).join('');
+
+        // สินค้าทั้งหมด
+        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         document.getElementById('main-list').innerHTML = filtered.map(p => {
-            const info = getPlatformInfo(p[3]);
+            const plat = getPlatform(p[3]);
             return `
-            <div class="product-card" onclick="window.open('${p[3]}','_blank')">
-                <img src="${p[1].split(',')[0]}" class="product-img">
-                <div class="product-body">
-                    <div class="product-tag">${p[4] || ''}</div>
-                    <div class="product-title">${p[0]}</div>
-                    <div class="product-price">฿${p[2]}</div>
-                    <div class="buy-button ${info.class}"><i class="fab ${info.icon}"></i> ${info.text}</div>
+                <div class="card">
+                    <img src="${p[1]}" class="card-img" onerror="this.src='https://via.placeholder.com/150/111/D4AF37?text=No+Image'">
+                    <div class="card-body">
+                        <div class="p-name">${p[0]}</div>
+                        <div class="p-price">฿${p[2]}</div>
+                        <a href="${p[3]}" target="_blank" class="btn-platform ${plat.class}">
+                            <i class="fab ${plat.icon}"></i> ${plat.text}
+                        </a>
+                    </div>
                 </div>
-            </div>`;
+            `;
         }).join('');
     }
+
     fetchData();
 </script>
 </body>
