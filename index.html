@@ -26,7 +26,7 @@
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
         .store-info h1 { font-size: 16px; transition: 0.3s; }
 
-        /* ✅ Recommended Scroller (Section 1) */
+        /* ✅ Recommended Scroller */
         .rec-container { display: flex; gap: 8px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; transition: 0.4s; }
         .rec-container::-webkit-scrollbar { display: none; }
         
@@ -40,7 +40,7 @@
         .rec-price { color: var(--yellow); font-weight: bold; font-size: 13px; }
         .btn-mini { display: block; color: #fff; font-size: 9px; font-weight: bold; padding: 4px 0; border-radius: 4px; text-decoration: none; text-align: center; }
 
-        /* ✅ เอฟเฟกต์หดตัว (SHRINK) */
+        /* ✅ SHRINK MODE */
         .shrink header { padding: 5px 12px; gap: 8px; }
         .shrink .logo-circle { width: 25px; height: 25px; }
         .shrink .store-info h1 { font-size: 12px; }
@@ -54,13 +54,12 @@
         .shrink .rec-price { font-size: 10px; }
         .shrink .btn-mini { padding: 2px 0; font-size: 8px; }
 
-        /* Platform Styles */
         .shopee { background: var(--shopee); }
         .lazada { background: var(--lazada); }
         .tiktok { background: var(--tiktok); }
         .other { background: var(--gold); color: #000; }
 
-        /* ✅ ส่วนค้นหาและหมวดหมู่ */
+        /* ✅ Tools Sticky */
         .tools-sticky { position: sticky; top: 165px; z-index: 1900; background: rgba(13,13,13,0.98); padding: 10px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
         .shrink + .tools-sticky { top: 85px; }
 
@@ -69,16 +68,19 @@
         .cat-btn { background: #222; color: #888; padding: 7px 18px; border-radius: 20px; font-size: 12px; border: none; white-space: nowrap; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
-        /* ✅ Grid สินค้าหลัก */
+        /* ✅ Main Grid */
         .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px; }
         .p-card { background: #fff; border-radius: 6px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
         .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
         .p-info { padding: 5px; flex-grow: 1; }
-        .p-name { font-size: 10px; color: #555; height: 24px; overflow: hidden; line-height: 1.2; }
+        .p-name { font-size: 10px; color: #555; height: 24px; overflow: hidden; line-height: 1.2; font-weight: 600; }
+        
+        /* ✅ สไตล์สำหรับคำโปรย คอลัมน์ E */
+        .p-tagline { font-size: 8px; color: #888; height: 12px; overflow: hidden; margin-bottom: 2px; }
+        
         .p-price { font-size: 13px; font-weight: bold; margin: 2px 0; }
         .btn-buy { display: block; text-align: center; padding: 4px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; }
 
-        /* Zoom Modal */
         .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
         .modal img { max-width: 90%; border: 1px solid var(--gold); border-radius: 10px; }
     </style>
@@ -157,7 +159,6 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // 1. สุ่มสินค้าแนะนำ (บน)
         let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
         recs = recs.sort(() => 0.5 - Math.random()).slice(0, 10);
         
@@ -174,7 +175,6 @@
             </div>`;
         }).join('');
 
-        // 2. กรองและสุ่มสินค้าหลัก (ล่าง)
         let filtered = db.filter(p => {
             const matchName = p[0].toLowerCase().includes(q);
             const matchCat = (currentCat === 'all' || p[5].toString() === currentCat);
@@ -190,6 +190,7 @@
                 <img src="${p[1]}" class="p-img" onclick="openImg('${p[1]}')">
                 <div class="p-info">
                     <div class="p-name">${p[0]}</div>
+                    <div class="p-tagline">${p[4] || ''}</div>
                     <div class="p-price">฿${p[2]}</div>
                     <a href="${p[3]}" target="_blank" class="btn-buy ${plat}">${plat === 'other' ? 'สั่งซื้อ' : plat.toUpperCase()}</a>
                 </div>
