@@ -15,76 +15,60 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; overflow-x: hidden; }
 
-        /* ✅ ส่วนหัวติดหนึบที่ขยาย/หดได้ */
-        .header-sticky { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 2px solid var(--gold); transition: 0.4s ease-in-out; }
+        /* ✅ ส่วนหัวติดหนึบ */
+        .header-sticky { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 2px solid var(--gold); }
         header { padding: 15px 0; text-align: center; }
         .logo { height: 50px; width: auto; filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); transition: 0.3s; }
 
-        /* ✅ สินค้าแนะนำ (สไลด์ข้าง) */
-        .rec-scroller { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; transition: 0.3s; }
+        /* ✅ สินค้าแนะนำ (สไลด์ข้าง - สไตล์เดียวกับด้านล่าง) */
+        .rec-section { padding-bottom: 10px; }
+        .rec-scroller { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 10px; scrollbar-width: none; }
         .rec-scroller::-webkit-scrollbar { display: none; }
         
-        /* สไตล์การ์ดแนะนำตอนปกติ */
-        .rec-card { 
-            min-width: 140px; background: var(--card); border: 1px solid var(--border); 
+        .product-card { 
+            min-width: 145px; background: var(--card); border: 1px solid var(--border); 
             border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s;
         }
-        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; transition: 0.3s; }
-        .rec-body { padding: 8px; text-align: center; display: flex; flex-direction: column; gap: 5px; }
-        .rec-price { font-size: 16px; font-weight: bold; color: var(--yellow); }
+        .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: zoom-in; }
+        .p-body { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; gap: 4px; }
+        .p-title { font-size: 12px; color: #ddd; height: 32px; overflow: hidden; line-height: 1.3; }
+        .p-price { font-size: 16px; font-weight: bold; color: var(--yellow); }
 
-        /* ✅ เอฟเฟกต์ตอนหด (Shrink Mode) */
-        .shrink header { padding: 5px 0; }
-        .shrink .logo { height: 30px; }
-        .shrink .rec-scroller { padding: 0 10px 8px; gap: 8px; }
-        
-        /* เปลี่ยนการ์ดแนะนำเป็นแถบเล็กๆ แนวนอน */
-        .shrink .rec-card { 
-            min-width: 180px; flex-direction: row; align-items: center; padding: 5px; 
-            background: #1a1a1a; border-radius: 30px; border: 1px solid var(--gold);
-        }
-        .shrink .rec-img { width: 40px; height: 40px; border-radius: 50%; }
-        .shrink .rec-body { flex-direction: row; padding: 0 8px; align-items: center; width: 100%; justify-content: space-between; }
-        .shrink .rec-price { font-size: 14px; }
-
-        /* ✅ ปุ่มสั่งซื้อ (สีกระโดดตามค่าย) */
+        /* ✅ ปุ่มค่ายสินค้า */
         .btn-buy { 
             display: flex; align-items: center; justify-content: center; gap: 4px; 
-            padding: 8px 0; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; color: #fff; 
+            padding: 7px 0; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: bold; color: #fff; 
         }
-        .shrink .btn-buy { padding: 4px 12px; border-radius: 20px; font-size: 11px; }
-
         .bg-shopee { background-color: var(--shopee) !important; }
         .bg-lazada { background-color: var(--lazada) !important; }
         .bg-tiktok { background-color: var(--tiktok) !important; border: 1px solid #444; }
-        .bg-default { background-color: var(--gold) !important; color: #000 !important; }
 
-        /* ✅ ค้นหาและหมวดหมู่ (ติดหนึบถัดมา) */
-        .tools-sticky { position: sticky; top: 140px; z-index: 1900; background: rgba(0,0,0,0.9); padding: 10px; transition: 0.4s; }
-        .shrink + .tools-sticky { top: 95px; } /* ขยับตามความสูงที่หด */
-        
+        /* ✅ หมวดหมู่ติดหนึบ */
+        .tools-sticky { position: sticky; top: 82px; z-index: 1900; background: rgba(0,0,0,0.9); padding: 10px; border-bottom: 1px solid #222; }
         #search { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: #000; color: #fff; margin-bottom: 10px; outline: none; }
         .cat-box { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: #111; border: 1px solid #333; padding: 8px 20px; border-radius: 30px; color: #aaa; white-space: nowrap; font-size: 14px; }
-        .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; border-color: var(--yellow); }
+        .cat-btn { background: #111; border: 1px solid #333; padding: 7px 18px; border-radius: 20px; color: #aaa; white-space: nowrap; font-size: 13px; }
+        .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
-        /* รายการสินค้าหลัก */
+        /* ✅ รายการสินค้าหลัก (3 คอลัมน์) */
         .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
-        .card-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .card-body { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; gap: 5px; }
-        .p-name { font-size: 12px; color: #ddd; height: 32px; overflow: hidden; line-height: 1.3; }
-        .p-price { font-size: 15px; font-weight: bold; color: var(--yellow); }
+
+        /* ✅ ระบบแสดงรูปใหญ่ (Modal) */
+        .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        .modal-content { max-width: 90%; max-height: 80%; border-radius: 10px; border: 2px solid var(--gold); }
+        .close-btn { position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; cursor: pointer; }
 
         footer { padding: 40px 0; text-align: center; color: #333; font-size: 11px; }
     </style>
 </head>
 <body>
 
-<div class="header-sticky" id="nav">
+<div class="header-sticky">
     <header><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo"></header>
-    <div style="color:var(--yellow); font-size:13px; margin:0 12px 8px; font-weight:bold;">✨ สินค้าแนะนำ</div>
-    <div class="rec-scroller" id="rec-list"></div>
+    <div class="rec-section">
+        <div style="color:var(--yellow); font-size:13px; margin:0 12px 8px; font-weight:bold;">⭐ สินค้าแนะนำ</div>
+        <div class="rec-scroller" id="rec-list"></div>
+    </div>
 </div>
 
 <div class="tools-sticky">
@@ -98,28 +82,32 @@
 
 <div class="main-grid" id="main-list"></div>
 
+<div id="imgModal" class="modal" onclick="this.style.display='none'">
+    <span class="close-btn">&times;</span>
+    <img class="modal-content" id="fullImg">
+</div>
+
 <footer>PHAENDIN OFFICIAL STORE</footer>
 
 <script>
     const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
-    
     let db = [];
     let currentCat = 'all';
 
-    // ระบบหดเมื่อเลื่อน
-    window.onscroll = () => {
-        const nav = document.getElementById("nav");
-        window.scrollY > 50 ? nav.classList.add("shrink") : nav.classList.remove("shrink");
-    };
-
     function getPlat(url) {
-        if (!url) return { class: 'bg-default', text: 'ซื้อ' };
+        if (!url) return { class: 'bg-shopee', text: 'ซื้อ' };
         const u = url.toLowerCase();
         if (u.includes('shopee')) return { class: 'bg-shopee', text: 'Shopee' };
         if (u.includes('lazada')) return { class: 'bg-lazada', text: 'Lazada' };
         if (u.includes('tiktok')) return { class: 'bg-tiktok', text: 'TikTok' };
-        return { class: 'bg-default', text: 'ซื้อ' };
+        return { class: 'bg-shopee', text: 'ซื้อเลย' };
+    }
+
+    // ✅ ฟังก์ชันโชว์รูปใหญ่
+    function showImg(src) {
+        document.getElementById('fullImg').src = src;
+        document.getElementById('imgModal').style.display = 'flex';
     }
 
     async function init() {
@@ -129,7 +117,7 @@
             const rows = csv.split(/\r?\n/).slice(1);
             db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             render();
-        } catch (e) { console.error("Error"); }
+        } catch (e) { console.error("Error loading data"); }
     }
 
     function setCat(cat, btn) {
@@ -139,37 +127,26 @@
         render();
     }
 
+    function createCard(p) {
+        const plat = getPlat(p[3]);
+        return `
+            <div class="product-card">
+                <img src="${p[1]}" class="p-img" onclick="showImg('${p[1]}')">
+                <div class="p-body">
+                    <div class="p-title">${p[0]}</div>
+                    <div class="p-price">฿${p[2]}</div>
+                    <a href="${p[3]}" target="_blank" class="btn-buy ${plat.class}">${plat.text}</a>
+                </div>
+            </div>`;
+    }
+
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-        
-        // สินค้าแนะนำ (หดแล้วยังเห็นราคา/ปุ่ม)
         const recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
-        document.getElementById('rec-list').innerHTML = recs.map(p => {
-            const plat = getPlat(p[3]);
-            return `
-                <div class="rec-card">
-                    <img src="${p[1]}" class="rec-img">
-                    <div class="rec-body">
-                        <div class="rec-price">฿${p[2]}</div>
-                        <a href="${p[3]}" target="_blank" class="btn-buy ${plat.class}">${plat.text}</a>
-                    </div>
-                </div>`;
-        }).join('');
+        document.getElementById('rec-list').innerHTML = recs.map(p => createCard(p)).join('');
 
-        // สินค้าหลัก
         const filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(q));
-        document.getElementById('main-list').innerHTML = filtered.map(p => {
-            const plat = getPlat(p[3]);
-            return `
-                <div class="card">
-                    <img src="${p[1]}" class="card-img">
-                    <div class="card-body">
-                        <div class="p-name">${p[0]}</div>
-                        <div class="p-price">฿${p[2]}</div>
-                        <a href="${p[3]}" target="_blank" class="btn-buy ${plat.class}">${plat.text}</a>
-                    </div>
-                </div>`;
-        }).join('');
+        document.getElementById('main-list').innerHTML = filtered.map(p => createCard(p)).join('');
     }
     init();
 </script>
