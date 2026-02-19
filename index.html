@@ -13,46 +13,54 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; overflow-x: hidden; }
+        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; }
 
         /* ✅ ส่วนหัวและสินค้าแนะนำ (Sticky & Shrink) */
-        .sticky-wrapper { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 2px solid var(--gold); transition: 0.4s; }
+        .fixed-top-area { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 1px solid var(--gold); transition: 0.4s; }
         
-        header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; }
-        .logo-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; }
+        header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .logo-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; transition: 0.3s; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .store-info h1 { font-size: 16px; color: #fff; }
-
-        .section-bar { background: #fff; color: #000; padding: 4px 15px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
-
+        
         /* ✅ Recommended Scroller */
-        .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 10px 15px; scrollbar-width: none; transition: 0.4s; }
+        .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px 10px; scrollbar-width: none; transition: 0.4s; }
         .rec-container::-webkit-scrollbar { display: none; }
         
-        .rec-item { min-width: 160px; background: #1a1a1a; border-radius: 10px; border: 1px solid #333; overflow: hidden; transition: 0.4s; }
-        .rec-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; cursor: zoom-in; transition: 0.4s; }
+        .rec-item { 
+            min-width: 150px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; 
+            overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; 
+        }
+        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: zoom-in; transition: 0.4s; }
         .rec-body { padding: 8px; transition: 0.3s; }
-        .rec-price { color: var(--yellow); font-weight: bold; font-size: 14px; }
+        .rec-name { font-size: 11px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rec-price { color: var(--yellow); font-weight: bold; font-size: 14px; margin: 2px 0; }
 
-        /* ✅ เอฟเฟกต์ตอนเลื่อนลง (SHRINK) */
+        /* ✅ เอฟเฟกต์ตอนเลื่อนลง (SHRINK MODE) */
         .shrink header { padding: 5px 15px; }
-        .shrink .section-bar { display: none; }
-        .shrink .rec-container { padding: 5px 10px; }
-        .shrink .rec-item { min-width: 50px; border-radius: 50%; border: 2px solid var(--gold); background: none; }
-        .shrink .rec-img { aspect-ratio: 1/1; border-radius: 50%; }
-        .shrink .rec-body { display: none; }
+        .shrink .logo-circle { width: 25px; height: 25px; }
+        .shrink .store-info { display: none; }
+        
+        /* เปลี่ยนการ์ดแนะนำเป็นแถบเล็กแนวนอน */
+        .shrink .rec-item { min-width: 190px; flex-direction: row; align-items: center; padding: 5px; border-radius: 30px; border-color: var(--gold); }
+        .shrink .rec-img { width: 40px; height: 40px; border-radius: 50%; }
+        .shrink .rec-body { padding: 0 10px; display: flex; flex-direction: row; align-items: center; gap: 8px; width: 100%; justify-content: space-between; }
+        .shrink .rec-name { width: 60px; font-size: 10px; }
+        .shrink .rec-price { font-size: 12px; margin: 0; }
+        .shrink .btn-mini { padding: 2px 8px; font-size: 9px; border-radius: 15px; }
 
-        /* ✅ ค้นหาและหมวดหมู่ */
-        .tools-area { padding: 10px 15px; background: var(--black); }
+        /* ✅ ส่วนหมวดหมู่ (ติดหนึบถัดมา) */
+        .tools-sticky { position: sticky; top: 125px; z-index: 1900; background: rgba(13,13,13,0.95); padding: 10px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
+        .shrink + .tools-sticky { top: 95px; } /* ขยับตามความสูงที่หดของข้างบน */
+
         #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; margin-bottom: 10px; outline: none; }
         .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: #222; color: #888; padding: 6px 15px; border-radius: 20px; font-size: 12px; border: none; white-space: nowrap; }
+        .cat-btn { background: #222; color: #888; padding: 7px 18px; border-radius: 20px; font-size: 13px; border: none; white-space: nowrap; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
-        /* ✅ รายการสินค้าหลัก (3 คอลัมน์) */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px 15px; }
+        /* ✅ รายการสินค้าหลัก */
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 15px; }
         .p-card { background: #fff; border-radius: 8px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
-        .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: zoom-in; }
+        .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
         .p-info { padding: 6px; flex-grow: 1; }
         .p-name { font-size: 10px; color: #666; height: 26px; overflow: hidden; line-height: 1.2; }
         .p-price { font-size: 14px; font-weight: bold; margin: 3px 0; }
@@ -63,23 +71,25 @@
         .tiktok { background: var(--tiktok); }
 
         /* ✅ Modal ดูรูปใหญ่ */
-        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
         .modal img { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="sticky-wrapper" id="navbar">
+<div class="fixed-top-area" id="topNav">
     <header>
         <div class="logo-circle"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg"></div>
-        <div class="store-info"><h1>Phaendin Store</h1></div>
+        <div class="store-info">
+            <h1 style="font-size: 16px;">Phaendin Store</h1>
+            <p style="font-size: 10px; color: var(--gold);">สินค้าแนะนำ (สุ่ม)</p>
+        </div>
     </header>
-    <div class="section-bar"><i class="fas fa-star"></i> สินค้าแนะนำสุ่ม</div>
     <div class="rec-container" id="rec-list"></div>
 </div>
 
-<div class="tools-area">
-    <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
+<div class="tools-sticky" id="toolsNav">
+    <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
     <div class="cat-scroll">
         <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
         <button class="cat-btn" onclick="setCat('อาหาร', this)">อาหาร</button>
@@ -97,10 +107,10 @@
     let db = [];
     let currentCat = 'all';
 
-    // ✅ ตรวจจับการเลื่อนเพื่อหดหน้าจอ
+    // ✅ ระบบตรวจจับการสไลด์
     window.onscroll = () => {
-        const nav = document.getElementById("navbar");
-        window.scrollY > 50 ? nav.classList.add("shrink") : nav.classList.remove("shrink");
+        const topNav = document.getElementById("topNav");
+        window.scrollY > 50 ? topNav.classList.add("shrink") : topNav.classList.remove("shrink");
     };
 
     function getPlat(url) {
@@ -136,20 +146,21 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // ✅ 1. สุ่มสินค้าแนะนำ (Random)
+        // 1. สุ่มสินค้าแนะนำ
         let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
-        recs = recs.sort(() => 0.5 - Math.random()).slice(0, 6); // สุ่มมา 6 อย่าง
+        recs = recs.sort(() => 0.5 - Math.random()).slice(0, 8);
         
         document.getElementById('rec-list').innerHTML = recs.map(p => `
             <div class="rec-item">
                 <img src="${p[1]}" class="rec-img" onclick="openImg('${p[1]}')">
                 <div class="rec-body">
+                    <div class="rec-name">${p[0]}</div>
                     <div class="rec-price">฿${p[2]}</div>
-                    <a href="${p[3]}" class="btn-buy ${getPlat(p[3])}">สั่งซื้อ</a>
+                    <a href="${p[3]}" class="btn-buy btn-mini ${getPlat(p[3])}">ซื้อ</a>
                 </div>
             </div>`).join('');
 
-        // ✅ 2. สินค้าทั้งหมด
+        // 2. สินค้าทั้งหมด
         const filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(q));
         document.getElementById('main-list').innerHTML = filtered.map(p => `
             <div class="p-card">
