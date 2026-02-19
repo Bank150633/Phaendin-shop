@@ -95,10 +95,10 @@
 <div class="tools-sticky">
     <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
     <div class="cat-scroll">
-        <button class="cat-btn active" onclick="setCat('อาหาร', this)">อาหาร</button>
+        <button class="cat-btn active" onclick="setCat('all', this)">สุ่มทั้งหมด</button>
+        <button class="cat-btn" onclick="setCat('อาหาร', this)">อาหาร</button>
         <button class="cat-btn" onclick="setCat('สินค้าทั่วไป', this)">ทั่วไป</button>
         <button class="cat-btn" onclick="setCat('แม่และเด็ก', this)">แม่และเด็ก</button>
-        <button class="cat-btn" onclick="setCat('all', this)">สุ่มทั้งหมด</button>
     </div>
 </div>
 
@@ -110,7 +110,7 @@
     const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
     let db = [];
-    let currentCat = 'อาหาร'; // ตั้งค่าให้หมวดอาหารขึ้นเป็นอันแรกเสมอ
+    let currentCat = 'all'; // เปลี่ยนค่าเริ่มต้นกลับเป็น 'all' เพื่อโชว์ทั้งหมดก่อน
 
     window.onscroll = () => {
         const topNav = document.getElementById("topNav");
