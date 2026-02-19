@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN | Store</title>
+    <title>PHAENDIN | Premium Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -13,91 +13,93 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; line-height: 1.6; }
+        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; }
 
-        /* ✅ Header Section */
-        .top-nav { background: var(--black); padding: 15px; border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; gap: 15px; }
-        .logo-circle { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; background: #000; }
+        /* ✅ Header & Rec Section (หดได้) */
+        .sticky-wrapper { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 2px solid var(--gold); transition: 0.4s ease; }
+        
+        header { padding: 15px; display: flex; align-items: center; gap: 12px; transition: 0.3s; }
+        .logo-circle { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; transition: 0.3s; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .store-info h1 { font-size: 18px; color: #fff; font-weight: 600; }
-        .store-info p { font-size: 12px; color: var(--gold); }
+        .store-info h1 { font-size: 16px; }
+        .store-info p { font-size: 11px; color: var(--gold); }
 
-        /* ✅ Section Titles */
-        .section-bar { background: #fff; color: #000; padding: 5px 15px; margin: 15px 0; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-        .section-bar i { color: var(--gold); }
-
-        /* ✅ Recommended Section (Horizontal Scroll) */
-        .rec-container { display: flex; gap: 12px; overflow-x: auto; padding: 0 15px 15px; scrollbar-width: none; }
+        /* ✅ Recommended Cards */
+        .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px 15px; scrollbar-width: none; transition: 0.4s; }
         .rec-container::-webkit-scrollbar { display: none; }
         
-        .rec-item { min-width: 200px; background: var(--dark-gray); border-radius: 10px; border: 1px solid #333; overflow: hidden; }
-        .rec-img-box { width: 100%; aspect-ratio: 16/9; position: relative; cursor: zoom-in; }
+        .rec-item { min-width: 180px; background: var(--dark-gray); border-radius: 10px; border: 1px solid #333; overflow: hidden; transition: 0.4s; position: relative; }
+        .rec-img-box { width: 100%; aspect-ratio: 16/9; transition: 0.4s; }
         .rec-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .rec-detail { padding: 10px; }
-        .rec-title { font-size: 13px; margin-bottom: 5px; height: 20px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .rec-detail { padding: 8px; transition: 0.3s; }
+        .rec-title { font-size: 12px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* ✅ Category Buttons */
-        .cat-scroll { display: flex; gap: 10px; padding: 0 15px 15px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: #333; color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 13px; border: none; white-space: nowrap; }
+        /* ✅ เอฟเฟกต์ตอนหด (Shrink Mode) */
+        .shrink header { padding: 8px 15px; }
+        .shrink .logo-circle { width: 30px; height: 30px; }
+        .shrink .store-info { display: none; }
+        .shrink .rec-container { padding: 0 10px 10px; gap: 8px; }
+        .shrink .rec-item { min-width: 50px; max-width: 50px; border-radius: 50%; border: 2px solid var(--gold); background: none; }
+        .shrink .rec-img-box { aspect-ratio: 1/1; }
+        .shrink .rec-detail { display: none; }
+
+        /* ✅ Search & Categories (Sticky ต่อจาก Header) */
+        .tools-sticky { position: sticky; top: 125px; z-index: 1900; background: rgba(13,13,13,0.95); padding: 10px 15px; transition: 0.3s; }
+        .shrink + .tools-sticky { top: 75px; }
+
+        #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #000; color: #fff; margin-bottom: 10px; outline: none; }
+        #search:focus { border-color: var(--gold); }
+        .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+        .cat-btn { background: #222; color: #888; padding: 6px 16px; border-radius: 20px; font-size: 13px; border: none; white-space: nowrap; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
-        /* ✅ Main Grid (3 Columns) */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 15px 30px; }
+        /* ✅ Grid สินค้า */
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 15px; }
         .p-card { background: #fff; border-radius: 8px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
         .p-img-box { width: 100%; aspect-ratio: 1/1; cursor: zoom-in; }
         .p-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .p-info { padding: 8px; flex-grow: 1; }
-        .p-name { font-size: 11px; color: #666; height: 30px; overflow: hidden; line-height: 1.2; }
-        .p-price { font-size: 15px; font-weight: bold; margin: 4px 0; color: #000; }
-
-        /* ✅ Platform Buttons */
-        .btn-plat { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 6px 0; border-radius: 4px; color: #fff; font-size: 11px; text-decoration: none; font-weight: bold; }
+        .p-info { padding: 6px; flex-grow: 1; }
+        .p-name { font-size: 11px; color: #666; height: 28px; overflow: hidden; line-height: 1.2; }
+        .p-price { font-size: 14px; font-weight: bold; margin: 3px 0; }
+        .btn-plat { display: block; text-align: center; padding: 5px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; }
+        
         .bg-shope { background: var(--shopee); }
         .bg-laz { background: var(--lazada); }
         .bg-tk { background: var(--tiktok); }
 
-        /* ✅ Image Modal (Popup) */
+        /* ✅ Modal ดูรูปใหญ่ */
         .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        .modal img { max-width: 90%; max-height: 80%; border: 3px solid var(--gold); border-radius: 10px; }
-        .modal-close { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; }
+        .modal img { max-width: 90%; max-height: 70%; border: 2px solid var(--gold); border-radius: 10px; }
 
-        .search-area { padding: 0 15px 15px; }
-        #search { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--gold); background: #111; color: #fff; outline: none; }
+        .section-label { font-size: 13px; color: var(--gold); font-weight: bold; margin: 0 15px 10px; display: flex; align-items: center; gap: 5px; }
     </style>
 </head>
 <body>
 
-<div class="top-nav">
-    <div class="logo-circle">
-        <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg">
+<div class="sticky-wrapper" id="nav">
+    <header>
+        <div class="logo-circle"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg"></div>
+        <div class="store-info">
+            <h1>Phaendin | Store</h1>
+            <p>Official Online Store</p>
+        </div>
+    </header>
+    <div class="section-label" id="rec-label"><i class="fas fa-star"></i> แนะนำ</div>
+    <div class="rec-container" id="rec-list"></div>
+</div>
+
+<div class="tools-sticky">
+    <input type="text" id="search" placeholder="ค้นหาสินค้าที่นี่..." oninput="render()">
+    <div class="cat-scroll">
+        <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
+        <button class="cat-btn" onclick="setCat('อาหาร', this)">อาหาร</button>
+        <button class="cat-btn" onclick="setCat('สินค้าทั่วไป', this)">สินค้าทั่วไป</button>
     </div>
-    <div class="store-info">
-        <h1>Phaendin | Store</h1>
-        <p>17710660067-2</p>
-    </div>
 </div>
 
-<div class="section-bar">
-    <i class="fas fa-star"></i> สินค้าแนะนำหลัก
-</div>
-<div class="rec-container" id="rec-list"></div>
-
-<div class="search-area">
-    <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
-</div>
-<div class="cat-scroll">
-    <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
-    <button class="cat-btn" onclick="setCat('อาหาร', this)">อาหาร</button>
-    <button class="cat-btn" onclick="setCat('สินค้าทั่วไป', this)">สินค้าทั่วไป</button>
-</div>
-
-<div class="section-bar">
-    <i class="fas fa-th-large"></i> สินค้าทั้งหมด
-</div>
 <div class="main-grid" id="main-list"></div>
 
 <div id="imgModal" class="modal" onclick="this.style.display='none'">
-    <span class="modal-close">&times;</span>
     <img id="fullImg">
 </div>
 
@@ -107,6 +109,27 @@
     let db = [];
     let currentCat = 'all';
 
+    // ✅ ฟังก์ชันหด Header เมื่อเลื่อน
+    window.onscroll = () => {
+        const nav = document.getElementById("nav");
+        const label = document.getElementById("rec-label");
+        if (window.scrollY > 60) {
+            nav.classList.add("shrink");
+            label.style.display = "none";
+        } else {
+            nav.classList.remove("shrink");
+            label.style.display = "flex";
+        }
+    };
+
+    function getPlat(url) {
+        const u = url.toLowerCase();
+        if (u.includes('shopee')) return { class: 'bg-shope', text: 'SHOPEE' };
+        if (u.includes('lazada')) return { class: 'bg-laz', text: 'LAZADA' };
+        if (u.includes('tiktok')) return { class: 'bg-tk', text: 'TIKTOK' };
+        return { class: 'bg-shope', text: 'BUY' };
+    }
+
     async function init() {
         try {
             const res = await fetch(URL);
@@ -114,20 +137,7 @@
             const rows = csv.split(/\r?\n/).slice(1);
             db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             render();
-        } catch (e) { console.error("Error loading data"); }
-    }
-
-    function getPlat(url) {
-        const u = url.toLowerCase();
-        if (u.includes('shopee')) return { class: 'bg-shope', text: 'Shopee' };
-        if (u.includes('lazada')) return { class: 'bg-laz', text: 'Lazada' };
-        if (u.includes('tiktok')) return { class: 'bg-tk', text: 'TikTok' };
-        return { class: 'bg-shope', text: 'สั่งซื้อ' };
-    }
-
-    function openImg(src) {
-        document.getElementById('fullImg').src = src;
-        document.getElementById('imgModal').style.display = 'flex';
+        } catch (e) { console.error("Error"); }
     }
 
     function setCat(cat, btn) {
@@ -135,6 +145,11 @@
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         render();
+    }
+
+    function openImg(src) {
+        document.getElementById('fullImg').src = src;
+        document.getElementById('imgModal').style.display = 'flex';
     }
 
     function render() {
@@ -152,8 +167,8 @@
                     <div class="rec-detail">
                         <div class="rec-title">${p[0]}</div>
                         <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span style="color:var(--yellow); font-weight:bold;">฿${p[2]}</span>
-                            <a href="${p[3]}" class="btn-plat ${plat.class}" style="padding:4px 10px;">${plat.text}</a>
+                            <span style="color:var(--yellow); font-weight:bold; font-size:14px;">฿${p[2]}</span>
+                            <a href="${p[3]}" class="btn-plat ${plat.class}" style="padding:3px 8px;">ซื้อ</a>
                         </div>
                     </div>
                 </div>`;
