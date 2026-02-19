@@ -17,10 +17,8 @@
 
         /* ✅ ส่วนหัวและสินค้าแนะนำ (Sticky & Shrink) */
         .fixed-top-area { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 1px solid var(--gold); transition: 0.4s; }
-        
         header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-        .logo-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; transition: 0.3s; }
-        .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .logo-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; }
         
         /* ✅ Recommended Scroller */
         .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px 10px; scrollbar-width: none; transition: 0.4s; }
@@ -30,27 +28,34 @@
             min-width: 150px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; 
             overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; 
         }
-        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: zoom-in; transition: 0.4s; }
+        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: zoom-in; }
         .rec-body { padding: 8px; transition: 0.3s; }
         .rec-name { font-size: 11px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .rec-price { color: var(--yellow); font-weight: bold; font-size: 14px; margin: 2px 0; }
+        .rec-price { color: var(--yellow); font-weight: bold; font-size: 14px; }
 
-        /* ✅ เอฟเฟกต์ตอนเลื่อนลง (SHRINK MODE) */
+        /* ✅ เอฟเฟกต์ตอนเลื่อนลง (SHRINK MODE - ปรับให้เห็น 3-4 ตัว) */
         .shrink header { padding: 5px 15px; }
         .shrink .logo-circle { width: 25px; height: 25px; }
         .shrink .store-info { display: none; }
         
-        /* เปลี่ยนการ์ดแนะนำเป็นแถบเล็กแนวนอน */
-        .shrink .rec-item { min-width: 190px; flex-direction: row; align-items: center; padding: 5px; border-radius: 30px; border-color: var(--gold); }
-        .shrink .rec-img { width: 40px; height: 40px; border-radius: 50%; }
-        .shrink .rec-body { padding: 0 10px; display: flex; flex-direction: row; align-items: center; gap: 8px; width: 100%; justify-content: space-between; }
-        .shrink .rec-name { width: 60px; font-size: 10px; }
-        .shrink .rec-price { font-size: 12px; margin: 0; }
-        .shrink .btn-mini { padding: 2px 8px; font-size: 9px; border-radius: 15px; }
+        /* ปรับขนาดแคปซูลตอนหดให้เล็กลง เพื่อให้เห็นหลายตัว */
+        .shrink .rec-item { 
+            min-width: 110px; /* ลดความกว้างลง */
+            flex-direction: column; 
+            padding: 4px; 
+            border-radius: 10px; 
+            border-color: var(--gold); 
+            text-align: center;
+        }
+        .shrink .rec-img { width: 35px; height: 35px; border-radius: 50%; margin: 0 auto; }
+        .shrink .rec-body { padding: 2px; display: block; width: 100%; }
+        .shrink .rec-name { width: 100%; font-size: 9px; margin: 2px 0; }
+        .shrink .rec-price { font-size: 11px; display: block; }
+        .shrink .btn-mini { display: none; } /* ซ่อนปุ่มซื้อตอนหดเพื่อประหยัดที่ แต่กดที่ตัวสินค้าเพื่อไปลิงก์ได้ */
 
-        /* ✅ ส่วนหมวดหมู่ (ติดหนึบถัดมา) */
+        /* ✅ ส่วนหมวดหมู่ (ติดหนึบ) */
         .tools-sticky { position: sticky; top: 125px; z-index: 1900; background: rgba(13,13,13,0.95); padding: 10px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
-        .shrink + .tools-sticky { top: 95px; } /* ขยับตามความสูงที่หดของข้างบน */
+        .shrink + .tools-sticky { top: 90px; }
 
         #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; margin-bottom: 10px; outline: none; }
         .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
@@ -70,7 +75,6 @@
         .lazada { background: var(--lazada); }
         .tiktok { background: var(--tiktok); }
 
-        /* ✅ Modal ดูรูปใหญ่ */
         .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
         .modal img { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); border-radius: 10px; }
     </style>
@@ -82,13 +86,13 @@
         <div class="logo-circle"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg"></div>
         <div class="store-info">
             <h1 style="font-size: 16px;">Phaendin Store</h1>
-            <p style="font-size: 10px; color: var(--gold);">สินค้าแนะนำ (สุ่ม)</p>
+            <p style="font-size: 10px; color: var(--gold);">⭐ สินค้าแนะนำสุ่ม</p>
         </div>
     </header>
     <div class="rec-container" id="rec-list"></div>
 </div>
 
-<div class="tools-sticky" id="toolsNav">
+<div class="tools-sticky">
     <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
     <div class="cat-scroll">
         <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
@@ -107,7 +111,6 @@
     let db = [];
     let currentCat = 'all';
 
-    // ✅ ระบบตรวจจับการสไลด์
     window.onscroll = () => {
         const topNav = document.getElementById("topNav");
         window.scrollY > 50 ? topNav.classList.add("shrink") : topNav.classList.remove("shrink");
@@ -146,21 +149,20 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // 1. สุ่มสินค้าแนะนำ
+        // 1. สุ่มแนะนำ
         let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
-        recs = recs.sort(() => 0.5 - Math.random()).slice(0, 8);
+        recs = recs.sort(() => 0.5 - Math.random()).slice(0, 10);
         
         document.getElementById('rec-list').innerHTML = recs.map(p => `
-            <div class="rec-item">
-                <img src="${p[1]}" class="rec-img" onclick="openImg('${p[1]}')">
+            <div class="rec-item" onclick="window.open('${p[3]}', '_blank')">
+                <img src="${p[1]}" class="rec-img" onclick="event.stopPropagation(); openImg('${p[1]}')">
                 <div class="rec-body">
                     <div class="rec-name">${p[0]}</div>
                     <div class="rec-price">฿${p[2]}</div>
-                    <a href="${p[3]}" class="btn-buy btn-mini ${getPlat(p[3])}">ซื้อ</a>
                 </div>
             </div>`).join('');
 
-        // 2. สินค้าทั้งหมด
+        // 2. สินค้าหลัก
         const filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(q));
         document.getElementById('main-list').innerHTML = filtered.map(p => `
             <div class="p-card">
