@@ -17,66 +17,64 @@
 
         /* ✅ ส่วนหัวและสินค้าแนะนำ (Sticky & Shrink) */
         .fixed-top-area { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 1px solid var(--gold); transition: 0.4s; }
-        header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; }
         .logo-circle { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; }
         
-        /* ✅ Recommended Scroller */
-        .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px 10px; scrollbar-width: none; transition: 0.4s; }
+        /* ✅ Recommended Scroller - ปรับให้เห็น 3 ตัวตอนปกติ */
+        .rec-container { display: flex; gap: 8px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; transition: 0.4s; }
         .rec-container::-webkit-scrollbar { display: none; }
         
         .rec-item { 
-            min-width: 150px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; 
+            min-width: 30%; /* ปรับความกว้างเพื่อให้เห็นประมาณ 3 ตัว */
+            background: #1a1a1a; border-radius: 10px; border: 1px solid #333; 
             overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; 
         }
         .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: zoom-in; }
-        .rec-body { padding: 8px; transition: 0.3s; }
-        .rec-name { font-size: 11px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .rec-price { color: var(--yellow); font-weight: bold; font-size: 14px; }
+        .rec-body { padding: 6px; text-align: center; }
+        .rec-name { font-size: 10px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rec-price { color: var(--yellow); font-weight: bold; font-size: 13px; margin: 2px 0; }
+        .btn-mini { display: block; background: var(--gold); color: #000; font-size: 9px; font-weight: bold; padding: 3px 0; border-radius: 4px; text-decoration: none; }
 
-        /* ✅ เอฟเฟกต์ตอนเลื่อนลง (SHRINK MODE - ปรับให้เห็น 3-4 ตัว) */
+        /* ✅ เอฟเฟกต์ตอนเลื่อนลง (SHRINK MODE - เห็น 4 ตัว) */
         .shrink header { padding: 5px 15px; }
         .shrink .logo-circle { width: 25px; height: 25px; }
         .shrink .store-info { display: none; }
         
-        /* ปรับขนาดแคปซูลตอนหดให้เล็กลง เพื่อให้เห็นหลายตัว */
         .shrink .rec-item { 
-            min-width: 110px; /* ลดความกว้างลง */
-            flex-direction: column; 
-            padding: 4px; 
-            border-radius: 10px; 
-            border-color: var(--gold); 
-            text-align: center;
+            min-width: 22%; /* ปรับให้แคบลงเพื่อให้เห็น 4 ตัวพร้อมกัน */
+            background: none; border-radius: 0; border: none; padding: 0;
         }
-        .shrink .rec-img { width: 35px; height: 35px; border-radius: 50%; margin: 0 auto; }
-        .shrink .rec-body { padding: 2px; display: block; width: 100%; }
-        .shrink .rec-name { width: 100%; font-size: 9px; margin: 2px 0; }
+        .shrink .rec-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--gold); margin: 0 auto; }
+        .shrink .rec-body { padding: 4px 0; }
+        .shrink .rec-name { display: none; } /* ซ่อนชื่อตอนหดเพื่อความสวยงาม */
         .shrink .rec-price { font-size: 11px; display: block; }
-        .shrink .btn-mini { display: none; } /* ซ่อนปุ่มซื้อตอนหดเพื่อประหยัดที่ แต่กดที่ตัวสินค้าเพื่อไปลิงก์ได้ */
+        .shrink .btn-mini { display: none; }
 
-        /* ✅ ส่วนหมวดหมู่ (ติดหนึบ) */
-        .tools-sticky { position: sticky; top: 125px; z-index: 1900; background: rgba(13,13,13,0.95); padding: 10px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
+        /* ✅ ส่วนหมวดหมู่ (Sticky ต่อจาก Header) */
+        .tools-sticky { position: sticky; top: 180px; z-index: 1900; background: rgba(13,13,13,0.95); padding: 10px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
         .shrink + .tools-sticky { top: 90px; }
 
-        #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; margin-bottom: 10px; outline: none; }
+        #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; margin-bottom: 10px; outline: none; font-size: 14px; }
         .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: #222; color: #888; padding: 7px 18px; border-radius: 20px; font-size: 13px; border: none; white-space: nowrap; }
+        .cat-btn { background: #222; color: #888; padding: 7px 18px; border-radius: 20px; font-size: 12px; border: none; white-space: nowrap; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
-        /* ✅ รายการสินค้าหลัก */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 15px; }
-        .p-card { background: #fff; border-radius: 8px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
+        /* ✅ รายการสินค้าหลัก (3 คอลัมน์) */
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px; }
+        .p-card { background: #fff; border-radius: 6px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
         .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .p-info { padding: 6px; flex-grow: 1; }
-        .p-name { font-size: 10px; color: #666; height: 26px; overflow: hidden; line-height: 1.2; }
-        .p-price { font-size: 14px; font-weight: bold; margin: 3px 0; }
-        .btn-buy { display: block; text-align: center; padding: 5px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; }
+        .p-info { padding: 5px; flex-grow: 1; }
+        .p-name { font-size: 10px; color: #555; height: 24px; overflow: hidden; line-height: 1.2; }
+        .p-price { font-size: 13px; font-weight: bold; margin: 2px 0; }
+        .btn-buy { display: block; text-align: center; padding: 4px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; }
 
         .shopee { background: var(--shopee); }
         .lazada { background: var(--lazada); }
         .tiktok { background: var(--tiktok); }
 
+        /* Modal ซูมรูป */
         .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        .modal img { max-width: 90%; max-height: 80%; border: 2px solid var(--gold); border-radius: 10px; }
+        .modal img { max-width: 90%; border: 2px solid var(--gold); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -93,7 +91,7 @@
 </div>
 
 <div class="tools-sticky">
-    <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
+    <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
     <div class="cat-scroll">
         <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
         <button class="cat-btn" onclick="setCat('อาหาร', this)">อาหาร</button>
@@ -149,7 +147,7 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // 1. สุ่มแนะนำ
+        // 1. สุ่มแนะนำ (สุ่มทุกครั้งที่โหลดหรือเปลี่ยนหมวด)
         let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
         recs = recs.sort(() => 0.5 - Math.random()).slice(0, 10);
         
@@ -159,6 +157,7 @@
                 <div class="rec-body">
                     <div class="rec-name">${p[0]}</div>
                     <div class="rec-price">฿${p[2]}</div>
+                    <a href="${p[3]}" class="btn-mini">ซื้อเลย</a>
                 </div>
             </div>`).join('');
 
