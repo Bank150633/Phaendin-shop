@@ -18,7 +18,6 @@
         /* ✅ Fixed Top Area */
         .fixed-top-area { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 1px solid var(--gold); transition: 0.4s ease; }
         
-        /* ✅ Header (ปรับให้โลโก้อยู่ตลอด) */
         header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
         .logo-circle { 
             width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--gold); 
@@ -41,12 +40,11 @@
         .rec-price { color: var(--yellow); font-weight: bold; font-size: 13px; }
         .btn-mini { display: block; color: #fff; font-size: 9px; font-weight: bold; padding: 4px 0; border-radius: 4px; text-decoration: none; text-align: center; }
 
-        /* ✅ เอฟเฟกต์ตอนเลื่อนลง (SHRINK MODE - โลโก้ยังอยู่!) */
+        /* ✅ SHRINK MODE */
         .shrink header { padding: 5px 12px; gap: 8px; }
-        .shrink .logo-circle { width: 25px; height: 25px; } /* โลโก้เล็กลงแต่ไม่หาย */
-        .shrink .store-info h1 { font-size: 12px; } /* ชื่อร้านเล็กลง */
+        .shrink .logo-circle { width: 25px; height: 25px; }
+        .shrink .store-info h1 { font-size: 12px; }
         .shrink .store-info p { display: none; }
-        
         .shrink .rec-container { padding: 5px 8px 8px; gap: 5px; }
         .shrink .rec-item { min-width: 23%; background: #111; border: 1px solid #444; border-radius: 6px; }
         .shrink .rec-img { width: 100%; height: 35px; border-radius: 0; }
@@ -55,7 +53,6 @@
         .shrink .rec-price { font-size: 10px; }
         .shrink .btn-mini { padding: 2px 0; font-size: 8px; }
 
-        /* ✅ Platform Colors */
         .shopee { background: var(--shopee); }
         .lazada { background: var(--lazada); }
         .tiktok { background: var(--tiktok); }
@@ -63,14 +60,13 @@
 
         /* ✅ Sticky Tools */
         .tools-sticky { position: sticky; top: 165px; z-index: 1900; background: rgba(13,13,13,0.98); padding: 10px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
-        .shrink + .tools-sticky { top: 85px; } /* ขยับตามความสูงที่หด */
+        .shrink + .tools-sticky { top: 85px; }
 
         #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; margin-bottom: 8px; outline: none; font-size: 14px; }
         .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
         .cat-btn { background: #222; color: #888; padding: 7px 18px; border-radius: 20px; font-size: 12px; border: none; white-space: nowrap; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
-        /* ✅ Main Grid (Randomized) */
         .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px; }
         .p-card { background: #fff; border-radius: 6px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
         .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
@@ -79,7 +75,6 @@
         .p-price { font-size: 13px; font-weight: bold; margin: 2px 0; }
         .btn-buy { display: block; text-align: center; padding: 4px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; }
 
-        /* Modal */
         .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
         .modal img { max-width: 90%; border: 1px solid var(--gold); border-radius: 10px; }
     </style>
@@ -88,9 +83,7 @@
 
 <div class="fixed-top-area" id="topNav">
     <header>
-        <div class="logo-circle">
-            <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg">
-        </div>
+        <div class="logo-circle"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg"></div>
         <div class="store-info">
             <h1>Phaendin Store</h1>
             <p style="font-size: 9px; color: var(--gold);">⭐ สินค้าแนะนำสุ่ม</p>
@@ -102,9 +95,10 @@
 <div class="tools-sticky">
     <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
     <div class="cat-scroll">
-        <button class="cat-btn active" onclick="setCat('all', this)">สุ่มทั้งหมด</button>
-        <button class="cat-btn" onclick="setCat('อาหาร', this)">อาหาร</button>
+        <button class="cat-btn active" onclick="setCat('อาหาร', this)">อาหาร</button>
         <button class="cat-btn" onclick="setCat('สินค้าทั่วไป', this)">ทั่วไป</button>
+        <button class="cat-btn" onclick="setCat('แม่และเด็ก', this)">แม่และเด็ก</button>
+        <button class="cat-btn" onclick="setCat('all', this)">สุ่มทั้งหมด</button>
     </div>
 </div>
 
@@ -116,7 +110,7 @@
     const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
     let db = [];
-    let currentCat = 'all';
+    let currentCat = 'อาหาร'; // ตั้งค่าให้หมวดอาหารขึ้นเป็นอันแรกเสมอ
 
     window.onscroll = () => {
         const topNav = document.getElementById("topNav");
@@ -157,7 +151,6 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // 1. สุ่มแนะนำ (บน)
         let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
         recs = recs.sort(() => 0.5 - Math.random()).slice(0, 10);
         
@@ -174,7 +167,6 @@
             </div>`;
         }).join('');
 
-        // 2. สุ่มสินค้าหลัก (ล่าง)
         let filtered = db.filter(p => (currentCat === 'all' || p[5] === currentCat) && p[0].toLowerCase().includes(q));
         filtered = filtered.sort(() => 0.5 - Math.random());
 
