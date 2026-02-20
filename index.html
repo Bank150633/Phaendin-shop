@@ -9,83 +9,87 @@
     <style>
         :root { 
             --gold: #D4AF37; --yellow: #FFD700; --black: #0D0D0D; 
-            --shopee: #EE4D2D; --lazada: #10147E; --tiktok: #000000;
-            --direct: #06C755; 
+            --shopee: #EE4D2D; --lazada: #10147E; --direct: #06C755; 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; line-height: 1.5; }
+        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; }
 
-        /* ✅ Header Section */
-        .fixed-top-area { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 1px solid var(--gold); transition: 0.4s ease; }
-        header { padding: 15px; display: flex; align-items: center; gap: 12px; }
-        .logo-circle { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; flex-shrink: 0; }
+        /* ✅ ล็อค Header ให้อยู่กับที่ */
+        .header-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 3000;
+            background: var(--black);
+            border-bottom: 1px solid var(--gold);
+        }
+        
+        header { padding: 12px 15px; display: flex; align-items: center; gap: 12px; transition: 0.3s; }
+        .logo-circle { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--gold); overflow: hidden; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .store-info h1 { font-size: 18px; letter-spacing: 1px; }
+        header h1 { font-size: 16px; font-weight: 600; color: #fff; }
 
-        /* ✅ Recommended Horizontal Scroll */
-        .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px 15px; scrollbar-width: none; }
-        .rec-container::-webkit-scrollbar { display: none; }
-        .rec-item { min-width: 120px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; overflow: hidden; position: relative; }
-        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .rec-body { padding: 8px; text-align: center; }
-        .rec-name { font-size: 11px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .rec-price { color: var(--yellow); font-weight: bold; font-size: 14px; margin: 2px 0; }
+        /* ✅ ล็อคส่วนค้นหาและหมวดหมู่ (ไม่ให้หายเวลาสไลด์) */
+        .tools-area {
+            position: sticky;
+            top: 65px; /* ต่อจากความสูงของ Header */
+            z-index: 2500;
+            background: rgba(13, 13, 13, 0.95);
+            padding: 10px 15px;
+            backdrop-filter: blur(10px);
+        }
 
-        /* ✅ Tools & Search */
-        .tools-sticky { position: sticky; top: 180px; z-index: 1900; background: rgba(13,13,13,0.95); padding: 12px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
-        #search { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: #111; color: #fff; margin-bottom: 10px; outline: none; }
+        #search { 
+            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); 
+            background: #000; color: #fff; margin-bottom: 8px; outline: none; font-size: 14px; 
+        }
+
         .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: #222; color: #888; padding: 8px 20px; border-radius: 25px; font-size: 13px; border: none; white-space: nowrap; cursor: pointer; transition: 0.3s; }
+        .cat-btn { background: #222; color: #888; padding: 6px 15px; border-radius: 20px; font-size: 12px; border: none; white-space: nowrap; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
-        /* ✅ Main Grid */
-        .main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
-        .p-card { background: #fff; border-radius: 10px; overflow: hidden; color: #000; display: flex; flex-direction: column; transition: 0.3s; }
-        .p-img-box { position: relative; width: 100%; aspect-ratio: 1/1; }
+        /* ✅ รายการสินค้า */
+        .main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; margin-top: 5px; }
+        .p-card { background: #fff; border-radius: 8px; overflow: hidden; color: #000; display: flex; flex-direction: column; position: relative; }
+        .p-img-box { width: 100%; aspect-ratio: 1/1; position: relative; }
         .p-img { width: 100%; height: 100%; object-fit: cover; }
-        .badge { position: absolute; top: 5px; left: 5px; background: #e67e22; color: #fff; font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
-        .p-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
-        .p-name { font-size: 13px; font-weight: 600; color: #222; height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 8px; }
-        .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 10px; }
-        .p-old { font-size: 10px; color: #999; text-decoration: line-through; }
-        .p-new { font-size: 18px; font-weight: bold; color: #d35400; }
+        
+        .badge { 
+            position: absolute; top: 5px; left: 5px; background: #e67e22; color: #fff; 
+            font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: bold; z-index: 10;
+        }
 
-        /* ✅ Buttons */
-        .btn-group { display: flex; flex-direction: column; gap: 5px; margin-top: auto; }
-        .btn { width: 100%; padding: 8px; border-radius: 6px; text-decoration: none; text-align: center; font-size: 11px; font-weight: bold; transition: 0.2s; }
-        .shopee { background: var(--shopee); color: #fff; }
-        .lazada { background: var(--lazada); color: #fff; }
-        .tiktok { background: var(--tiktok); color: #fff; }
-        .direct { background: var(--direct); color: #fff; }
-        .other { background: #eee; color: #333; }
+        .p-info { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; }
+        .p-name { font-size: 12px; color: #333; font-weight: 600; line-height: 1.3; height: 32px; overflow: hidden; margin-bottom: 5px; }
+        
+        .price-box { margin-bottom: 8px; }
+        .price-old { font-size: 9px; color: #999; text-decoration: line-through; }
+        .price-new { font-size: 16px; font-weight: bold; color: #d35400; }
 
-        /* ✅ UI Logic */
-        .shrink header { padding: 8px 15px; }
-        .shrink .logo-circle { width: 30px; height: 30px; }
-        .shrink .store-info h1 { font-size: 14px; }
-        .shrink .rec-container { display: none; }
-        .shrink + .tools-sticky { top: 60px; }
+        .btn-group { display: flex; flex-direction: column; gap: 4px; }
+        .btn { 
+            display: block; text-align: center; padding: 6px 0; border-radius: 4px; 
+            color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; 
+        }
+        .shopee { background: var(--shopee); }
+        .lazada { background: var(--lazada); }
+        .direct { background: var(--direct); }
 
-        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        .modal img { max-width: 90%; max-height: 80%; border-radius: 8px; }
+        .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        .modal img { max-width: 90%; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<div class="fixed-top-area" id="topNav">
+<div class="header-wrapper">
     <header>
         <div class="logo-circle"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg"></div>
-        <div class="store-info">
-            <h1>PHAENDIN STORE</h1>
-        </div>
+        <h1>PHAENDIN STORE</h1>
     </header>
-    <div class="rec-container" id="rec-list">
-        </div>
 </div>
 
-<div class="tools-sticky">
-    <input type="text" id="search" placeholder="ค้นหาสินค้าที่ต้องการ..." oninput="render()">
+<div class="tools-area">
+    <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
     <div class="cat-scroll">
         <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
         <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
@@ -94,8 +98,7 @@
     </div>
 </div>
 
-<div class="main-grid" id="main-list">
-    </div>
+<div class="main-grid" id="main-list"></div>
 
 <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="fullImg"></div>
 
@@ -105,31 +108,14 @@
     let db = [];
     let currentCat = 'all';
 
-    window.onscroll = () => {
-        const topNav = document.getElementById("topNav");
-        window.scrollY > 50 ? topNav.classList.add("shrink") : topNav.classList.remove("shrink");
-    };
-
-    function getPlatStyle(url) {
-        if (!url) return 'other';
-        const u = url.toLowerCase();
-        if (u.includes('shopee')) return 'shopee';
-        if (u.includes('lazada')) return 'lazada';
-        if (u.includes('tiktok')) return 'tiktok';
-        return 'other';
-    }
-
     async function init() {
         try {
             const res = await fetch(URL);
             const csv = await res.text();
             const rows = csv.split(/\r?\n/).slice(1);
-            db = rows.map(r => {
-                // แยก CSV แบบรองรับ Comma ในเครื่องหมายคำพูด
-                return r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-            }).filter(x => x[0]);
+            db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             render();
-        } catch (e) { console.error("Error:", e); }
+        } catch (e) { console.error("Error loading data"); }
     }
 
     function setCat(cat, btn) {
@@ -144,50 +130,43 @@
         document.getElementById('imgModal').style.display = 'flex';
     }
 
+    function getPlat(url) {
+        if (!url) return 'other';
+        const u = url.toLowerCase();
+        if (u.includes('shopee')) return 'shopee';
+        if (u.includes('lazada')) return 'lazada';
+        return 'other';
+    }
+
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-
-        // 1. สินค้าแนะนำ (กรองจาก Badge "แนะนำ" ใน p[5])
-        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ")).slice(0, 10);
-        document.getElementById('rec-list').innerHTML = recs.map(p => `
-            <div class="rec-item" onclick="location.href='${p[4] || '#'}'">
-                <img src="${p[1]}" class="rec-img">
-                <div class="rec-body">
-                    <div class="rec-name">${p[0]}</div>
-                    <div class="rec-price">฿${p[3]}</div>
-                </div>
-            </div>
-        `).join('');
-
-        // 2. สินค้าหลัก
         const filtered = db.filter(p => {
-            const mName = p[0].toLowerCase().includes(q);
-            const mCat = (currentCat === 'all' || p[6] === currentCat);
-            return mName && mCat;
+            const matchName = p[0].toLowerCase().includes(q);
+            const matchCat = (currentCat === 'all' || p[6] === currentCat);
+            return matchName && matchCat;
         });
 
         document.getElementById('main-list').innerHTML = filtered.map(p => {
-            const plat = getPlatStyle(p[4]);
+            const plat = getPlat(p[4]);
             const hasForm = p[7] && p[7].length > 10;
             return `
-                <div class="p-card">
-                    <div class="p-img-box">
-                        <img src="${p[1]}" class="p-img" onclick="openImg('${p[1]}')">
-                        ${p[5] ? `<div class="badge">${p[5]}</div>` : ''}
+            <div class="p-card">
+                <div class="p-img-box">
+                    <img src="${p[1]}" class="p-img" onclick="openImg('${p[1]}')">
+                    ${p[5] ? `<div class="badge">${p[5]}</div>` : ''}
+                </div>
+                <div class="p-info">
+                    <div class="p-name">${p[0]}</div>
+                    <div class="price-box">
+                        <div class="price-old">฿${p[2]}</div>
+                        <div class="price-new">฿${p[3]}</div>
                     </div>
-                    <div class="p-info">
-                        <div class="p-name">${p[0]}</div>
-                        <div class="price-row">
-                            <span class="p-old">฿${p[2]}</span>
-                            <span class="p-new">฿${p[3]}</span>
-                        </div>
-                        <div class="btn-group">
-                            <a href="${p[4]}" target="_blank" class="btn ${plat}">${plat === 'other' ? 'ดูรายละเอียด' : plat.toUpperCase()}</a>
-                            ${hasForm ? `<a href="${p[7]}" target="_blank" class="btn direct"><i class="fab fa-line"></i> สั่งจอง/แจ้งโอน</a>` : ''}
-                        </div>
+                    <div class="btn-group">
+                        <a href="${p[4]}" target="_blank" class="btn ${plat}">${plat.toUpperCase()}</a>
+                        ${hasForm ? `<a href="${p[7]}" target="_blank" class="btn direct"><i class="fab fa-line"></i> สั่งจอง/แจ้งโอน</a>` : ''}
                     </div>
                 </div>
-            `;
+            </div>`;
         }).join('');
     }
 
