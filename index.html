@@ -75,11 +75,11 @@
         .p-info { padding: 5px; flex-grow: 1; display: flex; flex-direction: column; }
         .p-name { font-size: 10px; color: #333; height: 24px; overflow: hidden; line-height: 1.2; font-weight: 600; margin-bottom: 4px; }
         
-        /* ✅ ปรับความเข้มของแถบสี คอลัมน์ E ให้เด่นขึ้น */
+        /* ✅ ปรับความเข้มของแถบสี คอลัมน์ E */
         .badge-row { 
             display: inline-block; 
             background: #e67e22; /* สีส้มทองเข้มเด่นชัด */
-            color: #fff; /* ตัวหนังสือขาวอ่านง่าย */
+            color: #fff; 
             font-size: 8px; 
             padding: 1px 6px; 
             border-radius: 3px; 
@@ -87,24 +87,19 @@
             font-weight: bold;
             width: fit-content;
             white-space: nowrap;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
         
         .p-price { font-size: 13px; font-weight: bold; margin-bottom: 4px; color: #000; }
         .btn-buy { display: block; text-align: center; padding: 4px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; margin-top: auto; }
 
-        /* ✅ Footer สไตล์พรีเมียม */
+        /* ✅ Footer */
         footer { 
-            background: #111; 
-            padding: 40px 20px; 
-            text-align: center; 
-            border-top: 1px solid var(--gold);
-            margin-top: 20px;
+            background: #111; padding: 30px 20px; text-align: center; 
+            border-top: 1px solid var(--gold); margin-top: 20px;
         }
-        .footer-logo { width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--gold); margin-bottom: 15px; }
-        .footer-info h2 { font-size: 18px; color: var(--gold); margin-bottom: 5px; }
-        .footer-info p { font-size: 11px; color: #777; line-height: 1.5; }
-        .footer-credit { font-size: 9px; color: #444; margin-top: 30px; letter-spacing: 1px; }
+        .footer-info h2 { font-size: 18px; color: var(--gold); margin-bottom: 8px; }
+        .footer-info p { font-size: 11px; color: #777; line-height: 1.6; }
+        .footer-credit { font-size: 9px; color: #444; margin-top: 25px; }
 
         .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
         .modal img { max-width: 90%; border: 1px solid var(--gold); border-radius: 10px; }
@@ -138,14 +133,11 @@
 <div class="main-grid" id="main-list"></div>
 
 <footer>
-    <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="footer-logo">
     <div class="footer-info">
         <h2>PHAENDIN STORE</h2>
-        <p>คัดสรรสินค้าคุณภาพเพื่อคุณโดยเฉพาะ<br>ช้อปง่าย มั่นใจ ได้ของแท้จาก Official Store</p>
+        <p>แหล่งรวมสินค้าพรีเมียมที่คัดสรรมาเพื่อคุณโดยเฉพาะ<br>ช้อปง่าย มั่นใจ ปลอดภัย 100%</p>
     </div>
-    <div class="footer-credit">
-        © 2024 PHAENDIN. ALL RIGHTS RESERVED.
-    </div>
+    <div class="footer-credit">© 2024 PHAENDIN. ALL RIGHTS RESERVED.</div>
 </footer>
 
 <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="fullImg"></div>
@@ -175,7 +167,8 @@
             const res = await fetch(URL);
             const csv = await res.text();
             const rows = csv.split(/\r?\n/).slice(1);
-            db = rows.map(r => r.split(/,(?=(?:(?:[^3]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            // ✅ แก้ไขจุดนี้: ใช้ Regex มาตรฐานเพื่อแยก CSV ไม่ให้ Error
+            db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             render();
         } catch (e) { console.error("Error loading"); }
     }
