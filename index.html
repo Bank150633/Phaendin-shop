@@ -10,6 +10,7 @@
         :root { 
             --gold: #D4AF37; --yellow: #FFD700; --black: #0D0D0D; 
             --shopee: #EE4D2D; --lazada: #10147E; --tiktok: #000000;
+            --direct: #06C755; /* สีเขียว Line/Direct */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
@@ -57,6 +58,7 @@
         .shopee { background: var(--shopee); }
         .lazada { background: var(--lazada); }
         .tiktok { background: var(--tiktok); }
+        .direct { background: var(--direct); }
         .other { background: var(--gold); color: #000; }
 
         /* ✅ Tools Sticky */
@@ -69,36 +71,27 @@
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
         /* ✅ Main Grid */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px; }
+        .main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
         .p-card { background: #fff; border-radius: 6px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
         .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .p-info { padding: 5px; flex-grow: 1; display: flex; flex-direction: column; }
-        .p-name { font-size: 10px; color: #333; height: 24px; overflow: hidden; line-height: 1.2; font-weight: 600; margin-bottom: 4px; }
+        .p-info { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; }
+        .p-name { font-size: 11px; color: #333; height: 28px; overflow: hidden; line-height: 1.2; font-weight: 600; margin-bottom: 4px; }
         
-        /* ✅ ปรับความเข้มของแถบสี คอลัมน์ E */
         .badge-row { 
-            display: inline-block; 
-            background: #e67e22; /* สีส้มทองเข้มเด่นชัด */
-            color: #fff; 
-            font-size: 8px; 
-            padding: 1px 6px; 
-            border-radius: 3px; 
-            margin-bottom: 5px;
-            font-weight: bold;
-            width: fit-content;
-            white-space: nowrap;
+            display: inline-block; background: #e67e22; color: #fff; font-size: 8px; padding: 1px 6px; border-radius: 3px; margin-bottom: 5px; font-weight: bold; width: fit-content;
         }
         
-        .p-price { font-size: 13px; font-weight: bold; margin-bottom: 4px; color: #000; }
-        .btn-buy { display: block; text-align: center; padding: 4px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; margin-top: auto; }
+        /* สไตล์ราคา 2 แบบ */
+        .price-box { margin-bottom: 6px; }
+        .price-old { font-size: 9px; color: #888; text-decoration: line-through; }
+        .price-new { font-size: 15px; font-weight: bold; color: #d35400; }
+
+        /* ปรับปุ่มให้วางต่อกันได้ */
+        .btn-container { display: flex; flex-direction: column; gap: 4px; margin-top: auto; }
+        .btn-buy { display: block; text-align: center; padding: 6px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; }
 
         /* ✅ Footer */
-        footer { 
-            background: #111; padding: 30px 20px; text-align: center; 
-            border-top: 1px solid var(--gold); margin-top: 20px;
-        }
-        .footer-info h2 { font-size: 18px; color: var(--gold); margin-bottom: 8px; }
-        .footer-info p { font-size: 11px; color: #777; line-height: 1.6; }
+        footer { background: #111; padding: 30px 20px; text-align: center; border-top: 1px solid var(--gold); margin-top: 20px; }
         .footer-credit { font-size: 9px; color: #444; margin-top: 25px; }
 
         .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
@@ -112,7 +105,7 @@
         <div class="logo-circle"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg"></div>
         <div class="store-info">
             <h1>Phaendin Store</h1>
-            <p style="font-size: 9px; color: var(--gold);">⭐ สินค้าแนะนำ</p>
+            <p style="font-size: 9px; color: var(--gold);">⭐ สินค้าแนะนำ / สั่งจอง</p>
         </div>
     </header>
     <div class="rec-list-container">
@@ -121,7 +114,7 @@
 </div>
 
 <div class="tools-sticky">
-    <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
+    <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
     <div class="cat-scroll">
         <button class="cat-btn active" onclick="setCat('all', this)">สุ่มทั้งหมด</button>
         <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
@@ -134,10 +127,10 @@
 
 <footer>
     <div class="footer-info">
-        <h2>PHAENDIN STORE</h2>
-        <p>แหล่งรวมสินค้าพรีเมียมที่คัดสรรมาเพื่อคุณโดยเฉพาะ<br>ช้อปง่าย มั่นใจ ปลอดภัย 100%</p>
+        <h2 style="font-size: 18px; color: var(--gold); margin-bottom: 8px;">PHAENDIN STORE</h2>
+        <p style="font-size: 11px; color: #777;">คัดสรรสินค้าคุณภาพ พร้อมระบบสั่งจองโดยตรง</p>
     </div>
-    <div class="footer-credit">© 2024 PHAENDIN. ALL RIGHTS RESERVED.</div>
+    <div class="footer-credit">© 2026 PHAENDIN. ALL RIGHTS RESERVED.</div>
 </footer>
 
 <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="fullImg"></div>
@@ -167,7 +160,6 @@
             const res = await fetch(URL);
             const csv = await res.text();
             const rows = csv.split(/\r?\n/).slice(1);
-            // ✅ แก้ไขจุดนี้: ใช้ Regex มาตรฐานเพื่อแยก CSV ไม่ให้ Error
             db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             render();
         } catch (e) { console.error("Error loading"); }
@@ -188,22 +180,27 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
+        // --- 1. ส่วนแนะนำ (บน) ---
         let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
         recs = recs.sort(() => 0.5 - Math.random()).slice(0, 10);
         
         document.getElementById('rec-list').innerHTML = recs.map(p => {
             const plat = getPlat(p[3]);
+            const hasDirect = p[6] && p[6].length > 5; // ช่อง G
             return `
             <div class="rec-item">
                 <img src="${p[1]}" class="rec-img" onclick="openImg('${p[1]}')">
                 <div class="rec-body">
                     <div class="rec-name">${p[0]}</div>
-                    <div class="rec-price">฿${p[2]}</div>
-                    <a href="${p[3]}" target="_blank" class="btn-mini ${plat}">${plat === 'other' ? 'ซื้อ' : plat.toUpperCase()}</a>
+                    <div class="rec-price">฿${p[5] || p[2]}</div>
+                    <a href="${hasDirect ? p[6] : p[3]}" target="_blank" class="btn-mini ${hasDirect ? 'direct' : plat}">
+                        ${hasDirect ? 'สั่งจอง' : plat.toUpperCase()}
+                    </a>
                 </div>
             </div>`;
         }).join('');
 
+        // --- 2. รายการหลัก (ล่าง) ---
         let filtered = db.filter(p => {
             const matchName = p[0].toLowerCase().includes(q);
             const matchCat = (currentCat === 'all' || p[5].toString() === currentCat);
@@ -215,15 +212,22 @@
         document.getElementById('main-list').innerHTML = filtered.map(p => {
             const plat = getPlat(p[3]);
             const badge = p[4] ? `<div class="badge-row">${p[4]}</div>` : '';
-            
+            const hasDirect = p[6] && p[6].length > 5; // ลิงก์ช่อง G
+
             return `
             <div class="p-card">
                 <img src="${p[1]}" class="p-img" onclick="openImg('${p[1]}')">
                 <div class="p-info">
                     <div class="p-name">${p[0]}</div>
                     ${badge}
-                    <div class="p-price">฿${p[2]}</div>
-                    <a href="${p[3]}" target="_blank" class="btn-buy ${plat}">${plat === 'other' ? 'สั่งซื้อ' : plat.toUpperCase()}</a>
+                    <div class="price-box">
+                        <div class="price-old">ปกติ: ฿${p[2]}</div>
+                        <div class="price-new">฿${p[5] || p[2]}</div>
+                    </div>
+                    <div class="btn-container">
+                        <a href="${p[3]}" target="_blank" class="btn-buy ${plat}">${plat === 'other' ? 'ดูสินค้า' : plat.toUpperCase()}</a>
+                        ${hasDirect ? `<a href="${p[6]}" target="_blank" class="btn-buy direct">🛒 สั่งกับเรา/แจ้งโอน</a>` : ''}
+                    </div>
                 </div>
             </div>`;
         }).join('');
