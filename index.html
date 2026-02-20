@@ -10,92 +10,65 @@
         :root { 
             --gold: #D4AF37; --yellow: #FFD700; --black: #0D0D0D; 
             --shopee: #EE4D2D; --lazada: #10147E; --tiktok: #000000;
-            --direct: #06C755; /* สีเขียว Line/Direct */
+            --direct: #06C755; 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; }
+        body { font-family: 'Kanit', sans-serif; background: var(--black); color: #fff; line-height: 1.5; }
 
-        /* ✅ Fixed Top Area */
+        /* ✅ Header Section */
         .fixed-top-area { position: sticky; top: 0; z-index: 2000; background: var(--black); border-bottom: 1px solid var(--gold); transition: 0.4s ease; }
-        
-        header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
-        .logo-circle { 
-            width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--gold); 
-            overflow: hidden; flex-shrink: 0; transition: 0.3s; 
-        }
+        header { padding: 15px; display: flex; align-items: center; gap: 12px; }
+        .logo-circle { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--gold); overflow: hidden; flex-shrink: 0; }
         .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .store-info h1 { font-size: 16px; transition: 0.3s; }
+        .store-info h1 { font-size: 18px; letter-spacing: 1px; }
 
-        /* ✅ Recommended Scroller */
-        .rec-container { display: flex; gap: 8px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; transition: 0.4s; }
+        /* ✅ Recommended Horizontal Scroll */
+        .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px 15px; scrollbar-width: none; }
         .rec-container::-webkit-scrollbar { display: none; }
-        
-        .rec-item { 
-            min-width: 30%; background: #1a1a1a; border-radius: 10px; border: 1px solid #333; 
-            overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; 
-        }
-        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: zoom-in; }
-        .rec-body { padding: 6px; text-align: center; display: flex; flex-direction: column; gap: 2px; }
-        .rec-name { font-size: 10px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .rec-price { color: var(--yellow); font-weight: bold; font-size: 13px; }
-        .btn-mini { display: block; color: #fff; font-size: 9px; font-weight: bold; padding: 4px 0; border-radius: 4px; text-decoration: none; text-align: center; }
+        .rec-item { min-width: 120px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333; overflow: hidden; position: relative; }
+        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .rec-body { padding: 8px; text-align: center; }
+        .rec-name { font-size: 11px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rec-price { color: var(--yellow); font-weight: bold; font-size: 14px; margin: 2px 0; }
 
-        /* ✅ SHRINK MODE */
-        .shrink header { padding: 5px 12px; gap: 8px; }
-        .shrink .logo-circle { width: 25px; height: 25px; }
-        .shrink .store-info h1 { font-size: 12px; }
-        .shrink .store-info p { display: none; }
-        
-        .shrink .rec-container { padding: 5px 8px 8px; gap: 5px; }
-        .shrink .rec-item { min-width: 23%; background: #111; border: 1px solid #444; border-radius: 6px; }
-        .shrink .rec-img { width: 100%; height: 35px; border-radius: 0; }
-        .shrink .rec-body { padding: 3px; gap: 1px; }
-        .shrink .rec-name { font-size: 8px; color: #999; }
-        .shrink .rec-price { font-size: 10px; }
-        .shrink .btn-mini { padding: 2px 0; font-size: 8px; }
-
-        .shopee { background: var(--shopee); }
-        .lazada { background: var(--lazada); }
-        .tiktok { background: var(--tiktok); }
-        .direct { background: var(--direct); }
-        .other { background: var(--gold); color: #000; }
-
-        /* ✅ Tools Sticky */
-        .tools-sticky { position: sticky; top: 165px; z-index: 1900; background: rgba(13,13,13,0.98); padding: 10px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
-        .shrink + .tools-sticky { top: 85px; }
-
-        #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--gold); background: #000; color: #fff; margin-bottom: 8px; outline: none; font-size: 14px; }
+        /* ✅ Tools & Search */
+        .tools-sticky { position: sticky; top: 180px; z-index: 1900; background: rgba(13,13,13,0.95); padding: 12px 15px; border-bottom: 1px solid #222; transition: 0.4s; }
+        #search { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--gold); background: #111; color: #fff; margin-bottom: 10px; outline: none; }
         .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: #222; color: #888; padding: 7px 18px; border-radius: 20px; font-size: 12px; border: none; white-space: nowrap; }
+        .cat-btn { background: #222; color: #888; padding: 8px 20px; border-radius: 25px; font-size: 13px; border: none; white-space: nowrap; cursor: pointer; transition: 0.3s; }
         .cat-btn.active { background: var(--gold); color: #000; font-weight: bold; }
 
         /* ✅ Main Grid */
-        .main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
-        .p-card { background: #fff; border-radius: 6px; overflow: hidden; color: #000; display: flex; flex-direction: column; }
-        .p-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .p-info { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; }
-        .p-name { font-size: 11px; color: #333; height: 28px; overflow: hidden; line-height: 1.2; font-weight: 600; margin-bottom: 4px; }
-        
-        .badge-row { 
-            display: inline-block; background: #e67e22; color: #fff; font-size: 8px; padding: 1px 6px; border-radius: 3px; margin-bottom: 5px; font-weight: bold; width: fit-content;
-        }
-        
-        /* สไตล์ราคา 2 แบบ */
-        .price-box { margin-bottom: 6px; }
-        .price-old { font-size: 9px; color: #888; text-decoration: line-through; }
-        .price-new { font-size: 15px; font-weight: bold; color: #d35400; }
+        .main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
+        .p-card { background: #fff; border-radius: 10px; overflow: hidden; color: #000; display: flex; flex-direction: column; transition: 0.3s; }
+        .p-img-box { position: relative; width: 100%; aspect-ratio: 1/1; }
+        .p-img { width: 100%; height: 100%; object-fit: cover; }
+        .badge { position: absolute; top: 5px; left: 5px; background: #e67e22; color: #fff; font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        .p-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
+        .p-name { font-size: 13px; font-weight: 600; color: #222; height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 8px; }
+        .price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 10px; }
+        .p-old { font-size: 10px; color: #999; text-decoration: line-through; }
+        .p-new { font-size: 18px; font-weight: bold; color: #d35400; }
 
-        /* ปรับปุ่มให้วางต่อกันได้ */
-        .btn-container { display: flex; flex-direction: column; gap: 4px; margin-top: auto; }
-        .btn-buy { display: block; text-align: center; padding: 6px 0; border-radius: 4px; color: #fff; font-size: 10px; text-decoration: none; font-weight: bold; }
+        /* ✅ Buttons */
+        .btn-group { display: flex; flex-direction: column; gap: 5px; margin-top: auto; }
+        .btn { width: 100%; padding: 8px; border-radius: 6px; text-decoration: none; text-align: center; font-size: 11px; font-weight: bold; transition: 0.2s; }
+        .shopee { background: var(--shopee); color: #fff; }
+        .lazada { background: var(--lazada); color: #fff; }
+        .tiktok { background: var(--tiktok); color: #fff; }
+        .direct { background: var(--direct); color: #fff; }
+        .other { background: #eee; color: #333; }
 
-        /* ✅ Footer */
-        footer { background: #111; padding: 30px 20px; text-align: center; border-top: 1px solid var(--gold); margin-top: 20px; }
-        .footer-credit { font-size: 9px; color: #444; margin-top: 25px; }
+        /* ✅ UI Logic */
+        .shrink header { padding: 8px 15px; }
+        .shrink .logo-circle { width: 30px; height: 30px; }
+        .shrink .store-info h1 { font-size: 14px; }
+        .shrink .rec-container { display: none; }
+        .shrink + .tools-sticky { top: 60px; }
 
-        .modal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        .modal img { max-width: 90%; border: 1px solid var(--gold); border-radius: 10px; }
+        .modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        .modal img { max-width: 90%; max-height: 80%; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -104,34 +77,25 @@
     <header>
         <div class="logo-circle"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg"></div>
         <div class="store-info">
-            <h1>Phaendin Store</h1>
-            <p style="font-size: 9px; color: var(--gold);">⭐ สินค้าแนะนำ / สั่งจอง</p>
+            <h1>PHAENDIN STORE</h1>
         </div>
     </header>
-    <div class="rec-list-container">
-        <div class="rec-container" id="rec-list"></div>
-    </div>
+    <div class="rec-container" id="rec-list">
+        </div>
 </div>
 
 <div class="tools-sticky">
-    <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
+    <input type="text" id="search" placeholder="ค้นหาสินค้าที่ต้องการ..." oninput="render()">
     <div class="cat-scroll">
-        <button class="cat-btn active" onclick="setCat('all', this)">สุ่มทั้งหมด</button>
+        <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
         <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
         <button class="cat-btn" onclick="setCat('2', this)">ทั่วไป</button>
         <button class="cat-btn" onclick="setCat('3', this)">แม่และเด็ก</button>
     </div>
 </div>
 
-<div class="main-grid" id="main-list"></div>
-
-<footer>
-    <div class="footer-info">
-        <h2 style="font-size: 18px; color: var(--gold); margin-bottom: 8px;">PHAENDIN STORE</h2>
-        <p style="font-size: 11px; color: #777;">คัดสรรสินค้าคุณภาพ พร้อมระบบสั่งจองโดยตรง</p>
+<div class="main-grid" id="main-list">
     </div>
-    <div class="footer-credit">© 2026 PHAENDIN. ALL RIGHTS RESERVED.</div>
-</footer>
 
 <div id="imgModal" class="modal" onclick="this.style.display='none'"><img id="fullImg"></div>
 
@@ -139,14 +103,14 @@
     const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
     let db = [];
-    let currentCat = 'all'; 
+    let currentCat = 'all';
 
     window.onscroll = () => {
         const topNav = document.getElementById("topNav");
-        window.scrollY > 40 ? topNav.classList.add("shrink") : topNav.classList.remove("shrink");
+        window.scrollY > 50 ? topNav.classList.add("shrink") : topNav.classList.remove("shrink");
     };
 
-    function getPlat(url) {
+    function getPlatStyle(url) {
         if (!url) return 'other';
         const u = url.toLowerCase();
         if (u.includes('shopee')) return 'shopee';
@@ -160,14 +124,12 @@
             const res = await fetch(URL);
             const csv = await res.text();
             const rows = csv.split(/\r?\n/).slice(1);
-            db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            db = rows.map(r => {
+                // แยก CSV แบบรองรับ Comma ในเครื่องหมายคำพูด
+                return r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            }).filter(x => x[0]);
             render();
-        } catch (e) { console.error("Error loading"); }
-    }
-
-    function openImg(src) {
-        document.getElementById('fullImg').src = src;
-        document.getElementById('imgModal').style.display = 'flex';
+        } catch (e) { console.error("Error:", e); }
     }
 
     function setCat(cat, btn) {
@@ -177,59 +139,55 @@
         render();
     }
 
+    function openImg(src) {
+        document.getElementById('fullImg').src = src;
+        document.getElementById('imgModal').style.display = 'flex';
+    }
+
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-        
-        // --- 1. ส่วนแนะนำ (บน) ---
-        let recs = db.filter(p => p[6] === "แนะนำ" || p[6] === "1");
-        recs = recs.sort(() => 0.5 - Math.random()).slice(0, 10);
-        
-        document.getElementById('rec-list').innerHTML = recs.map(p => {
-            const plat = getPlat(p[3]);
-            const hasDirect = p[6] && p[6].length > 5; // ช่อง G
-            return `
-            <div class="rec-item">
-                <img src="${p[1]}" class="rec-img" onclick="openImg('${p[1]}')">
+
+        // 1. สินค้าแนะนำ (กรองจาก Badge "แนะนำ" ใน p[5])
+        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ")).slice(0, 10);
+        document.getElementById('rec-list').innerHTML = recs.map(p => `
+            <div class="rec-item" onclick="location.href='${p[4] || '#'}'">
+                <img src="${p[1]}" class="rec-img">
                 <div class="rec-body">
                     <div class="rec-name">${p[0]}</div>
-                    <div class="rec-price">฿${p[5] || p[2]}</div>
-                    <a href="${hasDirect ? p[6] : p[3]}" target="_blank" class="btn-mini ${hasDirect ? 'direct' : plat}">
-                        ${hasDirect ? 'สั่งจอง' : plat.toUpperCase()}
-                    </a>
+                    <div class="rec-price">฿${p[3]}</div>
                 </div>
-            </div>`;
-        }).join('');
+            </div>
+        `).join('');
 
-        // --- 2. รายการหลัก (ล่าง) ---
-        let filtered = db.filter(p => {
-            const matchName = p[0].toLowerCase().includes(q);
-            const matchCat = (currentCat === 'all' || p[5].toString() === currentCat);
-            return matchName && matchCat;
+        // 2. สินค้าหลัก
+        const filtered = db.filter(p => {
+            const mName = p[0].toLowerCase().includes(q);
+            const mCat = (currentCat === 'all' || p[6] === currentCat);
+            return mName && mCat;
         });
-        
-        filtered = filtered.sort(() => 0.5 - Math.random());
 
         document.getElementById('main-list').innerHTML = filtered.map(p => {
-            const plat = getPlat(p[3]);
-            const badge = p[4] ? `<div class="badge-row">${p[4]}</div>` : '';
-            const hasDirect = p[6] && p[6].length > 5; // ลิงก์ช่อง G
-
+            const plat = getPlatStyle(p[4]);
+            const hasForm = p[7] && p[7].length > 10;
             return `
-            <div class="p-card">
-                <img src="${p[1]}" class="p-img" onclick="openImg('${p[1]}')">
-                <div class="p-info">
-                    <div class="p-name">${p[0]}</div>
-                    ${badge}
-                    <div class="price-box">
-                        <div class="price-old">ปกติ: ฿${p[2]}</div>
-                        <div class="price-new">฿${p[5] || p[2]}</div>
+                <div class="p-card">
+                    <div class="p-img-box">
+                        <img src="${p[1]}" class="p-img" onclick="openImg('${p[1]}')">
+                        ${p[5] ? `<div class="badge">${p[5]}</div>` : ''}
                     </div>
-                    <div class="btn-container">
-                        <a href="${p[3]}" target="_blank" class="btn-buy ${plat}">${plat === 'other' ? 'ดูสินค้า' : plat.toUpperCase()}</a>
-                        ${hasDirect ? `<a href="${p[6]}" target="_blank" class="btn-buy direct">🛒 สั่งกับเรา/แจ้งโอน</a>` : ''}
+                    <div class="p-info">
+                        <div class="p-name">${p[0]}</div>
+                        <div class="price-row">
+                            <span class="p-old">฿${p[2]}</span>
+                            <span class="p-new">฿${p[3]}</span>
+                        </div>
+                        <div class="btn-group">
+                            <a href="${p[4]}" target="_blank" class="btn ${plat}">${plat === 'other' ? 'ดูรายละเอียด' : plat.toUpperCase()}</a>
+                            ${hasForm ? `<a href="${p[7]}" target="_blank" class="btn direct"><i class="fab fa-line"></i> สั่งจอง/แจ้งโอน</a>` : ''}
+                        </div>
                     </div>
                 </div>
-            </div>`;
+            `;
         }).join('');
     }
 
