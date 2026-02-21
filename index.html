@@ -10,153 +10,188 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
 
-        /* Navigation */
-        .nav { position: fixed; top: 0; width: 100%; z-index: 1000; background: #000; border-bottom: 1px solid #222; padding-bottom: 8px; }
-        .brand { display: flex; align-items: center; justify-content: center; padding: 12px 0; gap: 8px; }
-        .logo { width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--gold); }
-        .brand h1 { font-size: 14px; color: var(--gold); letter-spacing: 1px; }
+        /* ✅ Header & Navigation */
+        .fixed-top { position: fixed; top: 0; width: 100%; z-index: 1000; background: #000; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .logo-section { display: flex; align-items: center; justify-content: center; padding: 12px 0; gap: 8px; }
+        .logo-img { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--gold); }
+        .brand-name { font-size: 15px; color: var(--gold); letter-spacing: 1px; font-weight: 600; }
 
-        /* Search & Categories */
-        .search-box { padding: 0 15px; max-width: 500px; margin: 0 auto; }
-        #search { width: 100%; padding: 8px 15px; border-radius: 20px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; }
-        .cats { display: flex; justify-content: center; gap: 15px; margin-top: 10px; overflow-x: auto; scrollbar-width: none; }
-        .cats::-webkit-scrollbar { display: none; }
-        .cat-btn { font-size: 11px; color: #666; cursor: pointer; white-space: nowrap; padding-bottom: 2px; border-bottom: 2px solid transparent; }
+        /* ✅ ค้นหาและหมวดหมู่ */
+        .search-container { padding: 0 15px; max-width: 500px; margin: 0 auto; }
+        #search { width: 100%; padding: 10px 18px; border-radius: 25px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 13px; outline: none; }
+        .categories { display: flex; justify-content: center; gap: 18px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
+        .categories::-webkit-scrollbar { display: none; }
+        .cat-btn { font-size: 12px; color: #666; cursor: pointer; white-space: nowrap; padding-bottom: 3px; border-bottom: 2px solid transparent; }
         .cat-btn.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 600; }
 
-        /* Main Content */
-        main { margin-top: 140px; min-height: 80vh; }
-        .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; }
-        
-        /* Recommended (Horizontal Scroll) */
-        .rec-row { display: flex; gap: 8px; overflow-x: auto; padding: 0 15px 15px; scrollbar-width: none; }
-        .rec-card { min-width: 95px; width: 95px; aspect-ratio: 1/1; background: var(--card); border-radius: 5px; overflow: hidden; border: 1px solid #222; }
+        /* ✅ เนื้อหา */
+        main { margin-top: 145px; min-height: 80vh; }
+        .section-header { font-size: 12px; color: var(--gold); padding: 10px 15px; font-weight: 400; display: flex; align-items: center; gap: 5px; }
 
-        /* Product Grid (3 Columns) */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 5px; }
-        .card { background: var(--card); border-radius: 3px; display: flex; flex-direction: column; border: 1px solid #1a1a1a; height: 100%; position: relative; }
-        .media { width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
-        .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
+        /* ✅ สไลด์สินค้าแนะนำ */
+        .recommend-row { display: flex; gap: 10px; overflow-x: auto; padding: 0 15px 15px 15px; scrollbar-width: none; }
+        .recommend-row::-webkit-scrollbar { display: none; }
+        .rec-item { min-width: 100px; width: 100px; aspect-ratio: 1/1; background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid #222; position: relative; }
 
-        /* Info */
-        .info { padding: 6px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 10px; font-weight: 600; color: #eee; height: 26px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; }
-        .price-area { margin-top: auto; padding-top: 5px; border-top: 1px solid #222; text-align: center; }
-        .price-tag { color: var(--gold); font-size: 11px; font-weight: 600; margin-bottom: 5px; }
-        .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 6px 0; border-radius: 3px; text-decoration: none; }
+        /* ✅ ตารางสินค้าหลัก (3 คอลัมน์) */
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
+        .product-card { background: var(--card); border-radius: 4px; border: 1px solid #1a1a1a; display: flex; flex-direction: column; height: 100%; }
+        
+        /* สื่อภาพและวิดีโอ */
+        .media-container { width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
+        .media-container img, .media-container video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 
-        /* Modal */
-        #modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        
-        /* Loading Status */
-        #status { padding: 100px 20px; text-align: center; color: var(--gold); }
-        
-        footer { background: #0a0a0a; padding: 30px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: 20px; }
-        .foot-text { color: #444; font-size: 9px; margin-top: 5px; }
+        /* ข้อมูลสินค้า */
+        .product-info { padding: 8px; flex: 1; display: flex; flex-direction: column; }
+        .product-title { font-size: 10px; font-weight: 600; color: #eee; height: 28px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; }
+        .product-desc { font-size: 8px; color: #777; height: 20px; overflow: hidden; margin: 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .price-section { margin-top: auto; padding-top: 6px; border-top: 1px solid #222; text-align: center; }
+        .price-text { color: var(--gold); font-size: 11px; font-weight: 600; margin-bottom: 6px; display: block; }
+        .buy-button { display: block; background: var(--gold); color: #000; text-align: center; font-size: 10px; font-weight: 700; padding: 7px 0; border-radius: 4px; text-decoration: none; }
+
+        /* ✅ ฟุตเตอร์ */
+        footer { background: #0a0a0a; padding: 40px 20px; text-align: center; border-top: 1px solid #1a1a1a; margin-top: 30px; }
+        .footer-brand { color: var(--gold); font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+        .footer-note { color: #444; font-size: 10px; }
+
+        /* ✅ ระบบขยายสื่อ (Zoom Modal) */
+        #zoomModal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; padding: 20px; }
+        #zoomBody { max-width: 100%; max-height: 85vh; border: 1px solid var(--gold); }
+
+        /* หน้าจอกำลังโหลด */
+        #loadingStatus { padding: 120px 20px; text-align: center; color: var(--gold); font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div id="modal" onclick="this.style.display='none'"><div id="modal-content"></div></div>
+<div id="zoomModal" onclick="this.style.display='none'"><div id="zoomBody"></div></div>
 
-<nav class="nav">
-    <div class="brand">
-        <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo">
-        <h1>PHAENDIN STORE</h1>
+<nav class="fixed-top">
+    <div class="logo-section">
+        <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img">
+        <h1 class="brand-name">PHAENDIN STORE</h1>
     </div>
-    <div class="search-box">
-        <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
-        <div class="cats">
-            <div class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</div>
-            <div class="cat-btn" onclick="setCat('1', this)">อาหาร</div>
-            <div class="cat-btn" onclick="setCat('2', this)">ของใช้</div>
-            <div class="cat-btn" onclick="setCat('3', this)">แม่และเด็ก</div>
+    <div class="search-container">
+        <input type="text" id="search" placeholder="ค้นหาสินค้าที่ต้องการ..." oninput="renderApp()">
+        <div class="categories">
+            <div class="cat-btn active" onclick="filterCat('all', this)">ทั้งหมด</div>
+            <div class="cat-btn" onclick="filterCat('1', this)">อาหาร</div>
+            <div class="cat-btn" onclick="filterCat('2', this)">ของใช้</div>
+            <div class="cat-btn" onclick="filterCat('3', this)">แม่และเด็ก</div>
         </div>
     </div>
 </nav>
 
 <main>
-    <div id="status">กำลังเชื่อมต่อข้อมูล...</div>
-    <div id="rec-wrap" style="display:none;">
-        <div class="section-label">✨ สินค้าแนะนำ</div>
-        <div class="rec-row" id="rec-list"></div>
+    <div id="loadingStatus">กำลังโหลดข้อมูลสินค้า...</div>
+    
+    <div id="recommendArea" style="display:none;">
+        <div class="section-header">✨ สินค้าแนะนำสำหรับคุณ</div>
+        <div class="recommend-row" id="recommendList"></div>
     </div>
-    <div class="grid" id="main-list"></div>
+
+    <div class="product-grid" id="mainProductList"></div>
 </main>
 
 <footer>
-    <div style="color:var(--gold); font-size:12px;">PHAENDIN STORE</div>
-    <div class="foot-text">สั่งซื้อโดยตรง รับประกันคุณภาพสินค้า</div>
-    <div class="foot-text">© 2026 Official Store</div>
+    <div class="footer-brand">PHAENDIN STORE</div>
+    <div class="footer-note">สั่งซื้อได้ตลอด 24 ชั่วโมง จัดส่งรวดเร็วทันใจ</div>
+    <div class="footer-note" style="margin-top:15px; opacity:0.6;">© 2026 Official Online Store.</div>
 </footer>
 
 <script>
-    // 1. ใส่ ID ของ Google Sheets คุณที่นี่
+    // 🔗 แก้ไข SHEET_ID ตรงนี้
     const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
-    const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
+    const DATA_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
 
-    let db = [];
-    let currentCat = 'all';
+    let productsDB = [];
+    let currentCategory = 'all';
 
-    function getMedia(url, isZoom = false) {
+    // ฟังก์ชันสร้างสื่อ (รูปหรือวิดีโอ)
+    function generateMediaHtml(url, isZoom = false) {
         if (!url) return '';
-        const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
-        const style = isZoom ? 'max-width:90vw; max-height:80vh;' : 'width:100%; height:100%; object-fit:cover;';
-        if (isVid) return `<video src="${url}" autoplay loop muted playsinline ${isZoom ? 'controls' : ''} style="${style}"></video>`;
-        return `<img src="${url}" style="${style}" onclick="zoom('${url}')">`;
-    }
-
-    function zoom(url) {
-        document.getElementById('modal-content').innerHTML = getMedia(url, true);
-        document.getElementById('modal').style.display = 'flex';
-    }
-
-    async function loadData() {
-        try {
-            const res = await fetch(CSV_URL);
-            if (!res.ok) throw new Error("ดึงข้อมูลไม่ได้ โปรดเช็คการแชร์ Sheets");
-            const text = await res.text();
-            const rows = text.split(/\r?\n/).slice(1);
-            db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(r => r[0] && r[1]);
-            document.getElementById('status').style.display = 'none';
-            render();
-        } catch (e) {
-            document.getElementById('status').innerHTML = `❌ Error: ${e.message}<br>โปรดตั้งค่าการแชร์ Sheets เป็น 'ทุกคนที่มีลิงก์'`;
-        }
-    }
-
-    function render() {
-        const query = document.getElementById('search').value.toLowerCase();
+        const isVideo = url.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/);
+        const mediaStyle = isZoom ? 'max-width:95vw; max-height:80vh;' : 'width:100%; height:100%; object-fit:cover;';
         
-        const recData = db.filter(p => p[5] && p[5].includes("แนะนำ"));
-        if (recData.length > 0) {
-            document.getElementById('rec-wrap').style.display = 'block';
-            document.getElementById('rec-list').innerHTML = recData.map(p => `<div class="rec-card">${getMedia(p[1])}</div>`).join('');
+        if (isVideo) {
+            return `<video src="${url}" autoplay loop muted playsinline ${isZoom ? 'controls' : ''} style="${mediaStyle}"></video>`;
+        }
+        return `<img src="${url}" style="${mediaStyle}" onclick="openZoom('${url}')">`;
+    }
+
+    function openZoom(url) {
+        document.getElementById('zoomBody').innerHTML = generateMediaHtml(url, true);
+        document.getElementById('zoomModal').style.display = 'flex';
+    }
+
+    // ฟังก์ชันโหลดข้อมูลจาก Sheets
+    async function initApp() {
+        const status = document.getElementById('loadingStatus');
+        try {
+            const response = await fetch(DATA_URL);
+            if (!response.ok) throw new Error("เข้าถึง Sheets ไม่ได้ (เช็คสิทธิ์การแชร์)");
+            const rawText = await response.text();
+            
+            const rows = rawText.split(/\r?\n/).slice(1);
+            productsDB = rows.map(r => {
+                return r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            }).filter(r => r[0] && r[1]); 
+
+            if (productsDB.length === 0) {
+                status.innerText = "ไม่มีข้อมูลสินค้าในไฟล์ Sheets";
+            } else {
+                status.style.display = 'none';
+                renderApp();
+            }
+        } catch (err) {
+            status.innerHTML = `❌ เกิดข้อผิดพลาด: ${err.message}<br><br>กรุณาตรวจสอบว่าแชร์ Sheets เป็น "ทุกคนที่มีลิงก์"`;
+        }
+    }
+
+    function renderApp() {
+        const searchText = document.getElementById('search').value.toLowerCase();
+        
+        // 1. เรนเดอร์สินค้าแนะนำ
+        const recommendItems = productsDB.filter(p => p[5] && p[5].includes("แนะนำ"));
+        const recommendArea = document.getElementById('recommendArea');
+        if (recommendItems.length > 0) {
+            recommendArea.style.display = 'block';
+            document.getElementById('recommendList').innerHTML = recommendItems.map(p => `
+                <div class="rec-item">${generateMediaHtml(p[1])}</div>
+            `).join('');
+        } else {
+            recommendArea.style.display = 'none';
         }
 
-        const filtered = db.filter(p => (p[0].toLowerCase().includes(query)) && (currentCat === 'all' || p[6] === currentCat));
-        document.getElementById('main-list').innerHTML = filtered.map(p => `
-            <div class="card">
-                <div class="media">${getMedia(p[1])}</div>
-                <div class="info">
-                    <div class="title">${p[0]}</div>
-                    <div class="price-area">
-                        <div class="price-tag">฿${p[8] || p[3]}</div>
-                        <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
+        // 2. เรนเดอร์สินค้าหลัก
+        const filteredProducts = productsDB.filter(p => 
+            (p[0].toLowerCase().includes(searchText)) && 
+            (currentCategory === 'all' || p[6] === currentCategory)
+        );
+
+        document.getElementById('mainProductList').innerHTML = filteredProducts.map(p => `
+            <div class="product-card">
+                <div class="media-container">${generateMediaHtml(p[1])}</div>
+                <div class="product-info">
+                    <div class="product-title">${p[0]}</div>
+                    <div class="product-desc">${p[2] || ''}</div>
+                    <div class="price-section">
+                        <span class="price-text">฿${p[8] || p[3] || '0'}</span>
+                        <a href="${p[7] || '#'}" target="_blank" class="buy-button">สั่งซื้อสินค้า</a>
                     </div>
                 </div>
             </div>
         `).join('');
     }
 
-    function setCat(c, el) {
-        currentCat = c.toString();
+    function filterCat(cat, btn) {
+        currentCategory = cat.toString();
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-        render();
+        btn.classList.add('active');
+        renderApp();
     }
 
-    loadData();
+    initApp();
 </script>
 </body>
 </html>
