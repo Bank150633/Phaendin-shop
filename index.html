@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN | ร้านค้าพรีเมียม</title>
+    <title>PHAENDIN | พรีเมียมสโตร์</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -12,52 +12,69 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 190px; }
+        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 185px; }
 
         /* ✅ Header */
         .fixed-top { position: fixed; top: 0; left: 0; width: 100%; z-index: 999; background: #000; border-bottom: 1px solid #1A1A1A; }
         header { padding: 10px 20px; display: flex; align-items: center; justify-content: center; height: 50px; }
-        .logo { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid var(--gold); margin-right: 10px; }
-        header h1 { font-size: 16px; color: var(--gold); letter-spacing: 1px; font-weight: 400; }
+        .logo { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--gold); margin-right: 10px; }
+        header h1 { font-size: 15px; color: var(--gold); letter-spacing: 1.5px; font-weight: 400; }
 
-        /* ✅ สินค้าแนะนำ (ปรับให้ไม่เต็มจอ) */
-        .rec-section { padding: 10px 0; height: 120px; overflow: hidden; transition: 0.4s; }
-        .rec-container { display: flex; gap: 10px; overflow-x: auto; padding: 0 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-        .rec-item { min-width: 80px; background: #0A0A0A; border-radius: 8px; border: 1px solid #222; text-align: center; overflow: hidden; position: relative; flex-shrink: 0; }
-        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; display: block; opacity: 0.9; }
-        .rec-price-tag { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 9px; color: #000; font-weight: 600; padding: 2px 0; }
+        /* ✅ สินค้าแนะนำ (ปรับโชว์ประมาณ 4 ชิ้น) */
+        .rec-section { padding: 10px 0; height: 115px; overflow: hidden; transition: 0.4s; }
+        .rec-container { 
+            display: flex; 
+            gap: 8px; 
+            overflow-x: auto; 
+            padding: 0 12px; 
+            scrollbar-width: none; 
+            -webkit-overflow-scrolling: touch; 
+        }
+        .rec-item { 
+            /* คำนวณให้โชว์ 4 ชิ้นพอดี (100% / 4 ลบ gap) */
+            min-width: calc((100% / 4) - 12px); 
+            background: #0A0A0A; 
+            border-radius: 6px; 
+            border: 1px solid #222; 
+            text-align: center; 
+            overflow: hidden; 
+            position: relative; 
+            flex-shrink: 0; 
+        }
+        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; display: block; }
+        .rec-price-tag { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 8px; color: #000; font-weight: 600; padding: 2px 0; }
 
         .shrink .rec-section { height: 0; opacity: 0; padding: 0; }
         body.scrolled { padding-top: 105px; }
 
-        .tools-area { padding: 5px 15px; }
-        #search { width: 100%; padding: 8px 15px; border-radius: 4px; border: 1px solid #222; background: #0A0A0A; color: #FFF; margin-bottom: 8px; outline: none; font-size: 13px; }
-        .cat-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: transparent; color: #555; border: none; font-size: 13px; white-space: nowrap; padding-bottom: 5px; }
-        .cat-btn.active { color: var(--gold); border-bottom: 2.2px solid var(--gold); font-weight: 400; }
+        .tools-area { padding: 5px 12px; }
+        #search { width: 100%; padding: 8px 15px; border-radius: 4px; border: 1px solid #222; background: #0A0A0A; color: #FFF; margin-bottom: 8px; outline: none; font-size: 12px; }
+        .cat-scroll { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; }
+        .cat-btn { background: transparent; color: #555; border: none; font-size: 12px; white-space: nowrap; padding-bottom: 5px; }
+        .cat-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); font-weight: 400; }
 
-        /* ✅ Grid 3 คอลัมน์ */
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; padding: 6px; }
+        /* ✅ Grid สินค้าหลัก */
+        .main-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 5px; }
         .card { background: #0A0A0A; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #111; padding-bottom: 5px; }
         .img-container { width: 100%; aspect-ratio: 1/1; background: #050505; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
         .card-img { width: 100%; height: 100%; object-fit: cover; }
 
-        .card-info { padding: 6px 4px; flex: 1; display: flex; flex-direction: column; }
-        .card-name { font-size: 11px; font-weight: 400; color: #FFF; height: 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 2px; }
+        .card-info { padding: 5px 4px; flex: 1; display: flex; flex-direction: column; }
+        .card-name { font-size: 10px; font-weight: 400; color: #FFF; height: 14px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 2px; }
 
-        /* ✅ คำอธิบายสินค้า (จากคอลัมน์ C) */
-        .card-desc { font-size: 9px; color: #666; height: 24px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; margin-bottom: 6px; font-weight: 200; }
+        /* ✅ คำอธิบายสินค้า */
+        .card-desc { font-size: 8px; color: #555; height: 22px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.2; margin-bottom: 5px; font-weight: 200; }
 
         /* ราคา 2 ฝั่ง */
-        .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 6px; border-top: 1px solid #111; padding-top: 4px; }
+        .price-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; border-top: 1px solid #111; padding-top: 4px; }
         .p-group { display: flex; flex-direction: column; }
-        .p-label { font-size: 7px; color: #555; line-height: 1; margin-bottom: 1px; }
-        .p-val { font-size: 10px; color: #888; font-weight: 300; }
-        .p-val.highlight { font-size: 12px; color: var(--gold); font-weight: 600; }
+        .p-label { font-size: 6px; color: #444; line-height: 1; margin-bottom: 1px; }
+        .p-val { font-size: 9px; color: #777; font-weight: 300; }
+        .p-val.highlight { font-size: 11px; color: var(--gold); font-weight: 600; }
 
-        /* ระบบปุ่มภาษาไทย */
+        /* ปุ่มสั่งซื้อ */
         .btn-box { display: flex; flex-direction: column; gap: 3px; }
-        .btn { width: 100%; height: 22px; font-size: 9px; font-weight: 600; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
+        .btn { width: 100%; height: 20px; font-size: 8px; font-weight: 600; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
         .btn-app { background: #000; color: #FFF; border: 1px solid #222; }
         .btn-app.shopee { border-color: var(--shopee); color: var(--shopee); }
         .btn-app.lazada { border-color: var(--lazada); color: var(--lazada); }
@@ -80,11 +97,11 @@
         <div class="rec-container" id="rec-list"></div>
     </div>
     <div class="tools-area">
-        <input type="text" id="search" placeholder="ค้นหาสินค้าที่นี่..." oninput="render()">
+        <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
         <div class="cat-scroll">
-            <button class="cat-btn active" onclick="setCat('all', this)">สินค้าทั้งหมด</button>
+            <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
             <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
-            <button class="cat-btn" onclick="setCat('2', this)">ของใช้ทั่วไป</button>
+            <button class="cat-btn" onclick="setCat('2', this)">ของใช้</button>
             <button class="cat-btn" onclick="setCat('3', this)">แม่และเด็ก</button>
         </div>
     </div>
@@ -133,6 +150,7 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
+        // สินค้าแนะนำ
         const recData = db.filter(p => p[5] && p[5].includes("แนะนำ")).slice(0, 12);
         document.getElementById('rec-list').innerHTML = recData.map(p => `
             <div class="rec-item" onclick="showImg('${p[1]}')">
@@ -150,7 +168,7 @@
             const pOur = p[8];
             
             let appClass = linkApp.includes('shopee') ? 'shopee' : linkApp.includes('lazada') ? 'lazada' : '';
-            let appText = linkApp.includes('shopee') ? 'SHOPEE' : linkApp.includes('lazada') ? 'LAZADA' : 'สั่งในแอป';
+            let appText = linkApp.includes('shopee') ? 'SHOPEE' : linkApp.includes('lazada') ? 'LAZADA' : 'แอป';
 
             return `
             <div class="card">
@@ -162,17 +180,17 @@
                     <div class="card-desc">${pDesc}</div>
                     <div class="price-row">
                         <div class="p-group">
-                            <span class="p-label">ในแอป</span>
+                            <span class="p-label">แอป</span>
                             <span class="p-val">฿${pApp}</span>
                         </div>
                         <div class="p-group" style="text-align:right">
-                            <span class="p-label" style="color:var(--gold)">สั่งตรง</span>
+                            <span class="p-label" style="color:var(--gold)">ร้าน</span>
                             <span class="p-val highlight">฿${pOur || pApp}</span>
                         </div>
                     </div>
                     <div class="btn-box">
                         <a href="${linkApp}" target="_blank" class="btn btn-app ${appClass}">${appText}</a>
-                        ${linkDirect ? `<a href="${linkDirect}" target="_blank" class="btn btn-direct">สั่งกับร้าน</a>` : ''}
+                        ${linkDirect ? `<a href="${linkDirect}" target="_blank" class="btn btn-direct">สั่งตรง</a>` : ''}
                     </div>
                 </div>
             </div>`;
