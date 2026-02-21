@@ -18,15 +18,14 @@
         }
         header.shrunk { padding-bottom: 5px; }
         header.shrunk .logo-row { padding: 8px 0 4px; }
-        header.shrunk .logo-img { height: 35px; } /* ขนาดโลโก้ตอนหด */
+        header.shrunk .logo-img { height: 35px; }
         header.shrunk #search { padding: 6px 15px; margin-bottom: 5px; }
 
-        /* ✅ ปรับ Logo Row สำหรับโลโก้ใหม่ของคุณ */
         .logo-row { display: flex; align-items: center; justify-content: center; padding: 15px 0 10px; transition: 0.3s; }
         .logo-img { height: 55px; width: auto; object-fit: contain; transition: 0.3s; border-radius: 4px; }
 
         .nav-container { padding: 0 12px; }
-        #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; transition: 0.3s; }
+        #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; }
         
         .cat-bar { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
         .cat-bar::-webkit-scrollbar { display: none; }
@@ -37,34 +36,36 @@
         main { margin-top: 175px; min-height: 85vh; transition: 0.4s ease; }
         header.shrunk + main { margin-top: 140px; }
 
-        .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; font-weight: 600; text-transform: uppercase; }
 
-        /* ✅ ส่วนสินค้าแนะนำ (ขนาดกะทัดรัด) */
+        /* ✅ สินค้าแนะนำ */
         .rec-list { display: flex; gap: 6px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; }
-        .rec-card { min-width: 80px; width: 80px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; }
-        .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; }
+        .rec-card { min-width: 80px; width: 80px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; cursor: pointer; }
+        .rec-media { width: 100%; aspect-ratio: 1/1; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; }
 
-        /* ✅ Grid สินค้า 3 คอลัมน์ */
+        /* ✅ Grid สินค้า */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 20px; }
         .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 2px; overflow: hidden; height: 100%; }
-        .media { width: 100%; aspect-ratio: 1/1; background: #000; }
+        .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
 
         .info { padding: 5px; flex: 1; display: flex; flex-direction: column; }
         .title { font-size: 9px; height: 24px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; margin-bottom: 5px; color: #ddd; }
         .price { color: var(--gold); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 5px; display: block; }
-        .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 6px 0; border-radius: 2px; text-decoration: none; transition: 0.2s; }
-        .buy-btn:active { opacity: 0.7; transform: scale(0.95); }
+        .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 6px 0; border-radius: 2px; text-decoration: none; }
 
-        /* --- Footer --- */
-        footer { background: #080808; padding: 40px 15px; border-top: 1px solid #222; text-align: center; margin-top: 20px; }
-        .f-logo-img { height: 40px; margin-bottom: 15px; opacity: 0.9; }
-        .f-text { font-size: 10px; color: #666; margin-bottom: 20px; line-height: 1.6; }
-        .f-contact { display: inline-block; border: 1px solid #333; padding: 8px 20px; border-radius: 25px; color: var(--gold); font-size: 11px; text-decoration: none; transition: 0.3s; font-weight: 400; }
-        .f-contact:hover { background: var(--gold); color: #000; border-color: var(--gold); }
-        .copyright { font-size: 9px; color: #333; margin-top: 25px; letter-spacing: 1px; }
+        /* ✅ Modal ระบบดูรูปใหญ่ */
+        #imgModal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 20px; }
+        #imgModal img { max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+        .close-modal { position: absolute; top: 30px; right: 30px; color: white; font-size: 30px; cursor: pointer; font-weight: bold; }
+
+        /* ✅ Footer (ไม่มีโลโก้) */
+        footer { background: #080808; padding: 30px 15px; border-top: 1px solid #222; text-align: center; }
+        .f-text { font-size: 10px; color: #666; margin-bottom: 15px; line-height: 1.6; }
+        .f-contact { display: inline-block; border: 1px solid #333; padding: 8px 20px; border-radius: 25px; color: var(--gold); font-size: 11px; text-decoration: none; }
+        .copyright { font-size: 9px; color: #333; margin-top: 20px; }
 
         #status { text-align: center; padding: 100px 20px; color: var(--gold); font-size: 12px; }
     </style>
@@ -88,18 +89,20 @@
 
 <main>
     <div id="status">กำลังดึงข้อมูลสินค้า...</div>
-    
     <div id="rec-area" style="display:none;">
         <div class="section-label">✨ สินค้าแนะนำ</div>
         <div class="rec-list" id="rec-list"></div>
     </div>
-
     <div class="section-label" id="main-label" style="display:none;">📦 รายการสินค้า</div>
     <div class="grid" id="main-list"></div>
 </main>
 
+<div id="imgModal" onclick="closeModal()">
+    <span class="close-modal">&times;</span>
+    <img id="modalContent" src="">
+</div>
+
 <footer>
-    <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="f-logo-img" alt="PHAENDIN STORE Footer"><br>
     <p class="f-text">ศูนย์รวมสินค้าคุณภาพที่คัดสรรมาเพื่อคุณโดยเฉพาะ<br>อัปเดตเทรนด์ใหม่ๆ และโปรโมชั่นทุกวัน</p>
     <a href="https://line.me/R/ti/p/@yourid" class="f-contact" target="_blank">💬 สอบถามข้อมูลเพิ่มเติม</a>
     <div class="copyright">© 2026 PHAENDIN STORE. ALL RIGHTS RESERVED.</div>
@@ -110,21 +113,31 @@
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     let db = [], cur = 'all';
 
-    // ระบบ Shrink ส่วนหัวเวลาสไลด์
     window.addEventListener("scroll", () => {
         const h = document.getElementById("mainHeader");
         window.scrollY > 40 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
     });
 
-    // ฟังก์ชันจัดการ รูปภาพ/วิดีโอ
-    function getMedia(url) {
-        if(!url) return '';
-        return url.toLowerCase().match(/\.(mp4|webm|mov)$/) 
-            ? `<video src="${url}" autoplay loop muted playsinline></video>`
-            : `<img src="${url}" loading="lazy">`;
+    // ✅ ฟังก์ชันเปิด/ปิดรูปใหญ่
+    function openModal(src) {
+        if(src.toLowerCase().match(/\.(mp4|webm|mov)$/)) return; // ไม่เปิด modal สำหรับวิดีโอ
+        const modal = document.getElementById('imgModal');
+        const modalImg = document.getElementById('modalContent');
+        modal.style.display = "flex";
+        modalImg.src = src;
     }
 
-    // ฟังก์ชันสุ่มสินค้า (Shuffle)
+    function closeModal() {
+        document.getElementById('imgModal').style.display = "none";
+    }
+
+    function getMedia(url, isRec = false) {
+        if(!url) return '';
+        const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
+        if(isVid) return `<video src="${url}" autoplay loop muted playsinline></video>`;
+        return `<img src="${url}" loading="lazy" onclick="openModal('${url}')">`;
+    }
+
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -133,7 +146,6 @@
         return array;
     }
 
-    // โหลดข้อมูลจาก Google Sheets
     async function load() {
         try {
             const r = await fetch(URL);
@@ -141,21 +153,15 @@
             db = t.split(/\r?\n/).slice(1).map(row => 
                 row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
             ).filter(x => x[0] && x[1]);
-            
-            // สุ่มลำดับสินค้าทุกครั้งที่เข้าเว็บ
             db = shuffle(db);
-
             document.getElementById('status').style.display = 'none';
             document.getElementById('main-label').style.display = 'block';
             render();
-        } catch(e) { document.getElementById('status').innerText = "โปรดตรวจสอบการเชื่อมต่อ Google Sheets"; }
+        } catch(e) { document.getElementById('status').innerText = "โปรดตรวจสอบการเชื่อมต่อ Sheets"; }
     }
 
-    // แสดงผลสินค้า
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-        
-        // สินค้าแนะนำ (ดูจากคอลัมน์ index 5 ว่ามีคำว่า "แนะนำ" ไหม)
         const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
         const recArea = document.getElementById('rec-area');
         
@@ -163,13 +169,12 @@
             recArea.style.display = 'block';
             document.getElementById('rec-list').innerHTML = recs.map(p => `
                 <div class="rec-card">
-                    <div class="rec-media" style="height:100%">${getMedia(p[1])}</div>
+                    <div class="rec-media" style="height:100%">${getMedia(p[1], true)}</div>
                     <div class="rec-price">฿${p[8] || p[3]}</div>
                 </div>
             `).join('');
         } else { recArea.style.display = 'none'; }
 
-        // รายการสินค้าหลัก
         const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         document.getElementById('main-list').innerHTML = filt.map(p => `
             <div class="card">
@@ -189,7 +194,6 @@
         el.classList.add('active');
         render();
     }
-    
     load();
 </script>
 </body>
