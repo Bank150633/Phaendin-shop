@@ -17,14 +17,13 @@
             padding-bottom: 10px; transition: 0.4s ease;
         }
         header.shrunk { padding-bottom: 5px; }
-        header.shrunk .logo-row { padding: 5px 0 2px; transform: scale(0.85); }
-        header.shrunk .logo-img { width: 20px; height: 20px; }
-        header.shrunk .logo-row h1 { font-size: 13px; }
+        header.shrunk .logo-row { padding: 8px 0 4px; }
+        header.shrunk .logo-img { height: 35px; } /* ปรับขนาดตอนหด */
         header.shrunk #search { padding: 6px 15px; margin-bottom: 5px; }
 
-        .logo-row { display: flex; align-items: center; justify-content: center; padding: 12px 0 8px; gap: 8px; transition: 0.3s; }
-        .logo-img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold); }
-        .logo-row h1 { font-size: 15px; color: var(--gold); letter-spacing: 1px; font-weight: 600; }
+        /* ✅ ปรับ Logo Row สำหรับโลโก้แนวยาว */
+        .logo-row { display: flex; align-items: center; justify-content: center; padding: 15px 0 10px; transition: 0.3s; }
+        .logo-img { height: 50px; width: auto; object-fit: contain; transition: 0.3s; }
 
         .nav-container { padding: 0 12px; }
         #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; }
@@ -35,18 +34,19 @@
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
         /* --- Content --- */
-        main { margin-top: 150px; min-height: 80vh; }
+        main { margin-top: 170px; min-height: 80vh; transition: 0.4s ease; }
+        header.shrunk + main { margin-top: 140px; }
 
         .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; font-weight: 600; text-transform: uppercase; }
 
-        /* ✅ ปรับรูปแนะนำให้เล็กลง */
+        /* ✅ รูปแนะนำขนาดกะทัดรัด */
         .rec-list { display: flex; gap: 6px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; }
         .rec-card { min-width: 75px; width: 75px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; }
         .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.9); color: #000; font-size: 8px; font-weight: bold; text-align: center; padding: 1px 0; }
 
-        /* Grid */
+        /* Grid 3 Columns */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 20px; }
         .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 2px; overflow: hidden; }
         .media { width: 100%; aspect-ratio: 1/1; }
@@ -57,9 +57,9 @@
         .price { color: var(--gold); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 4px; display: block; }
         .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 5px 0; border-radius: 2px; text-decoration: none; }
 
-        /* ✅ Footer ใหม่ */
+        /* Footer */
         footer { background: #080808; padding: 30px 15px; border-top: 1px solid #222; text-align: center; }
-        .f-logo { font-size: 14px; color: var(--gold); font-weight: 600; margin-bottom: 10px; display: block; }
+        .f-logo-img { height: 30px; margin-bottom: 10px; }
         .f-text { font-size: 10px; color: #555; margin-bottom: 15px; line-height: 1.5; }
         .f-contact { display: inline-block; border: 1px solid #333; padding: 6px 15px; border-radius: 20px; color: #aaa; font-size: 10px; text-decoration: none; transition: 0.3s; }
         .f-contact:hover { border-color: var(--gold); color: var(--gold); }
@@ -72,8 +72,7 @@
 
 <header id="mainHeader">
     <div class="logo-row">
-        <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img">
-        <h1>PHAENDIN STORE</h1>
+        <img src="https://i.ibb.co/800.png" class="logo-img" alt="PHAENDIN LOGO">
     </div>
     <div class="nav-container">
         <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
@@ -97,7 +96,7 @@
 </main>
 
 <footer>
-    <span class="f-logo">PHAENDIN STORE</span>
+    <img src="https://i.ibb.co/800.png" class="f-logo-img" alt="PHAENDIN LOGO"><br>
     <p class="f-text">คัดสรรสินค้าคุณภาพดีที่สุดเพื่อคุณ<br>อัปเดตสินค้าใหม่ทุกวัน</p>
     <a href="https://line.me/R/ti/p/@yourid" class="f-contact" target="_blank">💬 ติดต่อสอบถาม / สั่งซื้อ</a>
     <div class="copyright">© 2026 PHAENDIN STORE. ALL RIGHTS RESERVED.</div>
@@ -108,6 +107,7 @@
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     let db = [], cur = 'all';
 
+    // ระบบ Shrink เมื่อเลื่อนหน้าจอ
     window.addEventListener("scroll", () => {
         const h = document.getElementById("mainHeader");
         window.scrollY > 40 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
@@ -120,7 +120,6 @@
             : `<img src="${url}" loading="lazy">`;
     }
 
-    // ✅ ฟังก์ชันสุ่มลำดับข้อมูล
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -137,7 +136,6 @@
                 row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
             ).filter(x => x[0] && x[1]);
             
-            // สุ่มข้อมูลก่อนแสดงผล
             db = shuffle(db);
 
             document.getElementById('status').style.display = 'none';
