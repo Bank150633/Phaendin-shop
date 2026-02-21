@@ -41,20 +41,19 @@
         /* สินค้าแนะนำ */
         .rec-list { display: flex; gap: 6px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; }
         .rec-card { min-width: 80px; width: 80px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; cursor: pointer; }
-        .rec-media { width: 100%; aspect-ratio: 1/1; }
-        .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
+        .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; }
+        .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; }
 
         /* Grid สินค้า 3 คอลัมน์ */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 20px; }
         .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 2px; overflow: hidden; height: 100%; }
-        .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; }
-        .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
+        .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; background: #000; position: relative; }
+        .media img, .media video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .info { padding: 5px; flex: 1; display: flex; flex-direction: column; }
         .title { font-size: 9px; font-weight: 600; height: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 2px; color: #fff; }
         
-        /* ✅ สไตล์คำอธิบายสินค้า */
         .desc { font-size: 8px; color: #888; height: 20px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.2; margin-bottom: 5px; }
 
         .price { color: var(--gold); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 5px; display: block; }
@@ -113,6 +112,7 @@
 </footer>
 
 <script>
+    // ✅ แทนที่ ID ของคุณ
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     let db = [], cur = 'all';
@@ -134,10 +134,13 @@
         document.getElementById('imgModal').style.display = "none";
     }
 
+    // ✅ ฟังก์ชันใหม่รองรับวิดีโอ
     function getMedia(url) {
         if(!url) return '';
         const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
-        if(isVid) return `<video src="${url}" autoplay loop muted playsinline></video>`;
+        if(isVid) {
+            return `<video src="${url}" autoplay loop muted playsinline loading="lazy"></video>`;
+        }
         return `<img src="${url}" loading="lazy" onclick="openModal('${url}')">`;
     }
 
@@ -172,24 +175,28 @@
             recArea.style.display = 'block';
             document.getElementById('rec-list').innerHTML = recs.map(p => `
                 <div class="rec-card">
-                    <div class="rec-media" style="height:100%">${getMedia(p[1])}</div>
-                    <div class="rec-price">฿${p[8] || p[3]}</div>
+                    <div class="rec-media">${getMedia(p[1])}</div>
+                    <div class="rec-price">฿${p[3]}</div>
                 </div>
             `).join('');
         } else { recArea.style.display = 'none'; }
 
         const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
-        document.getElementById('main-list').innerHTML = filt.map(p => `
+        document.getElementById('main-list').innerHTML = filt.map(p => {
+            // ✅ แก้ไขรายละเอียดสินค้า: ถ้าไม่มีให้ขึ้นข้อความอื่น
+            const description = (p[2] && p[2].trim() !== "") ? p[2] : "สินค้าคุณภาพ คัดสรรเพื่อคุณ";
+            
+            return `
             <div class="card">
                 <div class="media">${getMedia(p[1])}</div>
                 <div class="info">
                     <div class="title">${p[0]}</div>
-                    <div class="desc">${p[2] || 'ไม่มีรายละเอียดสินค้า'}</div>
-                    <span class="price">฿${p[8] || p[3]}</span>
+                    <div class="desc">${description}</div>
+                    <span class="price">฿${p[3]}</span>
                     <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
     }
 
     function setCat(c, el) {
