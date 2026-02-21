@@ -38,30 +38,34 @@
 
         .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; font-weight: 600; text-transform: uppercase; }
 
-        /* ✅ สินค้าแนะนำ */
+        /* สินค้าแนะนำ */
         .rec-list { display: flex; gap: 6px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; }
         .rec-card { min-width: 80px; width: 80px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; cursor: pointer; }
         .rec-media { width: 100%; aspect-ratio: 1/1; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; }
 
-        /* ✅ Grid สินค้า */
+        /* Grid สินค้า 3 คอลัมน์ */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 20px; }
         .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 2px; overflow: hidden; height: 100%; }
         .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
 
         .info { padding: 5px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 9px; height: 24px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; margin-bottom: 5px; color: #ddd; }
+        .title { font-size: 9px; font-weight: 600; height: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 2px; color: #fff; }
+        
+        /* ✅ สไตล์คำอธิบายสินค้า */
+        .desc { font-size: 8px; color: #888; height: 20px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.2; margin-bottom: 5px; }
+
         .price { color: var(--gold); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 5px; display: block; }
         .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 6px 0; border-radius: 2px; text-decoration: none; }
 
-        /* ✅ Modal ระบบดูรูปใหญ่ */
+        /* Modal ระบบดูรูปใหญ่ */
         #imgModal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 20px; }
-        #imgModal img { max-width: 100%; max-height: 80vh; border-radius: 8px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
-        .close-modal { position: absolute; top: 30px; right: 30px; color: white; font-size: 30px; cursor: pointer; font-weight: bold; }
+        #imgModal img { max-width: 100%; max-height: 80vh; border-radius: 8px; }
+        .close-modal { position: absolute; top: 30px; right: 30px; color: white; font-size: 30px; cursor: pointer; }
 
-        /* ✅ Footer (ไม่มีโลโก้) */
+        /* Footer */
         footer { background: #080808; padding: 30px 15px; border-top: 1px solid #222; text-align: center; }
         .f-text { font-size: 10px; color: #666; margin-bottom: 15px; line-height: 1.6; }
         .f-contact { display: inline-block; border: 1px solid #333; padding: 8px 20px; border-radius: 25px; color: var(--gold); font-size: 11px; text-decoration: none; }
@@ -118,9 +122,8 @@
         window.scrollY > 40 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
     });
 
-    // ✅ ฟังก์ชันเปิด/ปิดรูปใหญ่
     function openModal(src) {
-        if(src.toLowerCase().match(/\.(mp4|webm|mov)$/)) return; // ไม่เปิด modal สำหรับวิดีโอ
+        if(src.toLowerCase().match(/\.(mp4|webm|mov)$/)) return;
         const modal = document.getElementById('imgModal');
         const modalImg = document.getElementById('modalContent');
         modal.style.display = "flex";
@@ -131,7 +134,7 @@
         document.getElementById('imgModal').style.display = "none";
     }
 
-    function getMedia(url, isRec = false) {
+    function getMedia(url) {
         if(!url) return '';
         const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
         if(isVid) return `<video src="${url}" autoplay loop muted playsinline></video>`;
@@ -169,7 +172,7 @@
             recArea.style.display = 'block';
             document.getElementById('rec-list').innerHTML = recs.map(p => `
                 <div class="rec-card">
-                    <div class="rec-media" style="height:100%">${getMedia(p[1], true)}</div>
+                    <div class="rec-media" style="height:100%">${getMedia(p[1])}</div>
                     <div class="rec-price">฿${p[8] || p[3]}</div>
                 </div>
             `).join('');
@@ -181,6 +184,7 @@
                 <div class="media">${getMedia(p[1])}</div>
                 <div class="info">
                     <div class="title">${p[0]}</div>
+                    <div class="desc">${p[2] || 'ไม่มีรายละเอียดสินค้า'}</div>
                     <span class="price">฿${p[8] || p[3]}</span>
                     <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
                 </div>
