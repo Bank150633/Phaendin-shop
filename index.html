@@ -8,7 +8,7 @@
     <style>
         :root { --gold: #D4AF37; --bg-dark: #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 145px; }
+        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 145px; display: flex; flex-direction: column; min-height: 100vh; }
 
         /* Header */
         .fixed-top { position: fixed; top: 0; left: 0; width: 100%; z-index: 999; background: #000; border-bottom: 1px solid #1a1a1a; }
@@ -16,8 +16,11 @@
         .logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 8px; }
         header h1 { font-size: 12px; color: var(--gold); letter-spacing: 1px; font-weight: 600; }
 
-        /* แนะนำ */
-        .rec-section { padding: 5px 0; }
+        /* หัวข้อสินค้าแนะนำ */
+        .rec-title { font-size: 11px; color: var(--gold); padding: 5px 10px 0 10px; font-weight: 400; letter-spacing: 0.5px; }
+
+        /* แนะนำ (สไลด์) */
+        .rec-section { padding: 5px 0 8px 0; }
         .rec-container { display: flex; gap: 8px; overflow-x: auto; padding: 0 10px; scrollbar-width: none; }
         .rec-container::-webkit-scrollbar { display: none; }
         .rec-item { min-width: 80px; max-width: 80px; background: #111; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative; aspect-ratio: 1/1; flex-shrink: 0; }
@@ -25,31 +28,35 @@
         .rec-price { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 8px; color: #000; text-align: center; font-weight: 700; padding: 1px 0; }
 
         /* Tools */
-        .tools { padding: 2px 10px 8px 10px; }
+        .tools { padding: 2px 10px 8px 10px; border-top: 1px solid #111; }
         #search { width: 100%; padding: 7px 12px; border-radius: 4px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 11px; outline: none; margin-bottom: 6px; }
         .cat-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; }
         .cat-btn { background: none; color: #555; border: none; font-size: 11px; padding-bottom: 3px; cursor: pointer; white-space: nowrap; }
         .cat-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); font-weight: 600; }
 
-        /* Grid - ปรับให้ยืดหยุ่น */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; align-items: stretch; }
+        /* Grid สินค้า */
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; flex: 1; }
         .card { background: #0a0a0a; border: 1px solid #111; display: flex; flex-direction: column; border-radius: 2px; height: 100%; }
         .img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .img-box img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 
-        /* ส่วนข้อมูลสินค้า - แก้ให้ปุ่มตรงกัน */
         .info { padding: 5px; flex: 1; display: flex; flex-direction: column; }
         .name { font-size: 10px; font-weight: 600; color: #eee; margin-bottom: 1px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 24px; line-height: 1.2; }
         .desc { font-size: 8px; color: #bbb; height: 19px; overflow: hidden; line-height: 1.1; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .price-box { border-top: 1px solid #111; padding-top: 3px; margin-bottom: 5px; text-align: center; margin-top: auto; } /* margin-top: auto คือตัวช่วยสำคัญ */
+        .price-box { border-top: 1px solid #111; padding-top: 3px; margin-bottom: 5px; text-align: center; margin-top: auto; }
         .p-amt { font-size: 11px; color: var(--gold); font-weight: 600; }
         .btn-direct { display: flex; align-items: center; justify-content: center; height: 22px; border-radius: 2px; text-decoration: none; font-size: 9px; font-weight: 700; background: var(--gold); color: #000; width: 100%; }
 
-        /* Modal ขยายรูป */
-        #imgModal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
-        #imgModal img { max-width: 90%; max-height: 80vh; border: 2px solid var(--gold); }
+        /* Footer */
+        footer { background: #0a0a0a; padding: 20px 10px; border-top: 1px solid #111; text-align: center; margin-top: 20px; }
+        .foot-text { font-size: 10px; color: #555; letter-spacing: 1px; }
+        .foot-brand { color: var(--gold); font-size: 11px; margin-bottom: 5px; font-weight: 600; }
 
-        .shrink .rec-section { height: 0; opacity: 0; padding: 0; pointer-events: none; }
+        /* Modal */
+        #imgModal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        #imgModal img { max-width: 90%; max-height: 80vh; border: 1px solid var(--gold); }
+
+        .shrink .rec-section, .shrink .rec-title { height: 0; opacity: 0; padding: 0; pointer-events: none; overflow: hidden; }
         body.scrolled { padding-top: 85px; }
     </style>
 </head>
@@ -62,11 +69,12 @@
         <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo">
         <h1>PHAENDIN STORE</h1>
     </header>
+    <div class="rec-title">✨ สินค้าแนะนำ</div>
     <div class="rec-section"><div class="rec-container" id="rec-list"></div></div>
     <div class="tools">
-        <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
+        <input type="text" id="search" placeholder="ค้นหาสินค้าที่ต้องการ..." oninput="render()">
         <div class="cat-scroll">
-            <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
+            <button class="cat-btn active" onclick="setCat('all', this)">สินค้าทั้งหมด</button>
             <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
             <button class="cat-btn" onclick="setCat('2', this)">ของใช้</button>
             <button class="cat-btn" onclick="setCat('3', this)">แม่และเด็ก</button>
@@ -75,6 +83,12 @@
 </div>
 
 <div class="main-grid" id="main-list"></div>
+
+<footer>
+    <div class="foot-brand">PHAENDIN STORE</div>
+    <div class="foot-text">สั่งซื้อโดยตรง รับส่วนลดพิเศษจากทางร้าน</div>
+    <div class="foot-text" style="margin-top: 10px; opacity: 0.5;">© 2026 PHAENDIN STORE. All Rights Reserved.</div>
+</footer>
 
 <script>
     const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
@@ -122,7 +136,7 @@
                     <div class="price-box">
                         <span class="p-amt">฿${p[8] || p[3]}</span>
                     </div>
-                    <a href="${p[7]}" target="_blank" class="btn btn-direct">สั่งซื้อ</a>
+                    <a href="${p[7]}" target="_blank" class="btn btn-direct">สั่งซื้อสินค้า</a>
                 </div>
             </div>`).join('');
     }
