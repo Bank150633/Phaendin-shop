@@ -10,76 +10,44 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 145px; display: flex; flex-direction: column; min-height: 100vh; }
 
-        /* Header & Search */
-        .fixed-top { position: fixed; top: 0; left: 0; width: 100%; z-index: 999; background: #000; border-bottom: 1px solid #1a1a1a; }
-        header { padding: 6px; display: flex; align-items: center; justify-content: center; }
+        /* ✅ Header & Navigation */
+        .fixed-top { position: fixed; top: 0; left: 0; width: 100%; z-index: 999; background: #000; border-bottom: 1px solid #1a1a1a; transition: 0.3s; }
+        header { padding: 8px; display: flex; align-items: center; justify-content: center; }
         .logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 8px; }
-        header h1 { font-size: 12px; color: var(--gold); letter-spacing: 1px; font-weight: 600; }
-        .rec-title { font-size: 11px; color: var(--gold); padding: 5px 10px 0 10px; font-weight: 400; }
-        .rec-section { padding: 5px 0 8px 0; }
-        .rec-container { display: flex; gap: 8px; overflow-x: auto; padding: 0 10px; scrollbar-width: none; }
+        header h1 { font-size: 13px; color: var(--gold); letter-spacing: 1px; font-weight: 600; }
+        .rec-title { font-size: 11px; color: var(--gold); padding: 5px 12px 0 12px; font-weight: 400; }
+
+        /* ✅ ส่วนแนะนำ (สไลด์) */
+        .rec-section { padding: 5px 0 10px 0; }
+        .rec-container { display: flex; gap: 8px; overflow-x: auto; padding: 0 12px; scrollbar-width: none; }
         .rec-container::-webkit-scrollbar { display: none; }
-        
-        /* Media Box */
-        .media-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #111; position: relative; }
-        .media-box img, .media-box video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .rec-item { min-width: 85px; max-width: 85px; background: #111; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative; aspect-ratio: 1/1; flex-shrink: 0; }
+        .rec-price { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 9px; color: #000; text-align: center; font-weight: 700; padding: 1px 0; }
 
-        /* Cards & Grid */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; flex: 1; }
-        .card { background: #0a0a0a; border: 1px solid #111; display: flex; flex-direction: column; border-radius: 2px; }
-        .info { padding: 5px; flex: 1; display: flex; flex-direction: column; }
-        .name { font-size: 10px; font-weight: 600; color: #eee; height: 24px; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 1px; }
-        .desc { font-size: 8px; color: #bbb; height: 19px; overflow: hidden; line-height: 1.1; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .price-box { border-top: 1px solid #111; padding-top: 3px; margin-bottom: 5px; text-align: center; margin-top: auto; }
-        .p-amt { font-size: 11px; color: var(--gold); font-weight: 600; }
-        .btn-direct { display: flex; align-items: center; justify-content: center; height: 22px; border-radius: 2px; text-decoration: none; font-size: 9px; font-weight: 700; background: var(--gold); color: #000; }
-
-        /* Footer */
-        footer { background: #0a0a0a; padding: 20px 10px; border-top: 1px solid #111; text-align: center; margin-top: 20px; }
-        .foot-brand { color: var(--gold); font-size: 11px; margin-bottom: 5px; font-weight: 600; }
-        .foot-text { font-size: 9px; color: #555; }
-
-        /* Modal */
-        #imgModal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
-        #modalContent { max-width: 90%; max-height: 80vh; border: 1px solid var(--gold); }
-
-        .tools { padding: 2px 10px 8px 10px; border-top: 1px solid #111; }
-        #search { width: 100%; padding: 7px 12px; border-radius: 4px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 11px; outline: none; margin-bottom: 6px; }
+        /* ✅ Tools ค้นหา */
+        .tools { padding: 5px 12px 10px 12px; border-top: 1px solid #111; }
+        #search { width: 100%; padding: 8px 12px; border-radius: 5px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 11px; outline: none; margin-bottom: 8px; }
         .cat-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; }
         .cat-btn { background: none; color: #555; border: none; font-size: 11px; padding-bottom: 3px; cursor: pointer; white-space: nowrap; }
         .cat-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); font-weight: 600; }
 
-        .shrink .rec-section, .shrink .rec-title { height: 0; opacity: 0; padding: 0; pointer-events: none; overflow: hidden; }
-        body.scrolled { padding-top: 85px; }
-    </style>
-</head>
-<body>
+        /* ✅ Grid สินค้า */
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 5px; flex: 1; }
+        .card { background: #0a0a0a; border: 1px solid #111; display: flex; flex-direction: column; border-radius: 2px; height: 100%; }
+        
+        /* Box สำหรับรูป/วิดีโอ */
+        .media-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #000; position: relative; border-bottom: 1px solid #111; }
+        .media-box img, .media-box video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 
-<div id="imgModal" onclick="this.style.display='none'"><div id="modalMedia"></div></div>
+        /* ข้อมูลใน Card */
+        .info { padding: 6px; flex: 1; display: flex; flex-direction: column; }
+        .name { font-size: 10px; font-weight: 600; color: #eee; height: 26px; line-height: 1.2; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 2px; }
+        .desc { font-size: 8px; color: #999; height: 19px; overflow: hidden; line-height: 1.2; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .price-box { border-top: 1px solid #1a1a1a; padding-top: 4px; margin-bottom: 6px; text-align: center; margin-top: auto; }
+        .p-amt { font-size: 11px; color: var(--gold); font-weight: 600; }
+        .btn-direct { display: flex; align-items: center; justify-content: center; height: 24px; border-radius: 3px; text-decoration: none; font-size: 9px; font-weight: 700; background: var(--gold); color: #000; transition: 0.2s; }
 
-<div class="fixed-top" id="topNav">
-    <header>
-        <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo">
-        <h1>PHAENDIN STORE</h1>
-    </header>
-    <div class="rec-title">✨ สินค้าแนะนำ</div>
-    <div class="rec-section"><div class="rec-container" id="rec-list"></div></div>
-    <div class="tools">
-        <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
-        <div class="cat-scroll">
-            <button class="cat-btn active" onclick="setCat('all', this)">สินค้าทั้งหมด</button>
-            <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
-            <button class="cat-btn" onclick="setCat('2', this)">ของใช้</button>
-            <button class="cat-btn" onclick="setCat('3', this)">แม่และเด็ก</button>
-        </div>
-    </div>
-</div>
-
-<div class="main-grid" id="main-list"></div>
-
-<footer>
-    <div class="foot-brand">PHAENDIN STORE</div>
-    <div class="foot-text">สั่งซื้อโดยตรง รับส่วนลดพิเศษจากทางร้าน</div>
-    <div class="foot-text" style="margin-top: 5px; opacity: 0.5;">© 2026 PHAENDIN STORE.</div>
-</footer>
-
+        /* ✅ Footer */
+        footer { background: #0a0a0a; padding: 25px 12px; border-top: 1px solid #111; text-align: center; margin-top: 20px; }
+        .foot-brand { color: var(--gold); font-size: 12px; margin-bottom: 6px; font-weight: 600; letter-spacing: 1px; }
+        .foot-text { font-size:
