@@ -13,40 +13,41 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 170px; }
+        /* ✅ ลดระยะห่างด้านบนให้สินค้าหลักโชว์เร็วขึ้น */
+        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 145px; }
 
-        /* ✅ Header & Navigation */
+        /* ✅ Header */
         .fixed-top { position: fixed; top: 0; left: 0; width: 100%; z-index: 999; background: #000; border-bottom: 1px solid #1a1a1a; }
-        header { padding: 8px; display: flex; align-items: center; justify-content: center; }
-        .logo { width: 25px; height: 25px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 8px; }
-        header h1 { font-size: 13px; color: var(--gold); letter-spacing: 1px; }
+        header { padding: 6px; display: flex; align-items: center; justify-content: center; }
+        .logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 8px; }
+        header h1 { font-size: 12px; color: var(--gold); letter-spacing: 1px; }
 
-        /* ✅ แถบบน: แก้ไขจาก Grid เป็น Flex เพื่อให้สไลด์ได้ */
-        .rec-section { padding: 5px 0 10px 0; transition: 0.3s; }
+        /* ✅ ส่วนแนะนำ: ปรับขนาดให้เล็กลงและสไลด์ได้ */
+        .rec-section { padding: 5px 0; transition: 0.3s; }
         .rec-container { 
             display: flex; 
             gap: 8px; 
-            overflow-x: auto; /* ทำให้สไลด์แนวนอนได้ */
+            overflow-x: auto; 
             padding: 0 10px; 
-            scrollbar-width: none; /* ซ่อน scrollbar (Firefox) */
+            scrollbar-width: none; 
             -webkit-overflow-scrolling: touch; 
         }
-        .rec-container::-webkit-scrollbar { display: none; } /* ซ่อน scrollbar (Chrome/Safari) */
+        .rec-container::-webkit-scrollbar { display: none; }
 
         .rec-item { 
-            min-width: calc(25% - 8px); /* ขนาดความกว้าง 1 ชิ้น (ให้เห็นประมาณ 4 ชิ้นพอดี) */
+            min-width: 80px; /* ✅ ขนาดกะทัดรัด */
+            max-width: 80px;
             background: #111; border-radius: 4px; border: 1px solid #222; 
-            overflow: hidden; position: relative; aspect-ratio: 1/1; 
-            flex-shrink: 0; /* ป้องกันไม่ให้อันเล็กกว่าที่กำหนด */
+            overflow: hidden; position: relative; aspect-ratio: 1/1; flex-shrink: 0;
         }
         .rec-img { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 8px; color: #000; text-align: center; font-weight: 600; padding: 1px 0; }
 
         /* ✅ Search & Filter */
-        .tools { padding: 5px 10px; }
-        #search { width: 100%; padding: 6px 12px; border-radius: 4px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 5px; }
+        .tools { padding: 2px 10px 8px 10px; }
+        #search { width: 100%; padding: 6px 12px; border-radius: 4px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 11px; outline: none; margin-bottom: 5px; }
         .cat-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; }
-        .cat-btn { background: none; color: #555; border: none; font-size: 12px; padding-bottom: 3px; cursor: pointer; }
+        .cat-btn { background: none; color: #555; border: none; font-size: 11px; padding-bottom: 3px; cursor: pointer; }
         .cat-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
 
         /* ✅ Grid สินค้าหลัก 3 คอลัมน์ */
@@ -59,13 +60,11 @@
         .name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
         .desc { font-size: 8px; color: #666; height: 19px; overflow: hidden; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-        /* ราคา */
         .price-box { display: flex; justify-content: space-between; border-top: 1px solid #111; padding-top: 3px; margin-bottom: 4px; }
         .p-small { font-size: 6px; color: #444; }
         .p-amt { font-size: 9px; color: #888; }
         .p-amt.gold { color: var(--gold); font-weight: 600; font-size: 10px; }
 
-        /* ✅ ปุ่มแบบไดนามิก */
         .btn { display: flex; align-items: center; justify-content: center; height: 18px; border-radius: 2px; text-decoration: none; font-size: 9px; font-weight: 700; margin-bottom: 3px; }
         .btn-tiktok { background: #000; color: #fff; border: 1px solid #fff; box-shadow: -1px -1px 0 var(--tk-cyan), 1px 1px 0 var(--tk-pink); }
         .btn-shopee { background: var(--shopee); color: #fff; }
@@ -73,8 +72,9 @@
         .btn-app { background: #222; color: #fff; }
         .btn-direct { background: var(--gold); color: #000; }
 
+        /* ✅ เลื่อนลงแล้วพับส่วนแนะนำ */
         .shrink .rec-section { height: 0; opacity: 0; padding: 0; pointer-events: none; }
-        body.scrolled { padding-top: 100px; }
+        body.scrolled { padding-top: 85px; }
     </style>
 </head>
 <body>
@@ -115,7 +115,7 @@
             const res = await fetch(URL);
             const text = await res.text();
             const rows = text.split(/\r?\n/).slice(1);
-            db = rows.map(row => row.split(/,(?=(?:(?:[^2]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(r => r[0]);
+            db = rows.map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(r => r[0]);
             render();
         } catch (e) {}
     }
@@ -123,7 +123,7 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // สินค้าแนะนำ (ตอนนี้จะดึงมาทั้งหมดที่เขียนว่า "แนะนำ" เพื่อให้สไลด์ได้เยอะๆ)
+        // ✅ แสดงสินค้าแนะนำแบบสไลด์ (ดึงมาทั้งหมดเพื่อให้เลื่อนได้)
         const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
         document.getElementById('rec-list').innerHTML = recs.map(p => `
             <div class="rec-item">
