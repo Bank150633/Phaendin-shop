@@ -123,26 +123,38 @@
     });
 
     function openModal(src) {
-        if(src.toLowerCase().match(/\.(mp4|webm|mov)$/)) return;
-        const modal = document.getElementById('imgModal');
-        const modalImg = document.getElementById('modalContent');
-        modal.style.display = "flex";
-        modalImg.src = src;
+    const modal = document.getElementById('imgModal');
+    const modalImg = document.getElementById('modalContent');
+    const isVid = src.toLowerCase().match(/\.(mp4|webm|mov)$/);
+
+    if(isVid) {
+        // ถ้าเป็นวิดีโอ ให้สร้างแท็ก <video> มาแทนที่ภาพใน Modal
+        modalImg.outerHTML = `<video id="modalContent" src="${src}" controls autoplay style="max-width: 100%; max-height: 80vh; border-radius: 8px;"></video>`;
+    } else {
+        // ถ้าเป็นรูป ให้แสดงเป็นแท็ก <img> ตามเดิม
+        modalImg.outerHTML = `<img id="modalContent" src="${src}" style="max-width: 100%; max-height: 80vh; border-radius: 8px;">`;
     }
+    modal.style.display = "flex";
+}
 
     function closeModal() {
-        document.getElementById('imgModal').style.display = "none";
-    }
+    const modal = document.getElementById('imgModal');
+    const modalContent = document.getElementById('modalContent');
+    // ล้างค่าเพื่อให้วิดีโอหยุดเล่นทันทีที่ปิด
+    if(modalContent) modalContent.src = ""; 
+    modal.style.display = "none";
+}
 
     // ✅ ฟังก์ชันใหม่รองรับวิดีโอ
     function getMedia(url) {
-        if(!url) return '';
-        const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
-        if(isVid) {
-            return `<video src="${url}" autoplay loop muted playsinline loading="lazy"></video>`;
-        }
-        return `<img src="${url}" loading="lazy" onclick="openModal('${url}')">`;
+    if(!url) return '';
+    const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
+    if(isVid) {
+        // เพิ่ม onclick เพื่อให้กดแล้วเรียกฟังก์ชัน openModal
+        return `<video src="${url}" autoplay loop muted playsinline onclick="openModal('${url}')" style="width:100%; height:100%; object-fit:cover; cursor:pointer;"></video>`;
     }
+    return `<img src="${url}" loading="lazy" onclick="openModal('${url}')" style="width:100%; height:100%; object-fit:cover; cursor:pointer;">`;
+}
 
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
