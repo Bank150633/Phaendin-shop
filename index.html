@@ -21,7 +21,7 @@
         .logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 8px; }
         header h1 { font-size: 12px; color: var(--gold); letter-spacing: 1px; }
 
-        /* ✅ ส่วนแนะนำ: สไลด์กะทัดรัด */
+        /* ✅ ส่วนแนะนำ: สไลด์กะทัดรัด + กรอบบาง */
         .rec-section { padding: 5px 0; transition: 0.3s; }
         .rec-container { 
             display: flex; gap: 8px; overflow-x: auto; padding: 0 10px; 
@@ -31,9 +31,10 @@
 
         .rec-item { 
             min-width: 80px; max-width: 80px;
-            background: #111; border-radius: 4px; border: 1px solid #222; 
+            background: #111; border-radius: 4px; 
+            border: 1px solid rgba(255,255,255,0.1); /* ✅ กรอบบางๆ */
             overflow: hidden; position: relative; aspect-ratio: 1/1; flex-shrink: 0;
-            text-decoration: none; /* สำหรับปุ่มสั่งซื้อ */
+            text-decoration: none; 
         }
         .rec-img { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 8px; color: #000; text-align: center; font-weight: 600; padding: 1px 0; }
@@ -48,13 +49,15 @@
         /* ✅ Grid สินค้าหลัก 3 คอลัมน์ */
         .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; }
         .card { background: #0a0a0a; border: 1px solid #111; display: flex; flex-direction: column; padding-bottom: 5px; }
-        .img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; }
+        
+        /* ✅ เพิ่มกรอบบางให้รูปสินค้าหลัก */
+        .img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .info { padding: 4px; flex: 1; }
-        .name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+        /* ✅ ปรับชื่อสินค้าเป็นตัวหนา */
+        .name { font-size: 10px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; color: #eee; }
         
-        /* 🎨 ปรับสีคำอธิบายเป็นสีเทาอ่อน (Light Gray) เพื่อให้ดูสบายตา */
         .desc { font-size: 8px; color: #bbb; height: 19px; overflow: hidden; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
         .price-box { display: flex; justify-content: space-between; border-top: 1px solid #111; padding-top: 3px; margin-bottom: 4px; }
@@ -106,7 +109,6 @@
         else { nav.classList.remove("shrink"); document.body.classList.remove("scrolled"); }
     };
 
-    // 🎲 ฟังก์ชันสุ่มลำดับสินค้า
     function shuffle(array) {
         return array.sort(() => Math.random() - 0.5);
     }
@@ -124,7 +126,6 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // ✅ สุ่มสินค้าแนะนำ และเพิ่มลิงก์สั่งซื้อเมื่อกดที่รูป
         let recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
         recs = shuffle([...recs]); 
         document.getElementById('rec-list').innerHTML = recs.map(p => `
@@ -134,7 +135,6 @@
             </a>
         `).join('');
 
-        // ✅ สุ่มสินค้าหลักในแต่ละหมวด
         let filtered = db.filter(p => (p[0].toLowerCase().includes(q)) && (currentCat === 'all' || p[6] === currentCat));
         filtered = shuffle([...filtered]);
 
