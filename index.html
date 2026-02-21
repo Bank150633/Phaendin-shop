@@ -8,75 +8,66 @@
     <style>
         :root { 
             --gold: #D4AF37; --bg-dark: #000;
+            --shopee: #EE4D2D; --lazada: #7F27FF;
             --tk-cyan: #00f2ea; --tk-pink: #ff0050;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 195px; }
+        body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 170px; }
 
-        /* ✅ Header */
+        /* ✅ Header & Navigation */
         .fixed-top { position: fixed; top: 0; left: 0; width: 100%; z-index: 999; background: #000; border-bottom: 1px solid #1a1a1a; }
         header { padding: 8px; display: flex; align-items: center; justify-content: center; }
         .logo { width: 25px; height: 25px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 8px; }
         header h1 { font-size: 13px; color: var(--gold); letter-spacing: 1px; }
 
-        /* ✅ ส่วนแนะนำ: สไลด์ได้ (Scroll) */
-        .rec-section { padding: 5px 0 10px 0; transition: 0.3s; }
-        .rec-container { 
-            display: flex; gap: 8px; overflow-x: auto; padding: 0 12px; 
-            scrollbar-width: none; -webkit-overflow-scrolling: touch; 
-        }
-        .rec-container::-webkit-scrollbar { display: none; }
-        
-        .rec-item { 
-            min-width: calc(30% - 10px); /* ขนาดพอดีสไลด์สวยๆ */
-            background: #111; border-radius: 6px; border: 1px solid #222; 
-            overflow: hidden; position: relative; flex-shrink: 0;
-        }
-        .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        
-        /* ปุ่มสั่งซื้อบนส่วนสไลด์ */
-        .rec-buy-btn {
-            background: var(--gold); color: #000; font-size: 9px; font-weight: 600;
-            text-align: center; padding: 3px 0; text-decoration: none; display: block;
-        }
+        /* ✅ แถบบน: บังคับโชว์ 4 ชิ้นเป๊ะ (Grid 4 คอลัมน์) */
+        .rec-section { padding: 5px 10px; transition: 0.3s; }
+        .rec-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .rec-item { background: #111; border-radius: 4px; border: 1px solid #222; overflow: hidden; position: relative; aspect-ratio: 1/1; }
+        .rec-img { width: 100%; height: 100%; object-fit: cover; }
+        .rec-price { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 8px; color: #000; text-align: center; font-weight: 600; padding: 1px 0; }
 
         /* ✅ Search & Filter */
-        .tools { padding: 5px 12px; }
-        #search { width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 6px; }
+        .tools { padding: 5px 10px; }
+        #search { width: 100%; padding: 6px 12px; border-radius: 4px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 5px; }
         .cat-scroll { display: flex; gap: 15px; overflow-x: auto; scrollbar-width: none; }
         .cat-btn { background: none; color: #555; border: none; font-size: 12px; padding-bottom: 3px; cursor: pointer; }
         .cat-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); }
 
         /* ✅ Grid สินค้าหลัก 3 คอลัมน์ */
-        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 5px; }
+        .main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; }
         .card { background: #0a0a0a; border: 1px solid #111; display: flex; flex-direction: column; padding-bottom: 5px; }
         .img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
 
         .info { padding: 4px; flex: 1; }
         .name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
-        .desc { font-size: 8px; color: #666; height: 19px; overflow: hidden; line-height: 1.2; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .desc { font-size: 8px; color: #666; height: 19px; overflow: hidden; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
         /* ราคา */
-        .price-box { display: flex; justify-content: space-between; border-top: 1px solid #111; padding-top: 4px; margin-bottom: 5px; }
+        .price-box { display: flex; justify-content: space-between; border-top: 1px solid #111; padding-top: 3px; margin-bottom: 4px; }
         .p-small { font-size: 6px; color: #444; }
         .p-amt { font-size: 9px; color: #888; }
         .p-amt.gold { color: var(--gold); font-weight: 600; font-size: 10px; }
 
-        /* ✅ ปุ่ม TIKTOK & สั่งตรง */
-        .btn { display: flex; align-items: center; justify-content: center; height: 19px; border-radius: 2px; text-decoration: none; font-size: 9px; font-weight: 700; margin-bottom: 3px; }
+        /* ✅ สไตล์ปุ่มแบบไดนามิก */
+        .btn { display: flex; align-items: center; justify-content: center; height: 18px; border-radius: 2px; text-decoration: none; font-size: 9px; font-weight: 700; margin-bottom: 3px; }
+        
+        /* ปุ่ม TikTok นีออน */
         .btn-tiktok { 
             background: #000; color: #fff; border: 1px solid #fff;
             box-shadow: -1px -1px 0 var(--tk-cyan), 1px 1px 0 var(--tk-pink);
         }
-        .btn-shopee { background: #EE4D2D; color: #fff; }
-        .btn-lazada { background: #7F27FF; color: #fff; }
+        /* ปุ่ม Shopee/Lazada */
+        .btn-shopee { background: var(--shopee); color: #fff; }
+        .btn-lazada { background: var(--lazada); color: #fff; }
+        .btn-app { background: #222; color: #fff; } /* กรณีเป็นลิงก์อื่นๆ */
+        
         .btn-direct { background: var(--gold); color: #000; }
 
-        /* Scroll Effect */
         .shrink .rec-section { height: 0; opacity: 0; padding: 0; pointer-events: none; }
-        body.scrolled { padding-top: 110px; }
+        body.scrolled { padding-top: 100px; }
     </style>
 </head>
 <body>
@@ -86,13 +77,11 @@
         <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo">
         <h1>PHAENDIN STORE</h1>
     </header>
-    <div class="rec-section">
-        <div class="rec-container" id="rec-list"></div>
-    </div>
+    <div class="rec-section"><div class="rec-grid" id="rec-list"></div></div>
     <div class="tools">
         <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
         <div class="cat-scroll">
-            <button class="cat-btn active" onclick="setCat('all', this)">สุ่มทั้งหมด</button>
+            <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
             <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
             <button class="cat-btn" onclick="setCat('2', this)">ของใช้</button>
             <button class="cat-btn" onclick="setCat('3', this)">แม่และเด็ก</button>
@@ -114,15 +103,6 @@
         else { nav.classList.remove("shrink"); document.body.classList.remove("scrolled"); }
     };
 
-    // 🎲 ฟังก์ชันสุ่มสินค้า (Fisher-Yates Shuffle)
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
     async function loadData() {
         try {
             const res = await fetch(URL);
@@ -136,27 +116,25 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // 1. แสดงสินค้าแนะนำสไลด์ (สุ่มมาโชว์ 8 ชิ้น)
-        const recs = shuffleArray(db.filter(p => p[5] && p[5].includes("แนะนำ"))).slice(0, 8);
+        // แนะนำ 4 ชิ้น (Grid บังคับแถวเดียว)
+        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ")).slice(0, 4);
         document.getElementById('rec-list').innerHTML = recs.map(p => `
             <div class="rec-item">
                 <img src="${p[1]}" class="rec-img">
-                <a href="${p[4] || p[7]}" target="_blank" class="rec-buy-btn">สั่งซื้อ ฿${p[8] || p[3]}</a>
+                <div class="rec-price">฿${p[8] || p[3]}</div>
             </div>
         `).join('');
 
-        // 2. แสดงรายการสินค้าหลัก (สุ่มใหม่ทุกครั้งที่ render)
-        let filtered = db.filter(p => (p[0].toLowerCase().includes(q)) && (currentCat === 'all' || p[6] === currentCat));
-        filtered = shuffleArray(filtered); // ทำการสุ่ม
-
+        const filtered = db.filter(p => (p[0].toLowerCase().includes(q)) && (currentCat === 'all' || p[6] === currentCat));
         document.getElementById('main-list').innerHTML = filtered.map(p => {
             const link = p[4] || '';
-            let btnClass = 'btn-shopee'; 
-            let btnText = 'แอปซื้อ';
+            let btnClass = 'btn-app';
+            let btnText = 'ไปที่แอป';
 
+            // ตรวจจับลิงก์อัตโนมัติ
             if (link.includes('tiktok.com')) { btnClass = 'btn-tiktok'; btnText = 'TIKTOK'; }
-            else if (link.includes('lazada')) { btnClass = 'btn-lazada'; btnText = 'LAZADA'; }
-            else if (link.includes('shopee')) { btnClass = 'btn-shopee'; btnText = 'SHOPEE'; }
+            else if (link.includes('shopee.co.th')) { btnClass = 'btn-shopee'; btnText = 'SHOPEE'; }
+            else if (link.includes('lazada.co.th')) { btnClass = 'btn-lazada'; btnText = 'LAZADA'; }
 
             return `
             <div class="card">
@@ -165,23 +143,18 @@
                     <div class="name">${p[0]}</div>
                     <div class="desc">${p[2] || ''}</div>
                     <div class="price-box">
-                        <div><span class="p-small">ในแอป</span><br><span class="p-amt">฿${p[3]}</span></div>
-                        <div style="text-align:right"><span class="p-small" style="color:var(--gold)">ร้านเรา</span><br><span class="p-amt gold">฿${p[8] || p[3]}</span></div>
+                        <div><span class="p-small">ในแอป</span><span class="p-amt">฿${p[3]}</span></div>
+                        <div style="text-align:right"><span class="p-small" style="color:var(--gold)">ร้านเรา</span><span class="p-amt gold">฿${p[8] || p[3]}</span></div>
                     </div>
-                    <a href="${link}" target="_blank" class="btn ${btnClass}">${btnText}</a>
-                    ${p[7] ? `<a href="${p[7]}" target="_blank" class="btn btn-direct">สั่งตรง</a>` : ''}
+                    <div class="btn-group">
+                        <a href="${link}" target="_blank" class="btn ${btnClass}">${btnText}</a>
+                        ${p[7] ? `<a href="${p[7]}" target="_blank" class="btn btn-direct">สั่งตรง</a>` : ''}
+                    </div>
                 </div>
             </div>`;
         }).join('');
     }
-
-    function setCat(c, b) { 
-        currentCat = c.toString(); 
-        document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active')); 
-        b.classList.add('active'); 
-        render(); // ทุกครั้งที่เปลี่ยนหมวดจะสุ่มใหม่
-    }
-
+    function setCat(c, b) { currentCat = c.toString(); document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); render(); }
     loadData();
 </script>
 </body>
