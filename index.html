@@ -18,52 +18,53 @@
         }
         header.shrunk { padding-bottom: 5px; }
         header.shrunk .logo-row { padding: 8px 0 4px; }
-        header.shrunk .logo-img { height: 35px; } /* ปรับขนาดตอนหด */
+        header.shrunk .logo-img { height: 35px; } /* ขนาดโลโก้ตอนหด */
         header.shrunk #search { padding: 6px 15px; margin-bottom: 5px; }
 
-        /* ✅ ปรับ Logo Row สำหรับโลโก้แนวยาว */
+        /* ✅ ปรับ Logo Row สำหรับโลโก้ใหม่ของคุณ */
         .logo-row { display: flex; align-items: center; justify-content: center; padding: 15px 0 10px; transition: 0.3s; }
-        .logo-img { height: 50px; width: auto; object-fit: contain; transition: 0.3s; }
+        .logo-img { height: 55px; width: auto; object-fit: contain; transition: 0.3s; border-radius: 4px; }
 
         .nav-container { padding: 0 12px; }
-        #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; }
+        #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; transition: 0.3s; }
         
         .cat-bar { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
         .cat-bar::-webkit-scrollbar { display: none; }
         .cat-item { font-size: 10px; color: #aaa; cursor: pointer; white-space: nowrap; padding: 5px 12px; border-radius: 20px; background: var(--pill); }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
-        /* --- Content --- */
-        main { margin-top: 170px; min-height: 80vh; transition: 0.4s ease; }
+        /* --- Content Area --- */
+        main { margin-top: 175px; min-height: 85vh; transition: 0.4s ease; }
         header.shrunk + main { margin-top: 140px; }
 
-        .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; font-weight: 600; text-transform: uppercase; }
+        .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* ✅ รูปแนะนำขนาดกะทัดรัด */
+        /* ✅ ส่วนสินค้าแนะนำ (ขนาดกะทัดรัด) */
         .rec-list { display: flex; gap: 6px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; }
-        .rec-card { min-width: 75px; width: 75px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; }
+        .rec-card { min-width: 80px; width: 80px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; }
         .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
-        .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.9); color: #000; font-size: 8px; font-weight: bold; text-align: center; padding: 1px 0; }
+        .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; }
 
-        /* Grid 3 Columns */
+        /* ✅ Grid สินค้า 3 คอลัมน์ */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 20px; }
-        .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 2px; overflow: hidden; }
-        .media { width: 100%; aspect-ratio: 1/1; }
+        .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 2px; overflow: hidden; height: 100%; }
+        .media { width: 100%; aspect-ratio: 1/1; background: #000; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
 
-        .info { padding: 4px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 9px; height: 22px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.2; margin-bottom: 4px; color: #ddd; }
-        .price { color: var(--gold); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 4px; display: block; }
-        .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 5px 0; border-radius: 2px; text-decoration: none; }
+        .info { padding: 5px; flex: 1; display: flex; flex-direction: column; }
+        .title { font-size: 9px; height: 24px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.3; margin-bottom: 5px; color: #ddd; }
+        .price { color: var(--gold); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 5px; display: block; }
+        .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 6px 0; border-radius: 2px; text-decoration: none; transition: 0.2s; }
+        .buy-btn:active { opacity: 0.7; transform: scale(0.95); }
 
-        /* Footer */
-        footer { background: #080808; padding: 30px 15px; border-top: 1px solid #222; text-align: center; }
-        .f-logo-img { height: 30px; margin-bottom: 10px; }
-        .f-text { font-size: 10px; color: #555; margin-bottom: 15px; line-height: 1.5; }
-        .f-contact { display: inline-block; border: 1px solid #333; padding: 6px 15px; border-radius: 20px; color: #aaa; font-size: 10px; text-decoration: none; transition: 0.3s; }
-        .f-contact:hover { border-color: var(--gold); color: var(--gold); }
-        .copyright { font-size: 8px; color: #333; margin-top: 20px; }
+        /* --- Footer --- */
+        footer { background: #080808; padding: 40px 15px; border-top: 1px solid #222; text-align: center; margin-top: 20px; }
+        .f-logo-img { height: 40px; margin-bottom: 15px; opacity: 0.9; }
+        .f-text { font-size: 10px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+        .f-contact { display: inline-block; border: 1px solid #333; padding: 8px 20px; border-radius: 25px; color: var(--gold); font-size: 11px; text-decoration: none; transition: 0.3s; font-weight: 400; }
+        .f-contact:hover { background: var(--gold); color: #000; border-color: var(--gold); }
+        .copyright { font-size: 9px; color: #333; margin-top: 25px; letter-spacing: 1px; }
 
         #status { text-align: center; padding: 100px 20px; color: var(--gold); font-size: 12px; }
     </style>
@@ -72,7 +73,7 @@
 
 <header id="mainHeader">
     <div class="logo-row">
-        <img src="https://i.ibb.co/800.png" class="logo-img" alt="PHAENDIN LOGO">
+        <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img" alt="PHAENDIN STORE">
     </div>
     <div class="nav-container">
         <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
@@ -86,19 +87,21 @@
 </header>
 
 <main>
-    <div id="status">กำลังโหลดข้อมูล...</div>
+    <div id="status">กำลังดึงข้อมูลสินค้า...</div>
+    
     <div id="rec-area" style="display:none;">
-        <div class="section-label">✨ แนะนำ</div>
+        <div class="section-label">✨ สินค้าแนะนำ</div>
         <div class="rec-list" id="rec-list"></div>
     </div>
-    <div class="section-label" id="main-label" style="display:none;">📦 สินค้าทั้งหมด</div>
+
+    <div class="section-label" id="main-label" style="display:none;">📦 รายการสินค้า</div>
     <div class="grid" id="main-list"></div>
 </main>
 
 <footer>
-    <img src="https://i.ibb.co/800.png" class="f-logo-img" alt="PHAENDIN LOGO"><br>
-    <p class="f-text">คัดสรรสินค้าคุณภาพดีที่สุดเพื่อคุณ<br>อัปเดตสินค้าใหม่ทุกวัน</p>
-    <a href="https://line.me/R/ti/p/@yourid" class="f-contact" target="_blank">💬 ติดต่อสอบถาม / สั่งซื้อ</a>
+    <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="f-logo-img" alt="PHAENDIN STORE Footer"><br>
+    <p class="f-text">ศูนย์รวมสินค้าคุณภาพที่คัดสรรมาเพื่อคุณโดยเฉพาะ<br>อัปเดตเทรนด์ใหม่ๆ และโปรโมชั่นทุกวัน</p>
+    <a href="https://line.me/R/ti/p/@yourid" class="f-contact" target="_blank">💬 สอบถามข้อมูลเพิ่มเติม</a>
     <div class="copyright">© 2026 PHAENDIN STORE. ALL RIGHTS RESERVED.</div>
 </footer>
 
@@ -107,12 +110,13 @@
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     let db = [], cur = 'all';
 
-    // ระบบ Shrink เมื่อเลื่อนหน้าจอ
+    // ระบบ Shrink ส่วนหัวเวลาสไลด์
     window.addEventListener("scroll", () => {
         const h = document.getElementById("mainHeader");
         window.scrollY > 40 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
     });
 
+    // ฟังก์ชันจัดการ รูปภาพ/วิดีโอ
     function getMedia(url) {
         if(!url) return '';
         return url.toLowerCase().match(/\.(mp4|webm|mov)$/) 
@@ -120,6 +124,7 @@
             : `<img src="${url}" loading="lazy">`;
     }
 
+    // ฟังก์ชันสุ่มสินค้า (Shuffle)
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -128,6 +133,7 @@
         return array;
     }
 
+    // โหลดข้อมูลจาก Google Sheets
     async function load() {
         try {
             const r = await fetch(URL);
@@ -136,16 +142,20 @@
                 row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
             ).filter(x => x[0] && x[1]);
             
+            // สุ่มลำดับสินค้าทุกครั้งที่เข้าเว็บ
             db = shuffle(db);
 
             document.getElementById('status').style.display = 'none';
             document.getElementById('main-label').style.display = 'block';
             render();
-        } catch(e) { document.getElementById('status').innerText = "โปรดเช็คการแชร์ไฟล์ Sheets"; }
+        } catch(e) { document.getElementById('status').innerText = "โปรดตรวจสอบการเชื่อมต่อ Google Sheets"; }
     }
 
+    // แสดงผลสินค้า
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
+        
+        // สินค้าแนะนำ (ดูจากคอลัมน์ index 5 ว่ามีคำว่า "แนะนำ" ไหม)
         const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
         const recArea = document.getElementById('rec-area');
         
@@ -159,6 +169,7 @@
             `).join('');
         } else { recArea.style.display = 'none'; }
 
+        // รายการสินค้าหลัก
         const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         document.getElementById('main-list').innerHTML = filt.map(p => `
             <div class="card">
@@ -178,6 +189,7 @@
         el.classList.add('active');
         render();
     }
+    
     load();
 </script>
 </body>
