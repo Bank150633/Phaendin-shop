@@ -196,12 +196,20 @@
         `).join('');
     } else { recArea.style.display = 'none'; }
 
-    // 2. ส่วนรายการสินค้าทั้งหมด (รวมระบบนับเวลา)
+    // 2. ส่วนรายการสินค้าทั้งหมด
     const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
     
     document.getElementById('main-list').innerHTML = filt.map(p => {
         const description = (p[2] && p[2].trim() !== "") ? p[2] : "สินค้าคุณภาพ คัดสรรเพื่อคุณ";
+        // สร้าง ID ที่ไม่ซ้ำกันสำหรับตัวนับเวลา
         const timerId = `timer-${Math.random().toString(36).substr(2, 9)}`;
+
+        // สั่งให้ตัวนับเวลาทำงานหลังจากสร้าง HTML เสร็จแล้ว
+        if(p[8]) {
+            setTimeout(() => {
+                if(typeof startCountdown === "function") startCountdown(p[8], timerId);
+            }, 100);
+        }
 
         return `
             <div class="card">
@@ -209,12 +217,11 @@
                 <div class="info">
                     <div class="title">${p[0]}</div>
                     <div class="desc">${description}</div>
-                    ${p[8] ? `<div id="${timerId}" class="promo-timer">กำลังโหลดเวลา...</div>` : ''}
+                    ${p[8] ? `<div id="${timerId}" class="promo-timer" style="background:#ff4d4d; color:white; font-size:9px; text-align:center; padding:2px; border-radius:3px; margin-bottom:5px;">กำลังโหลด...</div>` : ''}
                     <span class="price">฿${p[3]}</span>
                     <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
                 </div>
             </div>
-            ${p[8] ? `<script>setTimeout(() => { if(typeof startCountdown === "function") startCountdown('${p[8]}', '${timerId}') }, 100)</script>` : ''}
         `;
     }).join('');
 }
@@ -307,8 +314,6 @@
         }, 1000);
     }
     </script>
-
-</body> </html>
 
 </body>
 </html>
