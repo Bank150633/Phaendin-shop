@@ -13,7 +13,6 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        /* ✅ ลดระยะห่างด้านบนให้สินค้าหลักโชว์เร็วขึ้น */
         body { font-family: 'Kanit', sans-serif; background: var(--bg-dark); color: #FFF; padding-top: 145px; }
 
         /* ✅ Header */
@@ -22,23 +21,19 @@
         .logo { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 8px; }
         header h1 { font-size: 12px; color: var(--gold); letter-spacing: 1px; }
 
-        /* ✅ ส่วนแนะนำ: ปรับขนาดให้เล็กลงและสไลด์ได้ */
+        /* ✅ ส่วนแนะนำ: สไลด์กะทัดรัด */
         .rec-section { padding: 5px 0; transition: 0.3s; }
         .rec-container { 
-            display: flex; 
-            gap: 8px; 
-            overflow-x: auto; 
-            padding: 0 10px; 
-            scrollbar-width: none; 
-            -webkit-overflow-scrolling: touch; 
+            display: flex; gap: 8px; overflow-x: auto; padding: 0 10px; 
+            scrollbar-width: none; -webkit-overflow-scrolling: touch; 
         }
         .rec-container::-webkit-scrollbar { display: none; }
 
         .rec-item { 
-            min-width: 80px; /* ✅ ขนาดกะทัดรัด */
-            max-width: 80px;
+            min-width: 80px; max-width: 80px;
             background: #111; border-radius: 4px; border: 1px solid #222; 
             overflow: hidden; position: relative; aspect-ratio: 1/1; flex-shrink: 0;
+            text-decoration: none; /* สำหรับปุ่มสั่งซื้อ */
         }
         .rec-img { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 8px; color: #000; text-align: center; font-weight: 600; padding: 1px 0; }
@@ -58,7 +53,9 @@
 
         .info { padding: 4px; flex: 1; }
         .name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
-        .desc { font-size: 8px; color: #666; height: 19px; overflow: hidden; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        
+        /* 🎨 ปรับสีคำอธิบายเป็นสีเทาอ่อน (Light Gray) เพื่อให้ดูสบายตา */
+        .desc { font-size: 8px; color: #bbb; height: 19px; overflow: hidden; line-height: 1.2; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
         .price-box { display: flex; justify-content: space-between; border-top: 1px solid #111; padding-top: 3px; margin-bottom: 4px; }
         .p-small { font-size: 6px; color: #444; }
@@ -72,7 +69,6 @@
         .btn-app { background: #222; color: #fff; }
         .btn-direct { background: var(--gold); color: #000; }
 
-        /* ✅ เลื่อนลงแล้วพับส่วนแนะนำ */
         .shrink .rec-section { height: 0; opacity: 0; padding: 0; pointer-events: none; }
         body.scrolled { padding-top: 85px; }
     </style>
@@ -88,7 +84,7 @@
     <div class="tools">
         <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
         <div class="cat-scroll">
-            <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด</button>
+            <button class="cat-btn active" onclick="setCat('all', this)">ทั้งหมด (สุ่ม)</button>
             <button class="cat-btn" onclick="setCat('1', this)">อาหาร</button>
             <button class="cat-btn" onclick="setCat('2', this)">ของใช้</button>
             <button class="cat-btn" onclick="setCat('3', this)">แม่และเด็ก</button>
@@ -110,6 +106,11 @@
         else { nav.classList.remove("shrink"); document.body.classList.remove("scrolled"); }
     };
 
+    // 🎲 ฟังก์ชันสุ่มลำดับสินค้า
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
     async function loadData() {
         try {
             const res = await fetch(URL);
@@ -123,16 +124,20 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // ✅ แสดงสินค้าแนะนำแบบสไลด์ (ดึงมาทั้งหมดเพื่อให้เลื่อนได้)
-        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
+        // ✅ สุ่มสินค้าแนะนำ และเพิ่มลิงก์สั่งซื้อเมื่อกดที่รูป
+        let recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
+        recs = shuffle([...recs]); 
         document.getElementById('rec-list').innerHTML = recs.map(p => `
-            <div class="rec-item">
+            <a href="${p[4] || p[7]}" target="_blank" class="rec-item">
                 <img src="${p[1]}" class="rec-img">
-                <div class="rec-price">฿${p[8] || p[3]}</div>
-            </div>
+                <div class="rec-price">สั่งซื้อ ฿${p[8] || p[3]}</div>
+            </a>
         `).join('');
 
-        const filtered = db.filter(p => (p[0].toLowerCase().includes(q)) && (currentCat === 'all' || p[6] === currentCat));
+        // ✅ สุ่มสินค้าหลักในแต่ละหมวด
+        let filtered = db.filter(p => (p[0].toLowerCase().includes(q)) && (currentCat === 'all' || p[6] === currentCat));
+        filtered = shuffle([...filtered]);
+
         document.getElementById('main-list').innerHTML = filtered.map(p => {
             const link = p[4] || '';
             let btnClass = 'btn-app';
