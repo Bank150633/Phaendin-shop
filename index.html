@@ -201,22 +201,28 @@
     } else { recArea.style.display = 'none'; }
 
     // 2. ส่วนรายการสินค้าทั้งหมด: กรองตามคำค้นหาและหมวดหมู่
-    const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
+   const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
     
     document.getElementById('main-list').innerHTML = filt.map(p => {
-        // แก้ไขเรื่องรายละเอียดสินค้าที่ว่างอยู่
         const description = (p[2] && p[2].trim() !== "") ? p[2] : "สินค้าคุณภาพ คัดสรรเพื่อคุณ";
         
+        // สร้าง ID สุ่มสำหรับตัวนับเวลาในแต่ละสินค้า
+        const timerId = `timer-${Math.random().toString(36).substr(2, 9)}`;
+
         return `
             <div class="card">
                 <div class="media">${getMedia(p[1])}</div>
                 <div class="info">
                     <div class="title">${p[0]}</div>
                     <div class="desc">${description}</div>
+                    
+                    ${p[8] ? `<div id="${timerId}" class="promo-timer">กำลังโหลดเวลา...</div>` : ''}
+                    
                     <span class="price">฿${p[3]}</span>
                     <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
                 </div>
             </div>
+            ${p[8] ? `<script>setTimeout(() => startCountdown('${p[8]}', '${timerId}'), 100)</script>` : ''}
         `}).join('');
 }
 
@@ -284,5 +290,32 @@
     }
 }
 </style>
+        <script>
+    function startCountdown(endTime, elementId) {
+        const timerFunc = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = new Date(endTime).getTime() - now;
+            const el = document.getElementById(elementId);
+
+            if (!el) { clearInterval(timerFunc); return; }
+
+            if (distance < 0) {
+                clearInterval(timerFunc);
+                el.innerHTML = "🏁 หมดเวลาโปรโมชั่น!";
+                el.style.background = "#666"; 
+                return;
+            }
+
+            const h = Math.floor(distance / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            el.innerHTML = `🔥 ด่วน! เหลือ ${h}ชม. ${m}นาที ${s}วิ`;
+        }, 1000);
+    }
+    </script>
+
+</body> </html>
+
 </body>
 </html>
