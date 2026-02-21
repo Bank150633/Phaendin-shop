@@ -167,26 +167,35 @@
     }
 
     function render() {
-        const q = document.getElementById('search').value.toLowerCase();
-        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
-        const recArea = document.getElementById('rec-area');
-        
-        if(recs.length > 0 && q === "") {
-            recArea.style.display = 'block';
-            document.getElementById('rec-list').innerHTML = recs.map(p => `
-                <div class="rec-card">
-                    <div class="rec-media">${getMedia(p[1])}</div>
-                    <div class="rec-price">฿${p[3]}</div>
-                </div>
-            `).join('');
-        } else { recArea.style.display = 'none'; }
+    const q = document.getElementById('search').value.toLowerCase();
+    
+    // 1. ส่วนสินค้าแนะนำ: ให้สุ่มลำดับใหม่แยกต่างหาก (Shuffled Recommendations)
+    // กรองเอาเฉพาะสินค้าที่มีคำว่า "แนะนำ" ในคอลัมน์ F
+    const allRecs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
+    
+    // ใช้คำสั่งสุ่มลำดับใหม่เฉพาะชุดนี้ เพื่อไม่ให้เหมือนลำดับด้านล่าง
+    const shuffledRecs = [...allRecs].sort(() => 0.5 - Math.random()); 
+    
+    const recArea = document.getElementById('rec-area');
+    if(shuffledRecs.length > 0 && q === "") {
+        recArea.style.display = 'block';
+        // ดึงมาโชว์แค่ 5-6 อย่างแรกที่สุ่มได้
+        document.getElementById('rec-list').innerHTML = shuffledRecs.slice(0, 6).map(p => `
+            <div class="rec-card">
+                <div class="rec-media">${getMedia(p[1])}</div>
+                <div class="rec-price">฿${p[3]}</div>
+            </div>
+        `).join('');
+    } else { recArea.style.display = 'none'; }
 
-        const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
-        document.getElementById('main-list').innerHTML = filt.map(p => {
-            // ✅ แก้ไขรายละเอียดสินค้า: ถ้าไม่มีให้ขึ้นข้อความอื่น
-            const description = (p[2] && p[2].trim() !== "") ? p[2] : "สินค้าคุณภาพ คัดสรรเพื่อคุณ";
-            
-            return `
+    // 2. ส่วนรายการสินค้าทั้งหมด: กรองตามคำค้นหาและหมวดหมู่
+    const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
+    
+    document.getElementById('main-list').innerHTML = filt.map(p => {
+        // แก้ไขเรื่องรายละเอียดสินค้าที่ว่างอยู่
+        const description = (p[2] && p[2].trim() !== "") ? p[2] : "สินค้าคุณภาพ คัดสรรเพื่อคุณ";
+        
+        return `
             <div class="card">
                 <div class="media">${getMedia(p[1])}</div>
                 <div class="info">
@@ -197,7 +206,7 @@
                 </div>
             </div>
         `}).join('');
-    }
+}
 
     function setCat(c, el) {
         cur = c.toString();
