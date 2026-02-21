@@ -181,17 +181,13 @@
     function render() {
     const q = document.getElementById('search').value.toLowerCase();
     
-    // 1. ส่วนสินค้าแนะนำ: ให้สุ่มลำดับใหม่แยกต่างหาก (Shuffled Recommendations)
-    // กรองเอาเฉพาะสินค้าที่มีคำว่า "แนะนำ" ในคอลัมน์ F
+    // 1. ส่วนสินค้าแนะนำ
     const allRecs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
-    
-    // ใช้คำสั่งสุ่มลำดับใหม่เฉพาะชุดนี้ เพื่อไม่ให้เหมือนลำดับด้านล่าง
     const shuffledRecs = [...allRecs].sort(() => 0.5 - Math.random()); 
-    
     const recArea = document.getElementById('rec-area');
+    
     if(shuffledRecs.length > 0 && q === "") {
         recArea.style.display = 'block';
-        // ดึงมาโชว์แค่ 5-6 อย่างแรกที่สุ่มได้
         document.getElementById('rec-list').innerHTML = shuffledRecs.slice(0, 6).map(p => `
             <div class="rec-card">
                 <div class="rec-media">${getMedia(p[1])}</div>
@@ -200,13 +196,11 @@
         `).join('');
     } else { recArea.style.display = 'none'; }
 
-    // 2. ส่วนรายการสินค้าทั้งหมด: กรองตามคำค้นหาและหมวดหมู่
-   const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
+    // 2. ส่วนรายการสินค้าทั้งหมด (รวมระบบนับเวลา)
+    const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
     
     document.getElementById('main-list').innerHTML = filt.map(p => {
         const description = (p[2] && p[2].trim() !== "") ? p[2] : "สินค้าคุณภาพ คัดสรรเพื่อคุณ";
-        
-        // สร้าง ID สุ่มสำหรับตัวนับเวลาในแต่ละสินค้า
         const timerId = `timer-${Math.random().toString(36).substr(2, 9)}`;
 
         return `
@@ -215,15 +209,14 @@
                 <div class="info">
                     <div class="title">${p[0]}</div>
                     <div class="desc">${description}</div>
-                    
                     ${p[8] ? `<div id="${timerId}" class="promo-timer">กำลังโหลดเวลา...</div>` : ''}
-                    
                     <span class="price">฿${p[3]}</span>
                     <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
                 </div>
             </div>
-            ${p[8] ? `<script>setTimeout(() => startCountdown('${p[8]}', '${timerId}'), 100)</script>` : ''}
-        `}).join('');
+            ${p[8] ? `<script>setTimeout(() => { if(typeof startCountdown === "function") startCountdown('${p[8]}', '${timerId}') }, 100)</script>` : ''}
+        `;
+    }).join('');
 }
 
     function setCat(c, el) {
