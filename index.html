@@ -10,14 +10,26 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
 
-        /* --- Fixed Header --- */
-        header { position: fixed; top: 0; width: 100%; background: #000; z-index: 1000; border-bottom: 1px solid #222; padding-bottom: 10px; }
-        .logo-row { display: flex; align-items: center; justify-content: center; padding: 12px 0 8px; gap: 8px; }
-        .logo-img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold); }
-        .logo-row h1 { font-size: 15px; color: var(--gold); letter-spacing: 1px; font-weight: 600; }
+        /* --- Fixed Header with Transition --- */
+        header { 
+            position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); 
+            z-index: 1000; border-bottom: 1px solid #222; 
+            padding-bottom: 10px; transition: all 0.3s ease-in-out;
+        }
+        
+        /* เมื่อหดตัว */
+        header.shrunk { padding-bottom: 5px; }
+        header.shrunk .logo-row { padding: 5px 0 2px; }
+        header.shrunk .logo-img { width: 20px; height: 20px; }
+        header.shrunk .logo-row h1 { font-size: 13px; }
+        header.shrunk #search { margin-bottom: 5px; padding: 6px 15px; }
+
+        .logo-row { display: flex; align-items: center; justify-content: center; padding: 12px 0 8px; gap: 8px; transition: all 0.3s ease; }
+        .logo-img { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--gold); transition: all 0.3s ease; }
+        .logo-row h1 { font-size: 15px; color: var(--gold); letter-spacing: 1px; font-weight: 600; transition: all 0.3s ease; }
 
         .nav-container { padding: 0 12px; }
-        #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; }
+        #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; transition: all 0.3s ease; }
         
         .cat-bar { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
         .cat-bar::-webkit-scrollbar { display: none; }
@@ -54,7 +66,7 @@
 </head>
 <body>
 
-<header>
+<header id="mainHeader">
     <div class="logo-row">
         <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img">
         <h1>PHAENDIN STORE</h1>
@@ -87,6 +99,16 @@
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     let db = [], cur = 'all';
 
+    // ✅ เพิ่มระบบหดส่วนหัวเวลาเลื่อน
+    window.addEventListener("scroll", function() {
+        const header = document.getElementById("mainHeader");
+        if (window.scrollY > 50) {
+            header.classList.add("shrunk");
+        } else {
+            header.classList.remove("shrunk");
+        }
+    });
+
     function getMedia(url) {
         if(!url) return '';
         const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
@@ -110,7 +132,6 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // กรองสินค้าแนะนำ (คอลัมน์ F / index 5)
         const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
         const recArea = document.getElementById('rec-area');
         if(recs.length > 0 && q === "") {
@@ -125,7 +146,6 @@
             recArea.style.display = 'none';
         }
 
-        // สินค้าหลัก (Grid 3 คอลัมน์)
         const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         document.getElementById('main-list').innerHTML = filt.map(p => `
             <div class="card">
