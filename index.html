@@ -8,7 +8,8 @@
     <style>
         :root { 
             --gold: #D4AF37; --bg-dark: #000000;
-            --shopee: #EE4D2D; --lazada: #7F27FF;
+            --tiktok: #00f2ea; /* สีฟ้าสไตล์ TikTok */
+            --tiktok-red: #ff0050; /* สีแดงสไตล์ TikTok */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
@@ -20,26 +21,16 @@
         .logo { width: 28px; height: 28px; border-radius: 50%; border: 1.2px solid var(--gold); margin-right: 8px; }
         header h1 { font-size: 14px; color: var(--gold); letter-spacing: 1px; font-weight: 400; }
 
-        /* ✅ สินค้าแนะนำ (แก้ไขให้โวว์ 4 ชิ้นตามภาพ 881.jpg) */
+        /* ✅ สินค้าแนะนำ (โชว์ 4 ชิ้นพอดี) */
         .rec-section { padding: 5px 0 10px 0; height: 105px; overflow: hidden; transition: 0.3s; }
         .rec-container { 
-            display: flex; 
-            gap: 8px; 
-            overflow-x: auto; 
-            padding: 0 12px; 
-            scrollbar-width: none; 
-            -webkit-overflow-scrolling: touch; 
+            display: flex; gap: 8px; overflow-x: auto; padding: 0 12px; 
+            scrollbar-width: none; -webkit-overflow-scrolling: touch; 
         }
         .rec-item { 
-            /* คำนวณให้เห็นประมาณ 4 ชิ้นในจอเดียว */
-            min-width: calc(25% - 10px); 
-            background: #0D0D0D; 
-            border-radius: 5px; 
-            border: 1px solid #222; 
-            text-align: center; 
-            overflow: hidden; 
-            position: relative; 
-            flex-shrink: 0; 
+            min-width: calc(25% - 10px); background: #0D0D0D; 
+            border-radius: 5px; border: 1px solid #222; 
+            text-align: center; overflow: hidden; position: relative; flex-shrink: 0; 
         }
         .rec-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; opacity: 0.8; }
         .rec-price-tag { position: absolute; bottom: 0; width: 100%; background: var(--gold); font-size: 8px; color: #000; font-weight: 600; padding: 1px 0; }
@@ -47,14 +38,14 @@
         .shrink .rec-section { height: 0; opacity: 0; padding: 0; }
         body.scrolled { padding-top: 100px; }
 
-        /* ✅ Search & Categories */
+        /* ✅ Search & Filter */
         .tools-area { padding: 2px 12px; }
         #search { width: 100%; padding: 7px 12px; border-radius: 4px; border: 1px solid #333; background: #0A0A0A; color: #FFF; margin-bottom: 6px; outline: none; font-size: 12px; }
         .cat-scroll { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
-        .cat-btn { background: transparent; color: #666; border: none; font-size: 12px; white-space: nowrap; padding-bottom: 3px; cursor: pointer; transition: 0.2s; }
+        .cat-btn { background: transparent; color: #666; border: none; font-size: 12px; white-space: nowrap; padding-bottom: 3px; cursor: pointer; }
         .cat-btn.active { color: var(--gold); border-bottom: 2px solid var(--gold); font-weight: 400; }
 
-        /* ✅ Grid สินค้าหลัก */
+        /* ✅ Grid สินค้าหลัก 3 คอลัมน์ */
         .main-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 5px; }
         .card { background: #0A0A0A; display: flex; flex-direction: column; overflow: hidden; border: 1px solid #111; padding-bottom: 5px; }
         .img-container { width: 100%; aspect-ratio: 1/1; background: #050505; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
@@ -71,12 +62,19 @@
         .p-val { font-size: 9px; color: #777; font-weight: 300; }
         .p-val.highlight { font-size: 11px; color: var(--gold); font-weight: 600; }
 
-        /* ปุ่มกด */
+        /* ✅ ปุ่มกด (เปลี่ยนเป็น TIKTOK) */
         .btn-box { display: flex; flex-direction: column; gap: 3px; }
         .btn { width: 100%; height: 18px; font-size: 8px; font-weight: 600; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 2px; }
-        .btn-app { background: transparent; color: #FFF; border: 1px solid #333; }
-        .btn-app.shopee { border-color: var(--shopee); color: var(--shopee); }
-        .btn-app.lazada { border-color: var(--lazada); color: var(--lazada); }
+        
+        /* สไตล์ปุ่ม TikTok */
+        .btn-tiktok { 
+            background: #000; 
+            color: #FFF; 
+            border: 1px solid #444; 
+            position: relative;
+        }
+        .btn-tiktok:active { border-color: var(--tiktok); }
+
         .btn-direct { background: var(--gold); color: #000; }
 
         #imgModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10000; justify-content: center; align-items: center; }
@@ -151,7 +149,6 @@
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // สินค้าแนะนำ (โชว์ 4 ชิ้นกะทัดรัด)
         const recData = db.filter(p => p[5] && p[5].includes("แนะนำ")).slice(0, 12);
         document.getElementById('rec-list').innerHTML = recData.map(p => `
             <div class="rec-item" onclick="showImg('${p[1]}')">
@@ -160,18 +157,14 @@
             </div>
         `).join('');
 
-        // รายการสินค้าหลัก 3 คอลัมน์
         const filtered = db.filter(p => (p[0].toLowerCase().includes(q)) && (currentCat === 'all' || p[6] === currentCat));
         document.getElementById('main-list').innerHTML = filtered.map(p => {
-            const linkApp = p[4] || '#';
+            const linkTikTok = p[4] || '#';
             const linkDirect = p[7];
             const pDesc = p[2] || '';
-            const pApp = p[3];
-            const pOur = p[8];
+            const pTikTokPrice = p[3];
+            const pOurPrice = p[8];
             
-            let appClass = linkApp.includes('shopee') ? 'shopee' : linkApp.includes('lazada') ? 'lazada' : '';
-            let appText = linkApp.includes('shopee') ? 'SHOPEE' : linkApp.includes('lazada') ? 'LAZADA' : 'แอป';
-
             return `
             <div class="card">
                 <div class="img-container" onclick="showImg('${p[1]}')">
@@ -182,16 +175,16 @@
                     <div class="card-desc">${pDesc}</div>
                     <div class="price-row">
                         <div class="p-group">
-                            <span class="p-label">แอป</span>
-                            <span class="p-val">฿${pApp}</span>
+                            <span class="p-label">ใน TikTok</span>
+                            <span class="p-val">฿${pTikTokPrice}</span>
                         </div>
                         <div class="p-group" style="text-align:right">
-                            <span class="p-label" style="color:var(--gold)">ร้าน</span>
-                            <span class="p-val highlight">฿${pOur || pApp}</span>
+                            <span class="p-label" style="color:var(--gold)">สั่งตรง</span>
+                            <span class="p-val highlight">฿${pOurPrice || pTikTokPrice}</span>
                         </div>
                     </div>
                     <div class="btn-box">
-                        <a href="${linkApp}" target="_blank" class="btn btn-app ${appClass}">${appText}</a>
+                        <a href="${linkTikTok}" target="_blank" class="btn btn-tiktok">TIKTOK</a>
                         ${linkDirect ? `<a href="${linkDirect}" target="_blank" class="btn btn-direct">สั่งตรง</a>` : ''}
                     </div>
                 </div>
