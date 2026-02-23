@@ -10,14 +10,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
 
-        /* --- Header --- */
+        /* --- Header & Layout --- */
         header { 
             position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.98); 
             z-index: 1000; border-bottom: 1px solid #222; padding-bottom: 10px; transition: 0.4s;
         }
         header.shrunk .banner-container { display: none; }
         .logo-row { display: flex; align-items: center; justify-content: center; padding: 15px 0 10px; }
-        .logo-img { height: 50px; border-radius: 4px; }
+        .logo-img { height: 45px; border-radius: 4px; }
 
         /* --- Banner --- */
         .banner-container { padding: 0 12px; margin-bottom: 12px; }
@@ -26,45 +26,62 @@
             background: #1a1a1a; border-radius: 8px; overflow: hidden; border: 1px solid var(--gold);
         }
         .banner-slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .banner-text { position: absolute; bottom: 12px; left: 15px; color: var(--gold); font-size: 14px; font-weight: 600; }
+        .banner-text { position: absolute; bottom: 12px; left: 15px; color: var(--gold); font-size: 14px; font-weight: 600; text-shadow: 1px 1px 3px #000; }
 
         .nav-container { padding: 0 12px; }
-        #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; margin-bottom: 10px; }
+        #search { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; margin-bottom: 10px; outline: none; }
         
-        .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-item { font-size: 11px; color: #aaa; padding: 6px 15px; border-radius: 20px; background: var(--pill); white-space: nowrap; }
+        .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
+        .cat-item { font-size: 11px; color: #aaa; padding: 6px 18px; border-radius: 20px; background: var(--pill); white-space: nowrap; cursor: pointer; }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
         /* --- Content Area --- */
-        main { margin-top: 300px; padding-bottom: 100px; }
+        main { margin-top: 310px; padding-bottom: 100px; }
         header.shrunk + main { margin-top: 150px; }
+        .section-label { font-size: 12px; color: var(--gold); padding: 10px 15px; font-weight: 600; }
 
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; }
-        .card { background: var(--card); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        /* --- Product Grid --- */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px 20px; }
+        .card { background: var(--card); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 1px solid #222; }
         
-        .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; background: #000; }
+        .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; background: #000; position: relative; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
+        .media::after { content: '🔍'; position: absolute; top: 8px; right: 8px; font-size: 12px; background: rgba(0,0,0,0.5); padding: 4px; border-radius: 4px; opacity: 0.7; }
 
-        .info { padding: 10px; flex: 1; }
-        .title { font-size: 13px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .info { padding: 12px; flex: 1; }
+        .title { font-size: 13px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
         .desc-box { font-size: 10px; color: #888; height: 26px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 8px; line-height: 1.3; }
-        .price { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .price { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 10px; }
         
-        .action-row { display: flex; gap: 5px; }
-        .buy-btn { flex: 1; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 8px; border-radius: 6px; cursor: pointer; }
-        .line-btn { width: 35px; border: 1px solid #28a745; color: #28a745; display: flex; align-items: center; justify-content: center; border-radius: 6px; text-decoration: none; }
+        .action-row { display: flex; gap: 6px; }
+        .buy-btn { flex: 1; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .buy-btn:active { transform: scale(0.95); opacity: 0.8; }
+        .line-btn { width: 40px; border: 1px solid #28a745; color: #28a745; display: flex; align-items: center; justify-content: center; border-radius: 8px; text-decoration: none; font-size: 18px; }
 
         /* --- Modals --- */
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
-        .modal-content { max-width: 90%; max-height: 80vh; border-radius: 10px; }
+        .modal-inner { position: relative; width: 90%; max-width: 500px; text-align: center; }
+        .modal-content { width: 100%; max-height: 80vh; border-radius: 12px; object-fit: contain; }
         
-        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 12px; width: 90%; max-width: 400px; padding: 25px; position: relative; }
-        .order-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 15px; text-align: center; }
-        .order-card input, .order-card textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #333; background: #000; color: #fff; font-family: 'Kanit'; }
-        .confirm-btn { width: 100%; background: var(--gold); color: #000; padding: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-        .close-btn { position: absolute; top: 10px; right: 15px; color: #fff; font-size: 24px; cursor: pointer; }
+        /* สั่งซื้อ Modal */
+        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 16px; width: 90%; max-width: 400px; padding: 25px; position: relative; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .order-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 5px; text-align: center; }
+        .order-summary { margin-bottom: 20px; color: #888; text-align: center; font-size: 12px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .order-card input, .order-card textarea { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #333; background: #050505; color: #fff; font-family: 'Kanit'; font-size: 14px; outline: none; }
+        .order-card input:focus { border-color: var(--gold); }
+        .confirm-btn { width: 100%; background: #28a745; color: #fff; padding: 16px; border-radius: 10px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .confirm-btn:hover { background: #218838; }
+        .close-btn { position: absolute; top: 15px; right: 20px; color: #555; font-size: 28px; cursor: pointer; }
 
-        .float-btn { position: fixed; bottom: 20px; left: 20px; background: #28a745; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 2000; font-size: 14px; }
+        /* Floating Button */
+        .float-btn { position: fixed; bottom: 25px; left: 20px; background: #28a745; color: white; padding: 12px 22px; border-radius: 50px; text-decoration: none; font-weight: 600; z-index: 2000; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; }
+        
+        /* Badge */
+        .badge-promo { position: absolute; top: 10px; left: 10px; background: #ff4d4d; color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 6px; font-weight: bold; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+
+        #status { text-align: center; padding: 100px 20px; color: var(--gold); font-size: 14px; }
     </style>
 </head>
 <body>
@@ -78,35 +95,35 @@
         </div>
     </div>
     <div class="nav-container">
-        <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
-        <div class="cat-bar">
-            <div id="cats"></div>
-        </div>
+        <input type="text" id="search" placeholder="ค้นหาชื่อสินค้าที่ต้องการ..." oninput="render()">
+        <div class="cat-bar" id="cats"></div>
     </div>
 </header>
 
 <main>
-    <div id="status" style="text-align:center; padding:50px;">กำลังโหลด...</div>
-    <div class="grid" id="main-list"></div>
+    <div id="status">กำลังเปิดคลังสินค้า...</div>
+    <div id="main-list" class="grid"></div>
 </main>
 
 <div id="imgModal" class="modal" onclick="closeModal('imgModal')">
-    <div id="modalBody"></div>
+    <div class="modal-inner" id="modalBody"></div>
 </div>
 
 <div id="orderModal" class="modal">
     <div class="order-card">
         <span class="close-btn" onclick="closeModal('orderModal')">&times;</span>
-        <h2>🛒 สั่งซื้อสินค้า</h2>
-        <div id="orderSummary" style="margin-bottom:15px; color:var(--gold); text-align:center; font-size:13px;"></div>
+        <h2>🛒 ข้อมูลการสั่งซื้อ</h2>
+        <div id="orderSummary" class="order-summary"></div>
         <input type="text" id="custName" placeholder="ชื่อ-นามสกุล">
-        <input type="tel" id="custTel" placeholder="เบอร์โทรศัพท์">
-        <textarea id="custAddr" rows="3" placeholder="ที่อยู่จัดส่ง"></textarea>
-        <button class="confirm-btn" onclick="sendOrder()">ยืนยันสั่งซื้อผ่าน Line</button>
+        <input type="tel" id="custTel" placeholder="เบอร์โทรศัพท์ที่ติดต่อได้">
+        <textarea id="custAddr" rows="3" placeholder="ที่อยู่จัดส่งสินค้าโดยละเอียด"></textarea>
+        <button class="confirm-btn" onclick="sendOrder()">ส่งรายการเข้า Line เพื่อสั่งซื้อ</button>
     </div>
 </div>
 
-<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="float-btn">💰 แจ้งโอนเงิน</a>
+<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="float-btn">
+    <span>💰</span> แจ้งโอนเงิน
+</a>
 
 <script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
@@ -118,6 +135,7 @@
         window.scrollY > 50 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
     };
 
+    // รองรับวิดีโอในคอลัมน์ B
     function getMediaHTML(url, isModal = false) {
         if(!url) return '';
         const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
@@ -126,14 +144,14 @@
         return `<img src="${url}" loading="lazy" ${style}>`;
     }
 
-    function openModal(url) {
+    function openImg(url) {
         document.getElementById('modalBody').innerHTML = getMediaHTML(url, true);
         document.getElementById('imgModal').style.display = 'flex';
     }
 
     function openOrder(name, price) {
-        selectedProduct = `สินค้า: ${name}\nราคา: ฿${price}`;
-        document.getElementById('orderSummary').innerText = `รายการ: ${name} (฿${price})`;
+        selectedProduct = `รายการ: ${name}\nราคา: ฿${price}`;
+        document.getElementById('orderSummary').innerText = `คุณกำลังสั่งซื้อ: ${name} ราคา ฿${price}`;
         document.getElementById('orderModal').style.display = 'flex';
     }
 
@@ -143,8 +161,9 @@
         const name = document.getElementById('custName').value;
         const tel = document.getElementById('custTel').value;
         const addr = document.getElementById('custAddr').value;
-        if(!name || !tel || !addr) return alert("กรุณากรอกข้อมูลให้ครบครับ");
-        const msg = `📦 *มีออเดอร์ใหม่!*\n${selectedProduct}\n----------\n👤 ผู้ซื้อ: ${name}\n📞 โทร: ${tel}\n🏠 ที่อยู่: ${addr}`;
+        if(!name || !tel || !addr) return alert("กรุณากรอกข้อมูลให้ครบถ้วนเพื่อความรวดเร็วในการจัดส่งครับ");
+        const msg = `📦 *มีรายการสั่งซื้อใหม่!*\n${selectedProduct}\n----------\n👤 ชื่อผู้รับ: ${name}\n📞 เบอร์โทร: ${tel}\n🏠 ที่อยู่: ${addr}\n----------\n(แจ้งแอดมินเพื่อยืนยันออเดอร์ได้เลยครับ)`;
+        // เปลี่ยน @yourid เป็น Line ID ของคุณจริงๆ
         window.open(`https://line.me/R/ti/p/@yourid?text=${encodeURIComponent(msg)}`);
     }
 
@@ -157,27 +176,31 @@
             ).filter(x => x[0] && x[1]);
             document.getElementById('status').style.display = 'none';
             render();
-        } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ"; }
+        } catch(e) { document.getElementById('status').innerText = "ขออภัย เชื่อมต่อข้อมูลไม่ได้ครับ"; }
     }
 
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         
-        document.getElementById('main-list').innerHTML = filt.map(p => `
-            <div class="card">
-                <div class="media" onclick="openModal('${p[1]}')">${getMediaHTML(p[1])}</div>
-                <div class="info">
-                    <div class="title">${p[0]}</div>
-                    <div class="desc-box">${p[2] || 'สินค้าคุณภาพ คัดสรรมาเพื่อคุณ'}</div>
-                    <div class="price">฿${p[3]}</div>
-                    <div class="action-row">
-                        <div class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</div>
-                        <a href="https://line.me/R/ti/p/@yourid" class="line-btn">💬</a>
+        document.getElementById('main-list').innerHTML = filt.map(p => {
+            const badge = (p[5] && p[5].includes("1แถม1")) ? '<div class="badge-promo">1 แถม 1</div>' : '';
+            return `
+                <div class="card">
+                    ${badge}
+                    <div class="media" onclick="openImg('${p[1]}')">${getMediaHTML(p[1])}</div>
+                    <div class="info">
+                        <div class="title">${p[0]}</div>
+                        <div class="desc-box">${p[2] || 'รายละเอียดสินค้าคุณภาพจาก PHAENDIN STORE'}</div>
+                        <div class="price">฿${p[3]}</div>
+                        <div class="action-row">
+                            <div class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</div>
+                            <a href="https://line.me/R/ti/p/@yourid" class="line-btn">💬</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         const categories = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
         document.getElementById('cats').innerHTML = categories.map(c => `
