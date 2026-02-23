@@ -2,102 +2,86 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHAENDIN STORE</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #D4AF37; --bg: #000; --card: #111; --green: #28a745; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        /* 1. แก้ฟุตเตอร์หาย/ทับ: ดันพื้นหลังขึ้นไปให้พ้นปุ่ม */
         body { 
             font-family: 'Kanit', sans-serif; 
-            background: var(--bg); 
+            background: #000; 
             color: #fff; 
-            padding-bottom: 200px !important; /* ดันขึ้นมาสูงๆ เลยครับ */
+            padding-bottom: 120px; /* เว้นที่ด้านล่างให้ปุ่มฟุตเตอร์ */
         }
 
-        /* 2. ส่วนหัว: ปรับให้คงที่และไม่บังสินค้า */
+        /* 1. ส่วนหัวและแบนเนอร์ */
         header { 
-            position: sticky; /* เปลี่ยนจาก fixed เป็น sticky เพื่อความเสถียร */
-            top: 0; 
-            width: 100%; 
             background: #000; 
-            z-index: 999; 
+            padding: 10px; 
+            text-align: center; 
             border-bottom: 1px solid #222;
-            padding-bottom: 10px;
         }
-        .logo-row { text-align: center; padding: 10px 0; }
-        .logo-img { height: 30px; }
-        .banner-container { padding: 0 12px; margin-bottom: 10px; }
         .banner-box { 
             width: 100%; 
-            height: 140px; 
+            height: 150px; 
             background: #111; 
             border-radius: 12px; 
-            border: 1px solid var(--gold);
+            border: 1px solid #D4AF37;
             overflow: hidden;
+            margin-top: 10px;
         }
         #bannerImg { width: 100%; height: 100%; object-fit: cover; }
 
-        /* ค้นหา */
-        .search-box { padding: 0 12px; }
-        #search { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 8px; 
-            background: #111; 
-            border: 1px solid #333; 
-            color: #fff;
-        }
-
-        /* 3. รายการสินค้า: ไม่ต้องใช้ margin-top แล้วเพราะใช้ sticky */
-        main { padding: 10px 12px; }
+        /* 2. รายการสินค้า */
+        main { padding: 15px; }
         .grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
+            gap: 15px; 
         }
         .card { 
-            background: var(--card); 
+            background: #111; 
             border-radius: 12px; 
             border: 1px solid #222; 
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
         .media-box { width: 100%; aspect-ratio: 1/1; cursor: pointer; }
         .media-box img, .media-box video { width: 100%; height: 100%; object-fit: cover; }
         .info { padding: 10px; }
-        .price { color: var(--gold); font-size: 18px; font-weight: bold; }
+        .price { color: #D4AF37; font-size: 18px; font-weight: bold; }
         .buy-btn { 
-            background: var(--gold); 
+            background: #D4AF37; 
             color: #000; 
             text-align: center; 
-            padding: 8px; 
-            border-radius: 6px; 
-            margin-top: 8px;
+            padding: 10px; 
+            border-radius: 8px; 
+            margin-top: 10px;
             font-weight: bold;
-            font-size: 13px;
+            cursor: pointer;
         }
 
-        /* 4. ฟุตเตอร์: ล็อคตายตัวหน้าจอ (Fixed) */
-        .footer-btn { 
+        /* 3. ฟุตเตอร์ (จุดสำคัญที่เคยหาย) */
+        .footer-fixed { 
             position: fixed; 
-            bottom: 25px; 
+            bottom: 20px; 
             left: 5%; 
             width: 90%; 
-            background: var(--green); 
+            background: #28a745; 
             color: #fff; 
             padding: 18px; 
             border-radius: 50px; 
             text-align: center; 
             font-weight: bold; 
-            z-index: 9999 !important; /* ต้องอยู่บนสุดเท่านั้น */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 9999; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
             text-decoration: none;
             display: block;
+            font-size: 16px;
         }
 
-        /* Modal ดูรูป */
+        /* 4. หน้าต่างดูรูป */
         .modal { 
             display: none; 
             position: fixed; 
@@ -112,63 +96,58 @@
 <body>
 
 <header>
-    <div class="logo-row"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img"></div>
-    <div class="banner-container">
-        <div class="banner-box"><img id="bannerImg" src=""></div>
+    <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" style="height:35px;">
+    <div class="banner-box">
+        <img id="bannerImg" src="">
     </div>
-    <div class="search-box"><input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()"></div>
 </header>
 
 <main>
-    <h3 style="color:var(--gold); margin-bottom:10px; font-size:14px;">📦 รายการสินค้า</h3>
-    <div class="grid" id="main-list"></div>
+    <div class="grid" id="main-list">
+        </div>
 </main>
 
-<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="footer-btn">
+<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="footer-fixed">
     💰 แจ้งโอนเงิน / ยืนยันคำสั่งซื้อ
 </a>
 
-<div id="mediaModal" class="modal" onclick="this.style.display='none'"><div id="modalBody"></div></div>
+<div id="mediaModal" class="modal" onclick="this.style.display='none'">
+    <div id="modalBody"></div>
+</div>
 
 <script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const PROD_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     const BANN_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`;
 
-    let db = [];
-
     async function loadData() {
         try {
-            // โหลดแบนเนอร์
+            // โหลด Banner
             const resB = await fetch(BANN_URL);
             const textB = await resB.text();
-            const bRow = textB.split('\n')[1];
-            if(bRow) document.getElementById('bannerImg').src = bRow.split(',')[0].replace(/"/g,'');
+            const bLines = textB.split('\n');
+            if(bLines[1]) document.getElementById('bannerImg').src = bLines[1].split(',')[0].replace(/"/g,'');
 
             // โหลดสินค้า
             const resP = await fetch(PROD_URL);
             const textP = await resP.text();
-            db = textP.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-            render();
-        } catch(e) { console.error(e); }
-    }
-
-    function render() {
-        const q = document.getElementById('search').value.toLowerCase();
-        const filt = db.filter(p => p[0].toLowerCase().includes(q));
-        
-        document.getElementById('main-list').innerHTML = filt.map(p => `
-            <div class="card">
-                <div class="media-box" onclick="showMedia('${p[1]}')">
-                    ${p[1].includes('.mp4') ? `<video src="${p[1]}" autoplay loop muted playsinline></video>` : `<img src="${p[1]}">`}
+            const rows = textP.split('\n').slice(1);
+            
+            const db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            
+            document.getElementById('main-list').innerHTML = db.map(p => `
+                <div class="card">
+                    <div class="media-box" onclick="showMedia('${p[1]}')">
+                        ${p[1].includes('.mp4') ? `<video src="${p[1]}" autoplay loop muted playsinline></video>` : `<img src="${p[1]}">`}
+                    </div>
+                    <div class="info">
+                        <div style="font-size:14px; margin-bottom:5px;">${p[0]}</div>
+                        <div class="price">฿${p[3]}</div>
+                        <div class="buy-btn" onclick="showMedia('${p[1]}')">ดูรูปใหญ่</div>
+                    </div>
                 </div>
-                <div class="info">
-                    <div style="font-size:13px; height:35px; overflow:hidden; margin-bottom:5px;">${p[0]}</div>
-                    <div class="price">฿${p[3]}</div>
-                    <div class="buy-btn" onclick="showMedia('${p[1]}')">ดูรายละเอียด</div>
-                </div>
-            </div>
-        `).join('');
+            `).join('');
+        } catch(e) { console.error("โหลดข้อมูลไม่สำเร็จ:", e); }
     }
 
     function showMedia(url) {
