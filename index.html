@@ -10,7 +10,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
 
-        /* --- Header Shrink --- */
+        /* --- Header --- */
         header { 
             position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.98); 
             z-index: 1000; border-bottom: 1px solid #222; 
@@ -19,76 +19,84 @@
         header.shrunk { padding-bottom: 5px; }
         header.shrunk .logo-row { padding: 8px 0 4px; }
         header.shrunk .logo-img { height: 35px; }
-        header.shrunk #search { padding: 6px 15px; margin-bottom: 5px; }
+        header.shrunk .banner-container { display: none; } /* ซ่อนแบนเนอร์เวลาเลื่อนลงเพื่อประหยัดที่ */
 
         .logo-row { display: flex; align-items: center; justify-content: center; padding: 15px 0 10px; transition: 0.3s; }
-        .logo-img { height: 55px; width: auto; object-fit: contain; transition: 0.3s; border-radius: 4px; }
-<div class="banner-container">
-    <div class="banner-slide">
-        <img src="https://i.ibb.co/v6Y0mF7X/banner1.jpg">
-        <div class="banner-text">✨ คัดสรรของดี เพื่อคุณโดยเฉพาะ</div>
-    </div>
-</div>
+        .logo-img { height: 50px; width: auto; object-fit: contain; transition: 0.3s; border-radius: 4px; }
+
+        /* --- Banner --- */
+        .banner-container { padding: 0 12px; margin-bottom: 12px; }
+        .banner-slide { 
+            position: relative; width: 100%; height: 120px; 
+            background: linear-gradient(45deg, #1a1a1a, #333); 
+            border-radius: 8px; overflow: hidden; border: 1px solid var(--gold);
+        }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .banner-text { 
+            position: absolute; bottom: 12px; left: 15px; 
+            color: var(--gold); font-size: 14px; font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+        }
 
         .nav-container { padding: 0 12px; }
-        #search { width: 100%; padding: 8px 15px; border-radius: 6px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 12px; outline: none; margin-bottom: 10px; }
+        #search { width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 13px; outline: none; margin-bottom: 10px; }
         
-        .cat-bar { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+        .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
         .cat-bar::-webkit-scrollbar { display: none; }
-        .cat-item { font-size: 10px; color: #aaa; cursor: pointer; white-space: nowrap; padding: 5px 12px; border-radius: 20px; background: var(--pill); }
+        .cat-item { font-size: 11px; color: #aaa; cursor: pointer; white-space: nowrap; padding: 6px 15px; border-radius: 20px; background: var(--pill); }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
- /* ก๊อปปี้ส่วนนี้ไปวางได้เลย */
-.banner-container { padding: 0 12px; margin-bottom: 10px; }
-.banner-slide { 
-    position: relative; width: 100%; height: 110px; 
-    background: #222; border-radius: 8px; overflow: hidden; 
-    border: 1px solid var(--gold);
-}
-.banner-slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-.banner-text { 
-    position: absolute; bottom: 10px; left: 12px; 
-    color: var(--gold); font-size: 13px; font-weight: 600;
-}
 
         /* --- Content Area --- */
-        main { margin-top: 290px; min-height: 85vh; transition: 0.4s ease; }
-        header.shrunk + main { margin-top: 250px; }
+        /* ปรับระยะห่างให้พอดีกับ Banner */
+        main { margin-top: 300px; min-height: 85vh; transition: 0.4s ease; }
+        header.shrunk + main { margin-top: 150px; }
 
-        .section-label { font-size: 11px; color: var(--gold); padding: 10px 15px 5px; font-weight: 600; text-transform: uppercase; }
+        .section-label { font-size: 12px; color: var(--gold); padding: 15px 15px 8px; font-weight: 600; text-transform: uppercase; }
 
         /* สินค้าแนะนำ */
-        .rec-list { display: flex; gap: 6px; overflow-x: auto; padding: 0 12px 12px; scrollbar-width: none; }
-        .rec-card { min-width: 80px; width: 80px; position: relative; border-radius: 4px; overflow: hidden; border: 1px solid #222; cursor: pointer; }
+        .rec-list { display: flex; gap: 8px; overflow-x: auto; padding: 0 12px 15px; scrollbar-width: none; }
+        .rec-card { min-width: 90px; width: 90px; position: relative; border-radius: 6px; overflow: hidden; border: 1px solid #222; }
         .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 8px; font-weight: bold; text-align: center; padding: 2px 0; }
+        .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 10px; font-weight: bold; text-align: center; padding: 3px 0; }
 
-        /* Grid สินค้า 3 คอลัมน์ */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px 20px; }
-        .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 2px; overflow: hidden; height: 100%; }
-        .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; background: #000; position: relative; }
-        .media img, .media video { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        .info { padding: 5px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 9px; font-weight: 600; height: 12px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 2px; color: #fff; }
+        /* Grid สินค้า 2 คอลัมน์ (ทำให้อ่านง่ายขึ้น) */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px 20px; }
+        .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 8px; overflow: hidden; position: relative; }
         
-        .desc { font-size: 8px; color: #888; height: 20px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.2; margin-bottom: 5px; }
+        /* Badge */
+        .badge-promo {
+            position: absolute; top: 8px; left: 8px; background: #ff4d4d; color: #fff;
+            font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: bold; z-index: 10;
+        }
 
-        .price { color: var(--gold); font-size: 11px; font-weight: 700; text-align: center; margin-bottom: 5px; display: block; }
-        .buy-btn { display: block; background: var(--gold); color: #000; text-align: center; font-size: 9px; font-weight: 700; padding: 6px 0; border-radius: 2px; text-decoration: none; }
+        .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; background: #000; }
+        .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Modal ระบบดูรูปใหญ่ */
-        #imgModal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 20px; }
-        #imgModal img { max-width: 100%; max-height: 80vh; border-radius: 8px; }
-        .close-modal { position: absolute; top: 30px; right: 30px; color: white; font-size: 30px; cursor: pointer; }
+        .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
+        .title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 5px; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.2; }
+        
+        .promo-timer { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid #ff4d4d; font-size: 10px; text-align: center; padding: 3px; border-radius: 4px; margin-bottom: 8px; }
 
-        /* Footer */
-        footer { background: #080808; padding: 30px 15px; border-top: 1px solid #222; text-align: center; }
-        .f-text { font-size: 10px; color: #666; margin-bottom: 15px; line-height: 1.6; }
-        .f-contact { display: inline-block; border: 1px solid #333; padding: 8px 20px; border-radius: 25px; color: var(--gold); font-size: 11px; text-decoration: none; }
-        .copyright { font-size: 9px; color: #333; margin-top: 20px; }
+        .price { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        
+        /* ปุ่มคู่ */
+        .action-row { display: flex; gap: 6px; }
+        .buy-btn { flex: 1; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 8px 0; border-radius: 6px; text-decoration: none; }
+        .line-btn { width: 40px; background: transparent; border: 1px solid #28a745; color: #28a745; display: flex; align-items: center; justify-content: center; border-radius: 6px; text-decoration: none; font-size: 16px; }
 
-        #status { text-align: center; padding: 100px 20px; color: var(--gold); font-size: 12px; }
+        /* Floating Button */
+        .float-btn { position: fixed; bottom: 25px; left: 20px; background: #28a745; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 2000; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .float-btn:hover { transform: scale(1.05); }
+
+        /* Modal */
+        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
+        #modalContent { max-width: 90%; max-height: 80vh; border-radius: 10px; }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 35px; cursor: pointer; }
+
+        footer { background: #080808; padding: 40px 15px; text-align: center; border-top: 1px solid #222; }
+        .f-text { font-size: 11px; color: #777; margin-bottom: 15px; }
+        #status { text-align: center; padding: 100px 20px; color: var(--gold); }
     </style>
 </head>
 <body>
@@ -97,6 +105,14 @@
     <div class="logo-row">
         <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img" alt="PHAENDIN STORE">
     </div>
+
+    <div class="banner-container">
+        <div class="banner-slide">
+            <img src="https://i.ibb.co/v6Y0mF7X/banner1.jpg" alt="Promotion">
+            <div class="banner-text">🔥 โปรโมชั่นพิเศษ คัดสรรเพื่อคุณ</div>
+        </div>
+    </div>
+
     <div class="nav-container">
         <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
         <div class="cat-bar">
@@ -109,7 +125,7 @@
 </header>
 
 <main>
-    <div id="status">กำลังดึงข้อมูลสินค้า...</div>
+    <div id="status">กำลังโหลดความอร่อย...</div>
     <div id="rec-area" style="display:none;">
         <div class="section-label">✨ สินค้าแนะนำ</div>
         <div class="rec-list" id="rec-list"></div>
@@ -118,68 +134,47 @@
     <div class="grid" id="main-list"></div>
 </main>
 
+<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="float-btn">
+    <span>💰</span> แจ้งโอนเงิน
+</a>
+
 <div id="imgModal" onclick="closeModal()">
     <span class="close-modal">&times;</span>
-    <img id="modalContent" src="">
+    <div id="modalBody"></div>
 </div>
 
 <footer>
-    <p class="f-text">ศูนย์รวมสินค้าคุณภาพที่คัดสรรมาเพื่อคุณโดยเฉพาะ<br>อัปเดตเทรนด์ใหม่ๆ และโปรโมชั่นทุกวัน</p>
-    <a href="https://line.me/R/ti/p/@yourid" class="f-contact" target="_blank">💬 สอบถามข้อมูลเพิ่มเติม</a>
-    <div class="copyright">© 2026 PHAENDIN STORE. ALL RIGHTS RESERVED.</div>
+    <p class="f-text">ศูนย์รวมสินค้าคุณภาพ PHAENDIN STORE<br>อัปเดตโปรโมชั่นใหม่ทุกวัน</p>
+    <div style="font-size: 10px; color: #444;">© 2026 PHAENDIN STORE.</div>
 </footer>
 
 <script>
-    // ✅ แทนที่ ID ของคุณ
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     let db = [], cur = 'all';
 
     window.addEventListener("scroll", () => {
         const h = document.getElementById("mainHeader");
-        window.scrollY > 40 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
+        window.scrollY > 50 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
     });
 
     function openModal(src) {
-    const modal = document.getElementById('imgModal');
-    const modalImg = document.getElementById('modalContent');
-    const isVid = src.toLowerCase().match(/\.(mp4|webm|mov)$/);
-
-    if(isVid) {
-        // ถ้าเป็นวิดีโอ ให้สร้างแท็ก <video> มาแทนที่ภาพใน Modal
-        modalImg.outerHTML = `<video id="modalContent" src="${src}" controls autoplay style="max-width: 100%; max-height: 80vh; border-radius: 8px;"></video>`;
-    } else {
-        // ถ้าเป็นรูป ให้แสดงเป็นแท็ก <img> ตามเดิม
-        modalImg.outerHTML = `<img id="modalContent" src="${src}" style="max-width: 100%; max-height: 80vh; border-radius: 8px;">`;
+        const modal = document.getElementById('imgModal');
+        const body = document.getElementById('modalBody');
+        const isVid = src.toLowerCase().match(/\.(mp4|webm|mov)$/);
+        body.innerHTML = isVid ? 
+            `<video src="${src}" controls autoplay style="max-width:100%; max-height:80vh; border-radius:10px;"></video>` :
+            `<img src="${src}" style="max-width:100%; max-height:80vh; border-radius:10px;">`;
+        modal.style.display = "flex";
     }
-    modal.style.display = "flex";
-}
 
-    function closeModal() {
-    const modal = document.getElementById('imgModal');
-    const modalContent = document.getElementById('modalContent');
-    // ล้างค่าเพื่อให้วิดีโอหยุดเล่นทันทีที่ปิด
-    if(modalContent) modalContent.src = ""; 
-    modal.style.display = "none";
-}
+    function closeModal() { document.getElementById('imgModal').style.display = "none"; }
 
-    // ✅ ฟังก์ชันใหม่รองรับวิดีโอ
     function getMedia(url) {
-    if(!url) return '';
-    const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
-    if(isVid) {
-        // เพิ่ม onclick เพื่อให้กดแล้วเรียกฟังก์ชัน openModal
-        return `<video src="${url}" autoplay loop muted playsinline onclick="openModal('${url}')" style="width:100%; height:100%; object-fit:cover; cursor:pointer;"></video>`;
-    }
-    return `<img src="${url}" loading="lazy" onclick="openModal('${url}')" style="width:100%; height:100%; object-fit:cover; cursor:pointer;">`;
-}
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+        if(!url) return '';
+        const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
+        if(isVid) return `<video src="${url}" autoplay loop muted playsinline onclick="openModal('${url}')" style="width:100%; height:100%; object-fit:cover;"></video>`;
+        return `<img src="${url}" loading="lazy" onclick="openModal('${url}')" style="width:100%; height:100%; object-fit:cover;">`;
     }
 
     async function load() {
@@ -189,60 +184,66 @@
             db = t.split(/\r?\n/).slice(1).map(row => 
                 row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
             ).filter(x => x[0] && x[1]);
-            db = shuffle(db);
             document.getElementById('status').style.display = 'none';
             document.getElementById('main-label').style.display = 'block';
             render();
-        } catch(e) { document.getElementById('status').innerText = "โปรดตรวจสอบการเชื่อมต่อ Sheets"; }
+        } catch(e) { document.getElementById('status').innerText = "เชื่อมต่อข้อมูลไม่ได้"; }
+    }
+
+    function startCountdown(endTime, elementId) {
+        const timerFunc = setInterval(() => {
+            const distance = new Date(endTime).getTime() - new Date().getTime();
+            const el = document.getElementById(elementId);
+            if (!el || distance < 0) { 
+                if(el) el.innerHTML = "🏁 หมดเวลา!"; 
+                clearInterval(timerFunc); return; 
+            }
+            const h = Math.floor(distance / 3600000);
+            const m = Math.floor((distance % 3600000) / 60000);
+            const s = Math.floor((distance % 60000) / 1000);
+            el.innerHTML = `🔥 ด่วน! ${h}ชม. ${m}น. ${s}ว.`;
+        }, 1000);
     }
 
     function render() {
-    const q = document.getElementById('search').value.toLowerCase();
-    
-    // 1. ส่วนสินค้าแนะนำ
-    const allRecs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
-    const shuffledRecs = [...allRecs].sort(() => 0.5 - Math.random()); 
-    const recArea = document.getElementById('rec-area');
-    
-    if(shuffledRecs.length > 0 && q === "") {
-        recArea.style.display = 'block';
-        document.getElementById('rec-list').innerHTML = shuffledRecs.slice(0, 6).map(p => `
+        const q = document.getElementById('search').value.toLowerCase();
+        
+        // สินค้าแนะนำ
+        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
+        document.getElementById('rec-area').style.display = (recs.length > 0 && q==="") ? 'block' : 'none';
+        document.getElementById('rec-list').innerHTML = recs.map(p => `
             <div class="rec-card">
                 <div class="rec-media">${getMedia(p[1])}</div>
                 <div class="rec-price">฿${p[3]}</div>
             </div>
         `).join('');
-    } else { recArea.style.display = 'none'; }
 
-    // 2. ส่วนรายการสินค้าทั้งหมด
-    const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
-    
-    document.getElementById('main-list').innerHTML = filt.map(p => {
-        const description = (p[2] && p[2].trim() !== "") ? p[2] : "สินค้าคุณภาพ คัดสรรเพื่อคุณ";
-        // สร้าง ID ที่ไม่ซ้ำกันสำหรับตัวนับเวลา
-        const timerId = `timer-${Math.random().toString(36).substr(2, 9)}`;
+        // รายการสินค้าหลัก
+        const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
+        document.getElementById('main-list').innerHTML = filt.map(p => {
+            const timerId = `t-${Math.random().toString(36).substr(2, 5)}`;
+            if(p[8]) setTimeout(() => startCountdown(p[8], timerId), 100);
+            
+            const badge = p[5].includes("1แถม1") ? '<div class="badge-promo">1 แถม 1</div>' : 
+                          p[5].includes("ขายดี") ? '<div class="badge-promo" style="background:var(--gold); color:#000;">HOT</div>' : '';
 
-        // สั่งให้ตัวนับเวลาทำงานหลังจากสร้าง HTML เสร็จแล้ว
-        if(p[8]) {
-            setTimeout(() => {
-                if(typeof startCountdown === "function") startCountdown(p[8], timerId);
-            }, 100);
-        }
-
-        return `
-            <div class="card">
-                <div class="media">${getMedia(p[1])}</div>
-                <div class="info">
-                    <div class="title">${p[0]}</div>
-                    <div class="desc">${description}</div>
-                    ${p[8] ? `<div id="${timerId}" class="promo-timer" style="background:#ff4d4d; color:white; font-size:9px; text-align:center; padding:2px; border-radius:3px; margin-bottom:5px;">กำลังโหลด...</div>` : ''}
-                    <span class="price">฿${p[3]}</span>
-                    <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
+            return `
+                <div class="card">
+                    ${badge}
+                    <div class="media">${getMedia(p[1])}</div>
+                    <div class="info">
+                        <div class="title">${p[0]}</div>
+                        ${p[8] ? `<div id="${timerId}" class="promo-timer">โหลดเวลา...</div>` : ''}
+                        <div class="price">฿${p[3]}</div>
+                        <div class="action-row">
+                            <a href="${p[7] || '#'}" target="_blank" class="buy-btn">สั่งซื้อ</a>
+                            <a href="https://line.me/R/ti/p/@yourid" class="line-btn">💬</a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        `;
-    }).join('');
-}
+            `;
+        }).join('');
+    }
 
     function setCat(c, el) {
         cur = c.toString();
@@ -252,86 +253,5 @@
     }
     load();
 </script>
-    <a href="https://forms.gle/RnbG77r84NixsEaLA"target="_blank" class="float-btn">
-    <div class="float-content">
-        <span class="float-icon">💰</span>
-        <span class="float-text">แจ้งโอนเงิน</span>
-    </div>
-</a>
-
-<style>
-/* ตั้งค่าตำแหน่งและความสวยงาม */
-.float-btn {
-    position: fixed;
-    bottom: 30px;      /* ระยะห่างจากขอบล่าง */
-    right: 30px;       /* ระยะห่างจากขอบขวา */
-    background: #28a745; /* สีเขียว (เปลี่ยนเป็นสีอื่นได้) */
-    color: white;
-    padding: 15px 25px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    z-index: 1000;      /* ให้อยู่เหนือทุกอย่างบนจอ */
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-}
-
-/* เอฟเฟกต์เวลาเอาเมาส์ไปวาง */
-.float-btn:hover {
-    transform: scale(1.1); /* ขยายใหญ่ขึ้นนิดหน่อย */
-    background: #218838;
-    color: white;
-}
-
-.float-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.float-icon {
-    font-size: 24px;
-}
-
-/* ปรับแต่งเมื่อดูบนมือถือ */
-@media (max-width: 600px) {
-    .float-text {
-        display: none; /* ซ่อนตัวหนังสือบนมือถือเพื่อให้ไม่บังจอ */
-    }
-    .float-btn {
-        padding: 15px;
-        bottom: 20px;
-        right: 20px;
-        border-radius: 50%; /* ทำเป็นวงกลมบนมือถือ */
-    }
-}
-</style>
-        <script>
-    function startCountdown(endTime, elementId) {
-        const timerFunc = setInterval(() => {
-            const now = new Date().getTime();
-            const distance = new Date(endTime).getTime() - now;
-            const el = document.getElementById(elementId);
-
-            if (!el) { clearInterval(timerFunc); return; }
-
-            if (distance < 0) {
-                clearInterval(timerFunc);
-                el.innerHTML = "🏁 หมดเวลาโปรโมชั่น!";
-                el.style.background = "#666"; 
-                return;
-            }
-
-            const h = Math.floor(distance / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            el.innerHTML = `🔥 ด่วน! เหลือ ${h}ชม. ${m}นาที ${s}วิ`;
-        }, 1000);
-    }
-    </script>
-
 </body>
 </html>
