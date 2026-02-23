@@ -162,7 +162,7 @@
             setInterval(updateTimers, 1000);
         } catch(e) { console.error(e); }
     }
-
+  
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
@@ -172,7 +172,7 @@
             const expired = time > 0 && time < now;
             const price = (expired && p[4]) ? p[4] : p[3];
             const old = expired ? null : p[4];
-            const desc = p[2] || "ไม่มีรายละเอียดสินค้า"; // ส่วนรายละเอียดสินค้า
+            const desc = p[2] || "ไม่มีรายละเอียดสินค้า";
 
             if(isRec) {
                 return `<div class="rec-card">
@@ -183,7 +183,7 @@
 
             return `<div class="card">
                 <div class="media" onclick="openMedia('${p[1]}')">
-                    ${p[7] && p[7].length > 5 ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}
+                    ${p[7] && p[7].length > 5 && !expired ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}
                     ${getMedia(p[1])}
                 </div>
                 <div class="info">
@@ -208,6 +208,23 @@
 
         const cats = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
         document.getElementById('cats').innerHTML = cats.map(c => `<span class="cat-item ${curCat === c[0] ? 'active' : ''}" onclick="curCat='${c[0]}';render()">${c[1]}</span>`).join('');
+    }
+
+    function updateTimers() {
+        const now = new Date().getTime();
+        document.querySelectorAll('.timer-badge').forEach(el => {
+            const dist = new Date(el.dataset.time).getTime() - now;
+            
+            // ถ้าหมดเวลา (น้อยกว่า 0) ให้ลบป้ายทิ้งไปเลย
+            if (dist < 0) { 
+                el.remove(); 
+            } else {
+                const h = Math.floor(dist / 3600000);
+                const m = Math.floor((dist % 3600000) / 60000);
+                const s = Math.floor((dist % 60000) / 1000);
+                el.innerHTML = `⏱️ ${h}:${m}:${s}`;
+            }
+        });
     }
 
     function updateTimers() {
