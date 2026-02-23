@@ -172,12 +172,15 @@
         document.getElementById('modalBody').innerHTML = getMediaHTML(url, true);
         document.getElementById('imgModal').style.display = 'flex';
     }
-
+    
     function openOrder(name, price) {
-        selectedProduct = `รายการ: ${name}\nราคา: ฿${price}`;
-        document.getElementById('orderSummary').innerText = `สั่งซื้อ: ${name} (฿${price})`;
-        document.getElementById('orderModal').style.display = 'flex';
-    }
+    selectedProduct = `สินค้า: ${name} (ราคา: ฿${price})`;
+    // แสดงให้ลูกค้าเห็นบนหน้าจอ
+    document.getElementById('orderSummary').innerText = selectedProduct;
+    // ใส่ค่าลงในฟอร์มเพื่อส่งเข้าอีเมลคุณ
+    document.getElementById('hiddenProduct').value = selectedProduct;
+    document.getElementById('orderModal').style.display = 'flex';}
+ }
 
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
