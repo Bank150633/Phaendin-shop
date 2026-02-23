@@ -72,8 +72,9 @@
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
         .modal-inner { position: relative; width: 90%; max-width: 500px; text-align: center; }
         .modal-content { width: 100%; max-height: 80vh; border-radius: 12px; object-fit: contain; }
-        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 16px; width: 90%; max-width: 400px; padding: 25px; position: relative; }
-        .order-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 15px; text-align: center; }
+        
+        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 16px; width: 90%; max-width: 400px; padding: 25px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .order-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 10px; text-align: center; }
         .order-card input, .order-card textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #333; background: #050505; color: #fff; font-family: 'Kanit'; outline: none; }
         .confirm-btn { width: 100%; background: #28a745; color: #fff; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
         .close-btn { position: absolute; top: 10px; right: 15px; color: #555; font-size: 28px; cursor: pointer; }
@@ -112,27 +113,35 @@
     <img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="f-logo">
     <div class="f-info">
         PHAENDIN STORE<br>
-        คัดสรรสินค้าคุณภาพดี ส่งตรงถึงมือคุณ<br>
-        สอบถามเพิ่มเติมโทร: 09x-xxx-xxxx
+        คัดสรรสินค้าคุณภาพดี ส่งตรงถึงมือคุณ
     </div>
     <div class="f-links">
         <a href="https://line.me/R/ti/p/@yourid">LINE OA</a>
-        <a href="#">หน้าหลัก</a>
         <a href="https://forms.gle/RnbG77r84NixsEaLA">แจ้งโอน</a>
     </div>
-    <div class="f-copy">© 2026 PHAENDIN STORE. ALL RIGHTS RESERVED.</div>
+    <div class="f-copy">© 2026 PHAENDIN STORE.</div>
 </footer>
 
 <div id="imgModal" class="modal" onclick="closeModal('imgModal')"><div class="modal-inner" id="modalBody"></div></div>
+
 <div id="orderModal" class="modal">
     <div class="order-card">
         <span class="close-btn" onclick="closeModal('orderModal')">&times;</span>
         <h2>🛒 สั่งซื้อสินค้า</h2>
         <div id="orderSummary" style="margin-bottom:15px; color:#888; text-align:center; font-size:12px;"></div>
+        
         <input type="text" id="custName" placeholder="ชื่อ-นามสกุล">
         <input type="tel" id="custTel" placeholder="เบอร์โทรศัพท์">
-        <textarea id="custAddr" rows="3" placeholder="ที่อยู่จัดส่ง"></textarea>
-        <button class="confirm-btn" onclick="sendOrder()">สั่งซื้อผ่าน Line</button>
+        <textarea id="custAddr" rows="2" placeholder="ที่อยู่จัดส่ง"></textarea>
+
+        <div style="background: #1a1a1a; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed var(--gold); text-align: center;">
+            <p style="font-size: 11px; color: var(--gold); margin-bottom: 5px;">💰 โอนเงินได้ที่:</p>
+            <p style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 2px;">ธนาคารกสิกรไทย (K-Bank)</p>
+            <p style="font-size: 18px; letter-spacing: 1px; color: var(--gold); font-weight: bold; margin-bottom: 2px;">000-0-00000-0</p>
+            <p style="font-size: 13px; color: #fff;">ชื่อบัญชี: บจก. แผ่นดิน สตอร์</p>
+        </div>
+
+        <button class="confirm-btn" onclick="sendOrder()">ส่งออเดอร์เข้า Line</button>
     </div>
 </div>
 
@@ -188,7 +197,7 @@
             document.getElementById('status').style.display = 'none';
             document.getElementById('main-label').style.display = 'block';
             render();
-        } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ"; }
+        } catch(e) { document.getElementById('status').innerText = "โหลดไม่สำเร็จ"; }
     }
 
     function render() {
@@ -203,24 +212,20 @@
         `).join('');
 
         const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
-        document.getElementById('main-list').innerHTML = filt.map(p => {
-            const badge = (p[5] && p[5].includes("1แถม1")) ? '<div class="badge-promo">1 แถม 1</div>' : '';
-            return `
-                <div class="card">
-                    ${badge}
-                    <div class="media" onclick="openImg('${p[1]}')">${getMediaHTML(p[1])}</div>
-                    <div class="info">
-                        <div class="title">${p[0]}</div>
-                        <div class="desc-box">${p[2] || 'สินค้าคุณภาพ'}</div>
-                        <div class="price">฿${p[3]}</div>
-                        <div class="action-row">
-                            <div class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</div>
-                            <a href="https://line.me/R/ti/p/@yourid" class="line-btn">💬</a>
-                        </div>
+        document.getElementById('main-list').innerHTML = filt.map(p => `
+            <div class="card">
+                <div class="media" onclick="openImg('${p[1]}')">${getMediaHTML(p[1])}</div>
+                <div class="info">
+                    <div class="title">${p[0]}</div>
+                    <div class="desc-box">${p[2] || 'สินค้าคุณภาพ'}</div>
+                    <div class="price">฿${p[3]}</div>
+                    <div class="action-row">
+                        <div class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</div>
+                        <a href="https://line.me/R/ti/p/@yourid" class="line-btn">💬</a>
                     </div>
                 </div>
-            `;
-        }).join('');
+            </div>
+        `).join('');
 
         const categories = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
         document.getElementById('cats').innerHTML = categories.map(c => `
