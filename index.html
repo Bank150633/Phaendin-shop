@@ -10,7 +10,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; overflow-x: hidden; }
 
-        /* --- Header & Layout --- */
+        /* --- Header --- */
         header { 
             position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.98); 
             z-index: 1000; border-bottom: 1px solid #222; padding-bottom: 10px; transition: 0.4s;
@@ -38,15 +38,21 @@
         /* --- Content Area --- */
         main { margin-top: 310px; padding-bottom: 100px; }
         header.shrunk + main { margin-top: 150px; }
-        .section-label { font-size: 12px; color: var(--gold); padding: 10px 15px; font-weight: 600; }
+        .section-label { font-size: 12px; color: var(--gold); padding: 15px 15px 8px; font-weight: 600; text-transform: uppercase; }
 
-        /* --- Product Grid --- */
+        /* --- สินค้าแนะนำ (Horizontal Scroll) --- */
+        .rec-list { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 15px; scrollbar-width: none; }
+        .rec-card { min-width: 100px; width: 100px; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #222; background: #111; }
+        .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; cursor: pointer; }
+        .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
+        .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 10px; font-weight: bold; text-align: center; padding: 4px 0; }
+
+        /* --- รายการสินค้า (Grid) --- */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px 20px; }
         .card { background: var(--card); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 1px solid #222; }
         
         .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; background: #000; position: relative; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
-        .media::after { content: '🔍'; position: absolute; top: 8px; right: 8px; font-size: 12px; background: rgba(0,0,0,0.5); padding: 4px; border-radius: 4px; opacity: 0.7; }
 
         .info { padding: 12px; flex: 1; }
         .title { font-size: 13px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
@@ -54,8 +60,7 @@
         .price { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 10px; }
         
         .action-row { display: flex; gap: 6px; }
-        .buy-btn { flex: 1; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        .buy-btn:active { transform: scale(0.95); opacity: 0.8; }
+        .buy-btn { flex: 1; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; }
         .line-btn { width: 40px; border: 1px solid #28a745; color: #28a745; display: flex; align-items: center; justify-content: center; border-radius: 8px; text-decoration: none; font-size: 18px; }
 
         /* --- Modals --- */
@@ -63,25 +68,17 @@
         .modal-inner { position: relative; width: 90%; max-width: 500px; text-align: center; }
         .modal-content { width: 100%; max-height: 80vh; border-radius: 12px; object-fit: contain; }
         
-        /* สั่งซื้อ Modal */
-        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 16px; width: 90%; max-width: 400px; padding: 25px; position: relative; animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
+        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 16px; width: 90%; max-width: 400px; padding: 25px; position: relative; }
         .order-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 5px; text-align: center; }
         .order-summary { margin-bottom: 20px; color: #888; text-align: center; font-size: 12px; border-bottom: 1px solid #222; padding-bottom: 10px; }
-        .order-card input, .order-card textarea { width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #333; background: #050505; color: #fff; font-family: 'Kanit'; font-size: 14px; outline: none; }
-        .order-card input:focus { border-color: var(--gold); }
-        .confirm-btn { width: 100%; background: #28a745; color: #fff; padding: 16px; border-radius: 10px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
-        .confirm-btn:hover { background: #218838; }
-        .close-btn { position: absolute; top: 15px; right: 20px; color: #555; font-size: 28px; cursor: pointer; }
+        .order-card input, .order-card textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; border: 1px solid #333; background: #050505; color: #fff; font-family: 'Kanit'; outline: none; }
+        .confirm-btn { width: 100%; background: #28a745; color: #fff; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; }
+        .close-btn { position: absolute; top: 10px; right: 15px; color: #555; font-size: 28px; cursor: pointer; }
 
-        /* Floating Button */
         .float-btn { position: fixed; bottom: 25px; left: 20px; background: #28a745; color: white; padding: 12px 22px; border-radius: 50px; text-decoration: none; font-weight: 600; z-index: 2000; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; }
-        
-        /* Badge */
-        .badge-promo { position: absolute; top: 10px; left: 10px; background: #ff4d4d; color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 6px; font-weight: bold; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .badge-promo { position: absolute; top: 10px; left: 10px; background: #ff4d4d; color: #fff; font-size: 10px; padding: 3px 10px; border-radius: 6px; font-weight: bold; z-index: 10; }
 
-        #status { text-align: center; padding: 100px 20px; color: var(--gold); font-size: 14px; }
+        #status { text-align: center; padding: 100px 20px; color: var(--gold); }
     </style>
 </head>
 <body>
@@ -95,14 +92,21 @@
         </div>
     </div>
     <div class="nav-container">
-        <input type="text" id="search" placeholder="ค้นหาชื่อสินค้าที่ต้องการ..." oninput="render()">
+        <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
         <div class="cat-bar" id="cats"></div>
     </div>
 </header>
 
 <main>
-    <div id="status">กำลังเปิดคลังสินค้า...</div>
-    <div id="main-list" class="grid"></div>
+    <div id="status">กำลังโหลดรายการสินค้า...</div>
+    
+    <div id="rec-area" style="display:none;">
+        <div class="section-label">✨ สินค้าแนะนำ</div>
+        <div class="rec-list" id="rec-list"></div>
+    </div>
+
+    <div id="main-label" class="section-label" style="display:none;">📦 รายการสินค้าทั้งหมด</div>
+    <div class="grid" id="main-list"></div>
 </main>
 
 <div id="imgModal" class="modal" onclick="closeModal('imgModal')">
@@ -115,15 +119,13 @@
         <h2>🛒 ข้อมูลการสั่งซื้อ</h2>
         <div id="orderSummary" class="order-summary"></div>
         <input type="text" id="custName" placeholder="ชื่อ-นามสกุล">
-        <input type="tel" id="custTel" placeholder="เบอร์โทรศัพท์ที่ติดต่อได้">
-        <textarea id="custAddr" rows="3" placeholder="ที่อยู่จัดส่งสินค้าโดยละเอียด"></textarea>
-        <button class="confirm-btn" onclick="sendOrder()">ส่งรายการเข้า Line เพื่อสั่งซื้อ</button>
+        <input type="tel" id="custTel" placeholder="เบอร์โทรศัพท์">
+        <textarea id="custAddr" rows="3" placeholder="ที่อยู่จัดส่งโดยละเอียด"></textarea>
+        <button class="confirm-btn" onclick="sendOrder()">สั่งซื้อผ่าน Line</button>
     </div>
 </div>
 
-<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="float-btn">
-    <span>💰</span> แจ้งโอนเงิน
-</a>
+<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="float-btn"><span>💰</span> แจ้งโอนเงิน</a>
 
 <script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
@@ -135,7 +137,6 @@
         window.scrollY > 50 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
     };
 
-    // รองรับวิดีโอในคอลัมน์ B
     function getMediaHTML(url, isModal = false) {
         if(!url) return '';
         const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
@@ -151,7 +152,7 @@
 
     function openOrder(name, price) {
         selectedProduct = `รายการ: ${name}\nราคา: ฿${price}`;
-        document.getElementById('orderSummary').innerText = `คุณกำลังสั่งซื้อ: ${name} ราคา ฿${price}`;
+        document.getElementById('orderSummary').innerText = `สั่งซื้อ: ${name} (฿${price})`;
         document.getElementById('orderModal').style.display = 'flex';
     }
 
@@ -161,9 +162,8 @@
         const name = document.getElementById('custName').value;
         const tel = document.getElementById('custTel').value;
         const addr = document.getElementById('custAddr').value;
-        if(!name || !tel || !addr) return alert("กรุณากรอกข้อมูลให้ครบถ้วนเพื่อความรวดเร็วในการจัดส่งครับ");
-        const msg = `📦 *มีรายการสั่งซื้อใหม่!*\n${selectedProduct}\n----------\n👤 ชื่อผู้รับ: ${name}\n📞 เบอร์โทร: ${tel}\n🏠 ที่อยู่: ${addr}\n----------\n(แจ้งแอดมินเพื่อยืนยันออเดอร์ได้เลยครับ)`;
-        // เปลี่ยน @yourid เป็น Line ID ของคุณจริงๆ
+        if(!name || !tel || !addr) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        const msg = `📦 *ออเดอร์ใหม่จากแอป*\n${selectedProduct}\n----------\n👤 ชื่อ: ${name}\n📞 โทร: ${tel}\n🏠 ที่อยู่: ${addr}`;
         window.open(`https://line.me/R/ti/p/@yourid?text=${encodeURIComponent(msg)}`);
     }
 
@@ -175,14 +175,26 @@
                 row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
             ).filter(x => x[0] && x[1]);
             document.getElementById('status').style.display = 'none';
+            document.getElementById('main-label').style.display = 'block';
             render();
-        } catch(e) { document.getElementById('status').innerText = "ขออภัย เชื่อมต่อข้อมูลไม่ได้ครับ"; }
+        } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ"; }
     }
 
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-        const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         
+        // สินค้าแนะนำ (Horizontal Scroll)
+        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
+        document.getElementById('rec-area').style.display = (recs.length > 0 && q==="") ? 'block' : 'none';
+        document.getElementById('rec-list').innerHTML = recs.map(p => `
+            <div class="rec-card">
+                <div class="rec-media" onclick="openImg('${p[1]}')">${getMediaHTML(p[1])}</div>
+                <div class="rec-price" onclick="openOrder('${p[0]}','${p[3]}')">฿${p[3]}</div>
+            </div>
+        `).join('');
+
+        // รายการสินค้าหลัก
+        const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         document.getElementById('main-list').innerHTML = filt.map(p => {
             const badge = (p[5] && p[5].includes("1แถม1")) ? '<div class="badge-promo">1 แถม 1</div>' : '';
             return `
@@ -191,7 +203,7 @@
                     <div class="media" onclick="openImg('${p[1]}')">${getMediaHTML(p[1])}</div>
                     <div class="info">
                         <div class="title">${p[0]}</div>
-                        <div class="desc-box">${p[2] || 'รายละเอียดสินค้าคุณภาพจาก PHAENDIN STORE'}</div>
+                        <div class="desc-box">${p[2] || 'รายละเอียดสินค้าคุณภาพ'}</div>
                         <div class="price">฿${p[3]}</div>
                         <div class="action-row">
                             <div class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</div>
