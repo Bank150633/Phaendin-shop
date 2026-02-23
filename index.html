@@ -148,17 +148,38 @@
     function openMedia(url) { document.getElementById('modalBody').innerHTML = getMedia(url); document.getElementById('mediaModal').style.display = 'flex'; }
 
     function openOrder(name, price, ship) {
-        const p = parseFloat(price) || 0;
-        const s = parseFloat(ship) || 0;
-        document.getElementById('orderSummary').innerHTML = `
-            <b>สินค้า:</b> ${name}<br>
-            <b>ราคา:</b> ฿${p}<br>
-            <b>ค่าส่ง:</b> ${s === 0 ? '<span style="color:var(--green)">ส่งฟรี</span>' : '฿'+s}<br>
-            <hr style="border:0; border-top:1px solid #222; margin:10px 0;">
-            <b style="font-size:18px;">ยอดรวม: <span style="color:var(--gold)">฿${p + s}</span></b>
-        `;
-        document.getElementById('orderModal').style.display = 'flex';
-    }
+    const p = parseFloat(price) || 0;
+    const s = parseFloat(ship) || 0;
+    const total = p + s;
+
+    // ส่วนที่แก้ไข: เพิ่มข้อมูลบัญชีและรูป QR Code
+    document.getElementById('orderSummary').innerHTML = `
+        <div style="text-align: center; margin-bottom: 15px;">
+            <p style="color: #aaa; font-size: 12px; margin-bottom: 5px;">ช่องทางชำระเงิน</p>
+            <b style="color: var(--gold); font-size: 16px;">ธนาคารกสิกรไทย (ตัวอย่าง)</b><br>
+            <b style="font-size: 18px; letter-spacing: 1px;">123-4-56789-0</b><br>
+            <p style="font-size: 14px; margin-top: 5px;">ชื่อบัญชี: บจก. แผ่นดิน สโตร์</p>
+            
+            <img src="https://your-qr-link.com/qr.jpg" style="width: 150px; height: 150px; margin: 15px auto; border-radius: 8px; border: 4px solid #fff; display: block;">
+        </div>
+
+        <div style="background: #1a1a1a; padding: 10px; border-radius: 8px; border-left: 4px solid var(--gold);">
+            <b style="color: #888; font-size: 11px;">รายการสั่งซื้อ</b><br>
+            <span style="font-size: 13px;">${name}</span><br>
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px;">
+                <span>ค่าสินค้า:</span> <span>฿${p.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                <span>ค่าจัดส่ง:</span> <span>${s === 0 ? '<span style="color:var(--green)">ส่งฟรี</span>' : '฿'+s}</span>
+            </div>
+            <hr style="border:0; border-top:1px solid #333; margin:8px 0;">
+            <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
+                <span>ยอดรวม:</span> <span style="color:var(--gold)">฿${total.toLocaleString()}</span>
+            </div>
+        </div>
+    `;
+    document.getElementById('orderModal').style.display = 'flex';
+}
 
     async function init() {
         try {
