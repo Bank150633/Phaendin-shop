@@ -41,7 +41,7 @@
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 11px; font-weight: bold; text-align: center; padding: 5px 0; }
 
-        /* --- Grid & Cards --- */
+        /* --- Card & Grid --- */
         .timer-badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 5px; font-weight: bold; z-index: 10; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px 20px; }
         .card { background: var(--card); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 1px solid #222; }
@@ -53,7 +53,7 @@
         .price { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         .buy-btn { width: 100%; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; }
 
-        /* --- Modal & Footer --- */
+        /* --- Modals & Footer --- */
         footer { background: #080808; padding: 40px 20px 100px; border-top: 1px solid #222; text-align: center; }
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
         .modal-inner { position: relative; width: 90%; max-width: 500px; }
@@ -61,7 +61,7 @@
         .order-card { background: #111; border: 1px solid var(--gold); border-radius: 16px; width: 90%; max-width: 400px; padding: 25px; text-align: center; }
         .order-summary-box { background: #000; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid var(--gold); color: #fff; font-size: 14px; text-align: left; }
         .confirm-btn { display: block; width: 100%; background: #28a745; color: #fff; padding: 15px; border-radius: 10px; text-decoration: none; font-weight: bold; }
-        .float-btn { position: fixed; bottom: 25px; left: 20px; background: #28a745; color: white; padding: 12px 22px; border-radius: 50px; text-decoration: none; font-weight: 600; z-index: 2000; }
+        .float-btn { position: fixed; bottom: 25px; left: 20px; background: #28a745; color: white; padding: 12px 22px; border-radius: 50px; text-decoration: none; font-weight: 600; z-index: 2000; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -75,16 +75,16 @@
         </div>
     </div>
     <div class="nav-container">
-        <input type="text" id="search" placeholder="ค้นหา..." oninput="render()">
+        <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
         <div class="cat-bar" id="cats"></div>
     </div>
 </header>
 
 <main>
-    <div id="status" style="text-align:center; padding:50px;">กำลังสุ่มแยกหมวดหมู่...</div>
+    <div id="status" style="text-align:center; padding:50px;">กำลังโหลดสินค้าทั้งหมด...</div>
     
     <div id="rec-area" style="display:none;">
-        <div class="section-label">✨ สินค้าแนะนำสำหรับคุณ</div>
+        <div class="section-label">✨ สินค้าแนะนำ</div>
         <div class="rec-list" id="rec-list"></div>
     </div>
 
@@ -93,7 +93,7 @@
 </main>
 
 <footer>
-    <div style="color:#666; font-size:14px; margin-bottom:15px;">PHAENDIN STORE</div>
+    <div style="color:#444; font-size:12px; margin-bottom:15px;">© 2026 PHAENDIN STORE</div>
     <div style="display:flex; justify-content:center; gap:10px;">
         <a href="https://line.me/R/ti/p/@yourid" style="color:var(--gold); text-decoration:none; font-size:12px; border:1px solid #333; padding:6px 15px; border-radius:5px;">LINE OA</a>
         <a href="https://forms.gle/RnbG77r84NixsEaLA" style="color:var(--gold); text-decoration:none; font-size:12px; border:1px solid #333; padding:6px 15px; border-radius:5px;">แจ้งโอนเงิน</a>
@@ -103,7 +103,7 @@
 <div id="imgModal" class="modal" onclick="closeModal('imgModal')"><div class="modal-inner" id="modalBody"></div></div>
 <div id="orderModal" class="modal">
     <div class="order-card">
-        <h2 style="color: var(--gold);">🛒 สรุปใบสั่งซื้อ</h2>
+        <h2 style="color: var(--gold);">🛒 สรุปรายการ</h2>
         <div id="orderSummary" class="order-summary-box"></div>
         <a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="confirm-btn">📝 ไปหน้าแจ้งโอนเงิน</a>
         <p onclick="closeModal('orderModal')" style="margin-top:15px; color:#555; cursor:pointer; font-size:12px;">ปิดหน้าต่าง</p>
@@ -115,7 +115,7 @@
 <script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
-    let dbRecommended = [], dbNormal = [], cur = 'all';
+    let dbAll = [], dbRecommended = [], cur = 'all';
 
     function getMediaHTML(url, isModal = false) {
         if(!url) return '';
@@ -129,11 +129,12 @@
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
+        let arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+            [arr[i], arr[j]] = [arr[j], arr[i]];
         }
-        return array;
+        return arr;
     }
 
     async function load() {
@@ -144,24 +145,23 @@
                 row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
             ).filter(x => x[0] && x[1]);
             
-            // --- แยกกลุ่มสินค้าออกจากกัน ---
-            // กลุ่มแนะนำ: คอลัมน์ F (p[5]) มีคำว่า "แนะนำ"
-            dbRecommended = shuffle(allItems.filter(p => p[5] && p[5].includes("แนะนำ")));
+            // 1. เก็บสินค้าทั้งหมด และสุ่มลำดับ
+            dbAll = shuffle(allItems);
             
-            // กลุ่มปกติ: คือสินค้าที่ "ไม่มี" คำว่าแนะนำ
-            dbNormal = shuffle(allItems.filter(p => !p[5] || !p[5].includes("แนะนำ")));
+            // 2. แยกสินค้าแนะนำไว้สำหรับ Slide ด้านบนโดยเฉพาะ
+            dbRecommended = shuffle(allItems.filter(p => p[5] && p[5].includes("แนะนำ")));
 
             document.getElementById('status').style.display = 'none';
             document.getElementById('main-label').style.display = 'block';
             render();
             setInterval(updateTimers, 1000);
-        } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลผิดพลาด"; }
+        } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่"; }
     }
 
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // 1. เรนเดอร์ส่วนแนะนำ (สุ่มเฉพาะในกลุ่มแนะนำ)
+        // เรนเดอร์ส่วนแนะนำ (สุ่มเฉพาะสินค้าที่มีคำว่าแนะนำ)
         const recArea = document.getElementById('rec-area');
         if(dbRecommended.length > 0 && q === "") {
             recArea.style.display = 'block';
@@ -175,8 +175,8 @@
             recArea.style.display = 'none';
         }
 
-        // 2. เรนเดอร์ส่วนสินค้าทั้งหมด (สุ่มเฉพาะในกลุ่มปกติ + กรองหมวดหมู่/ค้นหา)
-        const filt = dbNormal.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
+        // เรนเดอร์สินค้าทั้งหมด (ดึงมาทุกตัวที่ผ่านการค้นหาและหมวดหมู่)
+        const filt = dbAll.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         document.getElementById('main-list').innerHTML = filt.map((p, i) => {
             const hasT = p[7] && p[7].length > 5;
             return `
@@ -187,7 +187,7 @@
                 </div>
                 <div class="info">
                     <div class="title">${p[0]}</div>
-                    <div class="desc-box">${p[2] || 'รายละเอียดสินค้า'}</div>
+                    <div class="desc-box">${p[2] || 'สินค้าคุณภาพ'}</div>
                     <div class="price">฿${p[3]}</div>
                     <div class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</div>
                 </div>
@@ -205,7 +205,7 @@
         document.querySelectorAll('.timer-badge').forEach(el => {
             const target = new Date(el.getAttribute('data-time')).getTime();
             const dist = target - now;
-            if (dist < 0) { el.innerHTML = "จบดีล"; el.style.background = "#444"; }
+            if (dist < 0) { el.innerHTML = "จบโปรโมชั่น"; el.style.background = "#444"; }
             else {
                 const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
