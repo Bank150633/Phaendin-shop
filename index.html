@@ -13,96 +13,58 @@
         /* --- Header --- */
         header { 
             position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.98); 
-            z-index: 1000; border-bottom: 1px solid #222; 
-            padding-bottom: 10px; transition: 0.4s ease;
+            z-index: 1000; border-bottom: 1px solid #222; padding-bottom: 10px; transition: 0.4s;
         }
-        header.shrunk { padding-bottom: 5px; }
-        header.shrunk .logo-row { padding: 8px 0 4px; }
-        header.shrunk .logo-img { height: 35px; }
-        header.shrunk .banner-container { display: none; } 
-
-        .logo-row { display: flex; align-items: center; justify-content: center; padding: 15px 0 10px; transition: 0.3s; }
-        .logo-img { height: 50px; width: auto; object-fit: contain; transition: 0.3s; border-radius: 4px; }
+        header.shrunk .banner-container { display: none; }
+        .logo-row { display: flex; align-items: center; justify-content: center; padding: 15px 0 10px; }
+        .logo-img { height: 50px; border-radius: 4px; }
 
         /* --- Banner --- */
         .banner-container { padding: 0 12px; margin-bottom: 12px; }
         .banner-slide { 
             position: relative; width: 100%; height: 120px; 
-            background: linear-gradient(45deg, #1a1a1a, #333); 
-            border-radius: 8px; overflow: hidden; border: 1px solid var(--gold);
+            background: #1a1a1a; border-radius: 8px; overflow: hidden; border: 1px solid var(--gold);
         }
-        .banner-slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
-        .banner-text { 
-            position: absolute; bottom: 12px; left: 15px; 
-            color: var(--gold); font-size: 14px; font-weight: 600;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
-        }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        .banner-text { position: absolute; bottom: 12px; left: 15px; color: var(--gold); font-size: 14px; font-weight: 600; }
 
         .nav-container { padding: 0 12px; }
-        #search { width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; font-size: 13px; outline: none; margin-bottom: 10px; }
+        #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; margin-bottom: 10px; }
         
         .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-bar::-webkit-scrollbar { display: none; }
-        .cat-item { font-size: 11px; color: #aaa; cursor: pointer; white-space: nowrap; padding: 6px 15px; border-radius: 20px; background: var(--pill); }
+        .cat-item { font-size: 11px; color: #aaa; padding: 6px 15px; border-radius: 20px; background: var(--pill); white-space: nowrap; }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
         /* --- Content Area --- */
-        main { margin-top: 300px; min-height: 85vh; transition: 0.4s ease; }
+        main { margin-top: 300px; padding-bottom: 100px; }
         header.shrunk + main { margin-top: 150px; }
 
-        .section-label { font-size: 12px; color: var(--gold); padding: 15px 15px 8px; font-weight: 600; text-transform: uppercase; }
-
-        .rec-list { display: flex; gap: 8px; overflow-x: auto; padding: 0 12px 15px; scrollbar-width: none; }
-        .rec-card { min-width: 90px; width: 90px; position: relative; border-radius: 6px; overflow: hidden; border: 1px solid #222; }
-        .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; }
-        .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212, 175, 55, 0.95); color: #000; font-size: 10px; font-weight: bold; text-align: center; padding: 3px 0; }
-
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px 20px; }
-        .card { background: var(--card); border: 1px solid #1a1a1a; display: flex; flex-direction: column; border-radius: 8px; overflow: hidden; position: relative; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; }
+        .card { background: var(--card); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         
-        .badge-promo {
-            position: absolute; top: 8px; left: 8px; background: #ff4d4d; color: #fff;
-            font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: bold; z-index: 10;
-        }
-
         .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; background: #000; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
 
-        .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .info { padding: 10px; flex: 1; }
+        .title { font-size: 13px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .desc-box { font-size: 10px; color: #888; height: 26px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 8px; line-height: 1.3; }
         .price { color: var(--gold); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         
-        .action-row { display: flex; gap: 6px; }
-        .buy-btn { flex: 1; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 8px 0; border-radius: 6px; text-decoration: none; cursor: pointer; }
-        .line-btn { width: 40px; border: 1px solid #28a745; color: #28a745; display: flex; align-items: center; justify-content: center; border-radius: 6px; text-decoration: none; font-size: 16px; }
+        .action-row { display: flex; gap: 5px; }
+        .buy-btn { flex: 1; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 8px; border-radius: 6px; cursor: pointer; }
+        .line-btn { width: 35px; border: 1px solid #28a745; color: #28a745; display: flex; align-items: center; justify-content: center; border-radius: 6px; text-decoration: none; }
 
-        /* --- ฟอร์มสั่งซื้อ Modal --- */
-        .order-modal {
-            display: none; position: fixed; z-index: 4000; top: 0; left: 0; 
-            width: 100%; height: 100%; background: rgba(0,0,0,0.9); 
-            align-items: center; justify-content: center; padding: 20px;
-        }
-        .order-card {
-            background: #111; border: 1px solid var(--gold); border-radius: 12px;
-            width: 100%; max-width: 400px; padding: 25px; position: relative;
-        }
-        .order-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 15px; text-align: center; }
-        .order-card input, .order-card textarea {
-            width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px;
-            border: 1px solid #333; background: #000; color: #fff; font-family: 'Kanit'; outline: none;
-        }
-        .confirm-btn {
-            width: 100%; background: var(--gold); color: #000; padding: 15px;
-            border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer;
-        }
-        .close-order { position: absolute; top: 10px; right: 15px; color: #555; font-size: 24px; cursor: pointer; }
-
-        .float-btn { position: fixed; bottom: 25px; left: 20px; background: #28a745; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 2000; display: flex; align-items: center; gap: 8px; }
+        /* --- Modals --- */
+        .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
+        .modal-content { max-width: 90%; max-height: 80vh; border-radius: 10px; }
         
-        footer { background: #080808; padding: 40px 15px; text-align: center; border-top: 1px solid #222; }
-        #status { text-align: center; padding: 100px 20px; color: var(--gold); }
+        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 12px; width: 90%; max-width: 400px; padding: 25px; position: relative; }
+        .order-card h2 { color: var(--gold); font-size: 18px; margin-bottom: 15px; text-align: center; }
+        .order-card input, .order-card textarea { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #333; background: #000; color: #fff; font-family: 'Kanit'; }
+        .confirm-btn { width: 100%; background: var(--gold); color: #000; padding: 15px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
+        .close-btn { position: absolute; top: 10px; right: 15px; color: #fff; font-size: 24px; cursor: pointer; }
+
+        .float-btn { position: fixed; bottom: 20px; left: 20px; background: #28a745; color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; z-index: 2000; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -111,39 +73,36 @@
     <div class="logo-row"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img"></div>
     <div class="banner-container">
         <div class="banner-slide">
-            <img src="https://i.ibb.co/v6Y0mF7X/banner1.jpg">
+            <img src="https://i.ibb.co/v6Y0mF7X/banner1.jpg" id="bannerImg">
             <div class="banner-text">✨ คัดสรรของดี เพื่อแผ่นดินไทย</div>
         </div>
     </div>
     <div class="nav-container">
         <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
         <div class="cat-bar">
-            <div class="cat-item active" onclick="setCat('all', this)">ทั้งหมด</div>
-            <div class="cat-item" onclick="setCat('1', this)">อาหาร</div>
-            <div class="cat-item" onclick="setCat('2', this)">ของใช้</div>
-            <div class="cat-item" onclick="setCat('3', this)">แม่และเด็ก</div>
+            <div id="cats"></div>
         </div>
     </div>
 </header>
 
 <main>
-    <div id="status">กำลังเตรียมสินค้า...</div>
-    <div id="rec-area" style="display:none;">
-        <div class="section-label">✨ สินค้าแนะนำ</div>
-        <div class="rec-list" id="rec-list"></div>
-    </div>
+    <div id="status" style="text-align:center; padding:50px;">กำลังโหลด...</div>
     <div class="grid" id="main-list"></div>
 </main>
 
-<div id="orderModal" class="order-modal">
+<div id="imgModal" class="modal" onclick="closeModal('imgModal')">
+    <div id="modalBody"></div>
+</div>
+
+<div id="orderModal" class="modal">
     <div class="order-card">
-        <span class="close-order" onclick="closeOrder()">&times;</span>
+        <span class="close-btn" onclick="closeModal('orderModal')">&times;</span>
         <h2>🛒 สั่งซื้อสินค้า</h2>
-        <div id="orderSummary" style="margin-bottom: 15px; font-size: 14px; color: var(--gold); text-align: center; border-bottom: 1px dashed #333; padding-bottom: 10px;"></div>
+        <div id="orderSummary" style="margin-bottom:15px; color:var(--gold); text-align:center; font-size:13px;"></div>
         <input type="text" id="custName" placeholder="ชื่อ-นามสกุล">
         <input type="tel" id="custTel" placeholder="เบอร์โทรศัพท์">
-        <textarea id="custAddr" rows="3" placeholder="ที่อยู่จัดส่งโดยละเอียด"></textarea>
-        <button class="confirm-btn" onclick="sendOrder()">ยืนยันสั่งซื้อ (ส่งผ่าน Line)</button>
+        <textarea id="custAddr" rows="3" placeholder="ที่อยู่จัดส่ง"></textarea>
+        <button class="confirm-btn" onclick="sendOrder()">ยืนยันสั่งซื้อผ่าน Line</button>
     </div>
 </div>
 
@@ -154,27 +113,38 @@
     const URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     let db = [], cur = 'all', selectedProduct = "";
 
-    window.addEventListener("scroll", () => {
+    window.onscroll = () => {
         const h = document.getElementById("mainHeader");
         window.scrollY > 50 ? h.classList.add("shrunk") : h.classList.remove("shrunk");
-    });
+    };
 
-    // ฟอร์มสั่งซื้อ
+    function getMediaHTML(url, isModal = false) {
+        if(!url) return '';
+        const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
+        const style = isModal ? 'class="modal-content"' : '';
+        if(isVid) return `<video src="${url}" autoplay loop muted playsinline ${style}></video>`;
+        return `<img src="${url}" loading="lazy" ${style}>`;
+    }
+
+    function openModal(url) {
+        document.getElementById('modalBody').innerHTML = getMediaHTML(url, true);
+        document.getElementById('imgModal').style.display = 'flex';
+    }
+
     function openOrder(name, price) {
         selectedProduct = `สินค้า: ${name}\nราคา: ฿${price}`;
         document.getElementById('orderSummary').innerText = `รายการ: ${name} (฿${price})`;
         document.getElementById('orderModal').style.display = 'flex';
     }
-    function closeOrder() { document.getElementById('orderModal').style.display = 'none'; }
+
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
     function sendOrder() {
         const name = document.getElementById('custName').value;
         const tel = document.getElementById('custTel').value;
         const addr = document.getElementById('custAddr').value;
-        if(!name || !tel || !addr) return alert("กรุณากรอกข้อมูลให้ครบถ้วน");
-        
+        if(!name || !tel || !addr) return alert("กรุณากรอกข้อมูลให้ครบครับ");
         const msg = `📦 *มีออเดอร์ใหม่!*\n${selectedProduct}\n----------\n👤 ผู้ซื้อ: ${name}\n📞 โทร: ${tel}\n🏠 ที่อยู่: ${addr}`;
-        // ใส่ ID Line ของคุณตรง @yourid
         window.open(`https://line.me/R/ti/p/@yourid?text=${encodeURIComponent(msg)}`);
     }
 
@@ -187,25 +157,16 @@
             ).filter(x => x[0] && x[1]);
             document.getElementById('status').style.display = 'none';
             render();
-        } catch(e) { document.getElementById('status').innerText = "เชื่อมต่อไม่ได้"; }
+        } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ"; }
     }
 
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-        
-        const recs = db.filter(p => p[5] && p[5].includes("แนะนำ"));
-        document.getElementById('rec-area').style.display = (recs.length > 0 && q==="") ? 'block' : 'none';
-        document.getElementById('rec-list').innerHTML = recs.map(p => `
-            <div class="rec-card" onclick="openOrder('${p[0]}','${p[3]}')">
-                <div class="rec-media"><img src="${p[1]}"></div>
-                <div class="rec-price">฿${p[3]}</div>
-            </div>
-        `).join('');
-
         const filt = db.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
+        
         document.getElementById('main-list').innerHTML = filt.map(p => `
             <div class="card">
-                <div class="media"><img src="${p[1]}"></div>
+                <div class="media" onclick="openModal('${p[1]}')">${getMediaHTML(p[1])}</div>
                 <div class="info">
                     <div class="title">${p[0]}</div>
                     <div class="desc-box">${p[2] || 'สินค้าคุณภาพ คัดสรรมาเพื่อคุณ'}</div>
@@ -217,14 +178,14 @@
                 </div>
             </div>
         `).join('');
+
+        const categories = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
+        document.getElementById('cats').innerHTML = categories.map(c => `
+            <span class="cat-item ${cur === c[0] ? 'active' : ''}" onclick="setCat('${c[0]}')">${c[1]}</span>
+        `).join('');
     }
 
-    function setCat(c, el) {
-        cur = c.toString();
-        document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
-        el.classList.add('active');
-        render();
-    }
+    function setCat(c) { cur = c; render(); }
     load();
 </script>
 </body>
