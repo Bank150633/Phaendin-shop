@@ -179,13 +179,11 @@
     }
     
     function openOrder(name, price) {
-    selectedProduct = `สินค้า: ${name} (ราคา: ฿${price})`;
-    // แสดงให้ลูกค้าเห็นบนหน้าจอ
-    document.getElementById('orderSummary').innerText = selectedProduct;
-    // ใส่ค่าลงในฟอร์มเพื่อส่งเข้าอีเมลคุณ
-    document.getElementById('hiddenProduct').value = selectedProduct;
+    const detail = `รายการ: ${name} (฿${price})`;
+    document.getElementById('orderSummary').innerText = detail; // โชว์ในหน้าเว็บ
+    document.getElementById('hiddenProduct').value = detail;      // เตรียมส่งเข้าอีเมล
     document.getElementById('orderModal').style.display = 'flex';
- }
+}
 
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
