@@ -8,7 +8,9 @@
     <style>
         :root { --gold: #D4AF37; --bg: #000; --card: #111; --pill: #222; --red: #ff4d4d; --green: #28a745; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; padding-bottom: 180px; } 
+        
+        /* เพิ่มพื้นที่ด้านล่างสุดให้เยอะขึ้นเพื่อให้เลื่อนพ้นปุ่มฟุตเตอร์ */
+        body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; padding-bottom: 200px; } 
 
         /* Header & Banner */
         header { position: fixed; top: 0; width: 100%; background: #000; z-index: 2000; border-bottom: 1px solid #222; }
@@ -18,7 +20,7 @@
         .banner-slide { width: 100%; height: 140px; background: #1a1a1a; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); }
         .banner-slide img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Search & Categories (ที่เคยหายไป) */
+        /* Search & Categories */
         .nav-container { padding: 0 12px 10px; }
         #search { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #111; color: #fff; margin-bottom: 8px; outline: none; }
         .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
@@ -26,17 +28,17 @@
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
         /* Content Layout */
-        main { margin-top: 300px; }
+        main { margin-top: 310px; }
         .section-label { font-size: 14px; color: var(--gold); padding: 15px 12px 8px; font-weight: 600; }
 
-        /* Recommended Section (ที่เคยหายไป) */
+        /* Recommended Section */
         .rec-list { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 10px; scrollbar-width: none; }
         .rec-card { min-width: 130px; border-radius: 12px; overflow: hidden; border: 1px solid #222; background: #111; }
         .rec-media { width: 100%; aspect-ratio: 1/1; cursor: pointer; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
-        .rec-price { background: var(--gold); color: #000; font-size: 13px; font-weight: bold; text-align: center; padding: 8px 0; }
+        .rec-price { background: var(--gold); color: #000; font-size: 13px; font-weight: bold; text-align: center; padding: 10px 0; }
 
-        /* Grid Cards */
+        /* Grid & Product Card */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px; }
         .card { background: var(--card); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 1px solid #222; }
         .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; position: relative; background: #000; }
@@ -44,16 +46,16 @@
         .timer-badge { position: absolute; top: 6px; left: 6px; background: var(--red); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10; }
         
         .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 13px; font-weight: 600; margin-bottom: 8px; height: 38px; overflow: hidden; }
-        .price-row { display: flex; align-items: baseline; gap: 5px; margin-top: auto; padding-bottom: 8px; }
-        .price { color: var(--gold); font-size: 17px; font-weight: 700; }
+        .title { font-size: 13px; font-weight: 600; margin-bottom: 8px; height: 38px; overflow: hidden; line-height: 1.4; }
+        .price-row { display: flex; align-items: baseline; gap: 5px; margin-top: auto; padding-bottom: 10px; }
+        .price { color: var(--gold); font-size: 18px; font-weight: 700; }
         .price-old { color: #555; font-size: 11px; text-decoration: line-through; }
         
-        /* ปุ่มสั่งซื้อ (ที่เคยหายไป) */
-        .buy-btn { width: 100%; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; border: none; }
+        /* ปุ่มสั่งซื้อสีทอง (ในตัวสินค้า) */
+        .buy-btn { width: 100%; background: var(--gold); color: #000; text-align: center; font-size: 13px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; border: none; }
 
-        /* Footer (ปุ่มแจ้งโอน) */
-        .footer-fixed { position: fixed; bottom: 25px; left: 5%; width: 90%; background: var(--green); color: white; padding: 16px; border-radius: 50px; text-align: center; font-weight: bold; z-index: 3000; box-shadow: 0 8px 25px rgba(0,0,0,0.7); cursor: pointer; font-size: 16px; }
+        /* --- ปุ่มแจ้งโอนเงินฟุตเตอร์ด้านล่าง (สีเขียว) --- */
+        .footer-fixed { position: fixed; bottom: 25px; left: 5%; width: 90%; background: var(--green); color: white; padding: 18px; border-radius: 50px; text-align: center; font-weight: bold; z-index: 3000; box-shadow: 0 8px 30px rgba(0,0,0,0.8); cursor: pointer; font-size: 16px; display: block; text-decoration: none; }
 
         /* Modals */
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
@@ -80,9 +82,9 @@
     <div class="grid" id="main-list"></div>
 </main>
 
-<div class="footer-fixed" onclick="window.open('https://forms.gle/RnbG77r84NixsEaLA', '_blank')">
+<a href="https://forms.gle/RnbG77r84NixsEaLA" target="_blank" class="footer-fixed">
     💰 แจ้งโอนเงิน / ยืนยันคำสั่งซื้อ
-</div>
+</a>
 
 <div id="mediaModal" class="modal" onclick="this.style.display='none'"><div id="modalBody" class="modal-body"></div></div>
 
@@ -140,7 +142,6 @@
             };
         };
 
-        // สินค้าแนะนำ
         if(dbRec.length > 0 && q === "") {
             document.getElementById('rec-area').style.display = 'block';
             document.getElementById('rec-list').innerHTML = dbRec.map(p => {
@@ -152,7 +153,6 @@
             }).join('');
         } else { document.getElementById('rec-area').style.display = 'none'; }
 
-        // สินค้าทั้งหมด
         const filt = dbAll.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         document.getElementById('main-list').innerHTML = filt.map(p => {
             const pd = getPrice(p);
@@ -167,7 +167,7 @@
                         <span class="price">฿${pd.sale}</span>
                         ${pd.old ? `<span class="price-old">฿${pd.old}</span>` : ''}
                     </div>
-                    <div class="buy-btn" onclick="openMedia('${p[1]}')">รายละเอียด</div>
+                    <div class="buy-btn" onclick="openMedia('${p[1]}')">สั่งซื้อสินค้า</div>
                 </div>
             </div>`;
         }).join('');
