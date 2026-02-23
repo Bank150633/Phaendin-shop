@@ -31,6 +31,18 @@
         .cat-bar::-webkit-scrollbar { display: none; }
         .cat-item { font-size: 10px; color: #aaa; cursor: pointer; white-space: nowrap; padding: 5px 12px; border-radius: 20px; background: var(--pill); }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
+ /* ก๊อปปี้ส่วนนี้ไปวางได้เลย */
+.banner-container { padding: 0 12px; margin-bottom: 10px; }
+.banner-slide { 
+    position: relative; width: 100%; height: 110px; 
+    background: #222; border-radius: 8px; overflow: hidden; 
+    border: 1px solid var(--gold);
+}
+.banner-slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+.banner-text { 
+    position: absolute; bottom: 10px; left: 12px; 
+    color: var(--gold); font-size: 13px; font-weight: 600;
+}
 
         /* --- Content Area --- */
         main { margin-top: 175px; min-height: 85vh; transition: 0.4s ease; }
