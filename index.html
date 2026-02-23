@@ -125,29 +125,27 @@
 <div id="imgModal" class="modal" onclick="closeModal('imgModal')"><div class="modal-inner" id="modalBody"></div></div>
 
 <div id="orderModal" class="modal">
-    <div class="order-card">
-        <span class="close-btn" onclick="closeModal('orderModal')">&times;</span>
-        <h2 style="color: var(--gold);">🛒 สั่งซื้อและแจ้งโอน</h2>
-        <div id="orderSummary" style="margin-bottom:15px; color:#888; text-align:center; font-size:12px;"></div>
-        
-        <div style="background: #1a1a1a; padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed var(--gold); text-align: center;">
-            <p style="font-size: 11px; color: var(--gold); margin-bottom: 5px;">💰 โอนเงินได้ที่:</p>
-            <p style="font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 2px;">กสิกรไทย / PromptPay</p>
-            <p style="font-size: 18px; letter-spacing: 1px; color: var(--gold); font-weight: bold; margin-bottom: 2px;">xxx-x-x6762-x</p>
-            <p style="font-size: 13px; color: #fff;">นาย วัชระ ขันสิน</p>
-        </div>
+    <div class="order-card" style="background: #000; border: 1px solid #d4af37; padding: 20px; border-radius: 15px; max-width: 400px; margin: auto;">
+        <span class="close-btn" onclick="closeModal('orderModal')" style="color:#fff; float:right; cursor:pointer;">&times;</span>
+        <h2 style="color: #d4af37; text-align: center;">🛒 แจ้งโอนเงิน</h2>
 
-        <button class="confirm-btn" onclick="window.open('https://forms.gle/mhSQpfSnfL4nn1ZE6', '_blank')" style="background: #28a745; box-shadow: 0 4px 15px rgba(40,167,69,0.3);">
-            🚀 คลิกแจ้งโอนเงินที่นี่
-        </button>
+        <form action="https://formspree.io/f/xvgzezda" method="POST" enctype="multipart/form-data">
+            
+            <input type="text" name="Name" placeholder="ชื่อ-นามสกุล" required style="width:100%; margin-bottom:12px; padding:12px; border-radius:8px; border:1px solid #333; background:#111; color:#fff;">
+            
+            <input type="tel" name="Phone" placeholder="เบอร์โทรศัพท์" required style="width:100%; margin-bottom:12px; padding:12px; border-radius:8px; border:1px solid #333; background:#111; color:#fff;">
+            
+            <textarea name="Address" placeholder="ที่อยู่จัดส่งสินค้า" required style="width:100%; margin-bottom:12px; padding:12px; border-radius:8px; border:1px solid #333; background:#111; color:#fff; height:80px;"></textarea>
+            
+            <div style="margin-bottom: 20px; text-align: left; background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333;">
+                <label style="color: #d4af37; font-size: 12px; display: block; margin-bottom: 8px;">📸 แนบรูปสลิปโอนเงิน:</label>
+                <input type="file" name="Payment_Slip" accept="image/*" required style="color: #888; font-size: 12px;">
+            </div>
 
-        <p style="text-align: center; font-size: 11px; color: #666; margin-top: 10px;">
-            (โอนเงินแล้ว กดแจ้งผ่านเว็บได้เลย ไม่ต้องใช้ LINE ครับ)
-        </p>
-
-        <a href="tel:0944159031" style="display: block; text-align: center; color: #888; text-decoration: none; font-size: 13px; margin-top: 15px; padding: 8px; border: 1px solid #333; border-radius: 8px;">
-            📞 ติดต่อสอบถาม: 094-415-9031
-        </a>
+            <button type="submit" style="background: #28a745; width: 100%; padding: 15px; font-weight: bold; border: none; border-radius: 10px; color: white; cursor: pointer; font-size: 16px;">
+                🚀 ส่งข้อมูลแจ้งโอน
+            </button>
+        </form>
     </div>
 </div>
 
