@@ -125,26 +125,25 @@
 <div id="imgModal" class="modal" onclick="closeModal('imgModal')"><div class="modal-inner" id="modalBody"></div></div>
 
 <div id="orderModal" class="modal">
-    <div class="order-card" style="background: #000; border: 1px solid #d4af37; padding: 20px; border-radius: 15px; max-width: 400px; margin: auto;">
+    <div class="order-card" style="background: #000; border: 1px solid #d4af37; padding: 25px; border-radius: 15px; max-width: 400px; margin: auto;">
         <span class="close-btn" onclick="closeModal('orderModal')" style="color:#fff; float:right; cursor:pointer;">&times;</span>
         <h2 style="color: #d4af37; text-align: center;">🛒 แจ้งโอนเงิน</h2>
+        
+        <div id="orderSummary" style="color: #fff; background: #222; padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; border-left: 4px solid var(--gold);"></div>
 
         <form action="https://formspree.io/f/xvgzezda" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="Product_Detail" id="hiddenProduct">
             
-            <input type="text" name="Name" placeholder="ชื่อ-นามสกุล" required style="width:100%; margin-bottom:12px; padding:12px; border-radius:8px; border:1px solid #333; background:#111; color:#fff;">
-            
-            <input type="tel" name="Phone" placeholder="เบอร์โทรศัพท์" required style="width:100%; margin-bottom:12px; padding:12px; border-radius:8px; border:1px solid #333; background:#111; color:#fff;">
-            
-            <textarea name="Address" placeholder="ที่อยู่จัดส่งสินค้า" required style="width:100%; margin-bottom:12px; padding:12px; border-radius:8px; border:1px solid #333; background:#111; color:#fff; height:80px;"></textarea>
+            <input type="text" name="Name" placeholder="ชื่อ-นามสกุล" required>
+            <input type="tel" name="Phone" placeholder="เบอร์โทรศัพท์" required>
+            <textarea name="Address" placeholder="ที่อยู่จัดส่งสินค้า" required style="height:80px;"></textarea>
             
             <div style="margin-bottom: 20px; text-align: left; background: #111; padding: 10px; border-radius: 8px; border: 1px solid #333;">
                 <label style="color: #d4af37; font-size: 12px; display: block; margin-bottom: 8px;">📸 แนบรูปสลิปโอนเงิน:</label>
-                <input type="file" name="Payment_Slip" accept="image/*" required style="color: #888; font-size: 12px;">
+                <input type="file" name="Payment_Slip" accept="image/*" required>
             </div>
 
-            <button type="submit" style="background: #28a745; width: 100%; padding: 15px; font-weight: bold; border: none; border-radius: 10px; color: white; cursor: pointer; font-size: 16px;">
-                🚀 ส่งข้อมูลแจ้งโอน
-            </button>
+            <button type="submit" class="confirm-btn">🚀 ยืนยันและส่งข้อมูล</button>
         </form>
     </div>
 </div>
