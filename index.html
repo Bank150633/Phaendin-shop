@@ -158,10 +158,10 @@
         } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่"; }
     }
 
-    function render() {
+        function render() {
         const q = document.getElementById('search').value.toLowerCase();
         
-        // เรนเดอร์ส่วนแนะนำ (สุ่มเฉพาะสินค้าที่มีคำว่าแนะนำ)
+        // 1. เรนเดอร์ส่วนแนะนำ
         const recArea = document.getElementById('rec-area');
         if(dbRecommended.length > 0 && q === "") {
             recArea.style.display = 'block';
@@ -175,10 +175,15 @@
             recArea.style.display = 'none';
         }
 
-        // เรนเดอร์สินค้าทั้งหมด (ดึงมาทุกตัวที่ผ่านการค้นหาและหมวดหมู่)
+        // 2. เรนเดอร์สินค้าทั้งหมด (เพิ่มส่วนราคาขีดฆ่าแล้ว)
         const filt = dbAll.filter(p => p[0].toLowerCase().includes(q) && (cur === 'all' || p[6] === cur));
         document.getElementById('main-list').innerHTML = filt.map((p, i) => {
             const hasT = p[7] && p[7].length > 5;
+            
+            // ดึงราคาขาย (D) และ ราคาเดิม (E)
+            const priceSale = p[3]; 
+            const priceOld = p[4];  
+            
             return `
             <div class="card">
                 <div class="media" onclick="openImg('${p[1]}')">
@@ -188,8 +193,11 @@
                 <div class="info">
                     <div class="title">${p[0]}</div>
                     <div class="desc-box">${p[2] || 'สินค้าคุณภาพ'}</div>
-                    <div class="price">฿${p[3]}</div>
-                    <div class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</div>
+                    <div class="price-row" style="display: flex; align-items: baseline; gap: 8px;">
+                        <div class="price" style="color: #D4AF37; font-size: 18px; font-weight: 700;">฿${priceSale}</div>
+                        ${priceOld && priceOld !== "" ? `<div class="price-old" style="color: #555; font-size: 12px; text-decoration: line-through;">฿${priceOld}</div>` : ''}
+                    </div>
+                    <div class="buy-btn" onclick="openOrder('${p[0]}','${priceSale}')">สั่งซื้อ</div>
                 </div>
             </div>`;
         }).join('');
