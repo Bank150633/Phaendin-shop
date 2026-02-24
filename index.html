@@ -121,7 +121,7 @@
     const BANN_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`;
 
     let dbAll = [], dbRec = [], curCat = 'all';
-    let currentData = { name: '', price: 0, ship: 0, qty: 1, opt: '' };
+    let currentData = { name: '', basePrice: 0, ship: 0, qty: 1, options: '' };
 
     function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
@@ -156,7 +156,7 @@
                 </div>`;
         }
 
-                document.getElementById('orderSummary').innerHTML = `
+        document.getElementById('orderSummary').innerHTML = `
             <div style="text-align: center; margin-bottom: 15px;">
                 <p style="color: #aaa; font-size: 11px; margin-bottom: 5px;">ช่องทางชำระเงิน (PromptPay)</p>
                 <b style="color: var(--gold); font-size: 15px;">ธนาคารกสิกรไทย</b><br>
@@ -174,8 +174,9 @@
                 </div>
             </div>
             <div id="totalBox" style="background: #1a1a1a; padding: 10px; border-radius: 8px; border-left: 4px solid var(--gold);">
-                </div>`;
+            </div>`;
         calculateTotal();
+    } // แก้ไข: เติมปีกกาปิดที่หายไปตรงนี้
 
     function changeQty(n) {
         currentData.qty = Math.max(1, currentData.qty + n);
@@ -183,7 +184,7 @@
         calculateTotal();
     }
 
-        function calculateTotal() {
+    function calculateTotal() {
         const optEl = document.getElementById('selectedOpt');
         const pricePerUnit = optEl ? parseFloat(optEl.value) : currentData.basePrice;
         const optName = optEl ? optEl.options[optEl.selectedIndex].getAttribute('data-name') : '';
@@ -203,16 +204,11 @@
                 <span>ยอดรวมสุทธิ:</span> <span>฿${finalTotal.toLocaleString()}</span>
             </div>`;
 
-        // เชื่อมต่อ Google Form จริงของคุณ
+        // แก้ไข: เปลี่ยนเป็นลิงก์และ ID ช่องจริงของคุณ
         const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/viewform";
-        
-        // entry.1053869414 คือ ID ของช่อง "ชื่อ-นามสกุล" ในฟอร์มของคุณ
         const entryID = "entry.1053869414"; 
-        
-        // จัดรูปแบบข้อความที่จะไปโชว์ในฟอร์ม
-        const detail = `[สั่งซื้อ: ${currentData.name} ${optName} | จำนวน ${currentData.qty} ชิ้น | ยอดรวม ฿${finalTotal.toLocaleString()}] - ชื่อลูกค้า: `;
+        const detail = `[สั่งซื้อ: ${currentData.name} ${optName} | จำนวน ${currentData.qty} ชิ้น | ยอดโอน ฿${finalTotal.toLocaleString()}] - ชื่อลูกค้า: `;
 
-        // สร้างลิงก์ Prefilled เพื่อส่งข้อมูลเข้าฟอร์ม
         document.getElementById('finalOrderBtn').href = `${formURL}?usp=pp_url&${entryID}=${encodeURIComponent(detail)}`;
     }
 
