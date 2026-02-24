@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/jpeg" href="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg">
-<link rel="apple-touch-icon" href="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg">
-
+    <link rel="apple-touch-icon" href="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PHAENDIN STORE | OFFICIAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
@@ -63,33 +62,16 @@
         .nav-link { color: #777; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; }
         .nav-link.active { color: var(--gold); }
 
-                /* --- ชุดใหม่ที่ปรับปรุงแล้ว --- */
+        /* --- ปรับปรุง Modal สรุปยอดใหม่ --- */
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; padding: 10px; }
-        
-        .order-card { 
-            background: #111; 
-            border: 1px solid var(--gold); 
-            border-radius: 15px; 
-            width: 100%; 
-            max-width: 360px; 
-            padding: 15px; 
-            text-align: center; 
-            max-height: 95vh; 
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
+        .order-card { background: #111; border: 1px solid var(--gold); border-radius: 15px; width: 100%; max-width: 360px; padding: 15px; text-align: center; max-height: 95vh; display: flex; flex-direction: column; overflow-y: auto; }
         .summary-box { background: #000; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: left; font-size: 14px; }
         .confirm-btn { display: block; background: var(--green); color: #fff; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-bottom: 5px; }
         .modal-body img, .modal-body video { max-width: 90%; max-height: 80vh; border-radius: 10px; }
-
         .opt-select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; background: #222; color: #fff; border: 1px solid #444; font-family: 'Kanit'; font-size: 13px; }
         .qty-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; background: #1a1a1a; padding: 8px 12px; border-radius: 8px; }
         .qty-btn { width: 30px; height: 30px; background: var(--pill); color: var(--gold); border: 1px solid #444; border-radius: 5px; font-weight: bold; }
-        
         .cancel-link { display: inline-block; padding: 10px; color: #777; font-size: 13px; cursor: pointer; text-decoration: underline; }
-
     </style>
 </head>
 <body>
@@ -112,7 +94,7 @@
     <div class="grid" id="main-list"></div>
 </main>
 
-<a href="javascript:void(0)" onclick="openOrder('แจ้งโอนเงินทั่วไป', 0, 0, '')" class="float-pay-btn">
+<a href="javascript:void(0)" onclick="openOrder('แจ้งโอนเงินทั่วไป', 0, 0, '', 99)" class="float-pay-btn">
     <i class="fa-solid fa-receipt"></i> แจ้งโอนเงิน
 </a>
 
@@ -131,7 +113,6 @@
         <div id="orderSummary" class="summary-box"></div>
         <a href="#" id="finalOrderBtn" target="_blank" class="confirm-btn">ยืนยันยอดและส่งสลิป</a>
         <span class="cancel-link" onclick="document.getElementById('orderModal').style.display='none'">กลับไปหน้าเลือกสินค้า</span>
-
     </div>
 </div>
 
@@ -141,7 +122,7 @@
     const BANN_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`;
 
     let dbAll = [], dbRec = [], curCat = 'all';
-    let currentData = { name: '', basePrice: 0, ship: 0, qty: 1, options: '' };
+    let currentData = { name: '', basePrice: 0, ship: 0, qty: 1, options: '', maxLimit: 99 };
 
     function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
@@ -153,8 +134,16 @@
 
     function openMedia(url) { document.getElementById('modalBody').innerHTML = getMedia(url); document.getElementById('mediaModal').style.display = 'flex'; }
 
-    function openOrder(name, price, ship, options) {
-        currentData = { name, basePrice: parseFloat(price)||0, ship: parseFloat(ship)||0, qty: 1, options };
+    // แก้ไขฟังก์ชันเปิดหน้าสั่งซื้อให้รับค่า Limit
+    function openOrder(name, price, ship, options, limit) {
+        currentData = { 
+            name, 
+            basePrice: parseFloat(price)||0, 
+            ship: parseFloat(ship)||0, 
+            qty: 1, 
+            options, 
+            maxLimit: parseInt(limit) || 99 
+        };
         updateOrderUI();
         document.getElementById('orderModal').style.display = 'flex';
     }
@@ -174,7 +163,7 @@
                 <b style="color: var(--gold); font-size: 15px;">ธนาคารกสิกรไทย</b><br>
                 <b style="font-size: 18px; letter-spacing: 1px;">xxx-x-x6762-x</b><br>
                 <p style="font-size: 13px; margin-top: 5px;">ชื่อบัญชี: นาย วัชระ ชันสิน</p>
-                <img src="https://i.ibb.co/fVLb9p6B/004999092296200-20260224-144608.jpg" style="width: 160px; height: auto; margin: 15px auto; border-radius: 8px; border: 4px solid #fff; display: block;">
+                <img src="https://i.ibb.co/fVLb9p6B/004999092296200-20260224-144608.jpg" style="width: 140px; height: auto; margin: 15px auto; border-radius: 8px; border: 4px solid #fff; display: block;">
             </div>
             ${optHTML}
             <div class="qty-row"><span>จำนวน:</span><div><button class="qty-btn" onclick="changeQty(-1)">-</button><span id="displayQty" style="margin: 0 15px; font-weight: bold;">1</span><button class="qty-btn" onclick="changeQty(1)">+</button></div></div>
@@ -182,33 +171,35 @@
         calculateTotal();
     }
 
-    function changeQty(n) { currentData.qty = Math.max(1, currentData.qty + n); document.getElementById('displayQty').innerText = currentData.qty; calculateTotal(); }
+    // แก้ไขฟังก์ชันเปลี่ยนจำนวนให้จำกัดตาม maxLimit
+    function changeQty(n) { 
+        currentData.qty = Math.max(1, Math.min(currentData.maxLimit, currentData.qty + n)); 
+        document.getElementById('displayQty').innerText = currentData.qty; 
+        if (currentData.qty >= currentData.maxLimit && n > 0) {
+            alert("ขออภัย! สินค้านี้จำกัดการซื้อสูงสุด " + currentData.maxLimit + " ชิ้น");
+        }
+        calculateTotal(); 
+    }
 
     function calculateTotal() {
-    const optEl = document.getElementById('selectedOpt');
-    const pUnit = optEl ? parseFloat(optEl.value) : currentData.basePrice;
-    const oName = optEl ? optEl.options[optEl.selectedIndex].getAttribute('data-name') : '';
-    const totalP = pUnit * currentData.qty;
-    const finalT = totalP + currentData.ship;
+        const optEl = document.getElementById('selectedOpt');
+        const pUnit = optEl ? parseFloat(optEl.value) : currentData.basePrice;
+        const oName = optEl ? optEl.options[optEl.selectedIndex].getAttribute('data-name') : '';
+        const totalP = pUnit * currentData.qty;
+        const finalT = totalP + currentData.ship;
 
-    // แสดงผลสรุปยอดในหน้าเว็บ
-    document.getElementById('totalBox').innerHTML = `
-        <b style="color: #888; font-size: 11px;">รายการ:</b> <span style="font-size: 13px;">${currentData.name} ${oName}</span><br>
-        <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px;"><span>ยอดสินค้า:</span> <span>฿${totalP.toLocaleString()}</span></div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>ค่าจัดส่ง:</span> <span>${currentData.ship === 0 ? 'ส่งฟรี' : '฿'+currentData.ship}</span></div>
-        <hr style="border:0; border-top:1px solid #333; margin:8px 0;">
-        <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: bold; color: var(--gold);"><span>ยอดรวม:</span> <span>฿${finalT.toLocaleString()}</span></div>`;
-    
-    // --- ส่วนที่เชื่อมกับ Google Form (อัปเดตเลข ID ใหม่แล้ว) ---
-    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/viewform";
-    const entryID = "entry.1525913489"; // ใช้เลข ID จากลิงก์ที่คุณส่งมา
-    
-    // ข้อความที่จะให้เด้งเข้าไปในฟอร์ม
-    const detail = `📦 รายการสั่งซื้อ: ${currentData.name} ${oName}\n🔢 จำนวน: ${currentData.qty} ชิ้น\n💰 ยอดรวมทั้งหมด: ฿${finalT.toLocaleString()}`;
-    
-    // ส่งข้อมูลไปที่ปุ่มยืนยัน
-    document.getElementById('finalOrderBtn').href = `${formURL}?usp=pp_url&${entryID}=${encodeURIComponent(detail)}`;
-}
+        document.getElementById('totalBox').innerHTML = `
+            <b style="color: #888; font-size: 11px;">รายการ:</b> <span style="font-size: 13px;">${currentData.name} ${oName}</span><br>
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px;"><span>ยอดสินค้า:</span> <span>฿${totalP.toLocaleString()}</span></div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>ค่าจัดส่ง:</span> <span>${currentData.ship === 0 ? 'ส่งฟรี' : '฿'+currentData.ship}</span></div>
+            <hr style="border:0; border-top:1px solid #333; margin:8px 0;">
+            <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: bold; color: var(--gold);"><span>ยอดรวม:</span> <span>฿${finalT.toLocaleString()}</span></div>`;
+        
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/viewform";
+        const entryID = "entry.1525913489";
+        const detail = `📦 รายการสั่งซื้อ: ${currentData.name} ${oName}\n🔢 จำนวน: ${currentData.qty} ชิ้น\n💰 ยอดรวมทั้งหมด: ฿${finalT.toLocaleString()}`;
+        document.getElementById('finalOrderBtn').href = `${formURL}?usp=pp_url&${entryID}=${encodeURIComponent(detail)}`;
+    }
 
     async function init() {
         try {
@@ -247,6 +238,7 @@
             const status = p[5] || "";
             const ship = parseFloat(p[8]) || 0;
             const opts = p[9] || "";
+            const limit = p[10] || 99; // ดึงค่าจากคอลัมน์ K (ดัชนีที่ 10)
             
             let promoBadge = "";
             if (status.includes("1แถม1")) {
@@ -257,9 +249,9 @@
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: ${topPos}; right: 6px; background: #28a745; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10;">ส่งฟรี</div>`;
             }
 
-            if(isRec) return `<div class="rec-card"><div class="rec-media" onclick="openMedia('${p[1]}')">${promoBadge}${getMedia(p[1])}</div><div class="rec-price" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}')">฿${price}</div></div>`;
+            if(isRec) return `<div class="rec-card"><div class="rec-media" onclick="openMedia('${p[1]}')">${promoBadge}${getMedia(p[1])}</div><div class="rec-price" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">฿${price}</div></div>`;
             
-            return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${promoBadge}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||''}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}')">สั่งซื้อ</button></div></div>`;
+            return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${promoBadge}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||''}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">สั่งซื้อ</button></div></div>`;
         };
 
         if(dbRec.length > 0 && q === "") { 
