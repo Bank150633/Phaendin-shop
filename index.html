@@ -156,13 +156,13 @@
                 </div>`;
         }
 
-        document.getElementById('orderSummary').innerHTML = `
+                document.getElementById('orderSummary').innerHTML = `
             <div style="text-align: center; margin-bottom: 15px;">
-                <p style="color: #aaa; font-size: 11px; margin-bottom: 5px;">ช่องทางชำระเงิน</p>
+                <p style="color: #aaa; font-size: 11px; margin-bottom: 5px;">ช่องทางชำระเงิน (PromptPay)</p>
                 <b style="color: var(--gold); font-size: 15px;">ธนาคารกสิกรไทย</b><br>
-                <b style="font-size: 18px; letter-spacing: 1px;">xxx-x-xxxxx-x</b><br>
-                <p style="font-size: 13px; margin-top: 5px;">ชื่อบัญชี: บจก. แผ่นดิน สโตร์</p>
-                <img src="https://via.placeholder.com/150?text=QR+CODE" style="width: 140px; height: 140px; margin: 15px auto; border-radius: 8px; border: 4px solid #fff; display: block;">
+                <b style="font-size: 18px; letter-spacing: 1px;">xxx-x-x6762-x</b><br>
+                <p style="font-size: 13px; margin-top: 5px;">ชื่อบัญชี: นาย วัชระ ชันสิน</p>
+                <img src="https://i.ibb.co/6R2N7v7D/image.png" style="width: 140px; height: 140px; margin: 15px auto; border-radius: 8px; border: 4px solid #fff; display: block;">
             </div>
             ${optHTML}
             <div class="qty-row">
@@ -176,7 +176,6 @@
             <div id="totalBox" style="background: #1a1a1a; padding: 10px; border-radius: 8px; border-left: 4px solid var(--gold);">
                 </div>`;
         calculateTotal();
-    }
 
     function changeQty(n) {
         currentData.qty = Math.max(1, currentData.qty + n);
