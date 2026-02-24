@@ -183,7 +183,7 @@
         calculateTotal();
     }
 
-    function calculateTotal() {
+        function calculateTotal() {
         const optEl = document.getElementById('selectedOpt');
         const pricePerUnit = optEl ? parseFloat(optEl.value) : currentData.basePrice;
         const optName = optEl ? optEl.options[optEl.selectedIndex].getAttribute('data-name') : '';
@@ -203,11 +203,17 @@
                 <span>ยอดรวมสุทธิ:</span> <span>฿${finalTotal.toLocaleString()}</span>
             </div>`;
 
-        // สร้างลิงก์ส่งไป Google Form (Prefilled Link)
-        const formID = "RnbG77r84NixsEaLA"; // ID ฟอร์มเดิมของคุณ
-        const detail = `${currentData.name} [${optName}] จำนวน ${currentData.qty} ชิ้น ยอด ${finalTotal} บาท`;
-        document.getElementById('finalOrderBtn').href = `https://docs.google.com/forms/d/e/1FAIpQLScyV9VzW0_zR3_U5Vv3f8-V9xN0G79-qYx7pPzN0X-O0X-O0X/viewform?entry.123456789=${encodeURIComponent(detail)}`; 
-        // หมายเหตุ: ต้องเปลี่ยน entry.123456789 เป็น ID ช่องในฟอร์มของคุณ
+        // เชื่อมต่อ Google Form จริงของคุณ
+        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/viewform";
+        
+        // entry.1053869414 คือ ID ของช่อง "ชื่อ-นามสกุล" ในฟอร์มของคุณ
+        const entryID = "entry.1053869414"; 
+        
+        // จัดรูปแบบข้อความที่จะไปโชว์ในฟอร์ม
+        const detail = `[สั่งซื้อ: ${currentData.name} ${optName} | จำนวน ${currentData.qty} ชิ้น | ยอดรวม ฿${finalTotal.toLocaleString()}] - ชื่อลูกค้า: `;
+
+        // สร้างลิงก์ Prefilled เพื่อส่งข้อมูลเข้าฟอร์ม
+        document.getElementById('finalOrderBtn').href = `${formURL}?usp=pp_url&${entryID}=${encodeURIComponent(detail)}`;
     }
 
     async function init() {
