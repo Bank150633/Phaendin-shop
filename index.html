@@ -11,7 +11,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; padding-bottom: 150px; }
 
-        /* --- Animation --- */
         @keyframes blink {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(1.05); }
@@ -19,7 +18,6 @@
         }
         .badge-blink { animation: blink 1s infinite; box-shadow: 0 0 10px rgba(40, 167, 69, 0.4); }
 
-        /* --- Header & Navigation --- */
         header { position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.95); z-index: 1000; border-bottom: 1px solid #222; transition: 0.4s; }
         header.shrunk .banner-container { display: none; }
         .logo-row { text-align: center; padding: 10px 0; }
@@ -33,19 +31,16 @@
         .cat-item { font-size: 11px; color: #aaa; padding: 5px 15px; border-radius: 20px; background: var(--pill); white-space: nowrap; cursor: pointer; }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
-        /* --- Layout --- */
         main { margin-top: 300px; }
         header.shrunk + main { margin-top: 140px; }
         .section-label { font-size: 13px; color: var(--gold); padding: 15px 12px 8px; font-weight: 600; }
 
-        /* --- Recommended --- */
         .rec-list { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 5px; scrollbar-width: none; }
         .rec-card { min-width: 125px; border-radius: 12px; overflow: hidden; border: 1px solid #222; background: #111; position: relative; }
         .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; position: relative; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
         .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212,175,55,0.9); color: #000; font-size: 12px; font-weight: bold; text-align: center; padding: 6px 0; }
 
-        /* --- Product Grid --- */
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px; }
         .card { background: var(--card); border-radius: 12px; border: 1px solid #222; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .media { width: 100%; aspect-ratio: 1/1; cursor: pointer; position: relative; }
@@ -59,22 +54,18 @@
         .price-old { color: #555; font-size: 11px; text-decoration: line-through; }
         .buy-btn { width: 100%; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; border: none; }
 
-        /* --- Floating Button --- */
         .float-pay-btn { position: fixed; bottom: 85px; right: 15px; background: var(--green); color: #fff; padding: 12px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 14px; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; }
 
-        /* --- Bottom Nav --- */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--footer-h); background: #0a0a0a; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 2100; }
         .nav-link { color: #777; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; }
         .nav-link.active { color: var(--gold); }
 
-        /* --- Modals --- */
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
         .order-card { background: #111; border: 1px solid var(--gold); border-radius: 15px; width: 90%; max-width: 350px; padding: 25px; text-align: center; }
         .summary-box { background: #000; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: left; font-size: 14px; }
         .confirm-btn { display: block; background: var(--green); color: #fff; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; }
         .modal-body img, .modal-body video { max-width: 90%; max-height: 80vh; border-radius: 10px; }
 
-        /* --- Option & Quantity --- */
         .opt-select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 6px; background: #222; color: #fff; border: 1px solid #444; font-family: 'Kanit'; font-size: 13px; }
         .qty-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; background: #1a1a1a; padding: 8px 12px; border-radius: 8px; }
         .qty-btn { width: 30px; height: 30px; background: var(--pill); color: var(--gold); border: 1px solid #444; border-radius: 5px; font-weight: bold; }
@@ -213,10 +204,9 @@
         } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ"; console.error(e); }
     }
 
-        function render() {
+    function render() {
         const q = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
-        
         const itemHTML = (p, isRec = false) => {
             const time = p[7] ? new Date(p[7]).getTime() : 0;
             const expired = time > 0 && time < now;
@@ -227,11 +217,9 @@
             const opts = p[9] || "";
             
             let promoBadge = "";
-            // ป้าย 1 แถม 1
             if (status.includes("1แถม1")) {
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: 6px; right: 6px; background: #ffea00; color: #000; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10; border: 1px solid #000;">1 แถม 1</div>`;
             }
-            // ป้าย ส่งฟรี
             if (ship === 0) {
                 const topPos = status.includes("1แถม1") ? "32px" : "6px"; 
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: ${topPos}; right: 6px; background: #28a745; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10;">ส่งฟรี</div>`;
@@ -239,22 +227,7 @@
 
             if(isRec) return `<div class="rec-card"><div class="rec-media" onclick="openMedia('${p[1]}')">${promoBadge}${getMedia(p[1])}</div><div class="rec-price" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}')">฿${price}</div></div>`;
             
-            return `<div class="card">
-                <div class="media" onclick="openMedia('${p[1]}')">
-                    ${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}
-                    ${promoBadge}
-                    ${getMedia(p[1])}
-                </div>
-                <div class="info">
-                    <div class="title">${p[0]}</div>
-                    <div class="description">${p[2]||''}</div>
-                    <div class="price-row">
-                        <div class="price">฿${price}</div>
-                        ${old ? `<div class="price-old">฿${old}</div>` : ''}
-                    </div>
-                    <button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}')">สั่งซื้อ</button>
-                </div>
-            </div>`;
+            return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${promoBadge}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||''}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}')">สั่งซื้อ</button></div></div>`;
         };
 
         if(dbRec.length > 0 && q === "") { 
@@ -263,10 +236,8 @@
         } else { 
             document.getElementById('rec-area').style.display = 'none'; 
         }
-
         const filt = dbAll.filter(p => p[0].toLowerCase().includes(q) && (curCat === 'all' || p[6] === curCat));
         document.getElementById('main-list').innerHTML = filt.map(p => itemHTML(p)).join('');
-        
         const cats = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
         document.getElementById('cats').innerHTML = cats.map(c => `<span class="cat-item ${curCat === c[0] ? 'active' : ''}" onclick="curCat='${c[0]}';render()">${c[1]}</span>`).join('');
     }
@@ -282,20 +253,6 @@
         });
     }
 
-    init();
-    window.onscroll = () => { window.scrollY > 40 ? document.getElementById("mainHeader").classList.add("shrunk") : document.getElementById("mainHeader").classList.remove("shrunk"); };
-</script>
-
-    function updateTimers() {
-        const now = new Date().getTime();
-        document.querySelectorAll('.timer-badge').forEach(el => {
-            const dist = new Date(el.dataset.time).getTime() - now;
-            if (dist < 0) { el.remove(); } else {
-                const h = Math.floor(dist / 3600000), m = Math.floor((dist % 3600000) / 60000), s = Math.floor((dist % 60000) / 1000);
-                el.innerHTML = `⏱️ ${h}:${m}:${s}`;
-            }
-        });
-    }
     init();
     window.onscroll = () => { window.scrollY > 40 ? document.getElementById("mainHeader").classList.add("shrunk") : document.getElementById("mainHeader").classList.remove("shrunk"); };
 </script>
