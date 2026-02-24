@@ -162,7 +162,7 @@
                 <b style="color: var(--gold); font-size: 15px;">ธนาคารกสิกรไทย</b><br>
                 <b style="font-size: 18px; letter-spacing: 1px;">xxx-x-x6762-x</b><br>
                 <p style="font-size: 13px; margin-top: 5px;">ชื่อบัญชี: นาย วัชระ ชันสิน</p>
-                <img src="https://i.ibb.co/6R2N7v7D/image.png" style="width: 140px; height: 140px; margin: 15px auto; border-radius: 8px; border: 4px solid #fff; display: block;">
+                <img src="https://i.ibb.co/fVLb9p6B/004999092296200-20260224-144608.jpg" style="width: 100%; max-width: 200px; height: auto; margin: 15px auto; border-radius: 8px; border: 4px solid #fff; display: block;">
             </div>
             ${optHTML}
             <div class="qty-row">
@@ -176,7 +176,7 @@
             <div id="totalBox" style="background: #1a1a1a; padding: 10px; border-radius: 8px; border-left: 4px solid var(--gold);">
             </div>`;
         calculateTotal();
-    } // แก้ไข: เติมปีกกาปิดที่หายไปตรงนี้
+    }
 
     function changeQty(n) {
         currentData.qty = Math.max(1, currentData.qty + n);
@@ -204,7 +204,6 @@
                 <span>ยอดรวมสุทธิ:</span> <span>฿${finalTotal.toLocaleString()}</span>
             </div>`;
 
-        // แก้ไข: เปลี่ยนเป็นลิงก์และ ID ช่องจริงของคุณ
         const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/viewform";
         const entryID = "entry.1053869414"; 
         const detail = `[สั่งซื้อ: ${currentData.name} ${optName} | จำนวน ${currentData.qty} ชิ้น | ยอดโอน ฿${finalTotal.toLocaleString()}] - ชื่อลูกค้า: `;
@@ -248,32 +247,4 @@
             const old = expired ? null : p[4];
             const opts = p[9] || "";
             if(isRec) return `<div class="rec-card"><div class="rec-media" onclick="openMedia('${p[1]}')">${getMedia(p[1])}</div><div class="rec-price" onclick="openOrder('${p[0]}','${price}','${p[8]}','${opts}')">฿${price}</div></div>`;
-            return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${p[7] && p[7].length > 5 && !expired ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||'รายละเอียดสินค้า'}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${p[8]}','${opts}')">สั่งซื้อ</button></div></div>`;
-        };
-
-        if(dbRec.length > 0 && q === "") {
-            document.getElementById('rec-area').style.display = 'block';
-            document.getElementById('rec-list').innerHTML = dbRec.map(p => itemHTML(p, true)).join('');
-        } else { document.getElementById('rec-area').style.display = 'none'; }
-        const filt = dbAll.filter(p => p[0].toLowerCase().includes(q) && (curCat === 'all' || p[6] === curCat));
-        document.getElementById('main-list').innerHTML = filt.map(p => itemHTML(p)).join('');
-        const cats = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
-        document.getElementById('cats').innerHTML = cats.map(c => `<span class="cat-item ${curCat === c[0] ? 'active' : ''}" onclick="curCat='${c[0]}';render()">${c[1]}</span>`).join('');
-    }
-
-    function updateTimers() {
-        const now = new Date().getTime();
-        document.querySelectorAll('.timer-badge').forEach(el => {
-            const dist = new Date(el.dataset.time).getTime() - now;
-            if (dist < 0) { el.remove(); } else {
-                const h = Math.floor(dist / 3600000), m = Math.floor((dist % 3600000) / 60000), s = Math.floor((dist % 60000) / 1000);
-                el.innerHTML = `⏱️ ${h}:${m}:${s}`;
-            }
-        });
-    }
-
-    init();
-    window.onscroll = () => { window.scrollY > 40 ? document.getElementById("mainHeader").classList.add("shrunk") : document.getElementById("mainHeader").classList.remove("shrunk"); };
-</script>
-</body>
-</html>
+            return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${p[7] && p[7].length > 5 && !expired ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||'รายละเอียดสินค้า'}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${p[8]}','${opts
