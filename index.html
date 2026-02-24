@@ -163,20 +163,30 @@
     function changeQty(n) { currentData.qty = Math.max(1, currentData.qty + n); document.getElementById('displayQty').innerText = currentData.qty; calculateTotal(); }
 
     function calculateTotal() {
-        const optEl = document.getElementById('selectedOpt');
-        const pUnit = optEl ? parseFloat(optEl.value) : currentData.basePrice;
-        const oName = optEl ? optEl.options[optEl.selectedIndex].getAttribute('data-name') : '';
-        const totalP = pUnit * currentData.qty;
-        const finalT = totalP + currentData.ship;
-        document.getElementById('totalBox').innerHTML = `<b style="color: #888; font-size: 11px;">รายการ:</b> <span style="font-size: 13px;">${currentData.name} ${oName}</span><br>
-            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px;"><span>ยอดสินค้า:</span> <span>฿${totalP.toLocaleString()}</span></div>
-            <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>ค่าจัดส่ง:</span> <span>${currentData.ship === 0 ? 'ส่งฟรี' : '฿'+currentData.ship}</span></div>
-            <hr style="border:0; border-top:1px solid #333; margin:8px 0;"><div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: bold; color: var(--gold);"><span>ยอดรวม:</span> <span>฿${finalT.toLocaleString()}</span></div>`;
-        const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/viewform";
-        const entryID = "entry.1053869414"; 
-        const detail = `[สั่งซื้อ: ${currentData.name} ${oName} | จำนวน ${currentData.qty} ชิ้น | ยอด ฿${finalT.toLocaleString()}] - ชื่อลูกค้า: `;
-        document.getElementById('finalOrderBtn').href = `${formURL}?usp=pp_url&${entryID}=${encodeURIComponent(detail)}`;
-    }
+    const optEl = document.getElementById('selectedOpt');
+    const pUnit = optEl ? parseFloat(optEl.value) : currentData.basePrice;
+    const oName = optEl ? optEl.options[optEl.selectedIndex].getAttribute('data-name') : '';
+    const totalP = pUnit * currentData.qty;
+    const finalT = totalP + currentData.ship;
+
+    // แสดงผลใน Modal สรุปยอด
+    document.getElementById('totalBox').innerHTML = `
+        <b style="color: #888; font-size: 11px;">รายการ:</b> <span style="font-size: 13px;">${currentData.name} ${oName}</span><br>
+        <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 13px;"><span>ยอดสินค้า:</span> <span>฿${totalP.toLocaleString()}</span></div>
+        <div style="display: flex; justify-content: space-between; font-size: 13px;"><span>ค่าจัดส่ง:</span> <span>${currentData.ship === 0 ? 'ส่งฟรี' : '฿'+currentData.ship}</span></div>
+        <hr style="border:0; border-top:1px solid #333; margin:8px 0;">
+        <div style="display: flex; justify-content: space-between; font-size: 17px; font-weight: bold; color: var(--gold);"><span>ยอดรวม:</span> <span>฿${finalT.toLocaleString()}</span></div>`;
+
+    // --- ส่วนที่ส่งไป Google Form ---
+    const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/viewform";
+    const entryID = "entry.1053869414"; 
+
+    // ปรับรูปแบบข้อความให้ดูง่ายขึ้น (ใส่ \n เพื่อเว้นบรรทัดในช่องรายละเอียด)
+    const detail = `📦 รายการสั่งซื้อ: ${currentData.name} ${oName}\n🔢 จำนวน: ${currentData.qty} ชิ้น\n💰 ยอดรวม: ฿${finalT.toLocaleString()}`;
+
+    // ผูกลิงก์เข้ากับปุ่มยืนยัน
+    document.getElementById('finalOrderBtn').href = `${formURL}?usp=pp_url&${entryID}=${encodeURIComponent(detail)}`;
+}
 
     async function init() {
         try {
