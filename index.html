@@ -213,9 +213,10 @@
         } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ"; console.error(e); }
     }
 
-    function render() {
+        function render() {
         const q = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
+        
         const itemHTML = (p, isRec = false) => {
             const time = p[7] ? new Date(p[7]).getTime() : 0;
             const expired = time > 0 && time < now;
@@ -225,21 +226,65 @@
             const ship = parseFloat(p[8]) || 0;
             const opts = p[9] || "";
             
-                        // --- เริ่มต้นส่วนที่แก้ไข ---
             let promoBadge = "";
-            // ป้าย 1 แถม 1 (อยู่มุมขวาบนสุด)
+            // ป้าย 1 แถม 1
             if (status.includes("1แถม1")) {
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: 6px; right: 6px; background: #ffea00; color: #000; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10; border: 1px solid #000;">1 แถม 1</div>`;
             }
-            // ป้าย ส่งฟรี (ถ้ามี 1แถม1 ด้วย ป้ายนี้จะขยับลงมาข้างล่างเพื่อไม่ให้ทับกัน)
+            // ป้าย ส่งฟรี
             if (ship === 0) {
                 const topPos = status.includes("1แถม1") ? "32px" : "6px"; 
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: ${topPos}; right: 6px; background: #28a745; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10;">ส่งฟรี</div>`;
             }
-            // --- จบส่วนที่แก้ไข ---
 
             if(isRec) return `<div class="rec-card"><div class="rec-media" onclick="openMedia('${p[1]}')">${promoBadge}${getMedia(p[1])}</div><div class="rec-price" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}')">฿${price}</div></div>`;
-            // ... (โค้ดที่เหลือเหมือนเดิม)
+            
+            return `<div class="card">
+                <div class="media" onclick="openMedia('${p[1]}')">
+                    ${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}
+                    ${promoBadge}
+                    ${getMedia(p[1])}
+                </div>
+                <div class="info">
+                    <div class="title">${p[0]}</div>
+                    <div class="description">${p[2]||''}</div>
+                    <div class="price-row">
+                        <div class="price">฿${price}</div>
+                        ${old ? `<div class="price-old">฿${old}</div>` : ''}
+                    </div>
+                    <button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}')">สั่งซื้อ</button>
+                </div>
+            </div>`;
+        };
+
+        if(dbRec.length > 0 && q === "") { 
+            document.getElementById('rec-area').style.display = 'block'; 
+            document.getElementById('rec-list').innerHTML = dbRec.map(p => itemHTML(p, true)).join(''); 
+        } else { 
+            document.getElementById('rec-area').style.display = 'none'; 
+        }
+
+        const filt = dbAll.filter(p => p[0].toLowerCase().includes(q) && (curCat === 'all' || p[6] === curCat));
+        document.getElementById('main-list').innerHTML = filt.map(p => itemHTML(p)).join('');
+        
+        const cats = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
+        document.getElementById('cats').innerHTML = cats.map(c => `<span class="cat-item ${curCat === c[0] ? 'active' : ''}" onclick="curCat='${c[0]}';render()">${c[1]}</span>`).join('');
+    }
+
+    function updateTimers() {
+        const now = new Date().getTime();
+        document.querySelectorAll('.timer-badge').forEach(el => {
+            const dist = new Date(el.dataset.time).getTime() - now;
+            if (dist < 0) { el.remove(); } else {
+                const h = Math.floor(dist / 3600000), m = Math.floor((dist % 3600000) / 60000), s = Math.floor((dist % 60000) / 1000);
+                el.innerHTML = `⏱️ ${h}:${m}:${s}`;
+            }
+        });
+    }
+
+    init();
+    window.onscroll = () => { window.scrollY > 40 ? document.getElementById("mainHeader").classList.add("shrunk") : document.getElementById("mainHeader").classList.remove("shrunk"); };
+</script>
 
     function updateTimers() {
         const now = new Date().getTime();
