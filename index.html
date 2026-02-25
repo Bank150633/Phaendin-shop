@@ -31,6 +31,7 @@
             overflow: hidden;
             position: relative;
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            cursor: pointer;
         }
         .banner-left { width: 45%; position: relative; overflow: hidden; background: #000; }
         .banner-left img, .banner-left video { width: 100%; height: 100%; object-fit: cover; }
@@ -140,7 +141,7 @@
 
     let dbAll = [], dbRec = [], curCat = 'all';
     let currentData = { name: '', basePrice: 0, ship: 0, qty: 1, options: '', maxLimit: 99 };
-    let bannerEndTime = null; // ตัวแปรเก็บเวลาของ Banner
+    let bannerEndTime = null;
 
     function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
@@ -207,6 +208,18 @@
         document.getElementById('finalOrderBtn').href = `${formURL}?usp=pp_url&${entryID}=${encodeURIComponent(detail)}`;
     }
 
+    // ฟังก์ชันช่วยเลื่อนและค้นหาสินค้าจากแบนเนอร์
+    function bannerGoToProduct(productName) {
+        if(!productName) {
+            location.href='#main-label';
+            return;
+        }
+        const sInput = document.getElementById('search');
+        sInput.value = productName;
+        render(); // สั่งวาดหน้าจอใหม่ตามคำค้นหา
+        location.href='#main-label';
+    }
+
     async function init() {
         try {
             const resB = await fetch(BANN_URL);
@@ -217,8 +230,8 @@
                 const b = linesB[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                 const bannerDiv = document.getElementById('bannerContent');
                 
-                // คอลัมน์ C (b[2]) คือเวลาหมดเขต
                 bannerEndTime = b[2] ? new Date(b[2]).getTime() : null;
+                const targetProd = b[3] || ""; // คอลัมน์ D คือชื่อสินค้าที่จะลิงก์ไป
 
                 const isVid = b[0].toLowerCase().trim().match(/\.(mp4|webm|mov)$/);
                 const bannerMedia = isVid 
@@ -226,7 +239,7 @@
                     : `<img src="${b[0]}">`;
 
                 bannerDiv.innerHTML = `
-                    <div class="banner-slide" onclick="location.href='#main-label'">
+                    <div class="banner-slide" onclick="bannerGoToProduct('${targetProd}')">
                         <div class="banner-left">
                             ${bannerMedia}
                             <div class="flash-tag">FLASH SALE</div>
