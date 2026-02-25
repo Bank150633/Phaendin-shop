@@ -26,7 +26,6 @@
         .logo-img { height: 35px; }
         .banner-container { padding: 0 12px 10px; }
         
-        /* แก้ไขส่วนแบนเนอร์ */
         .banner-slide { position: relative; width: 100%; height: 140px; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); }
         .banner-slide img, .banner-slide video { width: 100%; height: 100%; object-fit: contain; opacity: 1; }
         .banner-text { position: absolute; bottom: 10px; left: 15px; font-size: 14px; font-weight: 600; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 4px; }
@@ -41,11 +40,13 @@
         header.shrunk + main { margin-top: 140px; }
         .section-label { font-size: 13px; color: var(--gold); padding: 15px 12px 8px; font-weight: 600; }
 
-        .rec-list { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 5px; scrollbar-width: none; }
-        .rec-card { min-width: 125px; border-radius: 12px; overflow: hidden; border: 1px solid #222; background: #111; position: relative; }
+        /* ปรับปรุงสินค้าแนะนำแบบที่ 2 */
+        .rec-list { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 10px; scrollbar-width: none; }
+        .rec-card { min-width: 130px; border-radius: 12px; overflow: hidden; border: 1px solid #333; background: #111; position: relative; cursor: pointer; transition: transform 0.2s; }
+        .rec-card:active { transform: scale(0.95); }
         .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; position: relative; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
-        .rec-price { position: absolute; bottom: 0; width: 100%; background: rgba(212,175,55,0.9); color: #000; font-size: 12px; font-weight: bold; text-align: center; padding: 6px 0; }
+        .rec-price { position: absolute; bottom: 8px; right: 8px; background: var(--gold); color: #000; font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 50px; box-shadow: 0 2px 8px rgba(0,0,0,0.5); z-index: 5; }
 
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px; }
         .card { background: var(--card); border-radius: 12px; border: 1px solid #222; display: flex; flex-direction: column; overflow: hidden; position: relative; }
@@ -54,22 +55,17 @@
         .timer-badge { position: absolute; top: 6px; left: 6px; background: var(--red); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10; }
         .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
         .title { font-size: 13px; font-weight: 600; height: 20px; overflow: hidden; margin-bottom: 4px; color: #fff; white-space: nowrap; text-overflow: ellipsis; }
-        
-        /* ปรับปรุงส่วนคำอธิบายให้รองรับลิงก์และยืดหยุ่น */
         .description { font-size: 10px; color: #777; height: auto; min-height: 32px; margin-bottom: 10px; line-height: 1.4; display: block; }
         .description a { color: var(--gold); text-decoration: underline; font-weight: 600; }
-
         .price-row { display: flex; align-items: baseline; gap: 5px; margin-top: auto; padding-bottom: 10px; }
         .price { color: var(--gold); font-size: 18px; font-weight: 700; }
         .price-old { color: #555; font-size: 11px; text-decoration: line-through; }
         .buy-btn { width: 100%; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; border: none; }
 
         .float-pay-btn { position: fixed; bottom: 85px; right: 15px; background: var(--green); color: #fff; padding: 12px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 14px; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; }
-
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--footer-h); background: #0a0a0a; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 2100; }
         .nav-link { color: #777; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; }
         .nav-link.active { color: var(--gold); }
-
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; padding: 10px; }
         .order-card { background: #111; border: 1px solid var(--gold); border-radius: 15px; width: 100%; max-width: 360px; padding: 15px; text-align: center; max-height: 95vh; display: flex; flex-direction: column; overflow-y: auto; }
         .summary-box { background: #000; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: left; font-size: 14px; }
@@ -206,7 +202,6 @@
                 if(b[0]) {
                     const bannerDiv = document.getElementById('bannerContent');
                     const isVid = b[0].toLowerCase().match(/\.(mp4|webm|mov)$/);
-                    // ปรับปรุงการแสดงข้อความบนแบนเนอร์ให้มีพื้นหลัง
                     bannerDiv.innerHTML = isVid ? 
                         `<video src="${b[0]}" autoplay loop muted playsinline></video><div class="banner-text">${b[1]||''}</div>` : 
                         `<img src="${b[0]}"><div class="banner-text">${b[1]||''}</div>`;
@@ -247,7 +242,15 @@
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: ${topPos}; right: 6px; background: #28a745; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10;">ส่งฟรี</div>`;
             }
 
-            if(isRec) return `<div class="rec-card"><div class="rec-media" onclick="openMedia('${p[1]}')">${promoBadge}${getMedia(p[1])}</div><div class="rec-price" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">฿${price}</div></div>`;
+            // แก้ไขส่วนสินค้าแนะนำให้กดได้ทั้งใบและสวยขึ้น
+            if(isRec) return `
+                <div class="rec-card" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">
+                    <div class="rec-media">
+                        ${promoBadge}
+                        ${getMedia(p[1])}
+                    </div>
+                    <div class="rec-price">฿${price}</div>
+                </div>`;
             
             return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${promoBadge}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||''}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">สั่งซื้อ</button></div></div>`;
         };
