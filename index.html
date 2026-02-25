@@ -13,22 +13,42 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; padding-bottom: 150px; }
 
-        @keyframes blink {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-            100% { opacity: 1; transform: scale(1); }
-        }
+        @keyframes blink { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
         .badge-blink { animation: blink 1s infinite; box-shadow: 0 0 10px rgba(40, 167, 69, 0.4); }
 
         header { position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.95); z-index: 1000; border-bottom: 1px solid #222; transition: 0.4s; }
         header.shrunk .banner-container { display: none; }
         .logo-row { text-align: center; padding: 10px 0; }
         .logo-img { height: 35px; }
-        .banner-container { padding: 0 12px 10px; }
         
-        .banner-slide { position: relative; width: 100%; height: 140px; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); }
-        .banner-slide img, .banner-slide video { width: 100%; height: 100%; object-fit: contain; opacity: 1; }
-        .banner-text { position: absolute; bottom: 10px; left: 15px; font-size: 14px; font-weight: 600; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 4px; }
+        /* สไตล์แบนเนอร์แบบสะดุดตา (Flash Sale Split) */
+        .banner-container { padding: 0 12px 10px; }
+        .banner-slide { 
+            height: 165px; 
+            display: flex; 
+            background: linear-gradient(135deg, #000 0%, #151515 100%);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        .banner-left { width: 45%; position: relative; overflow: hidden; }
+        .banner-left img { width: 100%; height: 100%; object-fit: cover; }
+        .flash-tag { position: absolute; top: 0; left: 0; background: var(--red); color: #fff; padding: 2px 10px; font-size: 10px; font-weight: bold; z-index: 5; border-bottom-right-radius: 10px; }
+
+        .banner-right { 
+            width: 55%; padding: 12px; display: flex; flex-direction: column; justify-content: center;
+            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        }
+        .banner-title { color: var(--gold); font-size: 18px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; text-transform: uppercase; }
+        .banner-sub { font-size: 11px; color: #aaa; margin-bottom: 8px; }
+
+        /* นาฬิกานับถอยหลัง */
+        .banner-timer { display: flex; gap: 4px; margin-bottom: 12px; align-items: center; }
+        .time-box { background: var(--gold); color: #000; padding: 4px 6px; border-radius: 4px; font-weight: 800; font-size: 13px; min-width: 28px; text-align: center; }
+        .time-sep { color: var(--gold); font-weight: bold; }
+        .shop-now-btn { background: #fff; color: #000; padding: 6px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; align-self: flex-start; box-shadow: 0 4px 10px rgba(255,255,255,0.2); }
 
         .nav-container { padding: 0 12px 10px; }
         #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; margin-bottom: 8px; outline: none; font-family: 'Kanit'; }
@@ -36,13 +56,12 @@
         .cat-item { font-size: 11px; color: #aaa; padding: 5px 15px; border-radius: 20px; background: var(--pill); white-space: nowrap; cursor: pointer; }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
-        main { margin-top: 320px; }
+        main { margin-top: 340px; }
         header.shrunk + main { margin-top: 140px; }
         .section-label { font-size: 13px; color: var(--gold); padding: 15px 12px 8px; font-weight: 600; }
 
-        /* ปรับปรุงสินค้าแนะนำแบบที่ 2 */
         .rec-list { display: flex; gap: 10px; overflow-x: auto; padding: 0 12px 10px; scrollbar-width: none; }
-        .rec-card { min-width: 130px; border-radius: 12px; overflow: hidden; border: 1px solid #333; background: #111; position: relative; cursor: pointer; transition: transform 0.2s; }
+        .rec-card { min-width: 130px; border-radius: 12px; overflow: hidden; border: 1px solid #333; background: #111; position: relative; cursor: pointer; transition: 0.2s; }
         .rec-card:active { transform: scale(0.95); }
         .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; position: relative; }
         .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
@@ -56,7 +75,6 @@
         .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
         .title { font-size: 13px; font-weight: 600; height: 20px; overflow: hidden; margin-bottom: 4px; color: #fff; white-space: nowrap; text-overflow: ellipsis; }
         .description { font-size: 10px; color: #777; height: auto; min-height: 32px; margin-bottom: 10px; line-height: 1.4; display: block; }
-        .description a { color: var(--gold); text-decoration: underline; font-weight: 600; }
         .price-row { display: flex; align-items: baseline; gap: 5px; margin-top: auto; padding-bottom: 10px; }
         .price { color: var(--gold); font-size: 18px; font-weight: 700; }
         .price-old { color: #555; font-size: 11px; text-decoration: line-through; }
@@ -81,9 +99,8 @@
 
 <header id="mainHeader">
     <div class="logo-row"><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo-img"></div>
-    <div class="banner-container">
-        <div class="banner-slide" id="bannerContent"></div>
-    </div>
+    <div class="banner-container" id="bannerContent">
+        </div>
     <div class="nav-container">
         <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
         <div class="cat-bar" id="cats"></div>
@@ -196,17 +213,31 @@
         try {
             const resB = await fetch(BANN_URL);
             const textB = await resB.text();
-            const linesB = textB.split(/\r?\n/).filter(l => l.trim() !== "");
-            if(linesB.length > 1) {
-                const b = linesB[1].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                if(b[0]) {
-                    const bannerDiv = document.getElementById('bannerContent');
-                    const isVid = b[0].toLowerCase().match(/\.(mp4|webm|mov)$/);
-                    bannerDiv.innerHTML = isVid ? 
-                        `<video src="${b[0]}" autoplay loop muted playsinline></video><div class="banner-text">${b[1]||''}</div>` : 
-                        `<img src="${b[0]}"><div class="banner-text">${b[1]||''}</div>`;
-                }
+            const linesB = textB.split(/\r?\n/).slice(1).filter(l => l.trim() !== "");
+            
+            if(linesB.length > 0) {
+                const b = linesB[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+                const bannerDiv = document.getElementById('bannerContent');
+                bannerDiv.innerHTML = `
+                    <div class="banner-slide" onclick="location.href='#main-label'">
+                        <div class="banner-left">
+                            <img src="${b[0]}">
+                            <div class="flash-tag">FLASH SALE</div>
+                        </div>
+                        <div class="banner-right">
+                            <div class="banner-title">${b[1] || 'ดีลพิเศษวันนี้'}</div>
+                            <div class="banner-sub">โปรโมชั่นจะหมดลงภายใน:</div>
+                            <div class="banner-timer">
+                                <div class="time-box" id="bh">00</div><span class="time-sep">:</span>
+                                <div class="time-box" id="bm">00</div><span class="time-sep">:</span>
+                                <div class="time-box" id="bs">00</div>
+                            </div>
+                            <div class="shop-now-btn">ช้อปเลยวันนี้ <i class="fa-solid fa-chevron-right"></i></div>
+                        </div>
+                    </div>`;
+                startBannerTimer();
             }
+
             const resP = await fetch(PROD_URL);
             const textP = await resP.text();
             let raw = textP.split(/\r?\n/).slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
@@ -218,6 +249,22 @@
             render();
             setInterval(updateTimers, 1000);
         } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลไม่สำเร็จ"; console.error(e); }
+    }
+
+    function startBannerTimer() {
+        setInterval(() => {
+            const now = new Date();
+            const end = new Date().setHours(23, 59, 59);
+            const diff = end - now;
+            if (diff > 0) {
+                const h = Math.floor(diff / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                document.getElementById('bh').innerText = h.toString().padStart(2, '0');
+                document.getElementById('bm').innerText = m.toString().padStart(2, '0');
+                document.getElementById('bs').innerText = s.toString().padStart(2, '0');
+            }
+        }, 1000);
     }
 
     function render() {
@@ -242,25 +289,15 @@
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: ${topPos}; right: 6px; background: #28a745; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10;">ส่งฟรี</div>`;
             }
 
-            // แก้ไขส่วนสินค้าแนะนำให้กดได้ทั้งใบและสวยขึ้น
-            if(isRec) return `
-                <div class="rec-card" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">
-                    <div class="rec-media">
-                        ${promoBadge}
-                        ${getMedia(p[1])}
-                    </div>
-                    <div class="rec-price">฿${price}</div>
-                </div>`;
-            
+            if(isRec) return `<div class="rec-card" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')"><div class="rec-media">${promoBadge}${getMedia(p[1])}</div><div class="rec-price">฿${price}</div></div>`;
             return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${promoBadge}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||''}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">สั่งซื้อ</button></div></div>`;
         };
 
         if(dbRec.length > 0 && q === "") { 
             document.getElementById('rec-area').style.display = 'block'; 
             document.getElementById('rec-list').innerHTML = dbRec.map(p => itemHTML(p, true)).join(''); 
-        } else { 
-            document.getElementById('rec-area').style.display = 'none'; 
-        }
+        } else { document.getElementById('rec-area').style.display = 'none'; }
+        
         const filt = dbAll.filter(p => p[0].toLowerCase().includes(q) && (curCat === 'all' || p[6] === curCat));
         document.getElementById('main-list').innerHTML = filt.map(p => itemHTML(p)).join('');
         const cats = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
