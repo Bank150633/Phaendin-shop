@@ -25,15 +25,19 @@
         .logo-row { text-align: center; padding: 10px 0; }
         .logo-img { height: 35px; }
         .banner-container { padding: 0 12px 10px; }
-        .banner-slide { position: relative; width: 100%; height: 120px; background: #1a1a1a; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); }
-        .banner-slide img, .banner-slide video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        
+        /* แก้ไขส่วนแบนเนอร์ */
+        .banner-slide { position: relative; width: 100%; height: 140px; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid var(--gold); }
+        .banner-slide img, .banner-slide video { width: 100%; height: 100%; object-fit: contain; opacity: 1; }
+        .banner-text { position: absolute; bottom: 10px; left: 15px; font-size: 14px; font-weight: 600; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 4px; }
+
         .nav-container { padding: 0 12px 10px; }
         #search { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #333; background: #0a0a0a; color: #fff; margin-bottom: 8px; outline: none; font-family: 'Kanit'; }
         .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
         .cat-item { font-size: 11px; color: #aaa; padding: 5px 15px; border-radius: 20px; background: var(--pill); white-space: nowrap; cursor: pointer; }
         .cat-item.active { color: #000; background: var(--gold); font-weight: 600; }
 
-        main { margin-top: 300px; }
+        main { margin-top: 320px; }
         header.shrunk + main { margin-top: 140px; }
         .section-label { font-size: 13px; color: var(--gold); padding: 15px 12px 8px; font-weight: 600; }
 
@@ -50,7 +54,11 @@
         .timer-badge { position: absolute; top: 6px; left: 6px; background: var(--red); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10; }
         .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
         .title { font-size: 13px; font-weight: 600; height: 20px; overflow: hidden; margin-bottom: 4px; color: #fff; white-space: nowrap; text-overflow: ellipsis; }
-        .description { font-size: 10px; color: #777; height: 32px; overflow: hidden; margin-bottom: 10px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        
+        /* ปรับปรุงส่วนคำอธิบายให้รองรับลิงก์และยืดหยุ่น */
+        .description { font-size: 10px; color: #777; height: auto; min-height: 32px; margin-bottom: 10px; line-height: 1.4; display: block; }
+        .description a { color: var(--gold); text-decoration: underline; font-weight: 600; }
+
         .price-row { display: flex; align-items: baseline; gap: 5px; margin-top: auto; padding-bottom: 10px; }
         .price { color: var(--gold); font-size: 18px; font-weight: 700; }
         .price-old { color: #555; font-size: 11px; text-decoration: line-through; }
@@ -62,7 +70,6 @@
         .nav-link { color: #777; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; }
         .nav-link.active { color: var(--gold); }
 
-        /* --- ปรับปรุง Modal สรุปยอดใหม่ --- */
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; padding: 10px; }
         .order-card { background: #111; border: 1px solid var(--gold); border-radius: 15px; width: 100%; max-width: 360px; padding: 15px; text-align: center; max-height: 95vh; display: flex; flex-direction: column; overflow-y: auto; }
         .summary-box { background: #000; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: left; font-size: 14px; }
@@ -134,16 +141,8 @@
 
     function openMedia(url) { document.getElementById('modalBody').innerHTML = getMedia(url); document.getElementById('mediaModal').style.display = 'flex'; }
 
-    // แก้ไขฟังก์ชันเปิดหน้าสั่งซื้อให้รับค่า Limit
     function openOrder(name, price, ship, options, limit) {
-        currentData = { 
-            name, 
-            basePrice: parseFloat(price)||0, 
-            ship: parseFloat(ship)||0, 
-            qty: 1, 
-            options, 
-            maxLimit: parseInt(limit) || 99 
-        };
+        currentData = { name, basePrice: parseFloat(price)||0, ship: parseFloat(ship)||0, qty: 1, options, maxLimit: parseInt(limit) || 99 };
         updateOrderUI();
         document.getElementById('orderModal').style.display = 'flex';
     }
@@ -171,13 +170,9 @@
         calculateTotal();
     }
 
-    // แก้ไขฟังก์ชันเปลี่ยนจำนวนให้จำกัดตาม maxLimit
     function changeQty(n) { 
         currentData.qty = Math.max(1, Math.min(currentData.maxLimit, currentData.qty + n)); 
         document.getElementById('displayQty').innerText = currentData.qty; 
-        if (currentData.qty >= currentData.maxLimit && n > 0) {
-            alert("ขออภัย! สินค้านี้จำกัดการซื้อสูงสุด " + currentData.maxLimit + " ชิ้น");
-        }
         calculateTotal(); 
     }
 
@@ -211,7 +206,10 @@
                 if(b[0]) {
                     const bannerDiv = document.getElementById('bannerContent');
                     const isVid = b[0].toLowerCase().match(/\.(mp4|webm|mov)$/);
-                    bannerDiv.innerHTML = isVid ? `<video src="${b[0]}" autoplay loop muted playsinline></video><div style="position:absolute; bottom:10px; left:15px; font-size:14px; font-weight:600;">${b[1]||''}</div>` : `<img src="${b[0]}"><div style="position:absolute; bottom:10px; left:15px; font-size:14px; font-weight:600;">${b[1]||''}</div>`;
+                    // ปรับปรุงการแสดงข้อความบนแบนเนอร์ให้มีพื้นหลัง
+                    bannerDiv.innerHTML = isVid ? 
+                        `<video src="${b[0]}" autoplay loop muted playsinline></video><div class="banner-text">${b[1]||''}</div>` : 
+                        `<img src="${b[0]}"><div class="banner-text">${b[1]||''}</div>`;
                 }
             }
             const resP = await fetch(PROD_URL);
@@ -238,7 +236,7 @@
             const status = p[5] || "";
             const ship = parseFloat(p[8]) || 0;
             const opts = p[9] || "";
-            const limit = p[10] || 99; // ดึงค่าจากคอลัมน์ K (ดัชนีที่ 10)
+            const limit = p[10] || 99;
             
             let promoBadge = "";
             if (status.includes("1แถม1")) {
