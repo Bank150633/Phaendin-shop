@@ -311,7 +311,7 @@
         }, 1000);
     }
 
-        function render() {
+            function render() {
         const q = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const itemHTML = (p, isRec = false) => {
@@ -333,21 +333,22 @@
                 promoBadge += `<div class="badge-blink" style="position: absolute; top: ${topPos}; right: 6px; background: #28a745; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: bold; z-index: 10;">ส่งฟรี</div>`;
             }
 
-            // แก้ไขส่วนสินค้าแนะนำ (isRec) ให้กดดูรูปได้ และมีปุ่มสั่งซื้อ
-            if(isRec) {
-                return `
-                <div class="rec-card">
-                    <div class="rec-media" onclick="openMedia('${p[1]}')">
+            // --- เริ่มต้นส่วนที่ปรับปรุง: เฉพาะสินค้าแนะนำ ---
+            if(isRec) return `
+                <div class="rec-card" style="min-width: 140px; display: flex; flex-direction: column; background: #111; border-radius: 12px; border: 1px solid #333;">
+                    <div class="rec-media" style="width: 100%; aspect-ratio: 1/1; position: relative;" onclick="openMedia('${p[1]}')">
                         ${promoBadge}
                         ${getMedia(p[1])}
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.6); color: var(--gold); font-size: 12px; font-weight: 800; padding: 4px; text-align: center;">฿${price}</div>
                     </div>
-                    <div class="rec-price" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">฿${price}</div>
-                    <div style="padding: 5px;">
-                        <button class="buy-btn" style="padding: 5px; font-size: 10px;" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">สั่งซื้อ</button>
+                    <div style="padding: 8px;">
+                        <button class="buy-btn" style="width: 100%; padding: 6px; font-size: 11px; border-radius: 6px;" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">
+                            <i class="fa-solid fa-cart-shopping"></i> สั่งซื้อ
+                        </button>
                     </div>
                 </div>`;
-            }
-            
+            // --- จบส่วนที่ปรับปรุง ---
+
             return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${promoBadge}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||''}</div><div class="price-row"><div class="price">฿${price}</div>${old ? `<div class="price-old">฿${old}</div>` : ''}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${opts}', '${limit}')">สั่งซื้อ</button></div></div>`;
         };
 
