@@ -140,6 +140,7 @@
 
     let dbAll = [], dbRec = [], curCat = 'all';
     let currentData = { name: '', basePrice: 0, ship: 0, qty: 1, options: '', maxLimit: 99 };
+    let bannerEndTime = null; // ตัวแปรเก็บเวลาของ Banner
 
     function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
@@ -216,7 +217,9 @@
                 const b = linesB[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                 const bannerDiv = document.getElementById('bannerContent');
                 
-                // แก้ไขตรงนี้: เพิ่มระบบเช็ค วิดีโอ/รูปภาพ สำหรับ Banner
+                // คอลัมน์ C (b[2]) คือเวลาหมดเขต
+                bannerEndTime = b[2] ? new Date(b[2]).getTime() : null;
+
                 const isVid = b[0].toLowerCase().trim().match(/\.(mp4|webm|mov)$/);
                 const bannerMedia = isVid 
                     ? `<video src="${b[0]}" autoplay loop muted playsinline></video>` 
@@ -257,9 +260,9 @@
 
     function startBannerTimer() {
         setInterval(() => {
-            const now = new Date();
-            const end = new Date().setHours(23, 59, 59);
-            const diff = end - now;
+            if (!bannerEndTime) return;
+            const now = new Date().getTime();
+            const diff = bannerEndTime - now;
             if (diff > 0) {
                 const h = Math.floor(diff / 3600000);
                 const m = Math.floor((diff % 3600000) / 60000);
@@ -267,6 +270,10 @@
                 document.getElementById('bh').innerText = h.toString().padStart(2, '0');
                 document.getElementById('bm').innerText = m.toString().padStart(2, '0');
                 document.getElementById('bs').innerText = s.toString().padStart(2, '0');
+            } else {
+                document.getElementById('bh').innerText = "00";
+                document.getElementById('bm').innerText = "00";
+                document.getElementById('bs').innerText = "00";
             }
         }, 1000);
     }
