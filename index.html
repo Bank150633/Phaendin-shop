@@ -256,10 +256,15 @@
             };
 
             try {
-                await fetch(APPS_URL, {
-                    method: 'POST',
-                    body: new URLSearchParams(payload)
-                });
+                const formData = new FormData();
+for (let key in payload) { formData.append(key, payload[key]); }
+
+await fetch(APPS_URL, {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors' // เพิ่มบรรทัดนี้เพื่อป้องกันการติด Block จาก Browser
+});
+
                 alert("แจ้งโอนสำเร็จ! ข้อมูลถูกบันทึกแล้ว ระบบกำลังพาไป Messenger");
                 window.location.href = "https://m.me/PhaendinStore";
             } catch(err) {
