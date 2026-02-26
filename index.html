@@ -255,9 +255,14 @@
                 mimeType: fileInput.files[0].type
             };
 
-                try {
-      await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(payload) });
-      
+             try {
+  // ส่งแบบ no-cors เพื่อให้ข้ามการตรวจเช็คสิทธิ์ของ Browser และเข้าชีททันที
+  await fetch(APPS_URL, { 
+    method: 'POST', 
+    body: new URLSearchParams(payload),
+    mode: 'no-cors' 
+  });
+   
       // 1. แจ้งเตือนลูกค้า
       alert("✅ บันทึกข้อมูลการแจ้งโอนสำเร็จ! ขอบคุณที่อุดหนุนครับ");
 
