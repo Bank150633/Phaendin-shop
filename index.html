@@ -90,6 +90,7 @@
         .form-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; border-radius: 8px; color: #fff; margin-top: 5px; margin-bottom: 12px; font-family: 'Kanit'; font-size: 14px; }
         .form-input:focus { border-color: var(--gold); outline: none; }
         .confirm-btn { width: 100%; background: var(--green); color: #fff; padding: 14px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 16px; border: none; cursor: pointer; display: block; margin-top: 10px; }
+        .confirm-btn:disabled { background: #444; cursor: not-allowed; }
         .cancel-link { display: inline-block; padding: 10px; color: #777; font-size: 13px; cursor: pointer; text-decoration: underline; margin-top: 10px; }
 
         .modal-body img, .modal-body video { max-width: 90%; max-height: 80vh; border-radius: 10px; }
@@ -133,23 +134,21 @@
     <div class="order-card">
         <h3 style="color:var(--gold); margin-bottom:10px;">ยืนยันคำสั่งซื้อ</h3>
         
-        <form id="checkoutForm" action="https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/formResponse" method="POST" onsubmit="handleSubmit()">
+        <form id="checkoutForm" onsubmit="handleFormSubmit(event)">
             <div id="orderSummary" class="summary-box"></div>
             
-            <input type="hidden" name="entry.1525913489" id="hiddenDetail">
-
             <div style="text-align:left; padding: 0 5px;">
                 <label style="font-size:12px; color:var(--gold);">ชื่อ-นามสกุล ผู้รับ *</label>
-                <input type="text" name="entry.XXXXXXX" class="form-input" placeholder="ระบุชื่อเพื่อจัดส่ง" required>
+                <input type="text" id="customer_name" class="form-input" placeholder="ระบุชื่อเพื่อจัดส่ง" required>
                 
                 <label style="font-size:12px; color:var(--gold);">เบอร์โทรศัพท์ *</label>
-                <input type="tel" name="entry.YYYYYYY" class="form-input" placeholder="ระบุเบอร์โทรที่ติดต่อได้" required>
+                <input type="tel" id="customer_phone" class="form-input" placeholder="ระบุเบอร์โทรที่ติดต่อได้" required>
                 
                 <label style="font-size:12px; color:var(--gold);">ที่อยู่จัดส่ง *</label>
-                <textarea name="entry.ZZZZZZZ" class="form-input" rows="3" placeholder="บ้านเลขที่ ถนน แขวง/ตำบล..." required></textarea>
+                <textarea id="customer_address" class="form-input" rows="3" placeholder="บ้านเลขที่ ถนน แขวง/ตำบล..." required></textarea>
             </div>
 
-            <button type="submit" class="confirm-btn">💰 ยืนยันสั่งซื้อและส่งสลิป</button>
+            <button type="submit" id="btnSubmit" class="confirm-btn">💰 ยืนยันสั่งซื้อและส่งสลิป</button>
         </form>
         
         <span class="cancel-link" onclick="document.getElementById('orderModal').style.display='none'">กลับไปหน้าเลือกสินค้า</span>
@@ -161,9 +160,52 @@
     const PROD_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
     const BANN_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`;
 
+    // ตั้งค่า Entry ID ของ Google Form ของคุณที่นี่ (ให้ตรงกับที่คุณก๊อปมา)
+    const ENTRY_DETAIL = "entry.1525913489";
+    const ENTRY_NAME = "entry.XXXXXXX"; // เปลี่ยน XXXXX เป็นเลขของคุณ
+    const ENTRY_PHONE = "entry.YYYYYYY"; // เปลี่ยน YYYYY เป็นเลขของคุณ
+    const ENTRY_ADDRESS = "entry.ZZZZZZZ"; // เปลี่ยน ZZZZZ เป็นเลขของคุณ
+    const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLScbfnx4Vgo4skn8irT-1c6GOG9wWBnWmafEy9kZjZ5eBUrjPw/formResponse";
+
     let dbAll = [], dbRec = [], curCat = 'all';
-    let currentData = { name: '', basePrice: 0, ship: 0, qty: 1, options: '', maxLimit: 99 };
+    let currentData = { name: '', basePrice: 0, ship: 0, qty: 1, options: '', maxLimit: 99, finalDetail: '' };
     let bannerEndTime = null;
+
+    // ฟังก์ชันส่งฟอร์มเบื้องหลัง (AJAX)
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmit');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> กำลังบันทึก...';
+
+        const name = document.getElementById('customer_name').value;
+        const phone = document.getElementById('customer_phone').value;
+        const address = document.getElementById('customer_address').value;
+
+        // เตรียมข้อมูลส่งไป Google Forms
+        const formData = new FormData();
+        formData.append(ENTRY_DETAIL, currentData.finalDetail);
+        formData.append(ENTRY_NAME, name);
+        formData.append(ENTRY_PHONE, phone);
+        formData.append(ENTRY_ADDRESS, address);
+
+        try {
+            // ส่งข้อมูลแบบเงียบๆ
+            await fetch(GOOGLE_FORM_ACTION, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            });
+            
+            // เมื่อส่งสำเร็จ ให้แจ้งเตือนและไป Messenger ทันที
+            alert("บันทึกข้อมูลเรียบร้อย! ระบบกำลังพาท่านไปส่งสลิปโอนเงินครับ");
+            window.location.href = "https://m.me/PhaendinStore";
+        } catch (error) {
+            alert("ขออภัย เกิดข้อผิดพลาด กรุณาลองใหม่");
+            btn.disabled = false;
+            btn.innerHTML = '💰 ยืนยันสั่งซื้อและส่งสลิป';
+        }
+    }
 
     async function checkTracking() {
         const phone = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้สั่งซื้อ:");
@@ -229,20 +271,12 @@
         const totalP = pUnit * currentData.qty;
         const finalT = totalP + currentData.ship;
         
-        const detailText = `📦 รายการ: ${currentData.name} ${oName}\n🔢 จำนวน: ${currentData.qty}\n💰 ยอดสุทธิ: ฿${finalT.toLocaleString()}`;
-        document.getElementById('hiddenDetail').value = detailText;
+        currentData.finalDetail = `📦 รายการ: ${currentData.name} ${oName}\n🔢 จำนวน: ${currentData.qty}\n💰 ยอดสุทธิ: ฿${finalT.toLocaleString()}`;
 
         document.getElementById('totalBox').innerHTML = `
             <div style="display: flex; justify-content: space-between;"><span>ยอดสินค้า:</span> <span>฿${totalP.toLocaleString()}</span></div>
             <div style="display: flex; justify-content: space-between;"><span>ค่าส่ง:</span> <span>${currentData.ship === 0 ? 'ส่งฟรี' : '฿'+currentData.ship}</span></div>
             <div style="display: flex; justify-content: space-between; margin-top: 5px; font-weight: bold; color: var(--gold); font-size: 16px;"><span>รวมทั้งสิ้น:</span> <span>฿${finalT.toLocaleString()}</span></div>`;
-    }
-
-    function handleSubmit() {
-        // เมื่อกดส่งฟอร์ม ให้หน่วงเวลาเล็กน้อยแล้วไป Messenger
-        setTimeout(() => {
-            window.location.href = "https://m.me/PhaendinStore";
-        }, 1000);
     }
 
     function bannerGoToProduct(productName) {
