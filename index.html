@@ -255,23 +255,29 @@
                 mimeType: fileInput.files[0].type
             };
 
-            try {
-                const formData = new FormData();
-for (let key in payload) { formData.append(key, payload[key]); }
+                try {
+      await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(payload) });
+      
+      // 1. แจ้งเตือนลูกค้า
+      alert("✅ บันทึกข้อมูลการแจ้งโอนสำเร็จ! ขอบคุณที่อุดหนุนครับ");
 
-await fetch(APPS_URL, {
-    method: 'POST',
-    body: formData,
-    mode: 'no-cors' // เพิ่มบรรทัดนี้เพื่อป้องกันการติด Block จาก Browser
-});
+      // 2. ล้างข้อมูลในฟอร์ม (ชื่อ, เบอร์, ที่อยู่, รูปสลิป จะถูกล้างออก)
+      document.getElementById('orderForm').reset();
+      document.getElementById('slipPreview').style.display = 'none';
+      document.getElementById('uploadText').style.display = 'block';
 
-                alert("แจ้งโอนสำเร็จ! ข้อมูลถูกบันทึกแล้ว ระบบกำลังพาไป Messenger");
-                window.location.href = "https://m.me/PhaendinStore";
-            } catch(err) {
-                alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่");
-                btn.disabled = false;
-                btn.innerText = "💰 ยืนยันแจ้งโอนเงิน";
-            }
+      // 3. ปิดหน้าต่าง Modal (หน้าจอจะกลับไปที่รายการสินค้า)
+      document.getElementById('orderModal').style.display = 'none';
+
+      // 4. คืนค่าปุ่มให้กลับมาใช้งานได้ปกติ
+      btn.disabled = false;
+      btn.innerText = "💰 ยืนยันแจ้งโอนเงิน";
+
+    } catch(err) {
+      alert("❌ เกิดข้อผิดพลาด: " + err.message);
+      btn.disabled = false;
+      btn.innerText = "💰 ยืนยันแจ้งโอนเงิน";
+    }
         };
         reader.readAsDataURL(fileInput.files[0]);
     };
