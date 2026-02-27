@@ -58,24 +58,17 @@
         .description { font-size: 10px; color: #777; height: auto; min-height: 32px; margin-bottom: 10px; line-height: 1.4; display: block; }
         .price { color: var(--gold); font-size: 18px; font-weight: 700; }
         .buy-btn { width: 100%; background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 10px; border-radius: 8px; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        
-        /* แก้ไขปุ่มลอยใหม่ที่นี่ */
+
+        /* ปุ่มติดต่อเราลอย */
         .float-pay-btn { position: fixed; bottom: 85px; right: 15px; background: var(--fb-blue); color: #fff; padding: 12px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 14px; z-index: 2000; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        
+
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--footer-h); background: #0a0a0a; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 2100; }
         .nav-link { color: #777; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; }
         .nav-link.active { color: var(--gold); }
         
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
         .modal-body { width: 100%; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .modal-body img, .modal-body video { 
-            max-width: 85%;
-            max-height: 70vh;
-            border-radius: 12px; 
-            border: 2px solid var(--gold); 
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
-            object-fit: contain;
-        }
+        .modal-body img, .modal-body video { max-width: 85%; max-height: 70vh; border-radius: 12px; border: 2px solid var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.4); object-fit: contain; }
         
         .order-card { background: #111; border: 1px solid var(--gold); border-radius: 15px; width: 100%; max-width: 380px; padding: 20px; text-align: center; max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; position: relative; }
         .summary-box { background: #000; padding: 12px; border-radius: 10px; margin: 10px 0; text-align: left; font-size: 14px; }
@@ -113,7 +106,7 @@
     <div class="grid" id="main-list"></div>
 </main>
 
-<a href="https://m.me/ชื่อเพจของคุณ" target="_blank" class="float-pay-btn">
+<a href="https://m.me/PHAENDINSTORE" target="_blank" class="float-pay-btn">
     <i class="fa-brands fa-facebook-messenger"></i> ติดต่อเรา
 </a>
 
@@ -186,11 +179,7 @@
             const text = await res.text();
             dbCoupons = text.split(/\r?\n/).slice(1).map(r => {
                 const cols = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                return {
-                    code: cols[0], type: cols[1], value: parseFloat(cols[2]) || 0,
-                    min: parseFloat(cols[3]) || 0, maxLimit: parseFloat(cols[4]) || 9999,
-                    expire: cols[5], desc: cols[6], status: cols[7]
-                };
+                return { code: cols[0], type: cols[1], value: parseFloat(cols[2]) || 0, min: parseFloat(cols[3]) || 0, maxLimit: parseFloat(cols[4]) || 9999, expire: cols[5], desc: cols[6], status: cols[7] };
             }).filter(c => c.code && c.status === 'ON');
             renderCouponModal();
         } catch (e) { console.error("Coupon load failed", e); }
@@ -198,27 +187,11 @@
 
     function renderCouponModal() {
         const list = document.getElementById('couponList');
-        if (dbCoupons.length === 0) {
-            list.innerHTML = "<p style='color:#555; font-size:12px; padding:20px;'>ไม่มีคูปองที่ใช้งานได้ในขณะนี้</p>";
-            return;
-        }
-        list.innerHTML = dbCoupons.map(c => `
-            <div class="coupon-item">
-                <div class="cpn-left"><i class="fa-solid ${c.type==='%' ? 'fa-percent' : 'fa-tag'}"></i></div>
-                <div class="cpn-mid">
-                    <b>ลด ${c.value} ${c.type}</b>
-                    <p>${c.desc}<br><small>ขั้นต่ำ ฿${c.min} (หมดอายุ: ${c.expire})</small></p>
-                </div>
-                <button class="cpn-btn" onclick="collectCoupon('${c.code}')">ใช้โค้ด</button>
-            </div>
-        `).join('');
+        if (dbCoupons.length === 0) { list.innerHTML = "<p style='color:#555; font-size:12px; padding:20px;'>ไม่มีคูปองที่ใช้งานได้ในขณะนี้</p>"; return; }
+        list.innerHTML = dbCoupons.map(c => `<div class="coupon-item"><div class="cpn-left"><i class="fa-solid ${c.type==='%' ? 'fa-percent' : 'fa-tag'}"></i></div><div class="cpn-mid"><b>ลด ${c.value} ${c.type}</b><p>${c.desc}<br><small>ขั้นต่ำ ฿${c.min} (หมดอายุ: ${c.expire})</small></p></div><button class="cpn-btn" onclick="collectCoupon('${c.code}')">ใช้โค้ด</button></div>`).join('');
     }
 
-    function collectCoupon(code) {
-        document.getElementById('couponInput').value = code;
-        applyManualCoupon();
-        document.getElementById('couponModal').style.display = 'none';
-    }
+    function collectCoupon(code) { document.getElementById('couponInput').value = code; applyManualCoupon(); document.getElementById('couponModal').style.display = 'none'; }
 
     function applyManualCoupon() {
         const input = document.getElementById('couponInput').value.trim().toUpperCase();
@@ -259,10 +232,7 @@
         return isVid ? `<video src="${url}" autoplay loop muted playsinline></video>` : `<img src="${url}" loading="lazy">`;
     }
     
-    function openMedia(url) { 
-        document.getElementById('modalBody').innerHTML = getMedia(url); 
-        document.getElementById('mediaModal').style.display = 'flex'; 
-    }
+    function openMedia(url) { document.getElementById('modalBody').innerHTML = getMedia(url); document.getElementById('mediaModal').style.display = 'flex'; }
 
     function openOrder(name, price, ship, options, limit) {
         currentData = { name, basePrice: parseFloat(price)||0, ship: parseFloat(ship)||0, qty: 1, options, maxLimit: parseInt(limit) || 99 };
@@ -277,30 +247,13 @@
         let optHTML = "";
         if(currentData.options && currentData.options !== "-") {
             const optArray = currentData.options.split(",");
-            optHTML = `<div style="margin-bottom: 12px;"><label style="font-size: 11px; color: var(--gold);">เลือกตัวเลือก:</label>
-                <select class="opt-select" id="selectedOpt" onchange="calculateTotal(); if(appliedCoupon) applyManualCoupon();">
-                ${optArray.map(o => { const [n,p] = o.split(":"); const pr = p ? p.trim() : currentData.basePrice; return `<option value="${pr}" data-name="${n.trim()}">${n.trim()} (฿${pr})</option>`; }).join('')}
-                </select></div>`;
+            optHTML = `<div style="margin-bottom: 12px;"><label style="font-size: 11px; color: var(--gold);">เลือกตัวเลือก:</label><select class="opt-select" id="selectedOpt" onchange="calculateTotal(); if(appliedCoupon) applyManualCoupon();">${optArray.map(o => { const [n,p] = o.split(":"); const pr = p ? p.trim() : currentData.basePrice; return `<option value="${pr}" data-name="${n.trim()}">${n.trim()} (฿${pr})</option>`; }).join('')}</select></div>`;
         }
-        document.getElementById('orderSummary').innerHTML = `
-            <div style="text-align: center; margin-bottom: 15px;">
-                <b style="color: var(--gold); font-size: 15px;">ธนาคารกสิกรไทย</b><br>
-                <b style="font-size: 18px; letter-spacing: 1px;">035-8-56762-2</b><br>
-                <p style="font-size: 12px;">ชื่อบัญชี: นาย วัชระ ชันสิน</p>
-                <img src="https://i.ibb.co/fVLb9p6B/004999092296200-20260224-144608.jpg" style="width: 120px; border-radius: 8px; border: 2px solid #fff; margin: 10px auto; display: block;">
-            </div>
-            ${optHTML}
-            <div class="qty-row"><span>จำนวน:</span><div><button type="button" class="qty-btn" onclick="changeQty(-1)">-</button><span id="displayQty" style="margin: 0 15px; font-weight: bold;">1</span><button type="button" class="qty-btn" onclick="changeQty(1)">+</button></div></div>
-            <div id="totalBox" style="background: #1a1a1a; padding: 10px; border-radius: 8px; border-left: 4px solid var(--gold); font-size: 13px;"></div>`;
+        document.getElementById('orderSummary').innerHTML = `<div style="text-align: center; margin-bottom: 15px;"><b style="color: var(--gold); font-size: 15px;">ธนาคารกสิกรไทย</b><br><b style="font-size: 18px; letter-spacing: 1px;">035-8-56762-2</b><br><p style="font-size: 12px;">ชื่อบัญชี: นาย วัชระ ชันสิน</p><img src="https://i.ibb.co/fVLb9p6B/004999092296200-20260224-144608.jpg" style="width: 120px; border-radius: 8px; border: 2px solid #fff; margin: 10px auto; display: block;"></div>${optHTML}<div class="qty-row"><span>จำนวน:</span><div><button type="button" class="qty-btn" onclick="changeQty(-1)">-</button><span id="displayQty" style="margin: 0 15px; font-weight: bold;">1</span><button type="button" class="qty-btn" onclick="changeQty(1)">+</button></div></div><div id="totalBox" style="background: #1a1a1a; padding: 10px; border-radius: 8px; border-left: 4px solid var(--gold); font-size: 13px;"></div>`;
         calculateTotal();
     }
 
-    function changeQty(n) { 
-        currentData.qty = Math.max(1, Math.min(currentData.maxLimit, currentData.qty + n)); 
-        document.getElementById('displayQty').innerText = currentData.qty; 
-        if(appliedCoupon) applyManualCoupon(); 
-        calculateTotal(); 
-    }
+    function changeQty(n) { currentData.qty = Math.max(1, Math.min(currentData.maxLimit, currentData.qty + n)); document.getElementById('displayQty').innerText = currentData.qty; if(appliedCoupon) applyManualCoupon(); calculateTotal(); }
 
     function calculateTotal() {
         const optEl = document.getElementById('selectedOpt');
@@ -309,21 +262,13 @@
         let discount = appliedCoupon ? appliedCoupon.discount : 0;
         let cpnText = appliedCoupon ? `<div style="display: flex; justify-content: space-between; color: var(--green);"><span>ส่วนลด (${appliedCoupon.code}):</span> <span>-฿${discount.toLocaleString()}</span></div>` : "";
         const finalT = (totalP + currentData.ship) - discount;
-        document.getElementById('totalBox').innerHTML = `
-            <div style="display: flex; justify-content: space-between;"><span>ยอดสินค้า:</span> <span>฿${totalP.toLocaleString()}</span></div>
-            <div style="display: flex; justify-content: space-between;"><span>ค่าส่ง:</span> <span>${currentData.ship === 0 ? 'ส่งฟรี' : '฿'+currentData.ship}</span></div>
-            ${cpnText}
-            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-weight: bold; color: var(--gold); font-size: 16px;"><span>รวมทั้งสิ้น:</span> <span id="finalTotalSpan">฿${finalT.toLocaleString()}</span></div>`;
+        document.getElementById('totalBox').innerHTML = `<div style="display: flex; justify-content: space-between;"><span>ยอดสินค้า:</span> <span>฿${totalP.toLocaleString()}</span></div><div style="display: flex; justify-content: space-between;"><span>ค่าส่ง:</span> <span>${currentData.ship === 0 ? 'ส่งฟรี' : '฿'+currentData.ship}</span></div>${cpnText}<div style="display: flex; justify-content: space-between; margin-top: 5px; font-weight: bold; color: var(--gold); font-size: 16px;"><span>รวมทั้งสิ้น:</span> <span id="finalTotalSpan">฿${finalT.toLocaleString()}</span></div>`;
     }
 
     function previewSlip(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.getElementById('slipPreview');
-                img.src = e.target.result; img.style.display = 'block';
-                document.getElementById('uploadText').style.display = 'none';
-            };
+            reader.onload = (e) => { const img = document.getElementById('slipPreview'); img.src = e.target.result; img.style.display = 'block'; document.getElementById('uploadText').style.display = 'none'; };
             reader.readAsDataURL(input.files[0]);
         }
     }
@@ -344,8 +289,7 @@
             const payload = { productDetail: detail, customerName: document.getElementById('custName').value, customerPhone: document.getElementById('custPhone').value, customerAddress: document.getElementById('custAddress').value, file: base64, mimeType: fileInput.files[0].type };
             try {
                 await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(payload), mode: 'no-cors' });
-                alert("✅ แจ้งโอนสำเร็จ! ขอบคุณที่อุดหนุนครับ");
-                location.reload();
+                alert("✅ แจ้งโอนสำเร็จ! ขอบคุณที่อุดหนุนครับ"); location.reload();
             } catch(err) { alert("❌ เกิดข้อผิดพลาด: " + err.message); btn.disabled = false; btn.innerText = "💰 ยืนยันแจ้งโอนเงิน"; }
         };
         reader.readAsDataURL(fileInput.files[0]);
@@ -363,20 +307,10 @@
             if(linesB.length > 0) {
                 const b = linesB[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                 bannerEndTime = b[2] ? new Date(b[2]).getTime() : null;
-                document.getElementById('bannerContent').innerHTML = `
-                    <div class="banner-slide" onclick="bannerGoToProduct('${b[3]||''}')">
-                        <div class="banner-left">${getMedia(b[0])}<div class="flash-tag">FLASH SALE</div></div>
-                        <div class="banner-right">
-                            <div class="banner-title">${b[1]||'ดีลพิเศษ'}</div>
-                            <div class="banner-sub">โปรโมชั่นหมดเวลาใน:</div>
-                            <div class="banner-timer"><div class="time-box" id="bh">00</div>: <div class="time-box" id="bm">00</div>: <div class="time-box" id="bs">00</div></div>
-                            <div class="shop-now-btn">ช้อปเลย <i class="fa-solid fa-chevron-right"></i></div>
-                        </div>
-                    </div>`;
+                document.getElementById('bannerContent').innerHTML = `<div class="banner-slide" onclick="bannerGoToProduct('${b[3]||''}')"><div class="banner-left">${getMedia(b[0])}<div class="flash-tag">FLASH SALE</div></div><div class="banner-right"><div class="banner-title">${b[1]||'ดีลพิเศษ'}</div><div class="banner-sub">โปรโมชั่นหมดเวลาใน:</div><div class="banner-timer"><div class="time-box" id="bh">00</div>: <div class="time-box" id="bm">00</div>: <div class="time-box" id="bs">00</div></div><div class="shop-now-btn">ช้อปเลย <i class="fa-solid fa-chevron-right"></i></div></div></div>`;
                 setInterval(updateBannerTimer, 1000);
             }
-            document.getElementById('status').style.display = 'none';
-            document.getElementById('main-label').style.display = 'block';
+            document.getElementById('status').style.display = 'none'; document.getElementById('main-label').style.display = 'block';
             render(); setInterval(updateTimers, 1000);
         } catch(e) { document.getElementById('status').innerText = "โหลดข้อมูลล้มเหลว"; }
     }
@@ -398,6 +332,8 @@
             const price = (expired && p[4]) ? p[4] : p[3], ship = parseFloat(p[8])||0;
             let badge = p[5].includes("1แถม1") ? `<div class="badge-blink" style="position:absolute;top:6px;right:6px;background:#ffea00;color:#000;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:bold;z-index:10;border:1px solid #000;">1 แถม 1</div>` : "";
             if (ship === 0) badge += `<div class="badge-blink" style="position:absolute;top:${badge? '32px':'6px'};right:6px;background:#28a745;color:#fff;font-size:10px;padding:3px 8px;border-radius:4px;font-weight:bold;z-index:10;">ส่งฟรี</div>`;
+            
+            // แก้ไขตรงนี้: เพิ่มฟังก์ชัน openOrder ให้ปุ่มแนะนำ
             if(isRec) return `<div class="rec-card"><div class="rec-media" onclick="openMedia('${p[1]}')">${badge}${getMedia(p[1])}<div class="rec-price-tag">฿${price}</div></div><div class="rec-btn-area"><button class="buy-btn" style="padding:7px;font-size:11px;" onclick="openOrder('${p[0]}','${price}','${ship}','${p[9]}','${p[10]}')"><i class="fa-solid fa-cart-shopping"></i> สั่งซื้อ</button></div></div>`;
             return `<div class="card"><div class="media" onclick="openMedia('${p[1]}')">${time > now ? `<div class="timer-badge" data-time="${p[7]}">00:00:00</div>` : ''}${badge}${getMedia(p[1])}</div><div class="info"><div class="title">${p[0]}</div><div class="description">${p[2]||''}</div><div class="price">฿${price}</div><button class="buy-btn" onclick="openOrder('${p[0]}','${price}','${ship}','${p[9]}','${p[10]}')"><i class="fa-solid fa-cart-shopping"></i> สั่งซื้อ</button></div></div>`;
         };
