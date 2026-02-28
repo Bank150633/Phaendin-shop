@@ -21,68 +21,71 @@
             --input-bg: #f2f2f7; --modal-bg: #ffffff; --nav-bg: #ffffff;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Kanit', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 80px; }
+        body { font-family: 'Kanit', sans-serif; background: var(--bg); color: var(--text); padding-bottom: 70px; }
 
-        /* Theme Toggle */
-        .theme-toggle { position: fixed; top: 12px; right: 15px; z-index: 5001; background: var(--gold-grad); color: #000; border: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .theme-toggle { position: fixed; top: 10px; right: 10px; z-index: 5001; background: var(--gold-grad); color: #000; border: none; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
         header { position: fixed; top: 0; width: 100%; background: var(--header); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
-        .logo-row { text-align: center; padding: 10px 0; }
-        .logo-img { height: 26px; }
+        .logo-row { text-align: center; padding: 8px 0; }
+        .logo-img { height: 24px; }
         
-        /* Banner Section */
-        .banner-container { padding: 0 12px 12px; }
-        .banner-slide { height: 150px; display: flex; background: #000; border: 2px solid var(--gold); border-radius: 15px; overflow: hidden; position: relative; }
-        .banner-left { width: 45%; cursor: zoom-in; }
+        /* Banner */
+        .banner-container { padding: 0 10px 10px; }
+        .banner-slide { height: 130px; display: flex; background: #000; border: 1.5px solid var(--gold); border-radius: 12px; overflow: hidden; position: relative; }
+        .banner-left { width: 42%; cursor: zoom-in; }
         .banner-left img, .banner-left video { width: 100%; height: 100%; object-fit: cover; }
-        .banner-right { width: 55%; padding: 15px; display: flex; flex-direction: column; justify-content: center; }
-        .banner-title { color: var(--gold); font-size: 14px; font-weight: 600; margin-bottom: 8px; line-height: 1.2; }
-        .banner-timer { display: flex; gap: 5px; margin-bottom: 10px; }
-        .time-box { background: var(--gold-grad); color: #000; padding: 3px 6px; border-radius: 5px; font-weight: 700; font-size: 11px; }
-        .banner-btn { background: var(--promo-red); color: #fff; border: none; padding: 6px 15px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; animation: pulse 1.5s infinite; }
+        .banner-right { width: 58%; padding: 12px; display: flex; flex-direction: column; justify-content: center; }
+        .banner-title { color: var(--gold); font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+        .banner-timer { display: flex; gap: 4px; margin-bottom: 8px; }
+        .time-box { background: var(--gold-grad); color: #000; padding: 2px 5px; border-radius: 4px; font-weight: 700; font-size: 10px; }
+        .banner-btn { background: var(--promo-red); color: #fff; border: none; padding: 5px 12px; border-radius: 15px; font-size: 10px; font-weight: 700; cursor: pointer; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* Search & Category */
-        .nav-container { padding: 0 12px 10px; }
-        #search { width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(128,128,128,0.2); background: var(--pill); color: var(--text); margin-bottom: 10px; outline: none; }
-        .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-        .cat-item { font-size: 11px; color: var(--text-dim); padding: 5px 18px; border-radius: 25px; background: var(--pill); white-space: nowrap; cursor: pointer; }
+        /* Search & Nav */
+        .nav-container { padding: 0 10px 8px; }
+        #search { width: 100%; padding: 8px 12px; border-radius: 10px; border: 1px solid rgba(128,128,128,0.2); background: var(--pill); color: var(--text); margin-bottom: 8px; font-size: 12px; outline: none; }
+        .cat-bar { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+        .cat-item { font-size: 10px; color: var(--text-dim); padding: 4px 14px; border-radius: 20px; background: var(--pill); cursor: pointer; white-space: nowrap; }
         .cat-item.active { background: var(--gold-grad); color: #000; font-weight: 600; }
 
-        main { margin-top: 325px; transition: 0.3s; }
+        main { margin-top: 290px; transition: 0.3s; }
         header.shrunk .banner-container { display: none; }
-        header.shrunk + main { margin-top: 140px; }
+        header.shrunk + main { margin-top: 130px; }
 
-        /* Product Grid & Cards */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px; }
-        .card { background: var(--card); border-radius: 15px; border: 1px solid rgba(128,128,128,0.1); overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        /* Product Cards */
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 0 8px; }
+        .card { background: var(--card); border-radius: 12px; border: 1px solid rgba(128,128,128,0.1); overflow: hidden; position: relative; display: flex; flex-direction: column; }
         
-        /* ระบบป้ายโปรโมชั่นแยกกัน (Badge Stack) */
-        .badge-stack { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 5; pointer-events: none; }
-        .promo-badge { background: var(--gold-grad); color: #000; padding: 2px 8px; border-radius: 4px; font-size: 9px; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.3); width: fit-content; }
+        .badge-stack { position: absolute; top: 6px; left: 6px; display: flex; flex-direction: column; gap: 3px; z-index: 5; }
+        .promo-badge { background: var(--gold-grad); color: #000; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.3); width: fit-content; }
         .promo-badge.green { background: var(--promo-green); color: #fff; }
 
         .media { width: 100%; aspect-ratio: 1/1; cursor: zoom-in; background: #000; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
-        .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 12px; font-weight: 500; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
-        .price { color: var(--gold); font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-        .buy-btn { width: 100%; background: var(--gold-grad); color: #000; font-weight: 700; padding: 8px; border-radius: 10px; border: none; font-size: 12px; cursor: pointer; margin-top: auto; }
+        .info { padding: 8px; flex: 1; display: flex; flex-direction: column; }
+        .title { font-size: 11px; font-weight: 500; height: 16px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .price { color: var(--gold); font-size: 14px; font-weight: 700; margin: 4px 0; }
+        .buy-btn { width: 100%; background: var(--gold-grad); color: #000; font-weight: 700; padding: 6px; border-radius: 8px; border: none; font-size: 11px; cursor: pointer; }
 
-        /* Zoom Media */
+        /* Zoom */
         #mediaZoom { display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.95); align-items:center; justify-content:center; }
         #zoomBox img, #zoomBox video { max-width: 95vw; max-height: 80vh; border-radius: 10px; border: 1.5px solid var(--gold); }
 
-        /* Order Modal */
-        .modal { display: none; position: fixed; z-index: 5000; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 15px; }
-        .modal-card { background: var(--modal-bg); border: 1.5px solid var(--gold); border-radius: 20px; width: 100%; max-width: 350px; padding: 20px; text-align: center; max-height: 90vh; overflow-y: auto; }
-        .form-input, .form-select { width: 100%; padding: 10px; background: var(--input-bg); border: 1px solid rgba(128,128,128,0.2); border-radius: 10px; color: var(--text); margin-bottom: 10px; font-size: 13px; font-family: 'Kanit'; }
-        .summary-box { background: rgba(128,128,128,0.1); padding: 12px; border-radius: 12px; text-align: left; font-size: 12px; margin-bottom: 10px; border-left: 4px solid var(--gold); }
+        /* Modal - ลดขนาดลง */
+        .modal { display: none; position: fixed; z-index: 5000; inset: 0; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 10px; }
+        .modal-card { background: var(--modal-bg); border: 1.5px solid var(--gold); border-radius: 15px; width: 95%; max-width: 330px; padding: 12px; text-align: center; max-height: 85vh; overflow-y: auto; }
         
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--nav-bg); display: flex; border-top: 1px solid rgba(212, 175, 55, 0.2); z-index: 2000; }
-        .nav-link { color: var(--text-dim); text-decoration: none; font-size: 11px; text-align: center; flex: 1; padding-top: 12px; cursor: pointer; }
+        .summary-box { background: rgba(128,128,128,0.1); padding: 8px; border-radius: 10px; text-align: left; font-size: 11px; margin-bottom: 8px; border-left: 3px solid var(--gold); }
+        .form-input, .form-select { width: 100%; padding: 8px; background: var(--input-bg); border: 1px solid rgba(128,128,128,0.2); border-radius: 8px; color: var(--text); margin-bottom: 6px; font-size: 12px; font-family: 'Kanit'; outline: none; }
+        
+        .qr-area { background: #fff; padding: 6px; border-radius: 10px; width: 110px; margin: 4px auto; border: 2px solid var(--gold); }
+        .qr-area img { width: 100%; display: block; }
+
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: var(--nav-bg); display: flex; border-top: 1px solid rgba(212, 175, 55, 0.2); z-index: 2000; }
+        .nav-link { color: var(--text-dim); text-decoration: none; font-size: 10px; text-align: center; flex: 1; padding-top: 10px; cursor: pointer; }
         .nav-link.active { color: var(--gold); }
-        .nav-link i { font-size: 20px; display: block; margin-bottom: 3px; }
+        .nav-link i { font-size: 18px; display: block; margin-bottom: 2px; }
     </style>
 </head>
 <body>
@@ -99,7 +102,7 @@
 </header>
 
 <main>
-    <div id="status" style="text-align:center; padding:120px 0; color:var(--text-dim);">กำลังโหลด...</div>
+    <div id="status" style="text-align:center; padding:100px 0; color:var(--text-dim);">กำลังโหลด...</div>
     <div class="grid" id="main-list"></div>
 </main>
 
@@ -113,38 +116,40 @@
 
 <div id="contactModal" class="modal" onclick="this.style.display='none'">
     <div class="modal-card" onclick="event.stopPropagation()">
-        <h4 style="color:var(--gold); margin-bottom:15px;">ติดต่อเจ้าหน้าที่</h4>
-        <div style="display: grid; gap: 10px;">
-            <a href="tel:0944159031" style="text-decoration:none; color:var(--text); background:var(--pill); padding:15px; border-radius:12px; display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-phone" style="color:var(--gold);"></i> โทร 094-415-9031</a>
-            <a href="https://m.me/YOUR_PAGE_ID" target="_blank" style="text-decoration:none; color:var(--text); background:var(--pill); padding:15px; border-radius:12px; display:flex; align-items:center; gap:10px;"><i class="fa-brands fa-facebook-messenger" style="color:#0084ff;"></i> Messenger</a>
+        <h4 style="color:var(--gold); margin-bottom:12px; font-size:15px;">ติดต่อเจ้าหน้าที่</h4>
+        <div style="display: grid; gap: 8px;">
+            <a href="tel:0944159031" style="text-decoration:none; color:var(--text); background:var(--pill); padding:12px; border-radius:10px; display:flex; align-items:center; gap:10px; font-size:13px;"><i class="fa-solid fa-phone" style="color:var(--gold);"></i> โทร 094-415-9031</a>
+            <a href="https://m.me/YOUR_PAGE_ID" target="_blank" style="text-decoration:none; color:var(--text); background:var(--pill); padding:12px; border-radius:10px; display:flex; align-items:center; gap:10px; font-size:13px;"><i class="fa-brands fa-facebook-messenger" style="color:#0084ff;"></i> Messenger</a>
         </div>
     </div>
 </div>
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <h4 style="color:var(--gold); margin-bottom:10px;">ยืนยันการสั่งซื้อ</h4>
+        <h4 style="color:var(--gold); margin-bottom:8px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
         <div class="summary-box">
-            <b style="color:var(--gold);">กสิกร: 035-8-56762-2 (วัชระ ชันสิน)</b>
-            <div id="sumDetail" style="margin-top:5px;"></div>
-            <div id="sumTotal" style="font-size:16px; font-weight:700; color:var(--gold);"></div>
+            <b style="color:var(--gold); font-size:12px;">กสิกร: 035-8-56762-2 (วัชระ ชันสิน)</b>
+            <div id="sumDetail" style="margin-top:3px; line-height:1.4;"></div>
+            <div id="sumTotal" style="font-size:15px; font-weight:700; color:var(--gold); margin-top:2px;"></div>
         </div>
         <form id="orderForm">
-            <div id="vArea" style="display:none; text-align:left; margin-bottom:10px;">
-                <label style="font-size:11px; color:var(--gold);">เลือกตัวเลือก:</label>
+            <div id="vArea" style="display:none; text-align:left;">
                 <select id="variantSelect" class="form-select" onchange="updatePrice()"></select>
             </div>
             <input type="text" id="custName" class="form-input" placeholder="ชื่อ-นามสกุล" required>
             <input type="tel" id="custPhone" class="form-input" placeholder="เบอร์โทรศัพท์" required>
-            <textarea id="custAddress" class="form-input" rows="2" placeholder="ที่อยู่จัดส่ง" required></textarea>
-            <div style="background:#fff; padding:8px; border-radius:12px; width:140px; margin:0 auto 10px; border:2px solid var(--gold);"><img src="https://i.ibb.co/Vp8pXQj/your-qr-code.png" style="width:100%;"></div>
+            <input type="text" id="custAddress" class="form-input" placeholder="ที่อยู่จัดส่ง" required>
+            
+            <div class="qr-area"><img src="https://i.ibb.co/Vp8pXQj/your-qr-code.png"></div>
+            
             <input type="file" id="slipFile" style="display:none;" onchange="previewSlip(this)">
-            <div style="border:1px dashed var(--gold); padding:10px; border-radius:12px; margin-bottom:10px; cursor:pointer;" onclick="document.getElementById('slipFile').click()">
-                <span id="upTxt" style="color:var(--gold); font-size:12px;">📸 แตะแนบสลิป</span>
-                <img id="slipPreview" style="width:100%; display:none; border-radius:10px; margin-top:5px;">
+            <div style="border:1px dashed var(--gold); padding:8px; border-radius:10px; margin-bottom:8px; cursor:pointer;" onclick="document.getElementById('slipFile').click()">
+                <span id="upTxt" style="color:var(--gold); font-size:11px;">📸 แตะแนบสลิปโอนเงิน</span>
+                <img id="slipPreview" style="width:100%; display:none; border-radius:8px; margin-top:5px;">
             </div>
             <button type="submit" id="btnSubmit" class="buy-btn">ยืนยันการสั่งซื้อ</button>
         </form>
+        <div onclick="document.getElementById('orderModal').style.display='none'" style="margin-top:8px; color:var(--text-dim); font-size:10px; cursor:pointer;">[ ปิดหน้าต่าง ]</div>
     </div>
 </div>
 
@@ -201,7 +206,6 @@
         if(!q && curCat==='all') list = list.sort(() => Math.random() - 0.5);
 
         document.getElementById('main-list').innerHTML = list.map(p => {
-            // สร้าง Badge หลายๆ อัน
             const badges = p[10] ? p[10].split(',').map(tag => {
                 const isFree = tag.trim().includes('ส่งฟรี');
                 return `<div class="promo-badge ${isFree ? 'green' : ''}">${tag.trim()}</div>`;
@@ -251,7 +255,7 @@
         const selP = parseFloat(document.getElementById('variantSelect').value);
         const total = selP + activeItem.s;
         document.getElementById('sumDetail').innerHTML = `📦 ${activeItem.n}<br>🚚 ค่าส่ง ฿${activeItem.s}`;
-        document.getElementById('sumTotal').innerText = `ยอดโอน: ฿${total.toLocaleString()}`;
+        document.getElementById('sumTotal').innerText = `ยอดโอนรวม: ฿${total.toLocaleString()}`;
     }
 
     function previewSlip(f) {
