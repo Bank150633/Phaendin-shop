@@ -64,8 +64,9 @@
         .form-control { width: 100%; background: var(--input-bg); border: 1px solid rgba(128,128,128,0.2); color: var(--text); padding: 9px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 13px; }
         .qr-mini { width: 110px; margin: 5px auto; padding: 5px; background: #fff; border-radius: 8px; border: 2px solid var(--gold); }
         
-        /* Contact Links */
-        .contact-link { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--card); border: 1px solid rgba(212,175,55,0.1); border-radius: 12px; color: var(--text); text-decoration: none; font-size: 13px; margin-bottom: 8px; }
+        /* Contact Links (ส่วนที่เพิ่ม/ปรับปรุง) */
+        .contact-link { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--card); border: 1px solid rgba(212,175,55,0.1); border-radius: 12px; color: var(--text); text-decoration: none; font-size: 13px; margin-bottom: 8px; transition: 0.2s; }
+        .contact-link:active { transform: scale(0.98); background: rgba(212,175,55,0.05); }
         .contact-link i { font-size: 18px; width: 25px; }
 
         /* Zoom Overlay */
@@ -104,10 +105,18 @@
 <div id="contactModal" class="modal" onclick="closeContact()">
     <div class="modal-card" onclick="event.stopPropagation()">
         <h3 style="color:var(--gold); margin-bottom:15px; font-size:16px;">ติดต่อสอบถาม</h3>
-        <a href="tel:0944159031" class="contact-link"><i class="fa-solid fa-phone" style="color:#34c759;"></i> โทร: 094-415-9031</a>
-        <a href="https://line.me/ti/p/YOUR_LINE_ID" target="_blank" class="contact-link"><i class="fa-brands fa-line" style="color:#06C755;"></i> LINE Official</a>
-        <a href="https://m.me/YOUR_PAGE_ID" target="_blank" class="contact-link"><i class="fa-brands fa-facebook-messenger" style="color:#0084FF;"></i> Facebook Messenger</a>
-        <a href="https://www.tiktok.com/@YOUR_USERNAME" target="_blank" class="contact-link"><i class="fa-brands fa-tiktok" style="color:#fff;"></i> TikTok Shop</a>
+        <a href="tel:0944159031" class="contact-link">
+            <i class="fa-solid fa-phone" style="color:#34c759;"></i> โทร: 094-415-9031
+        </a>
+        <a href="https://line.me/ti/p/YOUR_LINE_ID" target="_blank" class="contact-link">
+            <i class="fa-brands fa-line" style="color:#06C755;"></i> LINE Official
+        </a>
+        <a href="https://m.me/YOUR_PAGE_ID" target="_blank" class="contact-link">
+            <i class="fa-brands fa-facebook-messenger" style="color:#0084FF;"></i> Facebook Messenger
+        </a>
+        <a href="https://www.tiktok.com/@YOUR_USERNAME" target="_blank" class="contact-link">
+            <i class="fa-brands fa-tiktok" style="color:#fff;"></i> TikTok Shop
+        </a>
         <p onclick="closeContact()" style="font-size:11px; color:var(--text-dim); margin-top:10px; cursor:pointer;">[ ปิดหน้าต่าง ]</p>
     </div>
 </div>
