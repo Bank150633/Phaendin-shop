@@ -3,177 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Online Store</title>
+    <title>PHAENDIN | LUXURY STORE</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- ตั้งค่าตัวแปรสี (CSS Variables) --- */
         :root {
-            --primary: #2D3436;
-            --accent: #D4AF37; /* สีทองพรีเมียม */
-            --bg: #F8F9FA;
-            --white: #FFFFFF;
-            --text: #2D3436;
+            --gold: #D4AF37;
+            --gold-light: #F5D76E;
+            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
+            /* Dark Mode (Default) */
+            --bg: #050505;
+            --card: #121212;
+            --text: #FFFFFF;
+            --text-dim: #999999;
+            --nav-bg: rgba(0, 0, 0, 0.85);
+            --border: #222222;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+        /* --- Light Mode Settings --- */
+        body.light-mode {
+            --bg: #F8F9FA;
+            --card: #FFFFFF;
+            --text: #1A1A1A;
+            --text-dim: #666666;
+            --nav-bg: rgba(255, 255, 255, 0.9);
+            --border: #EEEEEE;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; transition: background 0.3s, color 0.3s; }
+        body { background-color: var(--bg); color: var(--text); overflow-x: hidden; padding-bottom: 80px; }
 
         /* Navigation */
         nav {
-            background: var(--white);
-            padding: 1rem 5%;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 1px solid var(--border);
         }
-        .logo { font-size: 1.5rem; font-weight: 600; color: var(--primary); letter-spacing: 1px; }
-        .cart-icon { position: relative; cursor: pointer; font-size: 1.2rem; }
-        .cart-count {
-            position: absolute; top: -8px; right: -12px;
-            background: var(--accent); color: white;
-            font-size: 0.7rem; padding: 2px 6px; border-radius: 50%;
-        }
+        .logo { font-size: 1.3rem; font-weight: 600; color: var(--gold); letter-spacing: 2px; }
+        .nav-tools { display: flex; gap: 20px; align-items: center; }
+        .mode-toggle, .cart-icon { cursor: pointer; font-size: 1.2rem; color: var(--text); }
+        .mode-toggle:hover, .cart-icon:hover { color: var(--gold); }
 
-        /* Hero Banner - แบบจอหนัง Cinematic */
-        .hero {
-            width: 100%; height: 300px;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=80');
-            background-size: cover; background-position: center;
-            display: flex; align-items: center; justify-content: center;
-            color: white; text-align: center;
+        /* Cinematic Banner (จอหนังเต็มขอบ) */
+        .hero-banner {
+            width: 100%; height: 250px;
+            background: #000;
+            position: relative;
+            overflow: hidden;
         }
-        .hero-content h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .hero-content p { font-weight: 300; opacity: 0.9; }
+        .hero-banner img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, var(--bg) 5%, transparent 60%);
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+            padding-bottom: 30px; text-align: center;
+        }
+        .hero-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 5px; color: #fff; }
+        .hero-tag { color: var(--gold); font-weight: 300; letter-spacing: 3px; font-size: 0.8rem; }
 
-        /* Search Bar Section */
-        .search-section { padding: 1.5rem 5%; max-width: 600px; margin: 0 auto; }
-        .search-box {
-            display: flex; background: var(--white);
-            border-radius: 30px; padding: 5px 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        /* Search Section */
+        .search-container { padding: 20px 5%; max-width: 600px; margin: 0 auto; }
+        .search-wrap {
+            position: relative;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2px 15px;
+            display: flex; align-items: center;
         }
-        .search-box input {
-            border: none; outline: none; width: 100%; padding: 10px; font-size: 1rem;
+        .search-wrap input {
+            background: transparent; border: none; outline: none;
+            color: var(--text); padding: 12px; width: 100%; font-size: 0.9rem;
         }
+        .search-wrap i { color: var(--gold); }
 
-        /* Product Grid - 3 Columns */
-        .container { padding: 2rem 5%; max-width: 1200px; margin: 0 auto; }
+        /* Product Grid (3 คอลัมน์) */
+        .container { padding: 0 10px; max-width: 1200px; margin: 0 auto; }
         .grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 คอลัมน์ */
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
-        @media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 480px) { .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
-
         .product-card {
-            background: var(--white); border-radius: 15px;
-            overflow: hidden; transition: transform 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
             display: flex; flex-direction: column;
+            position: relative;
         }
-        .product-card:hover { transform: translateY(-5px); }
         .product-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .product-info { padding: 1rem; text-align: center; flex-grow: 1; }
-        .product-title { font-size: 1rem; font-weight: 400; margin-bottom: 5px; }
-        .product-price { color: var(--accent); font-weight: 600; font-size: 1.1rem; }
-        .add-btn {
-            width: 100%; background: var(--primary); color: white;
-            border: none; padding: 12px; cursor: pointer;
-            font-weight: 400; transition: 0.3s;
+        .product-info { padding: 10px 5px; text-align: center; flex-grow: 1; }
+        .product-name { font-size: 0.85rem; font-weight: 400; color: var(--text); margin-bottom: 4px; }
+        .product-price { color: var(--gold); font-weight: 600; font-size: 1rem; }
+        
+        .buy-btn {
+            width: 100%; background: var(--gold-grad); color: #000;
+            border: none; padding: 10px; font-weight: 600; font-size: 0.8rem;
+            cursor: pointer; text-transform: uppercase;
         }
-        .add-btn:hover { background: var(--accent); }
 
-        /* Modal Settings */
+        /* Modal */
         .modal {
             display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.6); z-index: 2000;
+            background: rgba(0,0,0,0.8); z-index: 2000;
             align-items: center; justify-content: center; padding: 20px;
         }
         .modal-content {
-            background: white; width: 100%; max-width: 500px;
-            border-radius: 20px; padding: 2rem; position: relative;
-            max-height: 90vh; overflow-y: auto;
+            background: var(--card); color: var(--text);
+            width: 100%; max-width: 400px;
+            border-radius: 20px; padding: 25px;
+            border: 1px solid var(--gold);
         }
-
-        /* Cart Styles */
-        .cart-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; border-bottom: 1px solid #eee;
-        }
-        .checkout-form input, .checkout-form textarea {
-            width: 100%; padding: 12px; margin: 8px 0;
-            border: 1px solid #ddd; border-radius: 8px; outline: none;
+        .checkout-input {
+            width: 100%; padding: 12px; margin-bottom: 10px;
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 8px; color: var(--text); outline: none;
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">MYSHOP</div>
-        <div class="cart-icon" onclick="toggleCart()">
-            <i class="fa-solid fa-bag-shopping"></i>
-            <span class="cart-count" id="cartCount">0</span>
+        <div class="logo">PHAENDIN</div>
+        <div class="nav-tools">
+            <div class="mode-toggle" onclick="toggleMode()">
+                <i id="modeIcon" class="fa-solid fa-moon"></i>
+            </div>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fa-solid fa-cart-shopping"></i>
+            </div>
         </div>
     </nav>
 
-    <div class="hero">
-        <div class="hero-content">
-            <h1>NEW COLLECTION</h1>
-            <p>สัมผัสประสบการณ์การช้อปปิ้งที่เหนือระดับ</p>
+    <div class="hero-banner">
+        <img src="https://images.unsplash.com/photo-1491336477066-31156b5e4f35?q=80&w=1470&auto=format&fit=crop" alt="Hero">
+        <div class="hero-overlay">
+            <h1 class="hero-title">EXCLUSIVE COLLECTION</h1>
+            <p class="hero-tag">หรูหรา . มีระดับ . เหนือกาลเวลา</p>
         </div>
     </div>
 
-    <div class="search-section">
-        <div class="search-box">
-            <i class="fa-solid fa-magnifying-glass" style="margin-top: 13px; color: #999;"></i>
-            <input type="text" id="searchInput" placeholder="ค้นหาสินค้าที่ต้องการ..." oninput="renderProducts()">
+    <div class="search-container">
+        <div class="search-wrap">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." oninput="renderProducts()">
         </div>
     </div>
 
     <div class="container">
-        <h2 style="margin-bottom: 1.5rem; font-weight: 400;">สินค้าแนะนำ</h2>
         <div class="grid" id="productGrid">
             </div>
     </div>
 
     <div id="cartModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-bottom: 1rem;">ตะกร้าสินค้า</h3>
-            <div id="cartItems"></div>
-            <div style="margin: 1.5rem 0; text-align: right;">
-                <strong>ยอดรวมทั้งหมด: ฿<span id="totalPrice">0</span></strong>
+            <h3 style="margin-bottom: 15px; color: var(--gold);">ตะกร้าสินค้า</h3>
+            <div id="cartItems" style="margin-bottom: 20px; font-size: 0.9rem;"></div>
+            <div style="text-align: right; margin-bottom: 20px;">
+                <strong>ยอดรวม: ฿<span id="totalPrice">0</span></strong>
             </div>
             
-            <form class="checkout-form" onsubmit="handleCheckout(event)">
-                <input type="text" placeholder="ชื่อ-นามสกุล" required>
-                <input type="tel" placeholder="เบอร์โทรศัพท์" required>
-                <textarea placeholder="ที่อยู่ในการจัดส่ง" rows="3" required></textarea>
-                <div style="background: #fdfaf0; padding: 15px; border-radius: 10px; margin: 10px 0; border: 1px dashed var(--accent);">
-                    <p style="font-size: 0.9rem; color: #856404;">📌 โอนชำระที่: กสิกรไทย 000-0-00000-0</p>
-                    <input type="file" accept="image/*" required style="border: none; padding: 10px 0;">
-                </div>
-                <button type="submit" class="add-btn" style="border-radius: 8px;">ยืนยันการสั่งซื้อ</button>
+            <form onsubmit="handleCheckout(event)">
+                <input type="text" placeholder="ชื่อผู้รับ" class="checkout-input" required>
+                <input type="tel" placeholder="เบอร์โทรศัพท์" class="checkout-input" required>
+                <textarea placeholder="ที่อยู่จัดส่ง" class="checkout-input" rows="3" required></textarea>
+                <button type="submit" class="buy-btn" style="border-radius: 8px; margin-top: 10px;">ยืนยันสั่งซื้อ</button>
             </form>
-            <p onclick="toggleCart()" style="text-align: center; margin-top: 1rem; cursor: pointer; color: #999;">ปิดหน้าต่าง</p>
+            <p onclick="toggleCart()" style="text-align: center; margin-top: 15px; cursor: pointer; color: var(--text-dim); font-size: 0.8rem;">ยกเลิก</p>
         </div>
     </div>
 
     <script>
-        // ข้อมูลสินค้าสมมติ (คุณสามารถเปลี่ยนเป็นดึงจาก Google Sheets ได้ในอนาคต)
         const products = [
-            { id: 1, name: "Premium T-Shirt", price: 590, img: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500" },
-            { id: 2, name: "Canvas Totebag", price: 350, img: "https://images.unsplash.com/photo-1544816153-36ad49bc1b4b?w=500" },
-            { id: 3, name: "Black Cap", price: 420, img: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500" },
-            { id: 4, name: "Sun Glasses", price: 1290, img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500" },
-            { id: 5, name: "Leather Wallet", price: 890, img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=500" },
-            { id: 6, name: "Minimal Watch", price: 2500, img: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500" }
+            { id: 1, name: "Gold Edition Watch", price: 3500, img: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=500" },
+            { id: 2, name: "Dark Suit Premium", price: 8900, img: "https://images.unsplash.com/photo-1594932224030-940955d267de?w=500" },
+            { id: 3, name: "Leather Shoes", price: 2400, img: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=500" },
+            { id: 4, name: "Luxury Perfume", price: 1850, img: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=500" },
+            { id: 5, name: "Gold Tie Clip", price: 990, img: "https://images.unsplash.com/photo-1621335829175-95f437384d7c?w=500" },
+            { id: 6, name: "Premium Wallet", price: 1200, img: "https://images.unsplash.com/photo-1627123424574-724758594e93?w=500" }
         ];
 
         let cart = [];
@@ -181,17 +202,16 @@
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             const search = document.getElementById('searchInput').value.toLowerCase();
-            
             const filtered = products.filter(p => p.name.toLowerCase().includes(search));
             
             grid.innerHTML = filtered.map(p => `
                 <div class="product-card">
                     <img src="${p.img}" class="product-img" alt="${p.name}">
                     <div class="product-info">
-                        <div class="product-title">${p.name}</div>
+                        <div class="product-name">${p.name}</div>
                         <div class="product-price">฿${p.price.toLocaleString()}</div>
                     </div>
-                    <button class="add-btn" onclick="addToCart(${p.id})">เพิ่มลงตะกร้า</button>
+                    <button class="buy-btn" onclick="addToCart(${p.id})">สั่งซื้อ</button>
                 </div>
             `).join('');
         }
@@ -200,28 +220,15 @@
             const p = products.find(x => x.id === id);
             cart.push(p);
             updateCartUI();
-            alert(`เพิ่ม ${p.name} ลงตะกร้าแล้ว!`);
+            alert("เพิ่มลงตะกร้าแล้ว");
         }
 
         function updateCartUI() {
-            document.getElementById('cartCount').innerText = cart.length;
-            const cartItems = document.getElementById('cartItems');
-            const totalPrice = document.getElementById('totalPrice');
-            
-            cartItems.innerHTML = cart.map((item, index) => `
-                <div class="cart-item">
-                    <span>${item.name}</span>
-                    <span>฿${item.price.toLocaleString()} <i class="fa-solid fa-trash" style="color:#ff7675; margin-left:10px; cursor:pointer;" onclick="removeFromCart(${index})"></i></span>
-                </div>
-            `).join('');
-            
+            const itemsDiv = document.getElementById('cartItems');
+            const totalSpan = document.getElementById('totalPrice');
+            itemsDiv.innerHTML = cart.map(item => `<div>• ${item.name} - ฿${item.price.toLocaleString()}</div>`).join('');
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            totalPrice.innerText = total.toLocaleString();
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
+            totalSpan.innerText = total.toLocaleString();
         }
 
         function toggleCart() {
@@ -229,16 +236,24 @@
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function handleCheckout(e) {
-            e.preventDefault();
-            if(cart.length === 0) return alert("กรุณาเลือกสินค้าก่อนสั่งซื้อ");
-            alert("สั่งซื้อสำเร็จ! ขอบคุณที่ใช้บริการครับ");
-            cart = [];
-            updateCartUI();
-            toggleCart();
+        function toggleMode() {
+            const body = document.body;
+            const icon = document.getElementById('modeIcon');
+            body.classList.toggle('light-mode');
+            
+            if(body.classList.contains('light-mode')) {
+                icon.className = 'fa-solid fa-sun';
+            } else {
+                icon.className = 'fa-solid fa-moon';
+            }
         }
 
-        // เริ่มต้นใช้งาน
+        function handleCheckout(e) {
+            e.preventDefault();
+            alert("ได้รับคำสั่งซื้อของคุณแล้ว ระบบจะจัดส่งโดยเร็วที่สุด");
+            cart = []; updateCartUI(); toggleCart();
+        }
+
         renderProducts();
     </script>
 </body>
