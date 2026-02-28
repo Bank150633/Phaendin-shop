@@ -16,67 +16,62 @@
             --bg: #050505; 
             --card: rgba(255, 255, 255, 0.03); 
             --pill: rgba(255, 255, 255, 0.1); 
-            --red: #ff4d4d; 
             --footer-h: 75px; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; padding-bottom: 120px; overflow-x: hidden; }
 
-        /* --- Header --- */
-        header { position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid rgba(212, 175, 55, 0.2); transition: 0.4s; }
+        /* --- Header & Banner --- */
+        header { position: fixed; top: 0; width: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid rgba(212, 175, 55, 0.2); transition: 0.4s; }
         .logo-row { text-align: center; padding: 12px 0; }
         .logo-img { height: 38px; filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
         
         .banner-container { padding: 0 15px 15px; transition: 0.3s; }
-        .banner-slide { height: 185px; display: flex; background: #000; border: 1.5px solid var(--gold); border-radius: 25px; overflow: hidden; position: relative; }
+        .banner-slide { height: 160px; display: flex; background: #000; border: 1.5px solid var(--gold); border-radius: 20px; overflow: hidden; position: relative; cursor: pointer; }
         .banner-left { width: 45%; background: #000; }
         .banner-left img, .banner-left video { width: 100%; height: 100%; object-fit: cover; }
         .banner-right { width: 55%; padding: 15px; display: flex; flex-direction: column; justify-content: center; }
-        .banner-title { color: var(--gold); font-size: 19px; font-weight: 800; line-height: 1.2; }
-        .time-box { background: var(--gold-grad); color: #000; padding: 4px 8px; border-radius: 8px; font-weight: 800; font-size: 14px; min-width: 32px; text-align: center; }
+        .banner-title { color: var(--gold); font-size: 18px; font-weight: 800; line-height: 1.2; }
+        .time-box { background: var(--gold-grad); color: #000; padding: 4px 6px; border-radius: 6px; font-weight: 800; font-size: 13px; min-width: 30px; text-align: center; display: inline-block; }
 
         .nav-container { padding: 0 15px 12px; }
         #search { width: 100%; padding: 12px 20px; border-radius: 50px; border: 1px solid #333; background: rgba(255,255,255,0.05); color: #fff; margin-bottom: 10px; outline: none; }
-        .cat-bar { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; }
-        .cat-item { font-size: 12px; color: #888; padding: 7px 20px; border-radius: 50px; background: var(--pill); white-space: nowrap; }
+        .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+        .cat-item { font-size: 11px; color: #888; padding: 6px 18px; border-radius: 50px; background: var(--pill); white-space: nowrap; }
         .cat-item.active { background: var(--gold-grad); color: #000; font-weight: 600; }
 
         /* --- Main Content --- */
-        main { margin-top: 365px; transition: 0.4s; }
+        main { margin-top: 360px; transition: 0.4s; }
         header.shrunk .banner-container { display: none; }
-        header.shrunk + main { margin-top: 155px; }
+        header.shrunk + main { margin-top: 150px; }
 
-        .section-label { font-size: 15px; color: var(--gold); padding: 20px 15px 10px; font-weight: 600; }
+        .section-label { font-size: 14px; color: var(--gold); padding: 20px 15px 10px; font-weight: 600; }
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 0 15px; }
-        .card { background: var(--card); border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; }
+        .card { background: var(--card); border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; display: flex; flex-direction: column; }
         .media { width: 100%; aspect-ratio: 1/1; background: #000; }
         .media img, .media video { width: 100%; height: 100%; object-fit: contain; }
         
         .info { padding: 12px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #fff; }
-        .desc { font-size: 10px; color: #777; margin-bottom: 10px; line-height: 1.4; height: 28px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .price { color: var(--gold-light); font-size: 18px; font-weight: 800; margin-top: auto; margin-bottom: 10px; }
+        .title { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+        .desc { font-size: 10px; color: #777; line-height: 1.4; height: 28px; overflow: hidden; margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .price { color: var(--gold-light); font-size: 18px; font-weight: 800; margin-top: auto; margin-bottom: 8px; }
         .buy-btn { width: 100%; background: var(--gold-grad); color: #000; font-weight: 800; padding: 10px; border-radius: 12px; border: none; font-size: 12px; }
 
         /* --- Footer Nav --- */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--footer-h); background: rgba(10,10,10,0.95); backdrop-filter: blur(20px); border-top: 1px solid rgba(212, 175, 55, 0.2); display: flex; justify-content: space-around; align-items: center; z-index: 2100; }
-        .nav-link { color: #666; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 11px; gap: 5px; }
+        .nav-link { color: #666; text-decoration: none; display: flex; flex-direction: column; align-items: center; font-size: 10px; gap: 4px; }
         .nav-link.active { color: var(--gold); }
         .nav-link i { font-size: 18px; }
 
         /* --- Modals --- */
         .modal { display: none; position: fixed; z-index: 5000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; padding: 20px; }
-        .order-card { background: #0a0a0a; border: 1.5px solid var(--gold); border-radius: 30px; width: 100%; max-width: 400px; padding: 25px; text-align: center; max-height: 90vh; overflow-y: auto; }
-        .form-input { width: 100%; padding: 12px; background: #151515; border: 1px solid #333; border-radius: 12px; color: #fff; margin-bottom: 10px; font-family: 'Kanit'; }
+        .modal-card { background: #0a0a0a; border: 1.5px solid var(--gold); border-radius: 25px; width: 100%; max-width: 400px; padding: 25px; text-align: center; max-height: 85vh; overflow-y: auto; }
+        .form-input { width: 100%; padding: 12px; background: #151515; border: 1px solid #333; border-radius: 10px; color: #fff; margin-bottom: 10px; font-family: 'Kanit'; font-size: 13px; }
         
-        /* ปุ่มติดต่อแบบหลายทาง */
-        .contact-item { display: flex; align-items: center; gap: 15px; background: #151515; padding: 15px; border-radius: 15px; margin-bottom: 10px; text-decoration: none; color: #fff; border: 1px solid #333; transition: 0.3s; }
-        .contact-item:active { background: #222; border-color: var(--gold); }
-        .contact-item i { font-size: 24px; width: 30px; text-align: center; }
-        .fa-line { color: #06C755; }
-        .fa-facebook-messenger { color: #0084FF; }
-        .fa-phone { color: #28a745; }
+        /* Contact Buttons */
+        .contact-item { display: flex; align-items: center; gap: 15px; background: #151515; padding: 12px; border-radius: 12px; margin-bottom: 10px; text-decoration: none; color: #fff; border: 1px solid #333; }
+        .fa-line { color: #06C755; } .fa-facebook-messenger { color: #0084FF; } .fa-phone { color: #28a745; }
     </style>
 </head>
 <body>
@@ -91,8 +86,8 @@
 </header>
 
 <main>
-    <div id="status" style="text-align:center; padding:100px 0; color:#555;">กำลังโหลดข้อมูล...</div>
-    <div id="main-label" class="section-label" style="display:none;">📦 คอลเลกชันสินค้า PHAENDIN</div>
+    <div id="status" style="text-align:center; padding:100px 0; color:#555;">กำลังเตรียมสินค้า...</div>
+    <div id="main-label" class="section-label" style="display:none;">📦 สินค้าแนะนำจาก PHAENDIN</div>
     <div class="grid" id="main-list"></div>
 </main>
 
@@ -102,50 +97,36 @@
     <a href="javascript:void(0)" onclick="openContactModal()" class="nav-link"><i class="fa-solid fa-comments"></i><span>ติดต่อเรา</span></a>
 </nav>
 
-<div id="contactModal" class="modal" onclick="closeContactModal(event)">
-    <div class="order-card" style="padding: 30px 20px;">
-        <h3 style="color:var(--gold); margin-bottom:20px;">เลือกช่องทางติดต่อสอบถาม</h3>
-        
-        <a href="https://m.me/yourfb" target="_blank" class="contact-item">
-            <i class="fa-brands fa-facebook-messenger"></i>
-            <div style="text-align:left;"><b style="display:block;">Messenger</b><span style="font-size:11px; color:#777;">ทักแชททางเฟซบุ๊ก</span></div>
-        </a>
-
-        <a href="https://line.me/ti/p/yourid" target="_blank" class="contact-item">
-            <i class="fa-brands fa-line"></i>
-            <div style="text-align:left;"><b style="display:block;">LINE Official</b><span style="font-size:11px; color:#777;">สอบถามทางไลน์</span></div>
-        </a>
-
-        <a href="tel:088XXXXXXX" class="contact-item">
-            <i class="fa-solid fa-phone"></i>
-            <div style="text-align:left;"><b style="display:block;">โทรศัพท์</b><span style="font-size:11px; color:#777;">โทรหาเราโดยตรง</span></div>
-        </a>
-
-        <p style="margin-top:20px; font-size:12px; color:#555; cursor:pointer;" onclick="document.getElementById('contactModal').style.display='none'">[ ปิดหน้าต่าง ]</p>
+<div id="contactModal" class="modal" onclick="if(event.target.id==='contactModal') this.style.display='none'">
+    <div class="modal-card">
+        <h3 style="color:var(--gold); margin-bottom:20px;">ช่องทางการติดต่อ</h3>
+        <a href="https://m.me/yourfb" target="_blank" class="contact-item"><i class="fa-brands fa-facebook-messenger"></i><div style="text-align:left;"><b>Messenger</b><br><span style="font-size:10px;color:#777;">พูดคุยทางเฟซบุ๊ก</span></div></a>
+        <a href="https://line.me/ti/p/yourid" target="_blank" class="contact-item"><i class="fa-brands fa-line"></i><div style="text-align:left;"><b>LINE Official</b><br><span style="font-size:10px;color:#777;">สอบถามทางไลน์</span></div></a>
+        <a href="tel:088XXXXXXX" class="contact-item"><i class="fa-solid fa-phone"></i><div style="text-align:left;"><b>โทรศัพท์</b><br><span style="font-size:10px;color:#777;">สายตรงเจ้าหน้าที่</span></div></a>
+        <p style="margin-top:15px; font-size:11px; color:#444;" onclick="document.getElementById('contactModal').style.display='none'">[ ปิดหน้าต่าง ]</p>
     </div>
 </div>
 
 <div id="orderModal" class="modal">
-    <div class="order-card">
-        <h3 style="color:var(--gold); margin-bottom:15px;">ยืนยันการสั่งซื้อ</h3>
-        <div style="background:#000; padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid #222;">
-            <p style="color:var(--gold); font-size:12px;">ธนาคารกสิกรไทย</p>
-            <p style="font-size:18px; color:#fff; margin:5px 0;">035-8-56762-2 <button onclick="copyAcc()" style="background:var(--gold); border:none; padding:2px 8px; border-radius:5px; font-size:10px; cursor:pointer; font-weight:bold;">คัดลอก</button></p>
-            <p style="font-size:11px; color:#777;">ชื่อบัญชี: นาย วัชระ ชันสิน</p>
-            <img src="https://i.ibb.co/fVLb9p6B/004999092296200-20260224-144608.jpg" style="width: 100px; margin-top:10px; border-radius:10px;">
+    <div class="modal-card">
+        <h3 style="color:var(--gold); margin-bottom:15px;">ยืนยันคำสั่งซื้อ</h3>
+        <div style="background:#000; padding:12px; border-radius:15px; margin-bottom:15px; border:1px solid #222;">
+            <p style="color:var(--gold); font-size:11px;">กสิกรไทย: 035-8-56762-2 <span onclick="copyAcc()" style="background:var(--gold); color:#000; padding:2px 6px; border-radius:4px; font-size:9px; cursor:pointer; font-weight:bold; margin-left:5px;">คัดลอก</span></p>
+            <p style="font-size:11px; color:#777; margin-top:4px;">ชื่อบัญชี: นาย วัชระ ชันสิน</p>
+            <img src="https://i.ibb.co/fVLb9p6B/004999092296200-20260224-144608.jpg" style="width: 90px; margin-top:8px; border-radius:8px;">
         </div>
         <form id="orderForm">
-            <div id="orderSummary" style="font-size:13px; text-align:left; margin-bottom:15px; padding:10px; background:#151515; border-radius:10px;"></div>
+            <div id="orderSummary" style="font-size:12px; text-align:left; margin-bottom:12px; color:#aaa;"></div>
             <input type="text" id="custName" class="form-input" placeholder="ชื่อ-นามสกุล *" required>
             <input type="tel" id="custPhone" class="form-input" placeholder="เบอร์โทรศัพท์ *" required>
             <textarea id="custAddress" class="form-input" rows="2" placeholder="ที่อยู่จัดส่ง *" required></textarea>
-            <textarea id="custNote" class="form-input" rows="1" placeholder="หมายเหตุเพิ่มเติม"></textarea>
-            <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; margin-bottom:10px; cursor:pointer;" onclick="document.getElementById('slipFile').click()">
-                <span id="uploadText" style="font-size:12px; color:var(--gold);">📸 คลิกแนบสลิปโอนเงิน</span>
+            <textarea id="custNote" class="form-input" rows="1" placeholder="หมายเหตุ (ถ้ามี)"></textarea>
+            <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; margin-bottom:12px; cursor:pointer;" onclick="document.getElementById('slipFile').click()">
+                <span id="uploadText" style="font-size:11px; color:var(--gold);">📸 แตะที่นี่เพื่อแนบสลิปโอนเงิน</span>
                 <img id="slipPreview" style="width:100%; display:none; border-radius:10px; margin-top:5px;">
             </div>
             <input type="file" id="slipFile" style="display:none;" onchange="previewSlip(this)">
-            <button type="submit" id="btnSubmit" style="width:100%; background:var(--gold-grad); padding:15px; border-radius:12px; border:none; font-weight:800; font-size:16px;">ยืนยันสั่งซื้อ</button>
+            <button type="submit" id="btnSubmit" style="width:100%; background:var(--gold-grad); padding:14px; border-radius:12px; border:none; font-weight:800; font-size:16px;">💰 ยืนยันแจ้งโอนเงิน</button>
         </form>
     </div>
 </div>
@@ -153,17 +134,17 @@
 <script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const PROD_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`;
+    const BANN_URL = `https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`;
     const APPS_URL = "https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec";
 
-    let dbAll = [], curCat = 'all', currentItem = {};
+    let dbAll = [], curCat = 'all', currentItem = {}, bannerEndTime = null;
 
     function openContactModal() { document.getElementById('contactModal').style.display = 'flex'; }
-    function closeContactModal(e) { if(e.target.id === 'contactModal') e.target.style.display = 'none'; }
-    function copyAcc() { navigator.clipboard.writeText("0358567622"); alert("คัดลอกเลขบัญชีแล้ว!"); }
+    function copyAcc() { navigator.clipboard.writeText("0358567622"); alert("คัดลอกเลขบัญชีสำเร็จ!"); }
 
     function openOrder(name, price, ship) {
         currentItem = { name, price: parseFloat(price), ship: parseFloat(ship) };
-        document.getElementById('orderSummary').innerHTML = `สินค้า: ${name}<br>ยอดโอนสุทธิ: ฿${(currentItem.price + currentItem.ship).toLocaleString()}`;
+        document.getElementById('orderSummary').innerHTML = `🔹 สินค้า: ${name}<br>🔹 ยอดโอนสุทธิ: ฿${(currentItem.price + currentItem.ship).toLocaleString()}`;
         document.getElementById('orderModal').style.display = 'flex';
     }
 
@@ -183,8 +164,8 @@
         e.preventDefault();
         const btn = document.getElementById('btnSubmit');
         const file = document.getElementById('slipFile').files[0];
-        if(!file) return alert("กรุณาแนบสลิปครับ");
-        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+        if(!file) return alert("กรุณาแนบรูปสลิปด้วยครับ");
+        btn.innerText = "กำลังประมวลผล..."; btn.disabled = true;
         const reader = new FileReader();
         reader.onload = async () => {
             const payload = {
@@ -196,17 +177,47 @@
                 mimeType: file.type
             };
             await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(payload), mode: 'no-cors' });
-            alert("สั่งซื้อสำเร็จ!"); location.reload();
+            alert("สั่งซื้อสำเร็จ! รอรับสินค้าได้เลยครับ"); location.reload();
         };
         reader.readAsDataURL(file);
     };
 
     async function init() {
-        const res = await fetch(PROD_URL), text = await res.text();
-        dbAll = text.split(/\r?\n/).slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-        document.getElementById('status').style.display = 'none';
-        document.getElementById('main-label').style.display = 'block';
-        render();
+        try {
+            // โหลด Banner
+            const resB = await fetch(BANN_URL), textB = await resB.text();
+            const bLines = textB.split(/\r?\n/).slice(1);
+            if(bLines.length > 0) {
+                const b = bLines[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+                bannerEndTime = b[2] ? new Date(b[2]).getTime() : null;
+                document.getElementById('bannerContent').innerHTML = `
+                    <div class="banner-slide">
+                        <div class="banner-left">${b[0].match(/\.(mp4|webm)$/) ? `<video src="${b[0]}" autoplay loop muted playsinline></video>` : `<img src="${b[0]}">`}</div>
+                        <div class="banner-right">
+                            <div class="banner-title">${b[1]||'Flash Sale ดีลพิเศษ'}</div>
+                            <div style="margin-top:8px;">
+                                <div class="time-box" id="bh">00</div> : <div class="time-box" id="bm">00</div> : <div class="time-box" id="bs">00</div>
+                            </div>
+                        </div>
+                    </div>`;
+                if(bannerEndTime) setInterval(updateTimer, 1000);
+            }
+            // โหลดสินค้า
+            const resP = await fetch(PROD_URL), textP = await resP.text();
+            dbAll = textP.split(/\r?\n/).slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            document.getElementById('status').style.display = 'none';
+            document.getElementById('main-label').style.display = 'block';
+            render();
+        } catch(e) { document.getElementById('status').innerText = "เชื่อมต่อฐานข้อมูลไม่สำเร็จ"; }
+    }
+
+    function updateTimer() {
+        const diff = bannerEndTime - new Date().getTime();
+        if(diff > 0) {
+            document.getElementById('bh').innerText = Math.floor(diff/3600000).toString().padStart(2,'0');
+            document.getElementById('bm').innerText = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+            document.getElementById('bs').innerText = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+        }
     }
 
     function render() {
@@ -226,14 +237,14 @@
     }
 
     async function checkTracking() {
-        const phone = prompt("กรอกเบอร์โทรศัพท์:");
+        const phone = prompt("กรอกเบอร์โทรศัพท์เพื่อติดตามพัสดุ:");
         if (!phone) return;
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
         const text = await res.text();
         const rows = text.split(/\r?\n/).slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()));
         const found = rows.find(r => r[0] === phone);
         if (found) alert(`คุณ: ${found[1]}\nขนส่ง: ${found[2]}\nเลขพัสดุ: ${found[3]}`);
-        else alert("ไม่พบข้อมูล");
+        else alert("ไม่พบข้อมูลพัสดุของคุณ");
     }
 
     init();
