@@ -7,59 +7,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { 
-            --gold: #D4AF37; --gold-btn: #eec24b;
-            --bg: #050505; --card: #1a1a1a; --text: #FFFFFF;
-        }
+        :root { --gold: #eec24b; --bg: #050505; --card: #1a1a1a; --text: #FFFFFF; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
         body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
 
-        /* Banner Cinematic แบบรูปที่ 1 */
-        .banner { width: 100%; height: 200px; position: relative; overflow: hidden; }
-        .banner img, .banner video { width: 100%; height: 100%; object-fit: cover; }
-        .banner-overlay { 
-            position: absolute; inset: 0; background: rgba(0,0,0,0.3);
-            display: flex; flex-direction: column; justify-content: center; padding-left: 20px;
-        }
-        .bn-tag { color: var(--gold); font-weight: 600; font-size: 1.2rem; text-shadow: 2px 2px 4px #000; }
-        .bn-timer { background: rgba(0,0,0,0.6); width: fit-content; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; margin: 8px 0; border: 1px solid var(--gold); }
-        .bn-btn { background: var(--gold-btn); color: #000; border: none; padding: 6px 15px; border-radius: 5px; font-weight: 600; width: fit-content; cursor: pointer; }
+        /* Banner ตามภาพ 1064 */
+        .banner { width: 100%; height: 210px; background: url('https://via.placeholder.com/1000x500/000/fff?text=Banner+Image') center/cover; position: relative; }
+        .banner-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; flex-direction: column; justify-content: center; padding: 20px; }
+        .bn-tag { color: var(--gold); font-weight: 600; font-size: 1.1rem; line-height: 1.3; }
+        .bn-timer { background: rgba(0,0,0,0.7); width: fit-content; padding: 4px 15px; border-radius: 20px; font-size: 0.8rem; margin: 10px 0; border: 1px solid var(--gold); color: #fff; }
+        .bn-btn { background: var(--gold); color: #000; border: none; padding: 8px 20px; border-radius: 8px; font-weight: 700; width: fit-content; cursor: pointer; }
 
         /* Search Bar */
-        .search-container { padding: 15px; position: relative; }
-        .search-container input { width: 100%; padding: 10px 40px; border-radius: 25px; border: 1px solid #444; background: #111; color: #fff; }
-        .search-container i { position: absolute; left: 30px; top: 27px; color: var(--gold); }
+        .search-box { padding: 15px; }
+        .search-wrap { position: relative; background: #111; border-radius: 25px; border: 1px solid #333; display: flex; align-items: center; padding: 0 15px; }
+        .search-wrap i { color: var(--gold); margin-right: 10px; }
+        .search-wrap input { background: transparent; border: none; color: #fff; padding: 12px 0; width: 100%; outline: none; font-size: 0.9rem; }
 
-        /* Grid 3 Columns เป๊ะตามรูปที่ 1 */
-        .grid-title { padding: 0 15px 10px; color: var(--gold); font-size: 0.9rem; }
+        /* Grid 3 Columns เป๊ะๆ */
+        .sec-title { padding: 0 15px 10px; color: var(--gold); font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 10px; }
-        
-        .card { background: var(--card); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 1px solid #333; }
-        .media-box { width: 100%; aspect-ratio: 1/1; background: #000; }
+        .card { background: var(--card); border-radius: 10px; overflow: hidden; border: 1px solid #222; display: flex; flex-direction: column; }
+        .media-box { width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
         .media-box img, .media-box video { width: 100%; height: 100%; object-fit: cover; }
         
         .card-body { padding: 8px 5px; text-align: center; flex-grow: 1; }
-        .p-name { font-size: 0.75rem; font-weight: 400; margin-bottom: 4px; height: 2.2em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: #ccc; }
-        .p-price { color: #fff; font-weight: 600; font-size: 1rem; margin-bottom: 8px; display: block; }
-        
-        .btn-order { background: var(--gold-btn); color: #000; border: none; padding: 8px 0; width: 100%; font-weight: 600; font-size: 0.8rem; cursor: pointer; }
+        .p-name { font-size: 0.75rem; color: #ccc; margin-bottom: 5px; height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .p-price { color: #fff; font-weight: 700; font-size: 1rem; display: block; margin-bottom: 8px; }
+        .btn-buy { background: var(--gold); color: #000; border: none; padding: 8px 0; width: 100%; font-weight: 700; font-size: 0.8rem; cursor: pointer; border-radius: 0 0 10px 100px; /* ทรงปุ่มตามรูป */ }
 
-        /* Footer Nav */
-        footer { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 10px 0; z-index: 100; }
-        .nav-item { flex: 1; text-align: center; color: #888; font-size: 0.7rem; cursor: pointer; }
+        /* Footer */
+        footer { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 10px 0; }
+        .nav-item { flex: 1; text-align: center; color: #666; font-size: 0.7rem; }
         .nav-item.active { color: var(--gold); }
         .nav-item i { display: block; font-size: 1.2rem; margin-bottom: 3px; }
-
-        /* Modal ตัวเลือกสินค้า */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #1a1a1a; width: 100%; max-width: 350px; border-radius: 15px; padding: 20px; border: 1px solid var(--gold); }
-        select, input, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #000; color: #fff; }
     </style>
 </head>
 <body>
 
     <div class="banner">
-        <div id="bannerMedia"></div>
         <div class="banner-overlay">
             <div class="bn-tag">ไม่ควรพลาด ของถูก ของดี มาแล้ว!</div>
             <div class="bn-timer">⏳ <span id="timer">00 : 00 : 00</span></div>
@@ -67,86 +53,75 @@
         </div>
     </div>
 
-    <div class="search-container">
-        <i class="fa-solid fa-search"></i>
-        <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." oninput="render()">
-    </div>
-
-    <div class="grid-title"><i class="fa-solid fa-fire"></i> สินค้าแนะนำ</div>
-    <div class="grid" id="productGrid"></div>
-
-    <div id="orderModal" class="modal">
-        <div class="modal-content">
-            <h3 id="pName" style="color:var(--gold)">ชื่อสินค้า</h3>
-            <div id="optionArea"></div>
-            <input type="text" id="custName" placeholder="ชื่อ-นามสกุล">
-            <input type="tel" id="custPhone" placeholder="เบอร์โทรศัพท์">
-            <textarea id="custAddr" placeholder="ที่อยู่จัดส่ง"></textarea>
-            <p style="text-align:center; margin:10px 0; font-size:0.8rem;">ยอดรวม: <span id="pTotal" style="color:var(--gold); font-weight:600;"></span></p>
-            <button class="btn-order" onclick="submitOrder()">ยืนยันสั่งซื้อ</button>
-            <p onclick="closeModal()" style="text-align:center; margin-top:15px; font-size:0.7rem; color:#888; cursor:pointer;">ยกเลิก</p>
+    <div class="search-box">
+        <div class="search-wrap">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." oninput="render()">
         </div>
     </div>
 
+    <div class="sec-title"><i class="fa-solid fa-fire"></i> สินค้าแนะนำ</div>
+    <div id="productGrid" class="grid">
+        </div>
+
     <footer>
         <div class="nav-item active"><i class="fa-solid fa-house"></i>หน้าแรก</div>
-        <div class="nav-item" onclick="alert('ระบบเช็คพัสดุ กำลังเชื่อมต่อ...')"><i class="fa-solid fa-truck"></i>พัสดุ</div>
-        <div class="nav-item" onclick="window.location.href='https://line.me'"><i class="fa-solid fa-comment"></i>ติดต่อ</div>
+        <div class="nav-item"><i class="fa-solid fa-truck"></i>พัสดุ</div>
+        <div class="nav-item"><i class="fa-solid fa-comment"></i>ติดต่อ</div>
     </footer>
 
 <script>
-    // ข้อมูลสินค้า (จำลองข้อมูลจากภาพที่ 1)
-    const products = [
-        { name: "ไตปลาคั่วแห้ง", price: 66, img: "https://via.placeholder.com/300/8B4513/FFFFFF?text=Fish", options: "สูตรดั้งเดิม,สูตรเผ็ดมาก" },
-        { name: "ผลไม้ดองเกลือ 500กรัม", price: 50, img: "https://via.placeholder.com/300/556B2F/FFFFFF?text=Fruit", options: "มะม่วง,พุทรา,องุ่น" },
-        { name: "น้ำพริกนรกปลาช่อนย่าง", price: 129, img: "https://via.placeholder.com/300/A52A2A/FFFFFF?text=Chili", options: "-" },
-        { name: "น้ำพริกหนังไก่", price: 100, img: "https://via.placeholder.com/300/FF8C00/FFFFFF?text=Chicken", options: "รสดั้งเดิม,ต้มยำ" },
-        { name: "หอยลายอบกรอบ", price: 150, img: "https://via.placeholder.com/300/4682B4/FFFFFF?text=Shell", options: "รสเผ็ด,รสนม" },
-        { name: "หมูแดดเดียว 3 รส", price: 180, img: "https://via.placeholder.com/300/DC143C/FFFFFF?text=Pork", options: "-" }
-    ];
+    // ⚠️ นำ ID จาก Google Sheets ของคุณมาใส่ตรงนี้
+    const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
+    let db = [];
+
+    async function init() {
+        try {
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Product`);
+            const text = await res.text();
+            
+            // แปลง CSV เป็น Array
+            const rows = text.split('\n').slice(1);
+            db = rows.map(row => {
+                // จัดการเรื่อง comma ในข้อความ
+                return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            }).filter(row => row[0] !== ""); 
+
+            render();
+        } catch (e) {
+            console.error("Load Error:", e);
+            document.getElementById('productGrid').innerHTML = "<p style='grid-column:1/-1; text-align:center;'>กำลังเชื่อมต่อข้อมูล...</p>";
+        }
+    }
 
     function renderMedia(url) {
-        if (url.includes('.mp4')) return `<video src="${url}" autoplay loop muted playsinline></video>`;
-        return `<img src="${url}" loading="lazy">`;
+        if (!url) return '<img src="https://via.placeholder.com/300?text=No+Image">';
+        const isVid = /\.(mp4|webm|mov)$/i.test(url);
+        if (isVid) return `<video src="${url}" autoplay loop muted playsinline></video>`;
+        return `<img src="${url}" onerror="this.src='https://via.placeholder.com/300?text=Error'">`;
     }
 
     function render() {
-        const q = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = products.filter(p => p.name.toLowerCase().includes(q));
-        document.getElementById('productGrid').innerHTML = filtered.map(p => `
-            <div class="card">
-                <div class="media-box">${renderMedia(p.img)}</div>
-                <div class="card-body">
-                    <span class="p-name">${p.name}</span>
-                    <span class="p-price">฿${p.price}</span>
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+        
+        document.getElementById('productGrid').innerHTML = filtered.map(p => {
+            // อ้างอิงคอลัมน์จากภาพ 1067
+            // p[0] = ชื่อสินค้า, p[1] = ลิงก์รูป, p[3] = ราคา
+            return `
+                <div class="card">
+                    <div class="media-box">${renderMedia(p[1])}</div>
+                    <div class="card-body">
+                        <div class="p-name">${p[0]}</div>
+                        <div class="p-price">฿${p[3]}</div>
+                    </div>
+                    <button class="btn-buy">สั่งซื้อ</button>
                 </div>
-                <button class="btn-order" onclick="openOrder('${p.name}', ${p.price}, '${p.options}')">สั่งซื้อ</button>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
-    function openOrder(name, price, opts) {
-        document.getElementById('pName').innerText = name;
-        document.getElementById('pTotal').innerText = '฿' + price;
-        const optArea = document.getElementById('optionArea');
-        optArea.innerHTML = '';
-        if(opts !== '-') {
-            let html = '<select id="pOpt"><option value="">เลือกตัวเลือกสินค้า</option>';
-            opts.split(',').forEach(o => html += `<option value="${o}">${o}</option>`);
-            html += '</select>';
-            optArea.innerHTML = html;
-        }
-        document.getElementById('orderModal').style.display = 'flex';
-    }
-
-    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
-
-    function submitOrder() {
-        alert("ขอบคุณสำหรับคำสั่งซื้อ! เรากำลังดำเนินการส่งข้อมูลไปยังระบบ...");
-        closeModal();
-    }
-
-    render();
+    init();
 </script>
 </body>
 </html>
