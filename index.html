@@ -36,7 +36,7 @@
         .flash-tag { position: absolute; top: 0; left: 0; background: var(--red); color: #fff; padding: 2px 8px; font-size: 9px; font-weight: bold; border-bottom-right-radius: 10px; z-index: 2; }
 
         .nav-container { padding: 0 10px 10px; }
-        #search { width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid #222; background: rgba(255,255,255,0.05); color: #fff; margin-bottom: 8px; outline: none; font-size: 13px; }
+        #search { width: 100%; padding: 10px 15px; border-radius: 12px; border: 1px solid #333; background: rgba(255,255,255,0.05); color: #fff; margin-bottom: 8px; outline: none; font-size: 13px; }
         .cat-bar { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
         .cat-item { font-size: 11px; color: #999; padding: 5px 14px; border-radius: 10px; background: var(--pill); white-space: nowrap; transition: 0.2s; border: 1px solid transparent; }
         .cat-item.active { background: var(--gold-grad); color: #000; font-weight: 600; }
@@ -54,7 +54,7 @@
         .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 10px; }
         .card { background: var(--card); border-radius: 15px; border: 1px solid rgba(255,255,255,0.03); overflow: hidden; display: flex; flex-direction: column; }
         
-        .media, .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; position: relative; cursor: pointer; overflow: hidden; }
+        .media, .rec-media { width: 100%; aspect-ratio: 1/1; background: #000; position: relative; cursor: zoom-in; overflow: hidden; }
         .media img, .media video, .rec-media img, .rec-media video { width: 100%; height: 100%; object-fit: cover; }
         
         .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
@@ -155,7 +155,7 @@
             // Load Products
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`);
             const textP = await resP.text();
-            let raw = textP.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0] && x[1].startsWith('http'));
+            let raw = textP.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^with code]*"$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0] && x[1].startsWith('http'));
             
             dbRec = raw.filter(p => p[5] && p[5].includes("แนะนำ")).slice(0, 6);
             dbAll = raw.filter(p => !dbRec.some(r => r[0] === p[0]));
