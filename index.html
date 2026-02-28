@@ -3,229 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN | THE ULTIMATE STORE</title>
+    <title>PHAENDIN STORE</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --gold: #D4AF37; --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
-            --bg: #050505; --card: #121212; --text: #FFFFFF; --text-dim: #999; --border: #222; --nav: rgba(0,0,0,0.9);
+        :root { 
+            --gold: #D4AF37; --gold-btn: #eec24b;
+            --bg: #050505; --card: #1a1a1a; --text: #FFFFFF;
         }
-        body.light-mode {
-            --bg: #F8F9FA; --card: #FFFFFF; --text: #1A1A1A; --text-dim: #666; --border: #EEE; --nav: rgba(255,255,255,0.9);
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 80px; }
+
+        /* Banner Cinematic แบบรูปที่ 1 */
+        .banner { width: 100%; height: 200px; position: relative; overflow: hidden; }
+        .banner img, .banner video { width: 100%; height: 100%; object-fit: cover; }
+        .banner-overlay { 
+            position: absolute; inset: 0; background: rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; justify-content: center; padding-left: 20px;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Kanit', sans-serif; transition: 0.3s; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 80px; overflow-x: hidden; }
+        .bn-tag { color: var(--gold); font-weight: 600; font-size: 1.2rem; text-shadow: 2px 2px 4px #000; }
+        .bn-timer { background: rgba(0,0,0,0.6); width: fit-content; padding: 2px 10px; border-radius: 20px; font-size: 0.8rem; margin: 8px 0; border: 1px solid var(--gold); }
+        .bn-btn { background: var(--gold-btn); color: #000; border: none; padding: 6px 15px; border-radius: 5px; font-weight: 600; width: fit-content; cursor: pointer; }
 
-        /* Navigation */
-        nav { position: fixed; top: 0; width: 100%; z-index: 1000; background: var(--nav); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; padding: 15px 5%; align-items: center; }
-        .logo { font-size: 1.2rem; font-weight: 600; color: var(--gold); letter-spacing: 2px; }
-        .nav-icons { display: flex; gap: 20px; font-size: 1.2rem; }
+        /* Search Bar */
+        .search-container { padding: 15px; position: relative; }
+        .search-container input { width: 100%; padding: 10px 40px; border-radius: 25px; border: 1px solid #444; background: #111; color: #fff; }
+        .search-container i { position: absolute; left: 30px; top: 27px; color: var(--gold); }
 
-        /* Banner Cinematic */
-        .hero { width: 100%; height: 260px; background: #000; position: relative; margin-top: 55px; overflow: hidden; }
-        #bnImg { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--bg), transparent); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .timer { font-size: 0.8rem; color: var(--gold); border: 1px solid var(--gold); padding: 5px 15px; border-radius: 20px; margin-top: 10px; background: rgba(0,0,0,0.5); }
-
-        /* Search & Grid */
-        .search-box { padding: 20px 5%; }
-        .search-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; padding: 0 15px; }
-        .search-wrap input { background: transparent; border: none; outline: none; color: var(--text); padding: 12px; width: 100%; }
-        
+        /* Grid 3 Columns เป๊ะตามรูปที่ 1 */
+        .grid-title { padding: 0 15px 10px; color: var(--gold); font-size: 0.9rem; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 10px; }
-        .card { background: var(--card); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; }
-        .card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
-        .card-info { padding: 8px; text-align: center; flex-grow: 1; }
-        .p-name { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .p-price { color: var(--gold); font-weight: 600; font-size: 0.9rem; }
-        .buy-btn { width: 100%; padding: 10px; border: none; background: var(--gold-grad); color: #000; font-weight: 600; font-size: 0.75rem; cursor: pointer; }
-
-        /* Modals */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: var(--card); width: 100%; max-width: 400px; border-radius: 20px; padding: 25px; border: 1px solid var(--gold); max-height: 85vh; overflow-y: auto; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.8rem; color: var(--gold); margin-bottom: 5px; }
-        input, select, textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); outline: none; }
+        
+        .card { background: var(--card); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; border: 1px solid #333; }
+        .media-box { width: 100%; aspect-ratio: 1/1; background: #000; }
+        .media-box img, .media-box video { width: 100%; height: 100%; object-fit: cover; }
+        
+        .card-body { padding: 8px 5px; text-align: center; flex-grow: 1; }
+        .p-name { font-size: 0.75rem; font-weight: 400; margin-bottom: 4px; height: 2.2em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: #ccc; }
+        .p-price { color: #fff; font-weight: 600; font-size: 1rem; margin-bottom: 8px; display: block; }
+        
+        .btn-order { background: var(--gold-btn); color: #000; border: none; padding: 8px 0; width: 100%; font-weight: 600; font-size: 0.8rem; cursor: pointer; }
 
         /* Footer Nav */
-        .footer-nav { position: fixed; bottom: 0; width: 100%; background: var(--nav); display: flex; border-top: 1px solid var(--border); padding: 10px 0; }
-        .nav-item { flex: 1; text-align: center; font-size: 0.7rem; color: var(--text-dim); cursor: pointer; }
-        .nav-item i { font-size: 1.2rem; display: block; margin-bottom: 3px; }
+        footer { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; border-top: 1px solid #222; padding: 10px 0; z-index: 100; }
+        .nav-item { flex: 1; text-align: center; color: #888; font-size: 0.7rem; cursor: pointer; }
         .nav-item.active { color: var(--gold); }
+        .nav-item i { display: block; font-size: 1.2rem; margin-bottom: 3px; }
+
+        /* Modal ตัวเลือกสินค้า */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: #1a1a1a; width: 100%; max-width: 350px; border-radius: 15px; padding: 20px; border: 1px solid var(--gold); }
+        select, input, textarea { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #444; background: #000; color: #fff; }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo">PHAENDIN</div>
-    <div class="nav-icons">
-        <i class="fa-solid fa-circle-half-stroke" onclick="toggleMode()"></i>
-        <i class="fa-solid fa-truck-fast" onclick="openModal('trackModal')"></i>
+    <div class="banner">
+        <div id="bannerMedia"></div>
+        <div class="banner-overlay">
+            <div class="bn-tag">ไม่ควรพลาด ของถูก ของดี มาแล้ว!</div>
+            <div class="bn-timer">⏳ <span id="timer">00 : 00 : 00</span></div>
+            <button class="bn-btn">รับสิทธิ์ด่วน</button>
+        </div>
     </div>
-</nav>
 
-<div class="hero">
-    <img id="bnImg" src="" alt="">
-    <div class="hero-overlay">
-        <h2 id="bnTitle" style="color:#fff">LOADING...</h2>
-        <div class="timer" id="timer">EXPIRES IN --:--:--</div>
+    <div class="search-container">
+        <i class="fa-solid fa-search"></i>
+        <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." oninput="render()">
     </div>
-</div>
 
-<div class="search-box">
-    <div class="search-wrap">
-        <i class="fa-solid fa-magnifying-glass" style="color:var(--gold)"></i>
-        <input type="text" id="searchInput" placeholder="ค้นหาสินค้าที่นี่..." oninput="render()">
+    <div class="grid-title"><i class="fa-solid fa-fire"></i> สินค้าแนะนำ</div>
+    <div class="grid" id="productGrid"></div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <h3 id="pName" style="color:var(--gold)">ชื่อสินค้า</h3>
+            <div id="optionArea"></div>
+            <input type="text" id="custName" placeholder="ชื่อ-นามสกุล">
+            <input type="tel" id="custPhone" placeholder="เบอร์โทรศัพท์">
+            <textarea id="custAddr" placeholder="ที่อยู่จัดส่ง"></textarea>
+            <p style="text-align:center; margin:10px 0; font-size:0.8rem;">ยอดรวม: <span id="pTotal" style="color:var(--gold); font-weight:600;"></span></p>
+            <button class="btn-order" onclick="submitOrder()">ยืนยันสั่งซื้อ</button>
+            <p onclick="closeModal()" style="text-align:center; margin-top:15px; font-size:0.7rem; color:#888; cursor:pointer;">ยกเลิก</p>
+        </div>
     </div>
-</div>
 
-<main class="grid" id="productGrid"></main>
-
-<div id="orderModal" class="modal">
-    <div class="modal-content">
-        <h3 id="mName" style="color:var(--gold)">ชื่อสินค้า</h3>
-        <p id="mDesc" style="font-size: 0.8rem; color:var(--text-dim); margin: 10px 0;"></p>
-        <form id="orderForm">
-            <div class="input-group" id="optionGroup">
-                <label>เลือกตัวเลือก</label>
-                <select id="mOption"></select>
-            </div>
-            <div class="input-group">
-                <label>ชื่อผู้รับ</label>
-                <input type="text" id="cName" required>
-            </div>
-            <div class="input-group">
-                <label>เบอร์โทรศัพท์</label>
-                <input type="tel" id="cPhone" required>
-            </div>
-            <div class="input-group">
-                <label>ที่อยู่จัดส่ง</label>
-                <textarea id="cAddr" rows="3" required></textarea>
-            </div>
-            <div style="background:var(--bg); padding:10px; border-radius:10px; margin-bottom:15px; text-align:center; border: 1px dashed var(--gold);">
-                <p style="font-size:0.8rem;">ยอดชำระ: ฿<span id="mTotal" style="font-weight:600; color:var(--gold);">0</span></p>
-                <p style="font-size:0.6rem; color:var(--text-dim);">กสิกรไทย: 000-0-00000-0 (ชื่อบัญชี)</p>
-                <input type="file" id="cSlip" accept="image/*" style="font-size:0.7rem; border:none; margin-top:5px;" required>
-            </div>
-            <button type="submit" class="buy-btn" style="border-radius:10px;">ยืนยันสั่งซื้อ</button>
-        </form>
-        <p onclick="closeModal('orderModal')" style="text-align:center; margin-top:15px; font-size:0.8rem; cursor:pointer;">ปิดหน้าต่าง</p>
-    </div>
-</div>
-
-<div id="trackModal" class="modal">
-    <div class="modal-content">
-        <h3 style="color:var(--gold); margin-bottom:15px;">เช็คพัสดุ</h3>
-        <input type="tel" id="trackPhone" placeholder="กรอกเบอร์โทรที่ใช้สั่งซื้อ" style="margin-bottom:10px;">
-        <button class="buy-btn" onclick="checkTracking()" style="border-radius:8px;">ค้นหา</button>
-        <div id="trackResult" style="margin-top:20px; font-size:0.9rem;"></div>
-        <p onclick="closeModal('trackModal')" style="text-align:center; margin-top:15px; font-size:0.8rem; cursor:pointer;">ปิด</p>
-    </div>
-</div>
-
-<div class="footer-nav">
-    <div class="nav-item active" onclick="location.reload()"><i class="fa-solid fa-house"></i>หน้าแรก</div>
-    <div class="nav-item" onclick="openModal('trackModal')"><i class="fa-solid fa-box"></i>พัสดุ</div>
-    <div class="nav-item" onclick="window.location.href='https://line.me/ti/p/YOUR_ID'"><i class="fa-solid fa-comment"></i>ติดต่อเรา</div>
-</div>
+    <footer>
+        <div class="nav-item active"><i class="fa-solid fa-house"></i>หน้าแรก</div>
+        <div class="nav-item" onclick="alert('ระบบเช็คพัสดุ กำลังเชื่อมต่อ...')"><i class="fa-solid fa-truck"></i>พัสดุ</div>
+        <div class="nav-item" onclick="window.location.href='https://line.me'"><i class="fa-solid fa-comment"></i>ติดต่อ</div>
+    </footer>
 
 <script>
-    // --- ตั้งค่า ID ของ Google Sheets ที่นี่ ---
-    const S_ID = 'ใส่_ID_GOOGLE_SHEET_ของคุณที่นี่'; 
-    const APPS_URL = 'ใส่_WEB_APP_URL_จาก_APPS_SCRIPT'; // สำหรับส่งข้อมูลเข้า Sheet
+    // ข้อมูลสินค้า (จำลองข้อมูลจากภาพที่ 1)
+    const products = [
+        { name: "ไตปลาคั่วแห้ง", price: 66, img: "https://via.placeholder.com/300/8B4513/FFFFFF?text=Fish", options: "สูตรดั้งเดิม,สูตรเผ็ดมาก" },
+        { name: "ผลไม้ดองเกลือ 500กรัม", price: 50, img: "https://via.placeholder.com/300/556B2F/FFFFFF?text=Fruit", options: "มะม่วง,พุทรา,องุ่น" },
+        { name: "น้ำพริกนรกปลาช่อนย่าง", price: 129, img: "https://via.placeholder.com/300/A52A2A/FFFFFF?text=Chili", options: "-" },
+        { name: "น้ำพริกหนังไก่", price: 100, img: "https://via.placeholder.com/300/FF8C00/FFFFFF?text=Chicken", options: "รสดั้งเดิม,ต้มยำ" },
+        { name: "หอยลายอบกรอบ", price: 150, img: "https://via.placeholder.com/300/4682B4/FFFFFF?text=Shell", options: "รสเผ็ด,รสนม" },
+        { name: "หมูแดดเดียว 3 รส", price: 180, img: "https://via.placeholder.com/300/DC143C/FFFFFF?text=Pork", options: "-" }
+    ];
 
-    let db = [], bannerData = {}, activeP = {};
-
-    async function init() {
-        try {
-            // ดึงข้อมูลสินค้า
-            const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Product`);
-            const pText = await resP.text();
-            db = pText.split('\n').slice(1).map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()));
-            db = db.sort(() => Math.random() - 0.5); // สุ่มลำดับสินค้า
-
-            // ดึงข้อมูลแบนเนอร์
-            const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
-            const bText = await resB.text();
-            const bRow = bText.split('\n').slice(1)[0].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-            document.getElementById('bnImg').src = bRow[0];
-            document.getElementById('bnTitle').innerText = bRow[1];
-            startTimer(bRow[2]);
-
-            render();
-        } catch (e) { console.log("Error:", e); }
+    function renderMedia(url) {
+        if (url.includes('.mp4')) return `<video src="${url}" autoplay loop muted playsinline></video>`;
+        return `<img src="${url}" loading="lazy">`;
     }
 
     function render() {
         const q = document.getElementById('searchInput').value.toLowerCase();
-        const grid = document.getElementById('productGrid');
-        const filtered = db.filter(p => p[0].toLowerCase().includes(q));
-        grid.innerHTML = filtered.map((p, i) => `
+        const filtered = products.filter(p => p.name.toLowerCase().includes(q));
+        document.getElementById('productGrid').innerHTML = filtered.map(p => `
             <div class="card">
-                <img src="${p[1]}" loading="lazy">
-                <div class="card-info">
-                    <div class="p-name">${p[0]}</div>
-                    <div class="p-price">฿${parseFloat(p[3]).toLocaleString()}</div>
+                <div class="media-box">${renderMedia(p.img)}</div>
+                <div class="card-body">
+                    <span class="p-name">${p.name}</span>
+                    <span class="p-price">฿${p.price}</span>
                 </div>
-                <button class="buy-btn" onclick="openOrder(${JSON.stringify(p).replace(/"/g, '&quot;')})">ซื้อเลย</button>
+                <button class="btn-order" onclick="openOrder('${p.name}', ${p.price}, '${p.options}')">สั่งซื้อ</button>
             </div>
         `).join('');
     }
 
-    function openOrder(p) {
-        activeP = p;
-        document.getElementById('mName').innerText = p[0];
-        document.getElementById('mDesc').innerText = p[2];
-        document.getElementById('mTotal').innerText = (parseFloat(p[3]) + parseFloat(p[4])).toLocaleString();
-        
-        const sel = document.getElementById('mOption');
-        sel.innerHTML = '';
-        if(p[5] && p[5] !== '-') {
-            document.getElementById('optionGroup').style.display = 'block';
-            p[5].split(',').forEach(opt => {
-                sel.innerHTML += `<option value="${opt.trim()}">${opt.trim()}</option>`;
-            });
-        } else {
-            document.getElementById('optionGroup').style.display = 'none';
+    function openOrder(name, price, opts) {
+        document.getElementById('pName').innerText = name;
+        document.getElementById('pTotal').innerText = '฿' + price;
+        const optArea = document.getElementById('optionArea');
+        optArea.innerHTML = '';
+        if(opts !== '-') {
+            let html = '<select id="pOpt"><option value="">เลือกตัวเลือกสินค้า</option>';
+            opts.split(',').forEach(o => html += `<option value="${o}">${o}</option>`);
+            html += '</select>';
+            optArea.innerHTML = html;
         }
-        openModal('orderModal');
+        document.getElementById('orderModal').style.display = 'flex';
     }
 
-    async function checkTracking() {
-        const phone = document.getElementById('trackPhone').value;
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g, '')));
-        const data = rows.find(r => r[0] === phone);
-        const resultDiv = document.getElementById('trackResult');
-        if(data) {
-            resultDiv.innerHTML = `<div style="background:var(--bg); padding:15px; border-radius:10px; border-left:4px solid var(--gold);">
-                <b>คุณ ${data[1]}</b><br>สถานะ: <span style="color:var(--gold)">${data[2]}</span><br>เลขพัสดุ: ${data[3]}
-            </div>`;
-        } else {
-            resultDiv.innerHTML = "ไม่พบข้อมูลพัสดุ";
-        }
+    function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+
+    function submitOrder() {
+        alert("ขอบคุณสำหรับคำสั่งซื้อ! เรากำลังดำเนินการส่งข้อมูลไปยังระบบ...");
+        closeModal();
     }
 
-    function startTimer(endTime) {
-        const target = new Date(endTime).getTime();
-        setInterval(() => {
-            const now = new Date().getTime();
-            const diff = target - now;
-            if(diff < 0) return document.getElementById('timer').innerText = "PROMOTION ENDED";
-            const h = Math.floor(diff / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerText = `EXPIRES IN ${h}:${m}:${s}`;
-        }, 1000);
-    }
-
-    function toggleMode() { document.body.classList.toggle('light-mode'); }
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    
-    init();
+    render();
 </script>
 </body>
 </html>
