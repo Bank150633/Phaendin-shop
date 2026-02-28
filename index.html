@@ -54,17 +54,32 @@
         .price { color: var(--gold-light); font-size: 14px; font-weight: 700; margin-bottom: 5px; }
         .buy-btn { width: 100%; background: var(--gold-grad); color: #000; font-weight: 600; padding: 5px; border-radius: 7px; border: none; font-size: 10px; cursor: pointer; }
 
-        /* --- Footer & Zoom --- */
+        /* --- Zoom Media (กลางจอ) --- */
+        #mediaZoom { 
+            display:none; position:fixed; inset:0; z-index:9000; background:rgba(0,0,0,0.95);
+            display: none; align-items:center; justify-content:center;
+        }
+        #zoomBox { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        #zoomBox img, #zoomBox video { 
+            max-width: 95vw; max-height: 85vh; object-fit: contain; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- Multi Contact Modal --- */
+        .contact-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 15px; }
+        .contact-item { 
+            display: flex; align-items: center; gap: 15px; padding: 12px; background: #111; 
+            border-radius: 10px; text-decoration: none; color: #fff; font-size: 14px; border: 1px solid #222;
+        }
+        .contact-item i { font-size: 20px; width: 30px; text-align: center; }
+
+        /* --- Footer & Modals --- */
         .bottom-nav { position: fixed; bottom: 0; width: 100%; height: var(--footer-h); background: #0a0a0a; display: flex; border-top: 1px solid rgba(212, 175, 55, 0.2); z-index: 2000; }
         .nav-link { color: #555; text-decoration: none; font-size: 9px; text-align: center; flex: 1; padding-top: 10px; }
         .nav-link.active { color: var(--gold); }
         .nav-link i { font-size: 15px; margin-bottom: 2px; display: block; }
 
-        #mediaZoom { display:none; position:fixed; inset:0; z-index:6000; background:rgba(0,0,0,0.9); align-items:center; justify-content:center; }
-        #mediaZoom img, #mediaZoom video { max-width: 90%; max-height: 80%; border-radius: 8px; }
-
         .modal { display: none; position: fixed; z-index: 5000; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; padding: 15px; }
-        .order-card { background: #0a0a0a; border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 15px; text-align: center; }
+        .modal-card { background: #0a0a0a; border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 15px; text-align: center; }
         .form-input { width: 100%; padding: 7px; background: #111; border: 1px solid #333; border-radius: 7px; color: #fff; margin-bottom: 7px; font-family: 'Kanit'; font-size: 11px; }
     </style>
 </head>
@@ -80,20 +95,38 @@
 </header>
 
 <main>
-    <div id="status" style="text-align:center; padding:100px 0; color:#555; font-size: 11px;">กำลังดึงสินค้า...</div>
+    <div id="status" style="text-align:center; padding:100px 0; color:#555; font-size: 11px;">กำลังเตรียมความหรูหรา...</div>
     <div class="grid" id="main-list"></div>
 </main>
 
 <nav class="bottom-nav">
     <a href="#" class="nav-link active"><i class="fa-solid fa-house"></i>หน้าหลัก</a>
     <a href="javascript:void(0)" onclick="checkTracking()" class="nav-link"><i class="fa-solid fa-truck-fast"></i>พัสดุ</a>
-    <a href="https://www.facebook.com/share/1BNoZAqd7W/" target="_blank" class="nav-link"><i class="fa-brands fa-facebook-messenger"></i>ติดต่อเรา</a>
+    <a href="javascript:void(0)" onclick="openContact()" class="nav-link"><i class="fa-solid fa-comments"></i>ติดต่อเรา</a>
 </nav>
 
 <div id="mediaZoom" onclick="this.style.display='none'"><div id="zoomBox"></div></div>
 
+<div id="contactModal" class="modal">
+    <div class="modal-card">
+        <h4 style="color:var(--gold);">เลือกช่องทางติดต่อ</h4>
+        <div class="contact-grid">
+            <a href="https://m.me/YOUR_PAGE_ID" target="_blank" class="contact-item" style="border-left: 4px solid #0084ff;">
+                <i class="fa-brands fa-facebook-messenger" style="color:#0084ff;"></i> Messenger (หลัก)
+            </a>
+            <a href="https://line.me/ti/p/YOUR_LINE_ID" target="_blank" class="contact-item" style="border-left: 4px solid #06c755;">
+                <i class="fa-brands fa-line" style="color:#06c755;"></i> Line Official
+            </a>
+            <a href="tel:09XXXXXXXX" class="contact-item" style="border-left: 4px solid var(--gold);">
+                <i class="fa-solid fa-phone" style="color:var(--gold);"></i> โทรสายด่วน
+            </a>
+        </div>
+        <p onclick="document.getElementById('contactModal').style.display='none'" style="margin-top:15px; color:#555; font-size:11px; cursor:pointer;">ปิดหน้าต่าง</p>
+    </div>
+</div>
+
 <div id="orderModal" class="modal">
-    <div class="order-card">
+    <div class="modal-card">
         <h4 style="color:var(--gold); margin-bottom:10px; font-size:13px;">ยืนยันสั่งซื้อ</h4>
         <div id="orderSummary" style="background:#000; padding:10px; border-radius:8px; margin-bottom:10px; text-align:left; font-size:11px;"></div>
         <form id="orderForm">
@@ -119,7 +152,6 @@
     let currentData = {};
     let bannerEndTime = null;
 
-    // ระบบสุ่ม
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -131,7 +163,10 @@
     function getMedia(url, isZoom = false) {
         if(!url) return '';
         const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
-        if(isVid) return `<video src="${url}" autoplay loop muted playsinline ${isZoom ? 'controls' : ''}></video>`;
+        if(isVid) {
+            // หน้าซูมตัด muted ออกเพื่อให้มีเสียง
+            return `<video src="${url}" autoplay loop ${isZoom ? 'controls' : 'muted'} playsinline></video>`;
+        }
         return `<img src="${url}" loading="lazy">`;
     }
 
@@ -140,9 +175,12 @@
         document.getElementById('mediaZoom').style.display = 'flex';
     }
 
+    function openContact() {
+        document.getElementById('contactModal').style.display = 'flex';
+    }
+
     async function init() {
         try {
-            // Load Banner
             const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
             const textB = await resB.text();
             const b = textB.split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
@@ -161,7 +199,6 @@
                 setInterval(updateTimer, 1000);
             }
 
-            // Load Products (ตัวดึงข้อมูลแบบเน้นเสถียร)
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const textP = await resP.text();
             dbAll = textP.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0] && x[1].startsWith('http'));
@@ -175,7 +212,7 @@
         const q = document.getElementById('search').value.toLowerCase();
         let filtered = dbAll.filter(p => p[0].toLowerCase().includes(q) && (curCat === 'all' || p[6] === curCat));
         
-        // ใช้ระบบสุ่ม
+        // ระบบสุ่มสินค้า (Shuffle)
         filtered = shuffle(filtered);
 
         document.getElementById('main-list').innerHTML = filtered.map(p => `
@@ -250,14 +287,14 @@
     };
 
     async function checkTracking() {
-        const ph = prompt("เบอร์โทร:");
+        const ph = prompt("เบอร์โทรศัพท์ที่ใช้สั่งซื้อ:");
         if (!ph) return;
         try {
             const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
             const t = await res.text();
             const found = t.split('\n').slice(1).map(r => r.split(',')).find(r => r[0].replace(/"/g,'') === ph);
-            if(found) alert(`คุณ: ${found[1]}\nพัสดุ: ${found[3]}`); else alert("ไม่พบข้อมูล");
-        } catch(e) { alert("ผิดพลาด"); }
+            if(found) alert(`คุณ: ${found[1]}\nสถานะ: ${found[2]}\nเลขพัสดุ: ${found[3]}`); else alert("ไม่พบข้อมูล");
+        } catch(e) { alert("ผิดพลาดในการเชื่อมต่อ"); }
     }
 
     window.onscroll = () => { window.scrollY > 30 ? document.getElementById("mainHeader").classList.add("shrunk") : document.getElementById("mainHeader").classList.remove("shrunk"); };
