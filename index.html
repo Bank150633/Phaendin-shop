@@ -59,7 +59,11 @@
         .media { width: 100%; aspect-ratio: 1/1; background: #000; cursor: zoom-in; }
         .media img, .media video { width: 100%; height: 100%; object-fit: cover; }
         .info { padding: 10px; flex: 1; display: flex; flex-direction: column; }
-        .title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* --- รายละเอียดสินค้า --- */
+        .title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 2px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+        .desc { font-size: 10px; color: var(--text-dim); margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; font-weight: 300; }
+        
         .price { color: var(--gold); font-size: 16px; font-weight: 700; margin-bottom: 8px; }
         .buy-btn { width: 100%; background: var(--gold-grad); color: #000; font-weight: 700; padding: 8px; border-radius: 10px; border: none; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; }
 
@@ -165,13 +169,11 @@
         }
     }
 
-    // ตรวจสอบโหมดล่าสุดที่เลือกไว้
     if(localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
         document.getElementById('themeBtn').innerHTML = '<i class="fa-solid fa-sun"></i>';
     }
 
-    // --- ฟังก์ชันเดิม (ห้ามแก้) ---
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -240,7 +242,7 @@
                 <div class="media" onclick="zoom('${p[1]}')">${getMedia(p[1])}</div>
                 <div class="info">
                     <div class="title">${p[0]}</div>
-                    <div class="price">฿${p[3]}</div>
+                    <div class="desc">${p[2] || ''}</div> <div class="price">฿${p[3]}</div>
                     <button class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}','${p[8]||0}')">
                         <i class="fa-solid fa-cart-shopping"></i> สั่งซื้อ
                     </button>
