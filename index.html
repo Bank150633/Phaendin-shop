@@ -3,174 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN STORE | OFFICIAL</title>
+    <title>PHAENDIN STORE | LUXURY</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --gold: #D4AF37; --gold-grad: linear-gradient(135deg, #D4AF37 0%, #F5D76E 100%); --bg: #000; --card: #121212; }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; padding-bottom: 100px; overflow-x: hidden; }
+        body { font-family: 'Kanit', sans-serif; background: var(--bg); color: #fff; padding-bottom: 100px; }
 
-        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 12px 0; border-bottom: 1px solid #222; }
-        .logo { height: 30px; display: block; margin: 0 auto; }
+        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); z-index: 1000; padding: 12px 0; border-bottom: 1px solid #222; }
+        .logo { height: 28px; display: block; margin: 0 auto; }
 
-        .container { padding-top: 60px; }
-        
-        /* --- Recommended Horizontal Scroll --- */
-        .rec-container { padding: 15px 0; background: rgba(212, 175, 55, 0.05); margin-bottom: 10px; }
-        .section-label { font-size: 15px; color: var(--gold); padding: 0 15px 10px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        .rec-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 15px; scrollbar-width: none; }
-        .rec-scroll::-webkit-scrollbar { display: none; }
-        .rec-item { min-width: 160px; max-width: 160px; background: var(--card); border-radius: 15px; overflow: hidden; border: 1px solid #333; }
+        /* --- Banner Section (Fixed) --- */
+        .banner-wrap { padding: 65px 12px 10px; }
+        .banner-box { 
+            background: #000; border: 1.5px solid var(--gold); border-radius: 15px; 
+            display: flex; height: 150px; overflow: hidden; position: relative;
+        }
+        .bn-media { width: 45%; background: #111; }
+        .bn-media img, .bn-media video { width: 100%; height: 100%; object-fit: cover; }
+        .bn-info { width: 55%; padding: 15px; display: flex; flex-direction: column; justify-content: center; }
+        .flash-tag { position: absolute; top: 0; left: 0; background: red; color: #fff; font-size: 9px; padding: 2px 8px; border-bottom-right-radius: 10px; font-weight: bold; }
 
-        /* --- Main Grid --- */
-        .main-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
-        .card { background: var(--card); border-radius: 18px; overflow: hidden; border: 1px solid #222; display: flex; flex-direction: column; }
-        
-        /* Media & Zoom */
-        .media-link { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; cursor: zoom-in; }
-        .media-link img, .media-link video { width: 100%; height: 100%; object-fit: contain; }
-        .zoom-icon { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); padding: 4px; border-radius: 50%; font-size: 10px; color: var(--gold); }
-
-        .info { padding: 12px; flex-grow: 1; }
-        .price { color: var(--gold); font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-        .title { font-size: 13px; color: #ddd; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 10px; }
-        .buy-btn { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 10px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
-
-        /* --- Navigation & Search --- */
-        .search-wrap { padding: 10px 15px; }
-        #search { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #333; background: #1a1a1a; color: #fff; outline: none; }
-        .cat-bar { display: flex; gap: 8px; overflow-x: auto; padding: 5px 15px 15px; scrollbar-width: none; }
-        .cat-btn { padding: 7px 18px; border-radius: 50px; background: #222; color: #888; font-size: 12px; border: none; white-space: nowrap; }
+        /* --- Category & Search --- */
+        .nav-tools { padding: 10px 12px; }
+        #search { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #333; background: #151515; color: #fff; outline: none; margin-bottom: 10px; }
+        .cat-scroll { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 5px; }
+        .cat-btn { padding: 6px 16px; border-radius: 50px; background: #222; color: #888; font-size: 12px; border: none; white-space: nowrap; }
         .cat-btn.active { background: var(--gold-grad); color: #000; font-weight: bold; }
 
-        /* --- Modals --- */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-inner { background: #111; border: 1px solid var(--gold); border-radius: 20px; width: 100%; max-width: 400px; padding: 20px; position: relative; }
-        .close-x { position: absolute; top: -40px; right: 0; color: #fff; font-size: 30px; cursor: pointer; }
-        .lb-media { width: 100%; max-height: 75vh; object-fit: contain; }
+        /* --- Product Grid --- */
+        .label { font-size: 15px; color: var(--gold); padding: 15px 12px 10px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .h-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 12px 20px; scrollbar-width: none; }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 12px; }
+        
+        .card { background: var(--card); border-radius: 15px; border: 1px solid #222; overflow: hidden; display: flex; flex-direction: column; }
+        .card-rec { min-width: 150px; max-width: 150px; }
+        
+        .media-link { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; cursor: zoom-in; }
+        .media-link img, .media-link video { width: 100%; height: 100%; object-fit: contain; }
+        .zoom-ico { position: absolute; bottom: 8px; right: 8px; font-size: 12px; color: var(--gold); background: rgba(0,0,0,0.5); padding: 4px; border-radius: 4px; }
 
-        .footer { position: fixed; bottom: 0; width: 100%; height: 75px; background: #080808; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 4000; }
-        .nav-link { color: #666; text-decoration: none; text-align: center; font-size: 10px; }
+        .p-info { padding: 10px; flex-grow: 1; }
+        .p-price { color: var(--gold); font-size: 17px; font-weight: 800; margin-bottom: 2px; }
+        .p-title { font-size: 12px; color: #ccc; line-height: 1.3; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 10px; }
+        .buy-btn { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 12px; }
+
+        /* --- Modal --- */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-inner { background: #111; border: 1px solid var(--gold); border-radius: 20px; width: 100%; max-width: 400px; padding: 20px; }
+        .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; font-size: 30px; }
+
+        .footer { position: fixed; bottom: 0; width: 100%; height: 70px; background: #080808; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; z-index: 4000; }
+        .nav-link { color: #555; text-decoration: none; text-align: center; font-size: 10px; }
         .nav-link.active { color: var(--gold); }
-        .nav-link i { font-size: 20px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
 <header><img src="https://i.ibb.co/SX2bN2VV/1771066008674-2.jpg" class="logo"></header>
 
-<div class="container">
-    <div class="search-wrap"><input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()"></div>
-    <div class="cat-bar" id="catBar"></div>
+<div class="banner-wrap" id="bannerArea"></div>
 
-    <main>
-        <div id="recSection" class="rec-container" style="display:none;">
-            <div class="section-label"><i class="fa-solid fa-fire"></i> สินค้าแนะนำพิเศษ</div>
-            <div class="rec-scroll" id="recList"></div>
-        </div>
-
-        <div class="section-label"><i class="fa-solid fa-box-open"></i> รายการสินค้า</div>
-        <div class="main-grid" id="allList"></div>
-    </main>
+<div class="nav-tools">
+    <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
+    <div class="cat-scroll" id="catBar"></div>
 </div>
 
+<main>
+    <div id="recSection" style="display:none;">
+        <div class="label"><i class="fa-solid fa-star"></i> แนะนำสำหรับคุณ</div>
+        <div class="h-scroll" id="recList"></div>
+    </div>
+    <div id="allSection">
+        <div class="label"><i class="fa-solid fa-grid-2"></i> สินค้าทั้งหมด</div>
+        <div class="grid" id="allList"></div>
+    </div>
+</main>
+
 <nav class="footer">
-    <a href="#" class="nav-link active"><i class="fa-solid fa-house"></i><br>หน้าหลัก</a>
-    <a href="javascript:void(0)" onclick="alert('ระบบติดตามพัสดุ')" class="nav-link"><i class="fa-solid fa-truck-fast"></i><br>พัสดุ</a>
-    <a href="javascript:void(0)" onclick="window.open('https://line.me/ti/p/yourid')" class="nav-link"><i class="fa-solid fa-comments"></i><br>ติดต่อเรา</a>
+    <a href="#" class="nav-link active"><i class="fa-solid fa-house" style="font-size:20px;"></i><br>หน้าหลัก</a>
+    <a href="javascript:void(0)" onclick="alert('เร็วๆ นี้')" class="nav-link"><i class="fa-solid fa-truck" style="font-size:20px;"></i><br>พัสดุ</a>
+    <a href="javascript:void(0)" onclick="window.open('https://line.me/ti/p/yourid')" class="nav-link"><i class="fa-solid fa-comment" style="font-size:20px;"></i><br>ติดต่อเรา</a>
 </nav>
 
 <div id="lightbox" class="modal" onclick="this.style.display='none'">
-    <span class="close-x">&times;</span>
     <div id="lbContent" style="width:100%; text-align:center;"></div>
 </div>
 
 <div id="orderModal" class="modal">
     <div class="modal-inner">
-        <h3 style="color:var(--gold); text-align:center; margin-bottom:15px;">แจ้งความประสงค์สั่งซื้อ</h3>
-        <div id="orderInfo" style="background:#000; padding:12px; border-radius:10px; margin-bottom:15px; font-size:13px; border:1px solid #333;"></div>
-        <input type="text" id="cName" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff; border-radius:8px; margin-bottom:10px;" placeholder="ชื่อ-นามสกุล">
-        <input type="tel" id="cPhone" style="width:100%; padding:12px; background:#000; border:1px solid #333; color:#fff; border-radius:8px; margin-bottom:10px;" placeholder="เบอร์โทรศัพท์">
-        <button onclick="confirmOrder()" class="buy-btn" style="height:50px; font-size:16px;">ยืนยันการสั่งซื้อ</button>
-        <p onclick="document.getElementById('orderModal').style.display='none'" style="text-align:center; color:#555; font-size:12px; margin-top:15px;">ปิดหน้าต่าง</p>
+        <h3 style="color:var(--gold); text-align:center; margin-bottom:15px;">ยืนยันการสั่งซื้อ</h3>
+        <div id="orderSum" style="font-size:13px; margin-bottom:15px; background:#000; padding:10px; border-radius:10px;"></div>
+        <button class="buy-btn" style="height:45px;" onclick="location.reload()">ตกลงและส่งหลักฐาน</button>
     </div>
 </div>
 
 <script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
-    let db = [], recs = [], curCat = 'all';
+    let fullDb = [], recItems = [], normalItems = [], curCat = 'all';
 
-    function getMedia(url, isZoom) {
+    function getMedia(url, zoom) {
         if (!url) return '';
         const isVid = url.toLowerCase().match(/\.(mp4|webm|mov)$/);
-        if (isVid) {
-            return `<video src="${url}" ${isZoom ? 'controls autoplay' : 'autoplay loop muted playsinline'} style="width:100%; height:100%; object-fit:contain;"></video>`;
-        }
-        return `<img src="${url}" style="width:100%; height:100%; object-fit:contain;" loading="lazy">`;
+        return isVid ? `<video src="${url}" ${zoom?'controls autoplay':'autoplay loop muted playsinline'} style="width:100%; height:100%; object-fit:contain;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:contain;">`;
     }
 
-    async function init() {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`);
-        const text = await res.text();
-        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()));
-        
-        db = rows.filter(r => r[0] && r[1]).sort(() => Math.random() - 0.5);
-        recs = db.filter(r => r[5] && r[5].includes("แนะนำ"));
-        
-        if (recs.length > 0) document.getElementById('recSection').style.display = 'block';
-        render();
+    async function loadAll() {
+        try {
+            // 1. Load Banner
+            const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
+            const textB = await resB.text();
+            const b = textB.split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            if(b && b[0]) {
+                document.getElementById('bannerArea').innerHTML = `
+                    <div class="banner-box" onclick="zoom('${b[0]}')">
+                        <div class="bn-media">${getMedia(b[0], false)}</div>
+                        <div class="bn-info">
+                            <div class="flash-tag">FLASH SALE</div>
+                            <div style="color:var(--gold); font-weight:bold; font-size:14px;">${b[1]}</div>
+                            <div style="font-size:10px; color:#888; margin-top:5px;">คลิกเพื่อดูรายละเอียด</div>
+                        </div>
+                    </div>`;
+            }
+
+            // 2. Load Products
+            const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv`);
+            const textP = await resP.text();
+            const rows = textP.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(r => r[0] && r[1]);
+            
+            // แยกกลุ่มชัดเจน (ป้องกันการสุ่มซ้ำ)
+            const shuffled = rows.sort(() => Math.random() - 0.5);
+            recItems = shuffled.filter(r => r[5] && r[5].includes("แนะนำ"));
+            const recIds = new Set(recItems.map(i => i[0]));
+            normalItems = shuffled.filter(r => !recIds.has(r[0]));
+
+            if(recItems.length > 0) document.getElementById('recSection').style.display = 'block';
+            render();
+        } catch (e) { console.error("Error loading data", e); }
     }
 
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-        
-        // Render Categories
         const cats = [['all','ทั้งหมด'],['1','อาหาร'],['2','ของใช้'],['3','แม่และเด็ก']];
-        document.getElementById('catBar').innerHTML = cats.map(c => `<button class="cat-btn ${curCat===c[0]?'active':''}" onclick="setCat('${c[0]}')">${c[1]}</button>`).join('');
+        document.getElementById('catBar').innerHTML = cats.map(c => `<button class="cat-btn ${curCat===c[0]?'active':''}" onclick="curCat='${c[0]}';render()">${c[1]}</button>`).join('');
 
-        // Render Recommended (เลื่อนซ้ายขวา)
-        document.getElementById('recList').innerHTML = recs.map(p => `
-            <div class="rec-item">
-                <div class="media-link" onclick="zoom('${p[1]}')">${getMedia(p[1], false)}<i class="fa-solid fa-magnifying-glass zoom-icon"></i></div>
-                <div style="padding:10px;">
-                    <div style="color:var(--gold); font-weight:bold;">฿${p[3]}</div>
-                    <div class="title" style="font-size:11px; height:32px;">${p[0]}</div>
-                    <button class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</button>
+        const cardHtml = (p, isRec) => `
+            <div class="card ${isRec?'card-rec':''}">
+                <div class="media-link" onclick="zoom('${p[1]}')">${getMedia(p[1], false)}<i class="fa-solid fa-expand zoom-ico"></i></div>
+                <div class="p-info">
+                    <div class="p-price">฿${p[3]}</div>
+                    <div class="p-title">${p[0]}</div>
+                    <button class="buy-btn" onclick="buy('${p[0]}','${p[3]}')">สั่งซื้อ</button>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
 
-        // Render All Grid
-        document.getElementById('allList').innerHTML = db
+        document.getElementById('recList').innerHTML = recItems.map(p => cardHtml(p, true)).join('');
+        document.getElementById('allList').innerHTML = normalItems
             .filter(p => p[0].toLowerCase().includes(q) && (curCat === 'all' || p[6] === curCat))
-            .map(p => `
-                <div class="card">
-                    <div class="media-link" onclick="zoom('${p[1]}')">${getMedia(p[1], false)}<i class="fa-solid fa-magnifying-glass zoom-icon"></i></div>
-                    <div class="info">
-                        <div class="price">฿${p[3]}</div>
-                        <div class="title">${p[0]}</div>
-                        <button class="buy-btn" onclick="openOrder('${p[0]}','${p[3]}')">สั่งซื้อ</button>
-                    </div>
-                </div>
-            `).join('');
+            .map(p => cardHtml(p, false)).join('');
     }
 
-    function setCat(c) { curCat = c; render(); }
     function zoom(url) {
         document.getElementById('lbContent').innerHTML = getMedia(url, true);
         document.getElementById('lightbox').style.display = 'flex';
     }
-    function openOrder(name, price) {
-        document.getElementById('orderInfo').innerHTML = `<b>สินค้า:</b> ${name}<br><b>ราคา:</b> <span style="color:var(--gold)">฿${price}</span>`;
+
+    function buy(name, price) {
+        document.getElementById('orderSum').innerHTML = `<b>ยืนยันสั่งซื้อ:</b> ${name}<br><b>ราคา:</b> ฿${price}`;
         document.getElementById('orderModal').style.display = 'flex';
     }
-    function confirmOrder() {
-        alert("ขอบคุณสำหรับคำสั่งซื้อ! เจ้าหน้าที่จะติดต่อกลับโดยเร็วที่สุด");
-        location.reload();
-    }
 
-    init();
+    loadAll();
 </script>
 </body>
 </html>
