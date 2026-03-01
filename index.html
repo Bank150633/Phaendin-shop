@@ -232,13 +232,29 @@
         openModal('orderModal');
     }
 
-    function updatePrice() {
+        function updatePrice() {
         const sel = document.getElementById('pOpt');
+        let optionPrice = activeP.basePrice;
+        let label = "";
+
         if(sel) {
-            activeP.currentPrice = parseFloat(sel.value);
-            activeP.optText = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
+            // ดึงราคาจาก value ที่เราตั้งไว้ในรูปแบบ "ชื่อ=ราคา"
+            optionPrice = parseFloat(sel.value);
+            label = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
+            activeP.currentPrice = optionPrice;
+            activeP.optText = label;
         }
-        document.getElementById('orderDetail').innerHTML = `🛒 ${activeP.name}${activeP.optText}<br>💰 ยอดโอนสุทธิ: ฿${(activeP.currentPrice + activeP.ship).toLocaleString()} (รวมส่ง)`;
+
+        const total = optionPrice + activeP.ship;
+
+        // แสดงผลในช่องรายละเอียด (เน้นยอดโอนสุทธิ)
+        document.getElementById('orderDetail').innerHTML = `
+            <div style="margin-bottom:5px; color:var(--text-dim);">🛒 ${activeP.name}${activeP.optText}</div>
+            <div style="font-size:14px; font-weight:700; color:var(--gold); border-top:1px solid rgba(212,175,55,0.2); pt:5px;">
+                💰 ยอดโอนสุทธิ: <span style="font-size:18px; color:#fff;">฿${total.toLocaleString()}</span> 
+                <br><span style="font-size:9px; font-weight:400; color:var(--text-dim);">(ราคาสินค้า ฿${optionPrice.toLocaleString()} + ค่าส่ง ฿${activeP.ship})</span>
+            </div>
+        `;
     }
 
     function zoom(url) { 
