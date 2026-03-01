@@ -114,7 +114,7 @@
 </header>
 
 <div class="banner-box" id="banner"></div>
-<div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</div>
+<div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าแนะนำ (สุ่ม)</div>
 <main class="grid" id="productGrid"></main>
 
 <nav>
@@ -195,7 +195,13 @@
             }
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const rows = (await resP.text()).split('\n').slice(1);
-            db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            
+            // ดึงข้อมูลและกรองแถวว่าง
+            let rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            
+            // --- เพิ่มระบบสุ่มลำดับ (Shuffle) ---
+            db = rawData.sort(() => Math.random() - 0.5); 
+            
             render();
         } catch(e) { console.error(e); }
     }
@@ -206,7 +212,6 @@
         document.getElementById('productGrid').innerHTML = filtered.map(p => {
             let originalPrice = parseFloat(p[3]);
             
-            // --- รวมป้ายแท็กจากช่อง E, F, G, H (ดัชนี 4,5,6,7) และ K (ดัชนี 10) ---
             let rawTags = [p[4], p[5], p[6], p[7], p[10]].filter(t => t && t !== '-' && t !== '').join(',');
             let tags = rawTags || '';
             
