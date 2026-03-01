@@ -39,30 +39,40 @@
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
-        /* --- ส่วนที่ปรับปรุง: Cinematic Banner --- */
-        .banner-box { padding: 0; margin-top: 0; width: 100%; }
+        /* --- แก้ไขส่วน Banner ให้เล็กลงและมีกรอบ --- */
+        .banner-box { padding: 8px; margin-top: 5px; } /* เพิ่ม Padding รอบนอก */
         .bn-card { 
-            border: none; border-bottom: 2px solid var(--gold); border-radius: 0; 
-            overflow: hidden; display: block; height: auto; min-height: 200px;
-            background: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); position: relative;
+            border: 2px solid var(--gold); /* เพิ่มกรอบสีทอง */
+            border-radius: 15px; /* เพิ่มความโค้งมน */
+            overflow: hidden; 
+            display: block; 
+            height: auto; 
+            min-height: 150px;
+            background: #000; 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); /* เงาสีทองจางๆ */
+            position: relative;
         }
-        .bn-img { width: 100%; height: 100%; position: relative; background: #000; border-right: none; }
-        .bn-img img, .bn-img video { width: 100%; height: auto; max-height: 70vh; object-fit: cover; display: block; }
+        .bn-img { width: 100%; height: 100%; position: relative; background: #000; }
+        .bn-img img, .bn-img video { 
+            width: 100%; 
+            height: 220px; /* จำกัดความสูงไม่ให้ใหญ่เกินไป */
+            object-fit: cover; 
+            display: block; 
+        }
         
-        /* Overlay ข้อความบนแบนเนอร์ */
         .bn-txt { 
             position: absolute; bottom: 0; left: 0; width: 100%;
-            padding: 20px 15px; display: flex; flex-direction: column; justify-content: flex-end;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+            padding: 15px 12px; display: flex; flex-direction: column; justify-content: flex-end;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
         }
-        .bn-title { font-size: 18px; font-weight: 600; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin-bottom: 8px; }
+        .bn-title { font-size: 15px; font-weight: 600; color: var(--gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 5px; }
         .bn-timer { 
-            display: flex; gap: 5px; font-size: 12px; color: #fff; background: rgba(0, 0, 0, 0.6); 
-            padding: 4px 12px; border-radius: 5px; width: fit-content; border: 1px solid var(--gold); margin-bottom: 10px;
+            display: flex; gap: 4px; font-size: 11px; color: #fff; background: rgba(0, 0, 0, 0.7); 
+            padding: 3px 10px; border-radius: 6px; width: fit-content; border: 1px solid rgba(212,175,55,0.5); margin-bottom: 8px;
         }
         /* ------------------------------------- */
 
-        .sec-title { padding: 15px 10px 5px; font-size: 14px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+        .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
         
         .card { background: var(--card); border: 1px solid rgba(212,175,55,0.15); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
@@ -195,7 +205,7 @@
                         <div class="bn-txt">
                             <div class="bn-title">🔥 ${b[1]}</div>
                             <div class="bn-timer">⏳ <span id="th">00</span>:<span id="tm">00</span>:<span id="ts">00</span></div>
-                            <button class="buy-now" style="width:120px; padding:6px 0; font-size:11px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
+                            <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
                         </div>
                     </div>`;
                 setInterval(tick, 1000);
