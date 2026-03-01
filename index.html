@@ -79,4 +79,227 @@
         .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; }
         
         .buy-now { 
-            width: 100%; background: var(--gold-grad); color: #00
+            width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; 
+            font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px;
+            text-transform: uppercase; position: relative; overflow: hidden;
+        }
+        .buy-now::after {
+            content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%;
+            background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite;
+        }
+        @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 10px; opacity: 0; transition: 0.3s; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 290px; padding: 12px; max-height: 90vh; overflow-y: auto; }
+        
+        .opt-sel { width: 100%; padding: 6px 8px; margin-bottom: 10px; border-radius: 6px; background: #1a1a1a; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.4); font-size: 10.5px; outline: none; }
+        .input-slim { width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
+
+        nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
+        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
+        .nav-tab.active { color: var(--gold); }
+        .nav-tab i { font-size: 15px; margin-bottom: 2px; }
+
+        #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
+        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="search-wrap">
+        <i class="fa-solid fa-search search-icon"></i>
+        <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
+        <button class="theme-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
+    </div>
+</header>
+
+<div class="banner-box" id="banner"></div>
+<div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</div>
+<main class="grid" id="productGrid"></main>
+
+<nav>
+    <div class="nav-tab active" onclick="location.reload()"><i class="fa-solid fa-house"></i> หน้าแรก</div>
+    <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-truck"></i> พัสดุ</div>
+    <div class="nav-tab" onclick="openModal('contactModal')"><i class="fa-solid fa-comment-dots"></i> ติดต่อ</div>
+</nav>
+
+<div id="contactModal" class="modal">
+    <div class="modal-card" style="text-align:center;">
+        <h4 style="color:var(--gold); margin-bottom:12px; font-size:14px;">ติดต่อเรา</h4>
+        <a href="tel:0944159031" style="display:block; background:#28a745; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;">📞 โทรสายด่วน</a>
+        <a href="https://line.me/ti/p/YOUR_ID" style="display:block; background:#06c755; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;">💬 Line OA</a>
+        <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
+    </div>
+</div>
+
+<div id="orderModal" class="modal">
+    <div class="modal-card">
+        <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
+        <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:10px; border-radius:10px; margin-bottom:12px; border:1px solid rgba(212,175,55,0.3);"></div>
+        <form id="orderForm">
+            <div id="optionBox"></div>
+            <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
+            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
+            <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
+            <div style="text-align:center; margin: 10px 0; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px;">
+                <p style="font-size:10px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0358567622" style="width:100px; margin-top:5px; border:2px solid #fff; border-radius:5px;">
+            </div>
+            <div style="border:1px dashed var(--gold); padding:8px; border-radius:8px; text-align:center; cursor:pointer;" onclick="document.getElementById('fileIn').click()">
+                <span id="upTxt" style="font-size:10px; color:var(--gold);">📸 คลิกแนบสลิป</span>
+                <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
+                <img id="preview" style="display:none; width:100%; margin-top:5px; border-radius:4px;">
+            </div>
+            <button type="submit" id="submitBtn" class="buy-now" style="margin-top:10px; border-radius:8px;">ยืนยันสั่งซื้อ</button>
+            <p onclick="closeModal('orderModal')" style="text-align:center; color:var(--text-dim); cursor:pointer; margin-top:8px; font-size:10px;">[ ยกเลิก ]</p>
+        </form>
+    </div>
+</div>
+
+<div id="zoomOverlay" onclick="closeZoom()"><div id="zoomContent"></div></div>
+
+<script>
+    const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+    const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
+    
+    let db = [], activeP = {}, bannerEnd = null;
+
+    async function init() {
+        try {
+            const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
+            const b = (await resB.text()).split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            if(b) {
+                bannerEnd = new Date(b[2]).getTime();
+                document.getElementById('banner').innerHTML = `
+                    <div class="bn-card">
+                        <div class="bn-img" onclick="zoom('${b[0]}')">${renderMedia(b[0], true)}</div>
+                        <div class="bn-txt">
+                            <div class="bn-title">🔥 ${b[1]}</div>
+                            <div class="bn-timer">⏳ <span id="th">00</span>:<span id="tm">00</span>:<span id="ts">00</span></div>
+                            <button class="buy-now" style="width:90px; padding:4px 0; font-size:9px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
+                        </div>
+                    </div>`;
+                setInterval(tick, 1000);
+            }
+            const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
+            const rows = (await resP.text()).split('\n').slice(1);
+            db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            render();
+        } catch(e) { console.error(e); }
+    }
+
+    function render() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+        document.getElementById('productGrid').innerHTML = filtered.map(p => {
+            // ระบบแยกสีป้ายแท็ก (คอลัมน์ K)
+            let badgesHtml = p[10] ? p[10].split(',').map(t => {
+                let tag = t.trim();
+                let c = 'bg-blue';
+                if(tag.includes('ขายดี')) c = 'bg-gold';
+                if(tag.includes('ลด') || tag.includes('Hot')) c = 'bg-red';
+                if(tag.includes('ใหม่') || tag.includes('พร้อมส่ง')) c = 'bg-green';
+                return `<span class="badge ${c}">${tag}</span>`;
+            }).join('') : '';
+
+            return `
+            <div class="card">
+                <div class="media-wrap" onclick="zoom('${p[1]}')">
+                    <div class="badge-container">${badgesHtml}</div>
+                    ${renderMedia(p[1], true)}
+                </div>
+                <div class="info">
+                    <div class="p-name">${p[0]}</div>
+                    <div class="p-desc">${p[2] || ''}</div>
+                    <div class="p-price">฿${parseFloat(p[3]).toLocaleString()}</div>
+                </div>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${p[3]}','${p[8]||0}','${p[9]||''}')">สั่งซื้อ</button>
+            </div>`;
+        }).join('');
+    }
+
+    function renderMedia(url, isMuted) {
+        if(!url) return '';
+        const isVid = url.match(/\.(mp4|webm|mov)$/i);
+        return isVid ? `<video src="${url}" ${isMuted ? 'autoplay loop muted playsinline' : 'controls autoplay'} style="width:100%; height:100%; object-fit:contain;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:contain;">`;
+    }
+
+    function openOrder(n, p, s, optStr) {
+        activeP = { name: n, basePrice: parseFloat(p), ship: parseFloat(s), currentPrice: parseFloat(p), optText: '' };
+        const box = document.getElementById('optionBox');
+        box.innerHTML = '';
+        if(optStr && optStr !== '-') {
+            let html = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก:</label><select id="pOpt" class="opt-sel" onchange="updatePrice()">`;
+            optStr.split(',').forEach(o => {
+                const pts = o.trim().split('=');
+                html += `<option value="${pts[1]||p}" data-label="${pts[0]}">${pts[0]} (฿${parseFloat(pts[1]||p).toLocaleString()})</option>`;
+            });
+            box.innerHTML = html + `</select>`;
+        }
+        updatePrice();
+        openModal('orderModal');
+    }
+
+    function updatePrice() {
+        const sel = document.getElementById('pOpt');
+        if(sel) {
+            activeP.currentPrice = parseFloat(sel.value);
+            activeP.optText = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
+        }
+        const total = activeP.currentPrice + activeP.ship;
+        document.getElementById('orderDetail').innerHTML = `<div style="font-size:10px;">🛒 ${activeP.name}${activeP.optText}</div><div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">฿${total.toLocaleString()}</div>`;
+    }
+
+    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; }
+    function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
+    function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
+    function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
+
+    document.getElementById('orderForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const file = document.getElementById('fileIn').files[0];
+        if(!file) return alert("กรุณาแนบสลิป!");
+        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+        const reader = new FileReader();
+        reader.onload = async () => {
+            const data = {
+                productDetail: `${activeP.name}${activeP.optText} ยอด: ${activeP.currentPrice + activeP.ship}`,
+                customerName: document.getElementById('cName').value,
+                customerPhone: document.getElementById('cPhone').value,
+                customerAddress: document.getElementById('cAddr').value,
+                file: reader.result.split(',')[1]
+            };
+            try {
+                await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
+                alert("สั่งซื้อสำเร็จ!"); location.reload();
+            } catch(err) { alert("ล้มเหลว"); btn.disabled = false; }
+        };
+        reader.readAsDataURL(file);
+    };
+
+    function tick() {
+        if(!bannerEnd) return;
+        const d = bannerEnd - Date.now();
+        if(d > 0) {
+            document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0');
+            document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0');
+            document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0');
+        }
+    }
+    function toggleTheme() { document.body.classList.toggle('light-mode'); }
+    async function checkShip() {
+        const p = prompt("เบอร์โทรที่ใช้สั่งซื้อ:"); if(!p) return;
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
+        const rows = (await res.text()).split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'')));
+        const f = rows.find(r => r[0] === p);
+        if(f) alert(`คุณ ${f[1]}\nสถานะ: ${f[2]}\nพัสดุ: ${f[3]}`);
+        else alert("ไม่พบข้อมูล");
+    }
+    init();
+</script>
+</body>
+</html>
