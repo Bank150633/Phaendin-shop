@@ -228,11 +228,11 @@
         if(optStr && optStr !== '-') {
             let html = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก:</label><select id="pOpt" class="opt-sel" onchange="updatePrice()">`;
             optStr.split(',').forEach((o, i) => {
-                // รองรับทั้งแบบ : และ =
                 let pts = o.includes(':') ? o.split(':') : o.split('=');
                 let label = pts[0].trim();
                 let price = pts[1] ? parseFloat(pts[1]) : activeP.pNormal;
-                html += `<option value="${price}" data-label="${label}">${label}</option>`;
+                // เพิ่มราคาต่อท้ายใน option ให้ลูกค้าเห็น
+                html += `<option value="${price}" data-label="${label}">${label} (฿${price.toLocaleString()})</option>`;
             });
             box.innerHTML = html + `</select>`;
         }
@@ -248,7 +248,6 @@
             activeP.optLabel = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
 
-        // คำนวณราคาที่ลด % จากราคาของตัวเลือกนั้นๆ
         let discounted = priceToUse;
         if(activeP.disc > 0) {
             discounted = priceToUse * (1 - (activeP.disc / 100));
@@ -258,11 +257,14 @@
         
         document.getElementById('orderDetail').innerHTML = `
             <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optLabel}</div>
-            <div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">
+            <div style="font-size:20px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">
                 <span style="text-decoration:line-through; font-size:12px; color:#888; margin-right:8px;">฿${priceToUse.toLocaleString()}</span>
                 ฿${activeP.finalPrice.toLocaleString()}
             </div>
-            ${activeP.disc > 0 ? `<div style="color:#ff4b2b; font-size:10px; text-align:center;">(ลดพิเศษ ${activeP.disc}%)</div>` : ''}
+            <div style="font-size:10px; text-align:center; color:var(--gold); margin-top:2px;">
+                🚚 ค่าจัดส่ง: ฿${activeP.ship.toLocaleString()}
+            </div>
+            ${activeP.disc > 0 ? `<div style="color:#ff4b2b; font-size:10px; text-align:center; font-weight:bold;">(ลดพิเศษ ${activeP.disc}%)</div>` : ''}
         `;
     }
 
@@ -300,7 +302,7 @@
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name}${activeP.optLabel} ยอด: ${activeP.finalPrice}`,
+                productDetail: `${activeP.name}${activeP.optLabel} ยอด: ${activeP.finalPrice} (รวมส่ง ฿${activeP.ship})`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
