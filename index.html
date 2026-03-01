@@ -39,23 +39,22 @@
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
-        /* --- ปรับปรุงแบนเนอร์ให้เหลือ 1 ใน 3 และมีกรอบ --- */
-        .banner-box { padding: 10px 12px; margin-top: 5px; } 
+        /* --- ปรับปรุงส่วน Banner ให้กะทัดรัดขึ้น (1 ใน 3) --- */
+        .banner-box { padding: 8px; margin-top: 5px; } 
         .bn-card { 
             border: 2px solid var(--gold); 
-            border-radius: 12px; 
+            border-radius: 15px; 
             overflow: hidden; 
             display: block; 
-            height: auto; 
+            height: 180px; /* ลดความสูงโดยรวมลง */
             background: #000; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
             position: relative;
         }
         .bn-img { width: 100%; height: 100%; position: relative; background: #000; }
         .bn-img img, .bn-img video { 
             width: 100%; 
-            height: auto;
-            aspect-ratio: 16 / 7; /* ปรับให้เตี้ยลงเพื่อลดขนาดพื้นที่หน้าจอ */
+            height: 100%; 
             object-fit: cover; 
             display: block; 
         }
@@ -63,16 +62,16 @@
         .bn-txt { 
             position: absolute; bottom: 0; left: 0; width: 100%;
             padding: 10px 12px; display: flex; flex-direction: column; justify-content: flex-end;
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
         }
-        .bn-title { font-size: 14px; font-weight: 600; color: var(--gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 4px; }
+        .bn-title { font-size: 14px; font-weight: 600; color: var(--gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 3px; }
         .bn-timer { 
-            display: flex; gap: 4px; font-size: 10px; color: #fff; background: rgba(0, 0, 0, 0.7); 
-            padding: 2px 8px; border-radius: 4px; width: fit-content; border: 1px solid rgba(212,175,55,0.4); margin-bottom: 6px;
+            display: flex; gap: 4px; font-size: 10px; color: #fff; background: rgba(0, 0, 0, 0.8); 
+            padding: 2px 8px; border-radius: 4px; width: fit-content; border: 1px solid rgba(212,175,55,0.5); margin-bottom: 6px;
         }
         /* ------------------------------------- */
 
-        .sec-title { padding: 10px 12px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+        .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
         
         .card { background: var(--card); border: 1px solid rgba(212,175,55,0.15); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
@@ -196,7 +195,7 @@
     async function init() {
         try {
             const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
-            const b = (await resB.text()).split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^\"\]*"){2})*[^\"\]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            const b = (await resB.text()).split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
             if(b) {
                 bannerEnd = new Date(b[2]).getTime();
                 document.getElementById('banner').innerHTML = `
@@ -205,14 +204,14 @@
                         <div class="bn-txt">
                             <div class="bn-title">🔥 ${b[1]}</div>
                             <div class="bn-timer">⏳ <span id="th">00</span>:<span id="tm">00</span>:<span id="ts">00</span></div>
-                            <button class="buy-now" style="width:100px; padding:4px 0; font-size:9px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
+                            <button class="buy-now" style="width:90px; padding:3px 0; font-size:9px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
                         </div>
                     </div>`;
                 setInterval(tick, 1000);
             }
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const rows = (await resP.text()).split('\n').slice(1);
-            let rawData = rows.map(r => r.split(/,(?=(?:(?:[^\"\]*"){2})*[^\"\]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            let rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             db = rawData.sort(() => Math.random() - 0.5); 
             render();
         } catch(e) { console.error(e); }
