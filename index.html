@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN STORE | ULTRA COMPACT V9</title>
+    <title>PHAENDIN STORE | ULTRA COMPACT V9.2</title>
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://phaendin-shop.vercel.app/">
     <meta property="og:title" content="PHAENDIN STORE | แหล่งรวมสินค้าคุณภาพ ราคาดี">
     <meta property="og:description" content="ช้อปง่าย จ่ายสะดวก ส่งไว ได้ของชัวร์ โปรโมชั่นจัดเต็ม">
-    
     <meta property="og:image" content="ใส่ลิงก์รูปของคุณตรงนี้.jpg"> 
-    
     <meta property="twitter:card" content="summary_large_image">
-    
     <meta property="twitter:image" content="ใส่ลิงก์รูปของคุณตรงนี้.jpg">
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -39,25 +36,19 @@
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
-        /* --- ปรับปรุงส่วน Banner ให้กะทัดรัดขึ้น (1 ใน 3) --- */
         .banner-box { padding: 8px; margin-top: 5px; } 
         .bn-card { 
             border: 2px solid var(--gold); 
             border-radius: 15px; 
             overflow: hidden; 
             display: block; 
-            height: 180px; /* ลดความสูงโดยรวมลง */
+            height: 180px; 
             background: #000; 
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
             position: relative;
         }
         .bn-img { width: 100%; height: 100%; position: relative; background: #000; }
-        .bn-img img, .bn-img video { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            display: block; 
-        }
+        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; display: block; }
         
         .bn-txt { 
             position: absolute; bottom: 0; left: 0; width: 100%;
@@ -69,7 +60,6 @@
             display: flex; gap: 4px; font-size: 10px; color: #fff; background: rgba(0, 0, 0, 0.8); 
             padding: 2px 8px; border-radius: 4px; width: fit-content; border: 1px solid rgba(212,175,55,0.5); margin-bottom: 6px;
         }
-        /* ------------------------------------- */
 
         .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
@@ -181,17 +171,6 @@
     
     let db = [], activeP = {}, bannerEnd = null;
 
-    function getDiscountedPrice(price, tagStr) {
-        let p = parseFloat(price);
-        if (!tagStr) return p;
-        let match = tagStr.match(/ลด\s*(\d+)%/);
-        if (match) {
-            let percent = parseInt(match[1]);
-            return p * (1 - (percent / 100));
-        }
-        return p;
-    }
-
     async function init() {
         try {
             const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
@@ -219,21 +198,41 @@
 
     function render() {
         const query = document.getElementById('search').value.toLowerCase();
+        const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+        
         document.getElementById('productGrid').innerHTML = filtered.map(p => {
-            let originalPrice = parseFloat(p[3]);
-            let rawTags = [p[4], p[5], p[6], p[7], p[10]].filter(t => t && t !== '-' && t !== '').join(',');
+            // ระบบคำนวณราคาโปรโมชันอัตโนมัติ
+            let priceNormal = parseFloat(p[3] || 0);    // คอลัมน์ D
+            let pricePromo = parseFloat(p[10] || 0);   // คอลัมน์ K
+            let expiryStr = p[11] ? p[11].trim() : ""; // คอลัมน์ L
+            let expiryDate = expiryStr ? new Date(expiryStr).getTime() : 0;
+
+            let currentPrice = priceNormal;
+            let isSale = false;
+
+            // เช็คว่าอยู่ในช่วงเวลาโปรโมชันหรือไม่
+            if (pricePromo > 0 && expiryDate > now) {
+                currentPrice = pricePromo;
+                isSale = true;
+            }
+
+            // จัดการ Badge
+            let rawTags = [p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && t !== '').join(',');
             let tags = rawTags || '';
-            let currentPrice = getDiscountedPrice(originalPrice, tags);
-            let hasDiscount = currentPrice < originalPrice;
             let badgesHtml = tags ? tags.split(',').map(t => {
                 let tag = t.trim();
                 let c = 'bg-blue';
                 if(tag.includes('ขายดี') || tag.includes('แนะนำ')) c = 'bg-gold';
-                if(tag.includes('ลด') || tag.includes('Hot') || tag.includes('Sale')) c = 'bg-red';
+                if(tag.includes('Hot') || tag.includes('Sale')) c = 'bg-red';
                 if(tag.includes('ใหม่') || tag.includes('พร้อมส่ง')) c = 'bg-green';
                 return `<span class="badge ${c}">${tag}</span>`;
             }).join('') : '';
+
+            // ถ้าลดราคา ให้เพิ่มป้าย SALE อัตโนมัติ
+            if (isSale) {
+                badgesHtml = `<span class="badge bg-red">SALE</span>` + badgesHtml;
+            }
 
             return `
             <div class="card">
@@ -245,8 +244,8 @@
                     <div class="p-name">${p[0]}</div>
                     <div class="p-desc">${p[2] || ''}</div>
                     <div class="p-price">
-                        ${hasDiscount ? `<span style="text-decoration:line-through; color:#888; font-size:9px; margin-right:4px;">฿${originalPrice.toLocaleString()}</span>` : ''}
-                        <span style="color:${hasDiscount ? '#ff4b2b' : '#fff'};">฿${currentPrice.toLocaleString()}</span>
+                        ${isSale ? `<span style="text-decoration:line-through; color:#888; font-size:9px; margin-right:4px;">฿${priceNormal.toLocaleString()}</span>` : ''}
+                        <span style="color:${isSale ? '#ff4b2b' : '#fff'};">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
                 <button class="buy-now" onclick="openOrder('${p[0]}','${currentPrice}','${p[8]||0}','${p[9]||''}')">สั่งซื้อ</button>
