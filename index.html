@@ -205,15 +205,19 @@
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         document.getElementById('productGrid').innerHTML = filtered.map(p => {
             let originalPrice = parseFloat(p[3]);
-            let tags = p[10] || '';
+            
+            // --- รวมป้ายแท็กจากช่อง E, F, G, H (ดัชนี 4,5,6,7) และ K (ดัชนี 10) ---
+            let rawTags = [p[4], p[5], p[6], p[7], p[10]].filter(t => t && t !== '-' && t !== '').join(',');
+            let tags = rawTags || '';
+            
             let currentPrice = getDiscountedPrice(originalPrice, tags);
             let hasDiscount = currentPrice < originalPrice;
 
             let badgesHtml = tags ? tags.split(',').map(t => {
                 let tag = t.trim();
                 let c = 'bg-blue';
-                if(tag.includes('ขายดี')) c = 'bg-gold';
-                if(tag.includes('ลด') || tag.includes('Hot')) c = 'bg-red';
+                if(tag.includes('ขายดี') || tag.includes('แนะนำ')) c = 'bg-gold';
+                if(tag.includes('ลด') || tag.includes('Hot') || tag.includes('Sale')) c = 'bg-red';
                 if(tag.includes('ใหม่') || tag.includes('พร้อมส่ง')) c = 'bg-green';
                 return `<span class="badge ${c}">${tag}</span>`;
             }).join('') : '';
