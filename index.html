@@ -5,14 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PHAENDIN STORE | SMART PRICE V9.6</title>
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://phaendin-shop.vercel.app/">
-    <meta property="og:title" content="PHAENDIN STORE | แหล่งรวมสินค้าคุณภาพ ราคาดี">
-    <meta property="og:description" content="ช้อปง่าย จ่ายสะดวก ส่งไว ได้ของชัวร์ โปรโมชั่นจัดเต็ม">
-    <meta property="og:image" content="ใส่ลิงก์รูปของคุณตรงนี้.jpg"> 
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:image" content="ใส่ลิงก์รูปของคุณตรงนี้.jpg">
-
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -98,7 +90,7 @@
 </header>
 
 <div class="banner-box" id="banner"></div>
-<div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าแนะนำ (สุ่ม)</div>
+<div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</div>
 <main class="grid" id="productGrid"></main>
 
 <nav>
@@ -160,15 +152,14 @@
                         <div class="bn-txt">
                             <div class="bn-title">🔥 ${b[1]}</div>
                             <div class="bn-timer">⏳ <span id="th">00</span>:<span id="tm">00</span>:<span id="ts">00</span></div>
-                            <button class="buy-now" style="width:90px; padding:3px 0; font-size:9px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
+                            <button class="buy-now" style="width:90px; padding:3px 0; font-size:9px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'',0)">รับสิทธิ์ด่วน</button>
                         </div>
                     </div>`;
                 setInterval(tick, 1000);
             }
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const rows = (await resP.text()).split('\n').slice(1);
-            let rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^\"$]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-            db = rawData.sort(() => Math.random() - 0.5); 
+            db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             render();
             setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
@@ -179,19 +170,16 @@
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
-        document.getElementById('productGrid').innerHTML = filtered.map((p, idx) => {
+        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
-            let expiryStr = p[11] ? p[11].trim() : "";
-            let expiryDate = expiryStr ? new Date(expiryStr).getTime() : 0;
+            let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
 
             let currentPrice = priceNormal;
-            let isSale = false;
-            let hasTimer = false;
-
-            let tagCols = [p[4], p[5], p[6], p[7]];
             let percentDiscount = 0;
-            tagCols.forEach(t => {
+
+            // หา % ส่วนลดจาก Tag
+            [p[4], p[5], p[6], p[7]].forEach(t => {
                 if(t && t.includes('%')) {
                     let match = t.match(/(\d+)%/);
                     if(match) percentDiscount = parseInt(match[1]);
@@ -200,20 +188,15 @@
 
             if (pricePromo > 0 && expiryDate > now) {
                 currentPrice = pricePromo;
-                isSale = true;
-                hasTimer = true; 
             } else if (percentDiscount > 0) {
                 currentPrice = priceNormal * (1 - (percentDiscount / 100));
-                isSale = true;
             }
 
-            let badgesHtml = tagCols.filter(t => t && t !== '-' && t !== '').map(t => {
-                let tag = t.trim();
-                let c = 'bg-blue';
-                if(tag.includes('ขายดี') || tag.includes('แนะนำ')) c = 'bg-gold';
-                if(tag.includes('Hot') || tag.includes('Sale') || tag.includes('%')) c = 'bg-red';
-                if(tag.includes('ใหม่') || tag.includes('พร้อมส่ง')) c = 'bg-green';
-                return `<span class="badge ${c}">${tag}</span>`;
+            let isSale = currentPrice < priceNormal;
+
+            let badgesHtml = [p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && t !== '').map(t => {
+                let c = t.includes('ขายดี')?'bg-gold':(t.includes('%')?'bg-red':'bg-blue');
+                return `<span class="badge ${c}">${t}</span>`;
             }).join('');
 
             return `
@@ -221,7 +204,7 @@
                 <div class="media-wrap" onclick="zoom('${p[1]}')">
                     <div class="badge-container">${badgesHtml}</div>
                     ${renderMedia(p[1], true)}
-                    ${hasTimer ? `<div class="p-timer-badge" data-expire="${expiryStr}">⏳ 00:00:00</div>` : ''}
+                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
@@ -231,92 +214,78 @@
                         <span class="${isSale ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${currentPrice}','${p[8]||0}','${p[9]||''}')">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
 
-    function updateProductTimers() {
-        const now = new Date().getTime();
-        let expiredFound = false;
-        document.querySelectorAll('.p-timer-badge').forEach(el => {
-            const expire = new Date(el.getAttribute('data-expire')).getTime();
-            const diff = expire - now;
-            if (diff > 0) {
-                const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
-                const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-                const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-                el.innerText = `⏳ ${h}:${m}:${s}`;
-            } else {
-                el.style.display = 'none';
-                expiredFound = true; 
-            }
-        });
-        if (expiredFound) render();
-    }
-
-    function renderMedia(url, isMuted) {
-        if(!url) return '';
-        const isVid = url.match(/\.(mp4|webm|mov)$/i);
-        return isVid ? `<video src="${url}" ${isMuted ? 'autoplay loop muted playsinline' : 'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
-    }
-
-    function openOrder(n, p, s, optStr) {
-        // p ในที่นี้จะเป็นราคาที่ลด % มาแล้วจากหน้าแรก
-        activeP = { name: n, basePrice: parseFloat(p), currentPrice: parseFloat(p), ship: parseFloat(s), optText: '' };
+    function openOrder(n, pNormal, s, optStr, discPercent) {
+        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, optPrice: 0, optLabel: '' };
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
         
         if(optStr && optStr !== '-') {
             let html = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก:</label><select id="pOpt" class="opt-sel" onchange="updatePrice()">`;
-            const options = optStr.split(',');
-            options.forEach((o, index) => {
-                const pts = o.trim().split('=');
-                const label = pts[0];
-                // ถ้าในตัวเลือกไม่มีการเขียนราคา (=...) ให้ใช้ราคาพื้นฐานที่ลด % แล้ว (p)
-                const price = pts[1] ? parseFloat(pts[1]) : parseFloat(p);
-                
-                if(index === 0) {
-                    activeP.currentPrice = price;
-                    activeP.optText = ` [${label}]`;
-                }
-                
-                html += `<option value="${price}" data-label="${label}">${label} (฿${price.toLocaleString()})</option>`;
+            optStr.split(',').forEach((o, i) => {
+                // รองรับทั้งแบบ : และ =
+                let pts = o.includes(':') ? o.split(':') : o.split('=');
+                let label = pts[0].trim();
+                let price = pts[1] ? parseFloat(pts[1]) : activeP.pNormal;
+                html += `<option value="${price}" data-label="${label}">${label}</option>`;
             });
             box.innerHTML = html + `</select>`;
         }
-        
         updatePrice();
         openModal('orderModal');
     }
 
     function updatePrice() {
         const sel = document.getElementById('pOpt');
+        let priceToUse = activeP.pNormal;
         if(sel) {
-            activeP.currentPrice = parseFloat(sel.value);
-            activeP.optText = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
+            priceToUse = parseFloat(sel.value);
+            activeP.optLabel = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
-        const total = activeP.currentPrice + activeP.ship;
+
+        // คำนวณราคาที่ลด % จากราคาของตัวเลือกนั้นๆ
+        let discounted = priceToUse;
+        if(activeP.disc > 0) {
+            discounted = priceToUse * (1 - (activeP.disc / 100));
+        }
+        
+        activeP.finalPrice = discounted + activeP.ship;
+        
         document.getElementById('orderDetail').innerHTML = `
-            <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optText}</div>
-            <div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">฿${total.toLocaleString()}</div>
+            <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optLabel}</div>
+            <div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">
+                <span style="text-decoration:line-through; font-size:12px; color:#888; margin-right:8px;">฿${priceToUse.toLocaleString()}</span>
+                ฿${activeP.finalPrice.toLocaleString()}
+            </div>
+            ${activeP.disc > 0 ? `<div style="color:#ff4b2b; font-size:10px; text-align:center;">(ลดพิเศษ ${activeP.disc}%)</div>` : ''}
         `;
     }
 
-    function zoom(url) { 
-        document.getElementById('zoomContent').innerHTML = renderMedia(url, false); 
-        document.getElementById('zoomOverlay').style.display = 'flex'; 
+    function updateProductTimers() {
+        document.querySelectorAll('.p-timer-badge').forEach(el => {
+            const diff = new Date(el.getAttribute('data-expire')).getTime() - Date.now();
+            if (diff > 0) {
+                const h = Math.floor(diff/3600000).toString().padStart(2,'0');
+                const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+                const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+                el.innerText = `⏳ ${h}:${m}:${s}`;
+            } else { el.style.display = 'none'; render(); }
+        });
     }
 
-    function closeZoom() { 
-        const overlay = document.getElementById('zoomOverlay');
-        const content = document.getElementById('zoomContent');
-        const video = content.querySelector('video');
-        if (video) { video.pause(); video.src = ""; video.load(); }
-        content.innerHTML = '';
-        overlay.style.display = 'none'; 
+    function renderMedia(url, isMuted) {
+        if(!url) return '';
+        return url.match(/\.(mp4|webm|mov)$/i) 
+            ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` 
+            : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
     }
 
+    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
     function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
@@ -330,7 +299,7 @@
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name}${activeP.optText} ยอด: ${activeP.currentPrice + activeP.ship}`,
+                productDetail: `${activeP.name}${activeP.optLabel} ยอด: ${activeP.finalPrice}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
