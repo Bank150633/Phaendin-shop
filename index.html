@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN STORE | ULTRA COMPACT V9.3</title>
+    <title>PHAENDIN STORE | SMART PRICE V9.6</title>
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://phaendin-shop.vercel.app/">
@@ -37,29 +37,12 @@
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
         .banner-box { padding: 8px; margin-top: 5px; } 
-        .bn-card { 
-            border: 2px solid var(--gold); 
-            border-radius: 15px; 
-            overflow: hidden; 
-            display: block; 
-            height: 180px; 
-            background: #000; 
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
-            position: relative;
-        }
+        .bn-card { border: 2px solid var(--gold); border-radius: 15px; overflow: hidden; display: block; height: 180px; background: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); position: relative; }
         .bn-img { width: 100%; height: 100%; position: relative; background: #000; }
         .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; display: block; }
-        
-        .bn-txt { 
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            padding: 10px 12px; display: flex; flex-direction: column; justify-content: flex-end;
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 70%, transparent 100%);
-        }
+        .bn-txt { position: absolute; bottom: 0; left: 0; width: 100%; padding: 10px 12px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 70%, transparent 100%); }
         .bn-title { font-size: 14px; font-weight: 600; color: var(--gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.8); margin-bottom: 3px; }
-        .bn-timer { 
-            display: flex; gap: 4px; font-size: 10px; color: #fff; background: rgba(0, 0, 0, 0.8); 
-            padding: 2px 8px; border-radius: 4px; width: fit-content; border: 1px solid rgba(212,175,55,0.5); margin-bottom: 6px;
-        }
+        .bn-timer { display: flex; gap: 4px; font-size: 10px; color: #fff; background: rgba(0, 0, 0, 0.8); padding: 2px 8px; border-radius: 4px; width: fit-content; border: 1px solid rgba(212,175,55,0.5); margin-bottom: 6px; }
 
         .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
@@ -69,10 +52,7 @@
         .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; }
         
         .badge-container { position: absolute; top: 4px; left: 4px; display: flex; flex-direction: column; gap: 3px; z-index: 5; }
-        .badge { 
-            font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; 
-            text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.2);
-        }
+        .badge { font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.2); }
         .bg-gold { background: var(--gold-grad); color: #000; }
         .bg-red { background: var(--red-grad); }
         .bg-green { background: var(--green-grad); }
@@ -81,23 +61,19 @@
         .info { padding: 4px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
         .p-name { font-size: 10px; font-weight: 500; color: var(--gold); margin-bottom: 1px; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; }
         
-        .buy-now { 
-            width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; 
-            font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px;
-            text-transform: uppercase; position: relative; overflow: hidden;
-        }
-        .buy-now::after {
-            content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%;
-            background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite;
-        }
+        /* สไตล์ราคาแบบคู่ */
+        .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+        .old-price { text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400; }
+        .new-price { color: #ff4b2b; }
+
+        .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
+        .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 10px; opacity: 0; transition: 0.3s; }
         .modal.show { display: flex; opacity: 1; }
         .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 290px; padding: 12px; max-height: 90vh; overflow-y: auto; }
-        
         .opt-sel { width: 100%; padding: 6px 8px; margin-bottom: 10px; border-radius: 6px; background: #1a1a1a; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.4); font-size: 10.5px; outline: none; }
         .input-slim { width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
@@ -204,31 +180,38 @@
         document.getElementById('productGrid').innerHTML = filtered.map(p => {
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
-            let expiryStr = p[11] ? p[11].trim() : ""; 
-            let expiryDate = expiryStr ? new Date(expiryStr).getTime() : 0;
+            let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
 
             let currentPrice = priceNormal;
             let isSale = false;
 
+            // --- ตรวจสอบเปอร์เซ็นต์ใน Tag (E, F, G, H) ---
+            let tagCols = [p[4], p[5], p[6], p[7]];
+            let percentDiscount = 0;
+            tagCols.forEach(t => {
+                if(t && t.includes('%')) {
+                    let match = t.match(/(\d+)%/);
+                    if(match) percentDiscount = parseInt(match[1]);
+                }
+            });
+
+            // --- ลำดับการใช้ราคา ---
             if (pricePromo > 0 && expiryDate > now) {
                 currentPrice = pricePromo;
                 isSale = true;
+            } else if (percentDiscount > 0) {
+                currentPrice = priceNormal * (1 - (percentDiscount / 100));
+                isSale = true;
             }
 
-            let rawTags = [p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && t !== '').join(',');
-            let tags = rawTags || '';
-            let badgesHtml = tags ? tags.split(',').map(t => {
+            let badgesHtml = tagCols.filter(t => t && t !== '-' && t !== '').map(t => {
                 let tag = t.trim();
                 let c = 'bg-blue';
                 if(tag.includes('ขายดี') || tag.includes('แนะนำ')) c = 'bg-gold';
-                if(tag.includes('Hot') || tag.includes('Sale')) c = 'bg-red';
+                if(tag.includes('Hot') || tag.includes('Sale') || tag.includes('%')) c = 'bg-red';
                 if(tag.includes('ใหม่') || tag.includes('พร้อมส่ง')) c = 'bg-green';
                 return `<span class="badge ${c}">${tag}</span>`;
-            }).join('') : '';
-
-            if (isSale) {
-                badgesHtml = `<span class="badge bg-red">SALE</span>` + badgesHtml;
-            }
+            }).join('');
 
             return `
             <div class="card">
@@ -240,8 +223,8 @@
                     <div class="p-name">${p[0]}</div>
                     <div class="p-desc">${p[2] || ''}</div>
                     <div class="p-price">
-                        ${isSale ? `<span style="text-decoration:line-through; color:#888; font-size:9px; margin-right:4px;">฿${priceNormal.toLocaleString()}</span>` : ''}
-                        <span style="color:${isSale ? '#ff4b2b' : '#fff'};">฿${currentPrice.toLocaleString()}</span>
+                        ${isSale ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                        <span class="${isSale ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
                 <button class="buy-now" onclick="openOrder('${p[0]}','${currentPrice}','${p[8]||0}','${p[9]||''}')">สั่งซื้อ</button>
@@ -252,12 +235,11 @@
     function renderMedia(url, isMuted) {
         if(!url) return '';
         const isVid = url.match(/\.(mp4|webm|mov)$/i);
-        // เพิ่ม id="zoomVideo" เพื่อให้ง่ายต่อการหยุดเสียง
         return isVid ? `<video src="${url}" ${isMuted ? 'autoplay loop muted playsinline' : 'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
     }
 
     function openOrder(n, p, s, optStr) {
-        activeP = { name: n, basePrice: parseFloat(p), ship: parseFloat(s), currentPrice: parseFloat(p), optText: '' };
+        activeP = { name: n, currentPrice: parseFloat(p), ship: parseFloat(s), optText: '' };
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
         if(optStr && optStr !== '-') {
@@ -287,23 +269,16 @@
         document.getElementById('zoomOverlay').style.display = 'flex'; 
     }
 
-    // แก้ไขฟังก์ชันปิด Zoom เพื่อหยุดวิดีโอและเสียงทันที
     function closeZoom() { 
         const overlay = document.getElementById('zoomOverlay');
         const content = document.getElementById('zoomContent');
-        
-        // 1. หยุดวิดีโอ (ถ้ามี)
         const video = content.querySelector('video');
         if (video) {
             video.pause();
-            video.src = ""; // ตัดแหล่งที่มาเสียง
-            video.load();   // รีโหลดเพื่อเคลียร์บัฟเฟอร์
+            video.src = "";
+            video.load();
         }
-        
-        // 2. เคลียร์เนื้อหาข้างในทิ้ง
         content.innerHTML = '';
-        
-        // 3. ปิดการแสดงผล
         overlay.style.display = 'none'; 
     }
 
