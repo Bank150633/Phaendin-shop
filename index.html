@@ -167,7 +167,7 @@
             }
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const rows = (await resP.text()).split('\n').slice(1);
-            let rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            let rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^\"$]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             db = rawData.sort(() => Math.random() - 0.5); 
             render();
             setInterval(updateProductTimers, 1000);
@@ -262,8 +262,8 @@
     }
 
     function openOrder(n, p, s, optStr) {
-        // p คือราคาเริ่มต้นที่ส่งมาจากปุ่มสั่งซื้อ
-        activeP = { name: n, currentPrice: parseFloat(p), ship: parseFloat(s), optText: '' };
+        // p ในที่นี้จะเป็นราคาที่ลด % มาแล้วจากหน้าแรก
+        activeP = { name: n, basePrice: parseFloat(p), currentPrice: parseFloat(p), ship: parseFloat(s), optText: '' };
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
         
@@ -273,9 +273,9 @@
             options.forEach((o, index) => {
                 const pts = o.trim().split('=');
                 const label = pts[0];
-                const price = parseFloat(pts[1] || p); // ถ้าไม่มีราคาในตัวเลือก ให้ใช้ราคา p แทน
+                // ถ้าในตัวเลือกไม่มีการเขียนราคา (=...) ให้ใช้ราคาพื้นฐานที่ลด % แล้ว (p)
+                const price = pts[1] ? parseFloat(pts[1]) : parseFloat(p);
                 
-                // ตั้งราคาเริ่มต้นให้เป็นราคาของตัวเลือกแรกทันทีที่เปิด
                 if(index === 0) {
                     activeP.currentPrice = price;
                     activeP.optText = ` [${label}]`;
