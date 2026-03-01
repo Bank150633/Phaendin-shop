@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PHAENDIN STORE | ULTRA COMPACT V9</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://phaendin-shop.vercel.app/"> <meta property="og:title" content="PHAENDIN STORE | สินค้าดี ราคาโดนใจ">
+    <meta property="og:description" content="ช้อปสินค้าง่ายๆ โปรโมชั่นจัดเต็ม ส่งไว ได้ของชัวร์">
+    <meta property="og:image" content="https://i.ibb.co/Vp8pXQj/your-qr-code.png"> <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:image" content="https://i.ibb.co/Vp8pXQj/your-qr-code.png"> <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
@@ -18,14 +23,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); padding-top: 45px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
 
-        /* Header - จิ๋ว */
         header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 1000; padding: 6px; border-bottom: 1px solid var(--gold); }
         .search-wrap { position: relative; max-width: 500px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
         #search { flex-grow: 1; padding: 5px 10px 5px 30px; border-radius: 15px; border: 1px solid var(--gold); background: var(--input-bg); color: var(--text); font-size: 10px; outline: none; }
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
-        /* Banner - จิ๋ว */
         .banner-box { padding: 4px; margin-top: 1px; }
         .bn-card { border: 1px solid var(--gold); border-radius: 8px; overflow: hidden; display: flex; height: 70px; background: #000; }
         .bn-img { width: 30%; border-right: 1px solid rgba(212,175,55,0.2); }
@@ -34,28 +37,20 @@
         .bn-title { font-size: 10px; font-weight: 600; color: var(--gold); margin-bottom: 1px; }
         .bn-timer { display: flex; gap: 2px; font-size: 9px; }
 
-        /* Grid System - 3 คอลัมน์ Ultra Slim */
         .sec-title { padding: 6px 10px 1px; font-size: 11px; font-weight: 600; color: var(--gold); }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
         
-        /* Card Structure - บีบจิ๋ว */
         .card { background: var(--card); border: 1px solid rgba(212,175,55,0.15); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-        
-        /* Media - อัตราส่วน 1:1 จิ๋ว */
         .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; }
-        
-        /* Badge - จิ๋วมาก */
         .badge-container { position: absolute; top: 3px; left: 3px; display: flex; flex-direction: column; gap: 2px; z-index: 2; }
         .badge { font-size: 6px; padding: 1px 3px; border-radius: 2px; font-weight: 700; color: #000; background: var(--gold-grad); }
 
-        /* Info - บีบพื้นที่แนวตั้ง */
         .info { padding: 4px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
         .p-name { font-size: 10px; font-weight: 500; color: var(--gold); margin-bottom: 1px; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; }
         
-        /* ปุ่มสั่งซื้อ Metallic Gold Shine - จิ๋ว Slim */
         .buy-now { 
             width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; 
             font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px;
@@ -68,7 +63,6 @@
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
         .buy-now:active { transform: scale(0.96); }
 
-        /* Modals - จิ๋ว */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 10px; opacity: 0; transition: 0.3s; }
         .modal.show { display: flex; opacity: 1; }
         .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 290px; padding: 12px; max-height: 90vh; overflow-y: auto; }
@@ -83,7 +77,6 @@
         }
         .input-slim { width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
-        /* Nav - จิ๋ว Slim */
         nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
         .nav-tab.active { color: var(--gold); }
@@ -125,8 +118,10 @@
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:13px;">สั่งซื้อ</h4>
-        <div id="orderDetail" style="font-size:10px; background:rgba(212,175,55,0.05); padding:8px; border-radius:6px; margin-bottom:12px; border-left: 3px solid var(--gold);"></div>
+        <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px; letter-spacing:1px;">ยืนยันการสั่งซื้อ</h4>
+        
+        <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:12px; border-radius:10px; margin-bottom:12px; border:1px solid rgba(212,175,55,0.3); box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+            </div>
         
         <form id="orderForm">
             <div id="optionBox" class="opt-box"></div>
@@ -135,18 +130,22 @@
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
             
-            <div style="text-align:center; margin: 10px 0;">
-                <p style="font-size:9px; color:var(--gold); margin-bottom:4px;">กสิกร: 035-8-56762-2</p>
-                <img src="https://i.ibb.co/Vp8pXQj/your-qr-code.png" style="width:100px; border-radius:6px; border:1px solid var(--gold);">
+            <div style="text-align:center; margin: 10px 0; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px;">
+                <p style="font-size:10px; color:var(--gold); margin-bottom:5px;">🏦 ธนาคารกสิกรไทย</p>
+                <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:8px;">
+                    <span style="font-size:16px; font-weight:700; color:#fff; letter-spacing:1px;">035-8-56762-2</span>
+                    <button type="button" onclick="copyBank()" style="background:var(--gold); border:none; color:#000; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:700; cursor:pointer;">คัดลอก</button>
+                </div>
+                <img src="https://i.ibb.co/Vp8pXQj/your-qr-code.png" style="width:105px; border-radius:6px; border:2px solid #fff;">
             </div>
 
-            <div style="border:1px dashed var(--gold); padding:8px; border-radius:6px; text-align:center; cursor:pointer;" onclick="document.getElementById('fileIn').click()">
-                <span id="upTxt" style="font-size:10px; color:var(--gold)">📸 คลิกแนบสลิป</span>
+            <div style="border:1px dashed var(--gold); padding:10px; border-radius:8px; text-align:center; cursor:pointer; background:rgba(212,175,55,0.05);" onclick="document.getElementById('fileIn').click()">
+                <span id="upTxt" style="font-size:10px; color:var(--gold); font-weight:600;"><i class="fa-solid fa-camera"></i> คลิกแนบสลิปโอนเงิน</span>
                 <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
                 <img id="preview" style="display:none; width:100%; margin-top:5px; border-radius:4px;">
             </div>
 
-            <button type="submit" id="submitBtn" class="buy-now" style="margin-top:12px; border-radius:8px;">ยืนยันสั่งซื้อ</button>
+            <button type="submit" id="submitBtn" class="buy-now" style="margin-top:12px; border-radius:8px; height:40px; font-size:12px;">ยืนยันการสั่งซื้อ</button>
             <p onclick="closeModal('orderModal')" style="text-align:center; color:var(--text-dim); cursor:pointer; margin-top:10px; font-size:11px;">[ ยกเลิก ]</p>
         </form>
     </div>
@@ -160,7 +159,6 @@
     
     let db = [], activeP = {}, bannerEnd = null;
 
-    // ระบบสุ่มสินค้า (Shuffle)
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -171,7 +169,6 @@
 
     async function init() {
         try {
-            // โหลด Banner
             const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
             const b = (await resB.text()).split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
             if(b) {
@@ -180,12 +177,11 @@
                 setInterval(tick, 1000);
             }
 
-            // โหลดสินค้า
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const rows = (await resP.text()).split('\n').slice(1);
             const rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             
-            db = shuffle(rawData); // สุ่มลำดับสินค้าทันที
+            db = shuffle(rawData);
             render();
         } catch(e) { console.error(e); }
     }
@@ -232,29 +228,35 @@
         openModal('orderModal');
     }
 
-        function updatePrice() {
+    function updatePrice() {
         const sel = document.getElementById('pOpt');
         let optionPrice = activeP.basePrice;
         let label = "";
 
         if(sel) {
-            // ดึงราคาจาก value ที่เราตั้งไว้ในรูปแบบ "ชื่อ=ราคา"
             optionPrice = parseFloat(sel.value);
-            label = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
+            label = ` <span style="color:var(--gold)">[${sel.options[sel.selectedIndex].getAttribute('data-label')}]</span>`;
             activeP.currentPrice = optionPrice;
-            activeP.optText = label;
+            activeP.optText = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
 
-        const total = optionPrice + activeP.ship;
+        const total = activeP.currentPrice + activeP.ship;
 
-        // แสดงผลในช่องรายละเอียด (เน้นยอดโอนสุทธิ)
         document.getElementById('orderDetail').innerHTML = `
-            <div style="margin-bottom:5px; color:var(--text-dim);">🛒 ${activeP.name}${activeP.optText}</div>
-            <div style="font-size:14px; font-weight:700; color:var(--gold); border-top:1px solid rgba(212,175,55,0.2); pt:5px;">
-                💰 ยอดโอนสุทธิ: <span style="font-size:18px; color:#fff;">฿${total.toLocaleString()}</span> 
-                <br><span style="font-size:9px; font-weight:400; color:var(--text-dim);">(ราคาสินค้า ฿${optionPrice.toLocaleString()} + ค่าส่ง ฿${activeP.ship})</span>
+            <div style="font-size:11px; color:#fff; margin-bottom:8px;">🛒 ${activeP.name}${label}</div>
+            <div style="text-align:center; border-top:1px dashed rgba(212,175,55,0.3); padding-top:8px;">
+                <div style="font-size:10px; color:var(--text-dim);">ยอดโอนสุทธิรวมค่าส่ง</div>
+                <div style="font-size:22px; font-weight:800; color:#fff; text-shadow: 0 0 10px rgba(212,175,55,0.4);">
+                    <span style="font-size:14px; color:var(--gold);">฿</span>${total.toLocaleString()}
+                </div>
             </div>
         `;
+    }
+
+    function copyBank() {
+        navigator.clipboard.writeText('0358567622').then(() => {
+            alert("คัดลอกเลขบัญชี 035-8-56762-2 แล้ว!");
+        });
     }
 
     function zoom(url) { 
@@ -332,7 +334,6 @@
     }
     function toggleTheme() { document.body.classList.toggle('light-mode'); }
     
-    // ระบบเช็คพัสดุ (ห้ามลบ)
     async function checkShip() {
         const p = prompt("เบอร์โทรที่ใช้สั่งซื้อ:"); if(!p) return;
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
