@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN STORE | ULTRA COMPACT V9.2</title>
+    <title>PHAENDIN STORE | ULTRA COMPACT V9.3</title>
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://phaendin-shop.vercel.app/">
@@ -202,22 +202,19 @@
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
         document.getElementById('productGrid').innerHTML = filtered.map(p => {
-            // ระบบคำนวณราคาโปรโมชันอัตโนมัติ
-            let priceNormal = parseFloat(p[3] || 0);    // คอลัมน์ D
-            let pricePromo = parseFloat(p[10] || 0);   // คอลัมน์ K
-            let expiryStr = p[11] ? p[11].trim() : ""; // คอลัมน์ L
+            let priceNormal = parseFloat(p[3] || 0);    
+            let pricePromo = parseFloat(p[10] || 0);   
+            let expiryStr = p[11] ? p[11].trim() : ""; 
             let expiryDate = expiryStr ? new Date(expiryStr).getTime() : 0;
 
             let currentPrice = priceNormal;
             let isSale = false;
 
-            // เช็คว่าอยู่ในช่วงเวลาโปรโมชันหรือไม่
             if (pricePromo > 0 && expiryDate > now) {
                 currentPrice = pricePromo;
                 isSale = true;
             }
 
-            // จัดการ Badge
             let rawTags = [p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && t !== '').join(',');
             let tags = rawTags || '';
             let badgesHtml = tags ? tags.split(',').map(t => {
@@ -229,7 +226,6 @@
                 return `<span class="badge ${c}">${tag}</span>`;
             }).join('') : '';
 
-            // ถ้าลดราคา ให้เพิ่มป้าย SALE อัตโนมัติ
             if (isSale) {
                 badgesHtml = `<span class="badge bg-red">SALE</span>` + badgesHtml;
             }
@@ -256,6 +252,7 @@
     function renderMedia(url, isMuted) {
         if(!url) return '';
         const isVid = url.match(/\.(mp4|webm|mov)$/i);
+        // เพิ่ม id="zoomVideo" เพื่อให้ง่ายต่อการหยุดเสียง
         return isVid ? `<video src="${url}" ${isMuted ? 'autoplay loop muted playsinline' : 'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
     }
 
@@ -285,8 +282,31 @@
         document.getElementById('orderDetail').innerHTML = `<div style="font-size:10px;">🛒 ${activeP.name}${activeP.optText}</div><div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">฿${total.toLocaleString()}</div>`;
     }
 
-    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
-    function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; }
+    function zoom(url) { 
+        document.getElementById('zoomContent').innerHTML = renderMedia(url, false); 
+        document.getElementById('zoomOverlay').style.display = 'flex'; 
+    }
+
+    // แก้ไขฟังก์ชันปิด Zoom เพื่อหยุดวิดีโอและเสียงทันที
+    function closeZoom() { 
+        const overlay = document.getElementById('zoomOverlay');
+        const content = document.getElementById('zoomContent');
+        
+        // 1. หยุดวิดีโอ (ถ้ามี)
+        const video = content.querySelector('video');
+        if (video) {
+            video.pause();
+            video.src = ""; // ตัดแหล่งที่มาเสียง
+            video.load();   // รีโหลดเพื่อเคลียร์บัฟเฟอร์
+        }
+        
+        // 2. เคลียร์เนื้อหาข้างในทิ้ง
+        content.innerHTML = '';
+        
+        // 3. ปิดการแสดงผล
+        overlay.style.display = 'none'; 
+    }
+
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
     function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
