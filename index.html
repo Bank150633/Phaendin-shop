@@ -39,7 +39,6 @@
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
-        /* แบนเนอร์พรีเมียม */
         .banner-box { padding: 8px; margin-top: 5px; }
         .bn-card { 
             border: 2px solid var(--gold); border-radius: 12px; overflow: hidden; display: flex; height: 105px; 
@@ -62,7 +61,6 @@
         .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; }
         
-        /* ปรับปรุงระบบป้ายแท็กหลายสี */
         .badge-container { position: absolute; top: 4px; left: 4px; display: flex; flex-direction: column; gap: 3px; z-index: 5; }
         .badge { 
             font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; 
@@ -166,6 +164,18 @@
     
     let db = [], activeP = {}, bannerEnd = null;
 
+    // ฟังก์ชันคำนวณส่วนลดจากป้ายแท็ก
+    function getDiscountedPrice(price, tagStr) {
+        let p = parseFloat(price);
+        if (!tagStr) return p;
+        let match = tagStr.match(/ลด\s*(\d+)%/);
+        if (match) {
+            let percent = parseInt(match[1]);
+            return p * (1 - (percent / 100));
+        }
+        return p;
+    }
+
     async function init() {
         try {
             const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
@@ -194,8 +204,12 @@
         const query = document.getElementById('search').value.toLowerCase();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         document.getElementById('productGrid').innerHTML = filtered.map(p => {
-            // ระบบแยกสีป้ายแท็ก (คอลัมน์ K)
-            let badgesHtml = p[10] ? p[10].split(',').map(t => {
+            let originalPrice = parseFloat(p[3]);
+            let tags = p[10] || '';
+            let currentPrice = getDiscountedPrice(originalPrice, tags);
+            let hasDiscount = currentPrice < originalPrice;
+
+            let badgesHtml = tags ? tags.split(',').map(t => {
                 let tag = t.trim();
                 let c = 'bg-blue';
                 if(tag.includes('ขายดี')) c = 'bg-gold';
@@ -213,9 +227,12 @@
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
                     <div class="p-desc">${p[2] || ''}</div>
-                    <div class="p-price">฿${parseFloat(p[3]).toLocaleString()}</div>
+                    <div class="p-price">
+                        ${hasDiscount ? `<span style="text-decoration:line-through; color:#888; font-size:9px; margin-right:4px;">฿${originalPrice.toLocaleString()}</span>` : ''}
+                        <span style="color:${hasDiscount ? '#ff4b2b' : '#fff'};">฿${currentPrice.toLocaleString()}</span>
+                    </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${p[3]}','${p[8]||0}','${p[9]||''}')">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${currentPrice}','${p[8]||0}','${p[9]||''}')">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
