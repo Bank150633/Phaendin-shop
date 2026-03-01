@@ -51,7 +51,6 @@
         .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; }
         
-        /* สไตล์ป้ายเวลานับถอยหลังรายสินค้า */
         .p-timer-badge { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(255, 65, 108, 0.9); color: #fff; font-size: 8.5px; text-align: center; padding: 2px 0; font-weight: bold; z-index: 6; }
 
         .badge-container { position: absolute; top: 4px; left: 4px; display: flex; flex-direction: column; gap: 3px; z-index: 5; }
@@ -171,7 +170,6 @@
             let rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             db = rawData.sort(() => Math.random() - 0.5); 
             render();
-            // เริ่มการทำงานของนาฬิกาจิ๋วในสินค้า
             setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
     }
@@ -191,7 +189,6 @@
             let isSale = false;
             let hasTimer = false;
 
-            // --- ตรวจสอบเปอร์เซ็นต์ใน Tag (E, F, G, H) ---
             let tagCols = [p[4], p[5], p[6], p[7]];
             let percentDiscount = 0;
             tagCols.forEach(t => {
@@ -201,7 +198,6 @@
                 }
             });
 
-            // --- ลำดับการใช้ราคา + ตรวจสอบเวลา Flash Sale ---
             if (pricePromo > 0 && expiryDate > now) {
                 currentPrice = pricePromo;
                 isSale = true;
@@ -240,30 +236,23 @@
         }).join('');
     }
 
-    // ฟังก์ชันอัปเดตนาฬิกา และลบป้ายเมื่อหมดเวลา
     function updateProductTimers() {
         const now = new Date().getTime();
         let expiredFound = false;
-        
         document.querySelectorAll('.p-timer-badge').forEach(el => {
             const expire = new Date(el.getAttribute('data-expire')).getTime();
             const diff = expire - now;
-            
             if (diff > 0) {
                 const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
                 const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
                 const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
                 el.innerText = `⏳ ${h}:${m}:${s}`;
             } else {
-                // เมื่อหมดเวลา: ซ่อนป้ายทันที และสั่ง Re-render เพื่อคืนค่าราคาปกติ
                 el.style.display = 'none';
                 expiredFound = true; 
             }
         });
-
-        if (expiredFound) {
-            render(); // วาดหน้าจอใหม่เพื่ออัปเดตราคาให้ถูกต้อง
-        }
+        if (expiredFound) render();
     }
 
     function renderMedia(url, isMuted) {
@@ -273,17 +262,30 @@
     }
 
     function openOrder(n, p, s, optStr) {
+        // p คือราคาเริ่มต้นที่ส่งมาจากปุ่มสั่งซื้อ
         activeP = { name: n, currentPrice: parseFloat(p), ship: parseFloat(s), optText: '' };
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
+        
         if(optStr && optStr !== '-') {
             let html = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก:</label><select id="pOpt" class="opt-sel" onchange="updatePrice()">`;
-            optStr.split(',').forEach(o => {
+            const options = optStr.split(',');
+            options.forEach((o, index) => {
                 const pts = o.trim().split('=');
-                html += `<option value="${pts[1]||p}" data-label="${pts[0]}">${pts[0]} (฿${parseFloat(pts[1]||p).toLocaleString()})</option>`;
+                const label = pts[0];
+                const price = parseFloat(pts[1] || p); // ถ้าไม่มีราคาในตัวเลือก ให้ใช้ราคา p แทน
+                
+                // ตั้งราคาเริ่มต้นให้เป็นราคาของตัวเลือกแรกทันทีที่เปิด
+                if(index === 0) {
+                    activeP.currentPrice = price;
+                    activeP.optText = ` [${label}]`;
+                }
+                
+                html += `<option value="${price}" data-label="${label}">${label} (฿${price.toLocaleString()})</option>`;
             });
             box.innerHTML = html + `</select>`;
         }
+        
         updatePrice();
         openModal('orderModal');
     }
@@ -295,7 +297,10 @@
             activeP.optText = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
         const total = activeP.currentPrice + activeP.ship;
-        document.getElementById('orderDetail').innerHTML = `<div style="font-size:10px;">🛒 ${activeP.name}${activeP.optText}</div><div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">฿${total.toLocaleString()}</div>`;
+        document.getElementById('orderDetail').innerHTML = `
+            <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optText}</div>
+            <div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">฿${total.toLocaleString()}</div>
+        `;
     }
 
     function zoom(url) { 
@@ -307,11 +312,7 @@
         const overlay = document.getElementById('zoomOverlay');
         const content = document.getElementById('zoomContent');
         const video = content.querySelector('video');
-        if (video) {
-            video.pause();
-            video.src = "";
-            video.load();
-        }
+        if (video) { video.pause(); video.src = ""; video.load(); }
         content.innerHTML = '';
         overlay.style.display = 'none'; 
     }
