@@ -39,22 +39,30 @@
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
-        .banner-box { padding: 8px; margin-top: 5px; }
+        /* --- ส่วนที่ปรับปรุง: Cinematic Banner --- */
+        .banner-box { padding: 0; margin-top: 0; width: 100%; }
         .bn-card { 
-            border: 2px solid var(--gold); border-radius: 12px; overflow: hidden; display: flex; height: 105px; 
-            background: linear-gradient(90deg, #000 0%, #1a1a1a 100%); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); position: relative;
+            border: none; border-bottom: 2px solid var(--gold); border-radius: 0; 
+            overflow: hidden; display: block; height: auto; min-height: 200px;
+            background: #000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); position: relative;
         }
-        .bn-img { width: 35%; position: relative; background: #000; border-right: 1px solid rgba(212,175,55,0.3); }
-        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; }
-        .bn-txt { width: 65%; padding: 10px; display: flex; flex-direction: column; justify-content: center; }
-        .bn-title { font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
+        .bn-img { width: 100%; height: 100%; position: relative; background: #000; border-right: none; }
+        .bn-img img, .bn-img video { width: 100%; height: auto; max-height: 70vh; object-fit: cover; display: block; }
+        
+        /* Overlay ข้อความบนแบนเนอร์ */
+        .bn-txt { 
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 20px 15px; display: flex; flex-direction: column; justify-content: flex-end;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+        }
+        .bn-title { font-size: 18px; font-weight: 600; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin-bottom: 8px; }
         .bn-timer { 
-            display: flex; gap: 5px; font-size: 11px; color: #fff; background: rgba(212, 175, 55, 0.15); 
-            padding: 3px 10px; border-radius: 20px; width: fit-content; border: 1px solid rgba(212, 175, 55, 0.3); margin-bottom: 8px;
+            display: flex; gap: 5px; font-size: 12px; color: #fff; background: rgba(0, 0, 0, 0.6); 
+            padding: 4px 12px; border-radius: 5px; width: fit-content; border: 1px solid var(--gold); margin-bottom: 10px;
         }
-        .bn-timer span { font-weight: 700; color: var(--gold); }
+        /* ------------------------------------- */
 
-        .sec-title { padding: 10px 10px 2px; font-size: 12px; font-weight: 600; color: var(--gold); }
+        .sec-title { padding: 15px 10px 5px; font-size: 14px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
         
         .card { background: var(--card); border: 1px solid rgba(212,175,55,0.15); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
@@ -164,7 +172,6 @@
     
     let db = [], activeP = {}, bannerEnd = null;
 
-    // ฟังก์ชันคำนวณส่วนลดจากป้ายแท็ก
     function getDiscountedPrice(price, tagStr) {
         let p = parseFloat(price);
         if (!tagStr) return p;
@@ -188,20 +195,15 @@
                         <div class="bn-txt">
                             <div class="bn-title">🔥 ${b[1]}</div>
                             <div class="bn-timer">⏳ <span id="th">00</span>:<span id="tm">00</span>:<span id="ts">00</span></div>
-                            <button class="buy-now" style="width:90px; padding:4px 0; font-size:9px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
+                            <button class="buy-now" style="width:120px; padding:6px 0; font-size:11px; border-radius:50px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์ด่วน</button>
                         </div>
                     </div>`;
                 setInterval(tick, 1000);
             }
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const rows = (await resP.text()).split('\n').slice(1);
-            
-            // ดึงข้อมูลและกรองแถวว่าง
             let rawData = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-            
-            // --- เพิ่มระบบสุ่มลำดับ (Shuffle) ---
             db = rawData.sort(() => Math.random() - 0.5); 
-            
             render();
         } catch(e) { console.error(e); }
     }
@@ -211,13 +213,10 @@
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         document.getElementById('productGrid').innerHTML = filtered.map(p => {
             let originalPrice = parseFloat(p[3]);
-            
             let rawTags = [p[4], p[5], p[6], p[7], p[10]].filter(t => t && t !== '-' && t !== '').join(',');
             let tags = rawTags || '';
-            
             let currentPrice = getDiscountedPrice(originalPrice, tags);
             let hasDiscount = currentPrice < originalPrice;
-
             let badgesHtml = tags ? tags.split(',').map(t => {
                 let tag = t.trim();
                 let c = 'bg-blue';
@@ -249,7 +248,7 @@
     function renderMedia(url, isMuted) {
         if(!url) return '';
         const isVid = url.match(/\.(mp4|webm|mov)$/i);
-        return isVid ? `<video src="${url}" ${isMuted ? 'autoplay loop muted playsinline' : 'controls autoplay'} style="width:100%; height:100%; object-fit:contain;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:contain;">`;
+        return isVid ? `<video src="${url}" ${isMuted ? 'autoplay loop muted playsinline' : 'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
     }
 
     function openOrder(n, p, s, optStr) {
