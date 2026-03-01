@@ -10,11 +10,11 @@
     <meta property="og:title" content="PHAENDIN STORE | แหล่งรวมสินค้าคุณภาพ ราคาดี">
     <meta property="og:description" content="ช้อปง่าย จ่ายสะดวก ส่งไว ได้ของชัวร์ โปรโมชั่นจัดเต็ม">
     
-    <meta property="og:image" content="ใส่ลิงก์รูปภาพของคุณตรงนี้.jpg"> 
+    <meta property="og:image" content="ใส่ลิงก์รูปของคุณตรงนี้.jpg"> 
     
     <meta property="twitter:card" content="summary_large_image">
     
-    <meta property="twitter:image" content="ใส่ลิงก์รูปภาพของคุณตรงนี้.jpg">
+    <meta property="twitter:image" content="ใส่ลิงก์รูปของคุณตรงนี้.jpg">
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,13 +36,34 @@
         .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
 
-        .banner-box { padding: 4px; margin-top: 1px; }
-        .bn-card { border: 1px solid var(--gold); border-radius: 8px; overflow: hidden; display: flex; height: 70px; background: #000; }
-        .bn-img { width: 30%; border-right: 1px solid rgba(212,175,55,0.2); }
-        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: contain; }
-        .bn-txt { width: 70%; padding: 4px 6px; display: flex; flex-direction: column; justify-content: center; }
-        .bn-title { font-size: 10px; font-weight: 600; color: var(--gold); margin-bottom: 1px; }
-        .bn-timer { display: flex; gap: 2px; font-size: 9px; }
+        /* --- ปรับแต่งแบนเนอร์ใหม่ให้สวยขึ้น --- */
+        .banner-box { padding: 8px; margin-top: 5px; }
+        .bn-card { 
+            border: 2px solid var(--gold); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            display: flex; 
+            height: 105px; 
+            background: linear-gradient(90deg, #000 0%, #1a1a1a 100%);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+            position: relative;
+        }
+        .bn-img { width: 35%; position: relative; background: #000; border-right: 1px solid rgba(212,175,55,0.3); }
+        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; }
+        .bn-txt { width: 65%; padding: 10px; display: flex; flex-direction: column; justify-content: center; }
+        .bn-title { 
+            font-size: 13px; font-weight: 600; color: var(--gold); 
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;
+            display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .bn-timer { 
+            display: flex; gap: 5px; font-size: 11px; color: #fff;
+            background: rgba(212, 175, 55, 0.15); padding: 3px 10px;
+            border-radius: 20px; width: fit-content; border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 8px;
+        }
+        .bn-timer span { font-weight: 700; color: var(--gold); }
+        /* ---------------------------------- */
 
         .sec-title { padding: 6px 10px 1px; font-size: 11px; font-weight: 600; color: var(--gold); }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
@@ -180,7 +201,22 @@
             const b = (await resB.text()).split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
             if(b) {
                 bannerEnd = new Date(b[2]).getTime();
-                document.getElementById('banner').innerHTML = `<div class="bn-card"><div class="bn-img" onclick="zoom('${b[0]}')">${renderMedia(b[0], true)}</div><div class="bn-txt"><div class="bn-title">${b[1]}</div><div class="bn-timer">⏳ <span id="th">00</span>:<span id="tm">00</span>:<span id="ts">00</span></div><button class="buy-now" style="width:60px; padding:4px 0; font-size:9px; border-radius:4px; margin-top:4px;" onclick="openOrder('${b[1]}',0,0,'')">รับสิทธิ์</button></div></div>`;
+                document.getElementById('banner').innerHTML = `
+                    <div class="bn-card">
+                        <div class="bn-img" onclick="zoom('${b[0]}')">
+                            ${renderMedia(b[0], true)}
+                            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(90deg, transparent, rgba(0,0,0,0.3))"></div>
+                        </div>
+                        <div class="bn-txt">
+                            <div class="bn-title">🔥 ${b[1]}</div>
+                            <div class="bn-timer">
+                                ⏳ <span id="th">00</span>:<span id="tm">00</span>:<span id="ts">00</span>
+                            </div>
+                            <button class="buy-now" style="width:90px; padding:5px 0; font-size:9px; border-radius:50px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" onclick="openOrder('${b[1]}',0,0,'')">
+                                รับสิทธิ์ด่วน <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>`;
                 setInterval(tick, 1000);
             }
 
