@@ -70,6 +70,11 @@
         .opt-sel { width: 100%; padding: 6px 8px; margin-bottom: 10px; border-radius: 6px; background: #1a1a1a; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.4); font-size: 10.5px; outline: none; }
         .input-slim { width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
+        /* ส่วนควบคุมจำนวน */
+        .qty-control { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; }
+        .qty-control label { font-size: 10px; color: var(--gold); }
+        .qty-control input { width: 60px; background: #000; border: 1px solid var(--gold); color: #fff; text-align: center; border-radius: 4px; font-weight: bold; }
+
         nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
         .nav-tab.active { color: var(--gold); }
@@ -77,11 +82,6 @@
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
-        
-        /* สไตล์เพิ่มเติมสำหรับช่องจำนวน */
-        .qty-box { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; border: 1px solid #333; }
-        .qty-box label { font-size: 10px; color: var(--gold); flex-grow: 1; }
-        .qty-box input { width: 50px; background: transparent; border: none; color: #fff; text-align: center; font-weight: bold; font-size: 14px; outline: none; }
     </style>
 </head>
 <body class="dark-mode">
@@ -121,15 +121,14 @@
         <form id="orderForm">
             <div id="optionBox"></div>
             
-            <div class="qty-box">
-                <label>🔢 จำนวนที่ต้องการ (ลิมิต 1-10)</label>
-                <input type="number" id="pQty" value="1" min="1" max="10" onchange="updatePrice()">
+            <div class="qty-control">
+                <label><i class="fa-solid fa-cart-plus"></i> ระบุจำนวนที่ต้องการ:</label>
+                <input type="number" id="pQty" value="1" min="1" onchange="updatePrice()">
             </div>
 
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
-            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์ (10 หลัก)" required class="input-slim" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
-            
             <div style="text-align:center; margin: 10px 0; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px;">
                 <p style="font-size:10px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0358567622" style="width:100px; margin-top:5px; border:2px solid #fff; border-radius:5px;">
@@ -164,6 +163,7 @@
                 let bShip  = b[7] || 0;
                 let bOpt   = b[8] || '';
                 let bDisc  = b[9] || 0;
+                let bLimit = b[10] || 10; // ลิมิตแบนเนอร์ถ้าใส่ไว้
 
                 let bTags = [b[3], b[4], b[5]].filter(t => t && t !== '-' && t !== '').map(t => {
                     let c = t.includes('โปร')?'bg-red':(t.includes('ขายดี')?'bg-gold':'bg-blue');
@@ -185,7 +185,7 @@
                                 <span style="font-size:10px; color:#ff4b2b; font-weight:bold;">เหลือเวลาเพียง</span>
                             </div>
                             <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
-                                onclick="openOrder('${b[1]}','${bPrice}','${bShip}','${bOpt}', ${bDisc})">
+                                onclick="openOrder('${b[1]}','${bPrice}','${bShip}','${bOpt}', ${bDisc}, ${bLimit})">
                                 รับสิทธิ์ด่วน
                             </button>
                         </div>
@@ -210,6 +210,8 @@
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
+            let buyLimit = p[12] ? parseInt(p[12]) : 10; // ดึงลิมิตจากคอลัมน์ M
+
             let currentPrice = priceNormal;
             let percentDiscount = 0;
 
@@ -244,14 +246,28 @@
                         <span class="${isSale ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount})">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
 
-    function openOrder(n, pNormal, s, optStr, discPercent) {
-        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, optPrice: 0, optLabel: '', currentQty: 1 };
-        document.getElementById('pQty').value = 1; // รีเซ็ตจำนวนเป็น 1 ทุกครั้งที่เปิด
+    function openOrder(n, pNormal, s, optStr, discPercent, buyLimit) {
+        // เก็บค่าลิมิตไว้ใน activeP
+        activeP = { 
+            name: n, 
+            pNormal: parseFloat(pNormal), 
+            ship: parseFloat(s), 
+            disc: discPercent, 
+            optPrice: 0, 
+            optLabel: '',
+            limit: buyLimit 
+        };
+
+        // ตั้งค่า Input จำนวนให้ล็อคตามลิมิต
+        const qtyIn = document.getElementById('pQty');
+        qtyIn.max = buyLimit;
+        qtyIn.value = 1;
+
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
         if(optStr && optStr !== '-') {
@@ -273,33 +289,38 @@
         const qtyIn = document.getElementById('pQty');
         let qty = parseInt(qtyIn.value) || 1;
 
-        // ลิมิตจำนวนสินค้า (1-10 ชิ้น)
+        // เช็คไม่ให้ซื้อเกินลิมิต
+        if(qty > activeP.limit) {
+            alert(`ขออภัย! สินค้านี้จำกัดการซื้อไม่เกิน ${activeP.limit} ชิ้นต่อออเดอร์`);
+            qty = activeP.limit;
+            qtyIn.value = qty;
+        }
         if(qty < 1) { qty = 1; qtyIn.value = 1; }
-        if(qty > 10) { qty = 10; qtyIn.value = 10; alert("จำกัดการซื้อสูงสุด 10 ชิ้นต่อออเดอร์"); }
-        activeP.currentQty = qty;
 
-        let pricePerUnit = activeP.pNormal;
+        let basePrice = activeP.pNormal;
         if(sel) {
-            pricePerUnit = parseFloat(sel.value);
+            basePrice = parseFloat(sel.value);
             activeP.optLabel = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
+
+        let discounted = basePrice;
+        if(activeP.disc > 0) discounted = basePrice * (1 - (activeP.disc / 100));
         
-        let discountedPerUnit = pricePerUnit;
-        if(activeP.disc > 0) discountedPerUnit = pricePerUnit * (1 - (activeP.disc / 100));
-        
-        // ยอดรวม = (ราคาลดแล้ว * จำนวน) + ค่าส่ง
-        activeP.finalPrice = (discountedPerUnit * qty) + activeP.ship;
+        // คำนวณราคารวม: (ราคาหลังลด * จำนวน) + ค่าส่ง
+        activeP.finalPrice = (discounted * qty) + activeP.ship;
+        activeP.currentQty = qty;
         
         document.getElementById('orderDetail').innerHTML = `
             <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optLabel} x ${qty} ชิ้น</div>
             <div style="font-size:20px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">
                 ฿${activeP.finalPrice.toLocaleString()}
             </div>
-            <div style="font-size:10px; text-align:center; color:var(--gold); margin-top:2px;">🚚 รวมค่าจัดส่ง ฿${activeP.ship.toLocaleString()} แล้ว</div>
+            <div style="font-size:10px; text-align:center; color:var(--gold); margin-top:2px;">🚚 ค่าจัดส่ง: ฿${activeP.ship.toLocaleString()}</div>
+            ${activeP.disc > 0 ? `<div style="color:#ff4b2b; font-size:10px; text-align:center; font-weight:bold;">(ลดพิเศษ ${activeP.disc}%)</div>` : ''}
+            <div style="font-size:9px; text-align:center; color:#888;">*จำกัดไม่เกิน ${activeP.limit} ชิ้น/ครั้ง</div>
         `;
     }
 
-    // ฟังก์ชันอื่นๆ คงเดิมตามโค้ดต้นฉบับ
     function updateProductTimers() {
         document.querySelectorAll('.p-timer-badge').forEach(el => {
             const diff = new Date(el.getAttribute('data-expire')).getTime() - Date.now();
@@ -327,9 +348,6 @@
 
     document.getElementById('orderForm').onsubmit = async (e) => {
         e.preventDefault();
-        const phone = document.getElementById('cPhone').value;
-        if(phone.length < 10 || !phone.startsWith('0')) return alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลัก เริ่มด้วย 0)");
-
         const btn = document.getElementById('submitBtn');
         const file = document.getElementById('fileIn').files[0];
         if(!file) return alert("กรุณาแนบสลิป!");
@@ -337,9 +355,9 @@
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${activeP.currentQty} | ยอดโอน: ฿${activeP.finalPrice}`,
+                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${activeP.currentQty} | ยอดรวม: ${activeP.finalPrice} (รวมส่ง ฿${activeP.ship})`,
                 customerName: document.getElementById('cName').value,
-                customerPhone: phone,
+                customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
                 file: reader.result.split(',')[1]
             };
