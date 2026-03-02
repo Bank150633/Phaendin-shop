@@ -22,11 +22,14 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); padding-top: 45px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
 
-        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 1000; padding: 6px; border-bottom: 1px solid var(--gold); }
-        .search-wrap { position: relative; max-width: 500px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
-        #search { flex-grow: 1; padding: 5px 10px 5px 30px; border-radius: 15px; border: 1px solid var(--gold); background: var(--input-bg); color: var(--text); font-size: 10px; outline: none; }
-        .search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 11px; }
-        .theme-btn { background: var(--gold-grad); border: none; width: 22px; height: 22px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
+        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 1000; padding: 10px; border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
+        .logo-txt { color: var(--gold); font-weight: 600; font-size: 14px; letter-spacing: 1px; }
+
+        /* ปรับสไตล์ช่องค้นหาสำหรับวางใต้แบนเนอร์ */
+        .search-wrap { position: relative; width: 100%; max-width: 500px; margin: 10px auto; padding: 0 10px; display: flex; align-items: center; gap: 8px; }
+        #search { flex-grow: 1; padding: 10px 10px 10px 35px; border-radius: 12px; border: 1px solid var(--gold); background: var(--input-bg); color: var(--text); font-size: 12px; outline: none; }
+        .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 13px; }
+        .theme-btn { background: var(--gold-grad); border: none; width: 30px; height: 30px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; flex-shrink: 0; }
 
         .banner-box { padding: 8px; margin-top: 5px; } 
         .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; display: block; height: 200px; background: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); position: relative; }
@@ -89,14 +92,17 @@
 <body class="dark-mode">
 
 <header>
-    <div class="search-wrap">
-        <i class="fa-solid fa-search search-icon"></i>
-        <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="render()">
-        <button class="theme-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
-    </div>
+    <div class="logo-txt">PHAENDIN STORE</div>
+    <button class="theme-btn" onclick="toggleTheme()"><i class="fa-solid fa-moon"></i></button>
 </header>
 
 <div class="banner-box" id="banner"></div>
+
+<div class="search-wrap">
+    <i class="fa-solid fa-search search-icon"></i>
+    <input type="text" id="search" placeholder="ค้นหาชื่อสินค้าที่ท่านต้องการ..." oninput="render()">
+</div>
+
 <div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</div>
 <main class="grid" id="productGrid"></main>
 
@@ -205,7 +211,7 @@
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
             let buyLimit = p[12] ? parseInt(p[12]) : 10;
-            let pDescription = p[2] || ''; // คอลัมน์ C (Index 2) คือคำอธิบายสินค้า
+            let pDescription = p[2] || '';
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
