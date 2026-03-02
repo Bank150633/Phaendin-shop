@@ -70,7 +70,6 @@
         .opt-sel { width: 100%; padding: 6px 8px; margin-bottom: 10px; border-radius: 6px; background: #1a1a1a; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.4); font-size: 10.5px; outline: none; }
         .input-slim { width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
-        /* ระบบปุ่มกดเพิ่ม-ลดจำนวน (Stepper) */
         .stepper-wrap { display: flex; align-items: center; justify-content: space-between; background: rgba(212,175,55,0.05); padding: 10px; border-radius: 8px; margin-bottom: 12px; border: 1px solid rgba(212,175,55,0.2); }
         .stepper-label { font-size: 10px; color: var(--gold); font-weight: 500; }
         .stepper-ctrl { display: flex; align-items: center; gap: 15px; }
@@ -264,7 +263,6 @@
     }
 
     function updatePrice() {
-        // ล็อคปุ่มบวกถ้าถึง Limit
         document.getElementById('btnPlus').disabled = (selectedQty >= activeP.limit);
         document.getElementById('btnMinus').disabled = (selectedQty <= 1);
 
@@ -277,11 +275,26 @@
         let discounted = activeP.disc > 0 ? basePrice * (1 - (activeP.disc / 100)) : basePrice;
         activeP.total = (discounted * selectedQty) + activeP.ship;
         
+        // แก้ไขส่วนสรุปราคาให้บอกส่วนลดและค่าส่งครบถ้วน
         document.getElementById('orderDetail').innerHTML = `
-            <div style="font-size:11px;">🛒 ${activeP.name}${activeP.optLabel}</div>
-            <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; margin-top:8px;">฿${activeP.total.toLocaleString()}</div>
-            <div style="font-size:9px; text-align:center; color:var(--text-dim);">฿${discounted.toLocaleString()} x ${selectedQty} ชิ้น + ส่ง ฿${activeP.ship}</div>
-            ${activeP.limit < 10 ? `<div style="color:#ff4b2b; font-size:9px; text-align:center; margin-top:4px;">* รายการนี้ซื้อได้สูงสุด ${activeP.limit} ชิ้น</div>` : ''}
+            <div style="font-size:11px; color:var(--gold); font-weight:500;">🛒 ${activeP.name}${activeP.optLabel}</div>
+            <div style="font-size:26px; font-weight:800; text-align:center; color:#fff; margin:10px 0;">฿${activeP.total.toLocaleString()}</div>
+            
+            <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; font-size:10px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span>ราคาต่อชิ้น:</span>
+                    <span>฿${discounted.toLocaleString()} ${activeP.disc > 0 ? `<span style="color:#ff4b2b;">(-${activeP.disc}%)</span>` : ''}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                    <span>จำนวน:</span>
+                    <span>x ${selectedQty}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; border-top:1px solid rgba(255,255,255,0.1); pt:4px; margin-top:4px;">
+                    <span>ค่าจัดส่ง:</span>
+                    <span style="${activeP.ship === 0 ? 'color:#38ef7d;' : ''}">${activeP.ship === 0 ? 'ส่งฟรี' : '฿'+activeP.ship.toLocaleString()}</span>
+                </div>
+            </div>
+            ${activeP.limit < 10 ? `<div style="color:#ff4b2b; font-size:9px; text-align:center; margin-top:6px;">* สินค้านี้จำกัดการซื้อสูงสุด ${activeP.limit} ชิ้น</div>` : ''}
         `;
     }
 
