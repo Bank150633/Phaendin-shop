@@ -61,7 +61,6 @@
         .new-price { color: #ff4b2b; }
 
         .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
-        .buy-now:disabled { background: #555 !important; color: #888; cursor: not-allowed; }
         .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
@@ -78,6 +77,11 @@
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
+        
+        /* สไตล์เพิ่มเติมสำหรับช่องจำนวน */
+        .qty-box { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 8px; border: 1px solid #333; }
+        .qty-box label { font-size: 10px; color: var(--gold); flex-grow: 1; }
+        .qty-box input { width: 50px; background: transparent; border: none; color: #fff; text-align: center; font-weight: bold; font-size: 14px; outline: none; }
     </style>
 </head>
 <body class="dark-mode">
@@ -100,16 +104,32 @@
     <div class="nav-tab" onclick="openModal('contactModal')"><i class="fa-solid fa-comment-dots"></i> ติดต่อ</div>
 </nav>
 
+<div id="contactModal" class="modal">
+    <div class="modal-card" style="text-align:center;">
+        <h4 style="color:var(--gold); margin-bottom:12px; font-size:14px;">ติดต่อเรา</h4>
+        <a href="tel:0944159031" style="display:block; background:#28a745; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;">📞 โทรสายด่วน</a>
+        <a href="https://line.me/ti/p/YOUR_ID" style="display:block; background:#06c755; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;">💬 Line OA</a>
+        <a href="https://m.me/YOUR_PAGE_ID" style="display:block; background:#0084ff; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-brands fa-facebook-messenger"></i> Messenger เพจ</a>
+        <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
+    </div>
+</div>
+
 <div id="orderModal" class="modal">
     <div class="modal-card">
         <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
         <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:10px; border-radius:10px; margin-bottom:12px; border:1px solid rgba(212,175,55,0.3);"></div>
         <form id="orderForm">
             <div id="optionBox"></div>
+            
+            <div class="qty-box">
+                <label>🔢 จำนวนที่ต้องการ (ลิมิต 1-10)</label>
+                <input type="number" id="pQty" value="1" min="1" max="10" onchange="updatePrice()">
+            </div>
+
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
-            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์ (10 หลัก)" required class="input-slim" 
-                   maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์ (10 หลัก)" required class="input-slim" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
+            
             <div style="text-align:center; margin: 10px 0; background:rgba(255,255,255,0.03); padding:10px; border-radius:8px;">
                 <p style="font-size:10px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0358567622" style="width:100px; margin-top:5px; border:2px solid #fff; border-radius:5px;">
@@ -122,16 +142,6 @@
             <button type="submit" id="submitBtn" class="buy-now" style="margin-top:10px; border-radius:8px;">ยืนยันสั่งซื้อ</button>
             <p onclick="closeModal('orderModal')" style="text-align:center; color:var(--text-dim); cursor:pointer; margin-top:8px; font-size:10px;">[ ยกเลิก ]</p>
         </form>
-    </div>
-</div>
-
-<div id="contactModal" class="modal">
-    <div class="modal-card" style="text-align:center;">
-        <h4 style="color:var(--gold); margin-bottom:12px; font-size:14px;">ติดต่อเรา</h4>
-        <a href="tel:0944159031" style="display:block; background:#28a745; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;">📞 โทรสายด่วน</a>
-        <a href="https://line.me/ti/p/YOUR_ID" style="display:block; background:#06c755; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;">💬 Line OA</a>
-        <a href="https://m.me/YOUR_PAGE_ID" style="display:block; background:#0084ff; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-brands fa-facebook-messenger"></i> Messenger เพจ</a>
-        <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
     </div>
 </div>
 
@@ -174,7 +184,7 @@
                                 </div>
                                 <span style="font-size:10px; color:#ff4b2b; font-weight:bold;">เหลือเวลาเพียง</span>
                             </div>
-                            <button id="bannerBtn" class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
+                            <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
                                 onclick="openOrder('${b[1]}','${bPrice}','${bShip}','${bOpt}', ${bDisc})">
                                 รับสิทธิ์ด่วน
                             </button>
@@ -240,7 +250,8 @@
     }
 
     function openOrder(n, pNormal, s, optStr, discPercent) {
-        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, optPrice: 0, optLabel: '' };
+        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, optPrice: 0, optLabel: '', currentQty: 1 };
+        document.getElementById('pQty').value = 1; // รีเซ็ตจำนวนเป็น 1 ทุกครั้งที่เปิด
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
         if(optStr && optStr !== '-') {
@@ -259,75 +270,36 @@
 
     function updatePrice() {
         const sel = document.getElementById('pOpt');
-        let priceToUse = activeP.pNormal;
+        const qtyIn = document.getElementById('pQty');
+        let qty = parseInt(qtyIn.value) || 1;
+
+        // ลิมิตจำนวนสินค้า (1-10 ชิ้น)
+        if(qty < 1) { qty = 1; qtyIn.value = 1; }
+        if(qty > 10) { qty = 10; qtyIn.value = 10; alert("จำกัดการซื้อสูงสุด 10 ชิ้นต่อออเดอร์"); }
+        activeP.currentQty = qty;
+
+        let pricePerUnit = activeP.pNormal;
         if(sel) {
-            priceToUse = parseFloat(sel.value);
+            pricePerUnit = parseFloat(sel.value);
             activeP.optLabel = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
-        let discounted = priceToUse;
-        if(activeP.disc > 0) discounted = priceToUse * (1 - (activeP.disc / 100));
-        activeP.finalPrice = discounted + activeP.ship;
+        
+        let discountedPerUnit = pricePerUnit;
+        if(activeP.disc > 0) discountedPerUnit = pricePerUnit * (1 - (activeP.disc / 100));
+        
+        // ยอดรวม = (ราคาลดแล้ว * จำนวน) + ค่าส่ง
+        activeP.finalPrice = (discountedPerUnit * qty) + activeP.ship;
         
         document.getElementById('orderDetail').innerHTML = `
-            <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optLabel}</div>
+            <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optLabel} x ${qty} ชิ้น</div>
             <div style="font-size:20px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">
-                ${activeP.disc > 0 || (sel && priceToUse != activeP.pNormal) ? `<span style="text-decoration:line-through; font-size:12px; color:#888; margin-right:8px;">฿${priceToUse.toLocaleString()}</span>` : ''}
                 ฿${activeP.finalPrice.toLocaleString()}
             </div>
-            <div style="font-size:10px; text-align:center; color:var(--gold); margin-top:2px;">🚚 ค่าจัดส่ง: ฿${activeP.ship.toLocaleString()}</div>
-            ${activeP.disc > 0 ? `<div style="color:#ff4b2b; font-size:10px; text-align:center; font-weight:bold;">(ลดพิเศษ ${activeP.disc}%)</div>` : ''}
+            <div style="font-size:10px; text-align:center; color:var(--gold); margin-top:2px;">🚚 รวมค่าจัดส่ง ฿${activeP.ship.toLocaleString()} แล้ว</div>
         `;
     }
 
-    function tick() {
-        if(!bannerEnd) return;
-        const d = bannerEnd - Date.now();
-        const bBtn = document.getElementById('bannerBtn');
-        if(d > 0) {
-            document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0');
-            document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0');
-            document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0');
-        } else {
-            // หมดเวลา ล็อคปุ่มแบนเนอร์ทันที (Limit by Time)
-            if(bBtn && !bBtn.disabled) {
-                bBtn.disabled = true;
-                bBtn.innerText = "หมดเวลา";
-            }
-        }
-    }
-
-    document.getElementById('orderForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const phone = document.getElementById('cPhone').value;
-        
-        // ตรวจสอบลิมิตเบอร์โทร (Phone Validation)
-        if (phone.length < 10) {
-            alert("กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก (เช่น 0812345678)");
-            return;
-        }
-
-        const btn = document.getElementById('submitBtn');
-        const file = document.getElementById('fileIn').files[0];
-        if(!file) return alert("กรุณาแนบสลิป!");
-        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
-        const reader = new FileReader();
-        reader.onload = async () => {
-            const data = {
-                productDetail: `${activeP.name}${activeP.optLabel} ยอด: ${activeP.finalPrice} (รวมส่ง ฿${activeP.ship})`,
-                customerName: document.getElementById('cName').value,
-                customerPhone: phone,
-                customerAddress: document.getElementById('cAddr').value,
-                file: reader.result.split(',')[1]
-            };
-            try {
-                await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
-                alert("สั่งซื้อสำเร็จ!"); location.reload();
-            } catch(err) { alert("ล้มล้ว"); btn.disabled = false; }
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // ฟังก์ชันอื่นๆ คงเดิม
+    // ฟังก์ชันอื่นๆ คงเดิมตามโค้ดต้นฉบับ
     function updateProductTimers() {
         document.querySelectorAll('.p-timer-badge').forEach(el => {
             const diff = new Date(el.getAttribute('data-expire')).getTime() - Date.now();
@@ -339,17 +311,55 @@
             } else { el.style.display = 'none'; }
         });
     }
+
     function renderMedia(url, isMuted) {
         if(!url) return '';
         return url.match(/\.(mp4|webm|mov)$/i) 
             ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` 
             : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
     }
+
     function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
     function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
+
+    document.getElementById('orderForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const phone = document.getElementById('cPhone').value;
+        if(phone.length < 10 || !phone.startsWith('0')) return alert("กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (10 หลัก เริ่มด้วย 0)");
+
+        const btn = document.getElementById('submitBtn');
+        const file = document.getElementById('fileIn').files[0];
+        if(!file) return alert("กรุณาแนบสลิป!");
+        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+        const reader = new FileReader();
+        reader.onload = async () => {
+            const data = {
+                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${activeP.currentQty} | ยอดโอน: ฿${activeP.finalPrice}`,
+                customerName: document.getElementById('cName').value,
+                customerPhone: phone,
+                customerAddress: document.getElementById('cAddr').value,
+                file: reader.result.split(',')[1]
+            };
+            try {
+                await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
+                alert("สั่งซื้อสำเร็จ!"); location.reload();
+            } catch(err) { alert("ล้มเหลว"); btn.disabled = false; }
+        };
+        reader.readAsDataURL(file);
+    };
+
+    function tick() {
+        if(!bannerEnd) return;
+        const d = bannerEnd - Date.now();
+        if(d > 0) {
+            document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0');
+            document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0');
+            document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0');
+        }
+    }
     function toggleTheme() { document.body.classList.toggle('light-mode'); }
     async function checkShip() {
         const p = prompt("เบอร์โทรที่ใช้สั่งซื้อ:"); if(!p) return;
