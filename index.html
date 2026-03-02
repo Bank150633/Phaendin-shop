@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN STORE | SMART PRICE V9.6 PREMIUM</title>
+    <title>PHAENDIN STORE | PREMIUM STEPPER</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -70,10 +70,13 @@
         .opt-sel { width: 100%; padding: 6px 8px; margin-bottom: 10px; border-radius: 6px; background: #1a1a1a; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.4); font-size: 10.5px; outline: none; }
         .input-slim { width: 100%; padding: 8px; margin-bottom: 5px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
-        /* ส่วนควบคุมจำนวน */
-        .qty-control { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; }
-        .qty-control label { font-size: 10px; color: var(--gold); }
-        .qty-control input { width: 60px; background: #000; border: 1px solid var(--gold); color: #fff; text-align: center; border-radius: 4px; font-weight: bold; }
+        /* ระบบปุ่มกดเพิ่ม-ลดจำนวน (Stepper) */
+        .stepper-wrap { display: flex; align-items: center; justify-content: space-between; background: rgba(212,175,55,0.05); padding: 10px; border-radius: 8px; margin-bottom: 12px; border: 1px solid rgba(212,175,55,0.2); }
+        .stepper-label { font-size: 10px; color: var(--gold); font-weight: 500; }
+        .stepper-ctrl { display: flex; align-items: center; gap: 15px; }
+        .step-btn { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 12px; }
+        .step-btn:disabled { opacity: 0.2; border-color: #666; color: #666; cursor: not-allowed; }
+        #qtyDisplay { font-size: 16px; font-weight: 700; color: #fff; min-width: 20px; text-align: center; }
 
         nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
@@ -121,9 +124,13 @@
         <form id="orderForm">
             <div id="optionBox"></div>
             
-            <div class="qty-control">
-                <label><i class="fa-solid fa-cart-plus"></i> ระบุจำนวนที่ต้องการ:</label>
-                <input type="number" id="pQty" value="1" min="1" onchange="updatePrice()">
+            <div class="stepper-wrap">
+                <span class="stepper-label"><i class="fa-solid fa-cart-plus"></i> เลือกจำนวน</span>
+                <div class="stepper-ctrl">
+                    <button type="button" class="step-btn" onclick="updateQty(-1)" id="btnMinus"><i class="fa-solid fa-minus"></i></button>
+                    <span id="qtyDisplay">1</span>
+                    <button type="button" class="step-btn" onclick="updateQty(1)" id="btnPlus"><i class="fa-solid fa-plus"></i></button>
+                </div>
             </div>
 
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
@@ -151,6 +158,7 @@
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
     
     let db = [], activeP = {}, bannerEnd = null;
+    let selectedQty = 1;
 
     async function init() {
         try {
@@ -159,20 +167,9 @@
             
             if(b) {
                 bannerEnd = new Date(b[2]).getTime();
-                let bPrice = b[6] || 0; 
-                let bShip  = b[7] || 0;
-                let bOpt   = b[8] || '';
-                let bDisc  = b[9] || 0;
-                let bLimit = b[10] || 10; // ลิมิตแบนเนอร์ถ้าใส่ไว้
-
-                let bTags = [b[3], b[4], b[5]].filter(t => t && t !== '-' && t !== '').map(t => {
-                    let c = t.includes('โปร')?'bg-red':(t.includes('ขายดี')?'bg-gold':'bg-blue');
-                    return `<span class="badge ${c}">${t}</span>`;
-                }).join('');
-
                 document.getElementById('banner').innerHTML = `
                     <div class="bn-card">
-                        <div class="bn-badges">${bTags}</div>
+                        <div class="bn-badges">${[b[3], b[4], b[5]].filter(t => t && t !== '-').map(t => `<span class="badge ${t.includes('โปร')?'bg-red':'bg-gold'}">${t}</span>`).join('')}</div>
                         <div class="bn-img" onclick="zoom('${b[0]}')">${renderMedia(b[0], true)}</div>
                         <div class="bn-txt">
                             <div class="bn-title">🔥 ${b[1]}</div>
@@ -182,10 +179,9 @@
                                     <span class="timer-unit" id="tm">00</span><span class="timer-sep">:</span>
                                     <span class="timer-unit" id="ts">00</span>
                                 </div>
-                                <span style="font-size:10px; color:#ff4b2b; font-weight:bold;">เหลือเวลาเพียง</span>
                             </div>
                             <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
-                                onclick="openOrder('${b[1]}','${bPrice}','${bShip}','${bOpt}', ${bDisc}, ${bLimit})">
+                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10})">
                                 รับสิทธิ์ด่วน
                             </button>
                         </div>
@@ -210,40 +206,27 @@
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let buyLimit = p[12] ? parseInt(p[12]) : 10; // ดึงลิมิตจากคอลัมน์ M
+            let buyLimit = p[12] ? parseInt(p[12]) : 10; 
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
-
-            [p[4], p[5], p[6], p[7]].forEach(t => {
-                if(t && t.includes('%')) {
-                    let match = t.match(/(\d+)%/);
-                    if(match) percentDiscount = parseInt(match[1]);
-                }
-            });
+            [p[4], p[5], p[6], p[7]].forEach(t => { if(t && t.includes('%')) percentDiscount = parseInt(t.match(/(\d+)%/)[1]); });
 
             if (pricePromo > 0 && expiryDate > now) currentPrice = pricePromo;
             else if (percentDiscount > 0) currentPrice = priceNormal * (1 - (percentDiscount / 100));
 
-            let isSale = currentPrice < priceNormal;
-            let badgesHtml = [p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && t !== '').map(t => {
-                let c = t.includes('ขายดี')?'bg-gold':(t.includes('%')?'bg-red':'bg-blue');
-                return `<span class="badge ${c}">${t}</span>`;
-            }).join('');
-
             return `
             <div class="card">
                 <div class="media-wrap" onclick="zoom('${p[1]}')">
-                    <div class="badge-container">${badgesHtml}</div>
+                    <div class="badge-container">${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-').map(t => `<span class="badge ${t.includes('%')?'bg-red':'bg-gold'}">${t}</span>`).join('')}</div>
                     ${renderMedia(p[1], true)}
                     ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
-                    <div class="p-desc">${p[2] || ''}</div>
                     <div class="p-price">
-                        ${isSale ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                        <span class="${isSale ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
                 <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit})">สั่งซื้อ</button>
@@ -252,30 +235,17 @@
     }
 
     function openOrder(n, pNormal, s, optStr, discPercent, buyLimit) {
-        // เก็บค่าลิมิตไว้ใน activeP
-        activeP = { 
-            name: n, 
-            pNormal: parseFloat(pNormal), 
-            ship: parseFloat(s), 
-            disc: discPercent, 
-            optPrice: 0, 
-            optLabel: '',
-            limit: buyLimit 
-        };
-
-        // ตั้งค่า Input จำนวนให้ล็อคตามลิมิต
-        const qtyIn = document.getElementById('pQty');
-        qtyIn.max = buyLimit;
-        qtyIn.value = 1;
-
+        selectedQty = 1; 
+        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, optPrice: 0, optLabel: '', limit: buyLimit };
+        
+        document.getElementById('qtyDisplay').innerText = selectedQty;
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
         if(optStr && optStr !== '-') {
-            let html = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก:</label><select id="pOpt" class="opt-sel" onchange="updatePrice()">`;
+            let html = `<label style="font-size:9px; color:var(--gold);">📦 ตัวเลือก:</label><select id="pOpt" class="opt-sel" onchange="updatePrice()">`;
             optStr.split(',').forEach((o) => {
                 let pts = o.includes(':') ? o.split(':') : o.split('=');
-                let label = pts[0].trim();
-                let price = pts[1] ? parseFloat(pts[1]) : activeP.pNormal;
+                let label = pts[0].trim(), price = pts[1] ? parseFloat(pts[1]) : activeP.pNormal;
                 html += `<option value="${price}" data-label="${label}">${label} (฿${price.toLocaleString()})</option>`;
             });
             box.innerHTML = html + `</select>`;
@@ -284,40 +254,34 @@
         openModal('orderModal');
     }
 
-    function updatePrice() {
-        const sel = document.getElementById('pOpt');
-        const qtyIn = document.getElementById('pQty');
-        let qty = parseInt(qtyIn.value) || 1;
-
-        // เช็คไม่ให้ซื้อเกินลิมิต
-        if(qty > activeP.limit) {
-            alert(`ขออภัย! สินค้านี้จำกัดการซื้อไม่เกิน ${activeP.limit} ชิ้นต่อออเดอร์`);
-            qty = activeP.limit;
-            qtyIn.value = qty;
+    function updateQty(val) {
+        const nextQty = selectedQty + val;
+        if (nextQty >= 1 && nextQty <= activeP.limit) {
+            selectedQty = nextQty;
+            document.getElementById('qtyDisplay').innerText = selectedQty;
+            updatePrice();
         }
-        if(qty < 1) { qty = 1; qtyIn.value = 1; }
+    }
 
+    function updatePrice() {
+        // ล็อคปุ่มบวกถ้าถึง Limit
+        document.getElementById('btnPlus').disabled = (selectedQty >= activeP.limit);
+        document.getElementById('btnMinus').disabled = (selectedQty <= 1);
+
+        const sel = document.getElementById('pOpt');
         let basePrice = activeP.pNormal;
         if(sel) {
             basePrice = parseFloat(sel.value);
             activeP.optLabel = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
-
-        let discounted = basePrice;
-        if(activeP.disc > 0) discounted = basePrice * (1 - (activeP.disc / 100));
-        
-        // คำนวณราคารวม: (ราคาหลังลด * จำนวน) + ค่าส่ง
-        activeP.finalPrice = (discounted * qty) + activeP.ship;
-        activeP.currentQty = qty;
+        let discounted = activeP.disc > 0 ? basePrice * (1 - (activeP.disc / 100)) : basePrice;
+        activeP.total = (discounted * selectedQty) + activeP.ship;
         
         document.getElementById('orderDetail').innerHTML = `
-            <div style="font-size:10px;">🛒 ${activeP.name}${activeP.optLabel} x ${qty} ชิ้น</div>
-            <div style="font-size:20px; font-weight:800; text-align:center; color:#fff; margin-top:5px;">
-                ฿${activeP.finalPrice.toLocaleString()}
-            </div>
-            <div style="font-size:10px; text-align:center; color:var(--gold); margin-top:2px;">🚚 ค่าจัดส่ง: ฿${activeP.ship.toLocaleString()}</div>
-            ${activeP.disc > 0 ? `<div style="color:#ff4b2b; font-size:10px; text-align:center; font-weight:bold;">(ลดพิเศษ ${activeP.disc}%)</div>` : ''}
-            <div style="font-size:9px; text-align:center; color:#888;">*จำกัดไม่เกิน ${activeP.limit} ชิ้น/ครั้ง</div>
+            <div style="font-size:11px;">🛒 ${activeP.name}${activeP.optLabel}</div>
+            <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; margin-top:8px;">฿${activeP.total.toLocaleString()}</div>
+            <div style="font-size:9px; text-align:center; color:var(--text-dim);">฿${discounted.toLocaleString()} x ${selectedQty} ชิ้น + ส่ง ฿${activeP.ship}</div>
+            ${activeP.limit < 10 ? `<div style="color:#ff4b2b; font-size:9px; text-align:center; margin-top:4px;">* รายการนี้ซื้อได้สูงสุด ${activeP.limit} ชิ้น</div>` : ''}
         `;
     }
 
@@ -351,11 +315,11 @@
         const btn = document.getElementById('submitBtn');
         const file = document.getElementById('fileIn').files[0];
         if(!file) return alert("กรุณาแนบสลิป!");
-        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+        btn.innerText = "กำลังส่ง..."; btn.disabled = true;
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${activeP.currentQty} | ยอดรวม: ${activeP.finalPrice} (รวมส่ง ฿${activeP.ship})`,
+                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${selectedQty} | ยอดโอน: ฿${activeP.total}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
@@ -369,15 +333,7 @@
         reader.readAsDataURL(file);
     };
 
-    function tick() {
-        if(!bannerEnd) return;
-        const d = bannerEnd - Date.now();
-        if(d > 0) {
-            document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0');
-            document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0');
-            document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0');
-        }
-    }
+    function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     function toggleTheme() { document.body.classList.toggle('light-mode'); }
     async function checkShip() {
         const p = prompt("เบอร์โทรที่ใช้สั่งซื้อ:"); if(!p) return;
