@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN STORE | PREMIUM</title>
+    <title>PHAENDIN STORE | PREMIUM FULL</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,276 +18,237 @@
             --bg: #F2F2F7; --card: #FFFFFF; --text: #1C1C1E; --text-dim: #636366; --input-bg: #FFFFFF;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 70px; transition: 0.3s; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 70px; transition: 0.3s; }
 
         header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 1000; padding: 12px 15px; border-bottom: 1.5px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        .logo-txt { color: var(--gold); font-weight: 600; font-size: 18px; letter-spacing: 1.5px; text-shadow: 0 0 10px rgba(212,175,55,0.3); }
+        .logo-txt { color: var(--gold); font-weight: 600; font-size: 18px; letter-spacing: 1.5px; }
 
-        .search-wrap { position: relative; width: 94%; max-width: 600px; margin: 15px auto 10px; display: flex; align-items: center; }
-        #search { width: 100%; padding: 12px 15px 12px 45px; border-radius: 50px; border: 1.5px solid var(--gold); background: var(--input-bg); color: var(--text); font-size: 14px; outline: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .search-icon { position: absolute; left: 18px; color: var(--gold); font-size: 16px; }
-
-        /* Product Grid ปรับปรุงให้ดูหรูขึ้น */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
-        @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-
-        .card { background: var(--card); border: 1px solid rgba(212,175,55,0.2); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card:active { transform: scale(0.97); }
-
-        .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; position: relative; overflow: hidden; }
-        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: cover; }
+        .banner-box { padding: 10px; }
+        .bn-card { border: 2px solid var(--gold); border-radius: 20px; overflow: hidden; height: 220px; position: relative; background: #000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .bn-img { width: 100%; height: 100%; }
+        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; }
         
-        .p-timer-badge { position: absolute; bottom: 0; width: 100%; background: rgba(255, 65, 108, 0.9); color: #fff; font-size: 10px; text-align: center; padding: 4px 0; font-weight: bold; z-index: 5; }
+        /* ข้อมูลใต้ภาพแบนเนอร์ */
+        .bn-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 15px; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
+        .bn-title { font-size: 18px; font-weight: 600; color: var(--gold); margin-bottom: 2px; }
+        .bn-desc { font-size: 11px; color: #ccc; margin-bottom: 8px; line-height: 1.3; }
 
-        .info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 5px; }
-        .p-name { font-size: 14px; font-weight: 600; color: var(--gold); }
-        .p-price { font-size: 16px; font-weight: 700; display: flex; align-items: baseline; gap: 6px; }
-        .old-price { text-decoration: line-through; color: #888; font-size: 12px; font-weight: 400; }
-        .new-price { color: #ff4b2b; }
+        .search-wrap { position: relative; width: 92%; margin: 10px auto; }
+        #search { width: 100%; padding: 12px 15px 12px 40px; border-radius: 50px; border: 1px solid var(--gold); background: var(--input-bg); color: var(--text); outline: none; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); }
 
-        /* Modal สั่งซื้อที่ใช้ง่ายขึ้น */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; align-items: center; justify-content: center; padding: 15px; opacity: 0; transition: 0.3s; }
-        .modal.show { display: flex; opacity: 1; }
-        .modal-card { background: var(--bg); border: 2px solid var(--gold); border-radius: 25px; width: 100%; max-width: 400px; padding: 20px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 30px rgba(212,175,55,0.3); }
+        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 12px; }
+        .card { background: var(--card); border-radius: 15px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(212,175,55,0.1); transition: 0.3s; }
+        .media-wrap { width: 100%; aspect-ratio: 1/1; position: relative; background: #000; }
+        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: cover; }
 
-        .input-slim { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 12px; background: var(--input-bg); color: #fff; border: 1px solid #444; font-size: 14px; outline: none; }
-        .input-slim:focus { border-color: var(--gold); }
+        .badge-box { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; }
+        .badge { font-size: 9px; padding: 3px 8px; border-radius: 5px; font-weight: bold; color: #fff; text-transform: uppercase; }
+        .bg-red { background: var(--red-grad); }
+        .bg-gold { background: var(--gold-grad); color: #000; }
 
-        .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 15px 0; font-weight: 700; font-size: 14px; cursor: pointer; border-radius: 12px; text-transform: uppercase; transition: 0.3s; }
-        .buy-now:hover { filter: brightness(1.1); }
+        .info { padding: 10px; flex-grow: 1; }
+        .p-name { font-size: 14px; font-weight: 600; color: var(--gold); margin-bottom: 4px; }
+        .p-desc { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; line-height: 1.2; height: 26px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        
+        .price-box { display: flex; align-items: baseline; gap: 8px; }
+        .new-price { font-size: 18px; font-weight: 800; color: #ff4b2b; }
+        .old-price { font-size: 12px; text-decoration: line-through; color: #888; }
 
-        nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: #000; display: flex; border-top: 1.5px solid rgba(212,175,55,0.3); z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
+        .buy-btn { width: 100%; padding: 12px; border: none; background: var(--gold-grad); color: #000; font-weight: 700; cursor: pointer; font-size: 13px; }
+
+        /* Modal & Stepper */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 20px; width: 100%; max-width: 380px; padding: 20px; }
+        
+        .stepper { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px 15px; border-radius: 12px; margin: 15px 0; border: 1px solid #333; }
+        .step-btn { width: 35px; height: 35px; border-radius: 50%; border: 1.5px solid var(--gold); background: none; color: var(--gold); font-size: 18px; cursor: pointer; }
+        
+        nav { position: fixed; bottom: 0; width: 100%; height: 60px; background: #000; display: flex; border-top: 1px solid var(--gold); z-index: 1000; }
+        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: #888; }
+        .nav-tab.active { color: var(--gold); }
+        .nav-tab i { font-size: 20px; margin-bottom: 4px; }
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
 <header>
     <div class="logo-txt">PHAENDIN STORE</div>
-    <button class="theme-btn" onclick="toggleTheme()" style="background:none; border:none; color:var(--gold); font-size:20px; cursor:pointer;"><i class="fa-solid fa-circle-half-stroke"></i></button>
+    <div onclick="toggleTheme()" style="color:var(--gold); font-size:20px;"><i class="fa-solid fa-circle-half-stroke"></i></div>
 </header>
 
-<div class="banner-box" id="banner"></div>
+<div id="banner" class="banner-box"></div>
 
 <div class="search-wrap">
     <i class="fa-solid fa-search search-icon"></i>
-    <input type="text" id="search" placeholder="ค้นหาสินค้าพรีเมียมที่คุณต้องการ..." oninput="render()">
+    <input type="text" id="search" placeholder="ค้นหาของอร่อยที่คุณต้องการ..." oninput="render()">
 </div>
 
-<div id="productGrid" class="grid"></div>
-
-<nav>
-    <div class="nav-tab active" onclick="location.reload()"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></div>
-    <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-box-open"></i><span>ติดตามพัสดุ</span></div>
-    <div class="nav-tab" onclick="openModal('contactModal')"><i class="fa-solid fa-headset"></i><span>ช่วยเหลือ</span></div>
-</nav>
+<div class="grid" id="productGrid"></div>
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <h3 style="color:var(--gold); text-align:center; margin-bottom:15px;">🛒 สรุปการสั่งซื้อ</h3>
-        <div id="orderDetail" style="margin-bottom:15px; padding:15px; background:rgba(212,175,55,0.05); border-radius:15px; border:1px solid rgba(212,175,55,0.2);"></div>
+        <h3 style="color:var(--gold); text-align:center; margin-bottom:15px;">🛒 ยืนยันรายการสั่งซื้อ</h3>
+        <div id="orderDetail" style="background:#141414; padding:15px; border-radius:15px; border:1px solid #333; margin-bottom:15px;"></div>
         
         <form id="orderForm">
             <div id="optionBox"></div>
             
-            <div class="stepper-wrap" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#1a1a1a; padding:10px; border-radius:12px;">
-                <span style="font-size:14px; color:var(--gold);">จำนวน</span>
-                <div style="display:flex; align-items:center; gap:15px;">
-                    <button type="button" class="step-btn" onclick="updateQty(-1)" style="width:30px; height:30px; border-radius:50%; border:1px solid var(--gold); background:none; color:var(--gold);">-</button>
-                    <span id="qtyDisplay" style="font-size:18px; font-weight:bold;">1</span>
-                    <button type="button" class="step-btn" onclick="updateQty(1)" style="width:30px; height:30px; border-radius:50%; border:1px solid var(--gold); background:none; color:var(--gold);">+</button>
+            <div class="stepper">
+                <span style="color:var(--gold); font-size:14px;">จำนวนที่ต้องการ</span>
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <button type="button" class="step-btn" onclick="updateQty(-1)">-</button>
+                    <span id="qtyDisplay" style="font-size:20px; font-weight:bold;">1</span>
+                    <button type="button" class="step-btn" onclick="updateQty(1)">+</button>
                 </div>
             </div>
 
-            <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
-            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
-            <textarea id="cAddr" placeholder="ที่อยู่ในการจัดส่ง" required class="input-slim" style="height:80px;"></textarea>
+            <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; background:#1a1a1a; border:1px solid #333; color:#fff;">
+            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; background:#1a1a1a; border:1px solid #333; color:#fff;">
+            <textarea id="cAddr" placeholder="ที่อยู่จัดส่งโดยละเอียด" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; background:#1a1a1a; border:1px solid #333; color:#fff; height:80px;"></textarea>
             
-            <div style="text-align:center; padding:15px; background:#1a1a1a; border-radius:15px; margin-bottom:15px; border:1px dashed var(--gold);">
-                <p style="font-size:12px; color:var(--gold);">ชำระเงินผ่าน QR Code (กสิกรไทย)</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=0358567622" style="width:120px; margin:10px auto; display:block; border-radius:10px;">
-                <p style="font-size:10px; color:#888;">035-8-56762-2 | บจก. แผ่นดิน แอนด์ ต้นไม้</p>
-            </div>
-
-            <div style="text-align:center; margin-bottom:15px;">
-                <button type="button" onclick="document.getElementById('fileIn').click()" style="background:#333; color:var(--gold); border:1px solid var(--gold); padding:8px 15px; border-radius:8px; font-size:12px;">
-                    <i class="fa-solid fa-image"></i> แนบสลิปโอนเงิน
-                </button>
-                <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
-                <img id="preview" style="display:none; width:80px; margin:10px auto; border-radius:5px;">
-            </div>
-
-            <button type="submit" id="submitBtn" class="buy-now">ยืนยันการสั่งซื้อ</button>
-            <p onclick="closeModal('orderModal')" style="text-align:center; margin-top:15px; color:#888; cursor:pointer; font-size:12px;">[ กลับไปเลือกสินค้า ]</p>
+            <button type="submit" id="submitBtn" class="buy-btn" style="border-radius:12px;">ยืนยันสั่งซื้อและแนบสลิป</button>
+            <p onclick="closeModal('orderModal')" style="text-align:center; color:#888; margin-top:15px; cursor:pointer; font-size:12px;">กลับไปเลือกสินค้า</p>
+            <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
         </form>
     </div>
 </div>
 
+<nav>
+    <div class="nav-tab active"><i class="fa-solid fa-house"></i><span>หน้าแรก</span></div>
+    <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-truck-fast"></i><span>ติดตามพัสดุ</span></div>
+    <div class="nav-tab"><i class="fa-solid fa-comment-dots"></i><span>ติดต่อเรา</span></div>
+</nav>
+
 <script>
-    // ตั้งค่าเบื้องต้น
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
-
+    
     let db = [], activeP = {}, selectedQty = 1;
 
     async function init() {
         try {
-            // ดึงข้อมูลสินค้าจาก Sheet 1 (gid=0)
-            const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
-            const data = await resP.text();
+            // ดึงข้อมูลแบนเนอร์ (Sheet 2)
+            const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
+            const bRaw = await resB.text();
+            const b = bRaw.split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
             
-            // แยกข้อมูล CSV (รองรับกรณีมีเครื่องหมายคอมม่าในชื่อสินค้า)
-            const rows = data.split('\n').slice(1);
-            db = rows.map(row => {
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                return cols;
-            }).filter(col => col[0]); // กรองแถวว่าง
+            if(b) {
+                document.getElementById('banner').innerHTML = `
+                    <div class="bn-card">
+                        <div class="bn-img">${renderMedia(b[0], true)}</div>
+                        <div class="bn-overlay">
+                            <div class="bn-title">🔥 ${b[1]}</div>
+                            <div class="bn-desc">${b[3] || 'โปรโมชั่นสุดพิเศษสำหรับคุณ'}</div>
+                            <div id="bn-timer" style="display:flex; gap:5px;"></div>
+                        </div>
+                    </div>`;
+                startBannerTimer(b[2]);
+            }
 
-            db.sort(() => Math.random() - 0.5); // สุ่มลำดับสินค้า
+            // ดึงข้อมูลสินค้า (Sheet 1)
+            const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
+            const pRaw = await resP.text();
+            db = pRaw.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            
             render();
-            setInterval(updateProductTimers, 1000); // อัปเดตตัวนับถอยหลัง
-        } catch (e) {
-            console.error("Error loading data:", e);
-        }
+        } catch(e) { console.error(e); }
     }
 
     function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = Date.now();
-        const html = db.filter(p => p[0].toLowerCase().includes(query)).map(p => {
-            const priceNormal = parseFloat(p[3]) || 0;
-            const pricePromo = parseFloat(p[10]) || 0;
-            const expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            const isPromoActive = pricePromo > 0 && expiryDate > now;
-
-            const displayPrice = isPromoActive ? pricePromo : priceNormal;
+        
+        document.getElementById('productGrid').innerHTML = db.filter(p => p[0].toLowerCase().includes(query)).map(p => {
+            const priceNormal = parseFloat(p[3] || 0);
+            const pricePromo = parseFloat(p[10] || 0);
+            const expiry = p[11] ? new Date(p[11]).getTime() : 0;
+            const isPromo = pricePromo > 0 && expiry > now;
+            const finalPrice = isPromo ? pricePromo : priceNormal;
 
             return `
                 <div class="card">
-                    <div class="media-wrap" onclick="zoom('${p[1]}')">
+                    <div class="media-wrap">
+                        <div class="badge-box">
+                            ${isPromo ? `<span class="badge bg-red">SALE</span>` : ''}
+                            ${[p[4],p[5],p[6],p[7]].filter(t => t && t !== '-').map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+                        </div>
                         ${renderMedia(p[1], true)}
-                        ${isPromoActive ? `<div class="p-timer-badge" data-expire="${p[11]}">FLASH SALE</div>` : ''}
                     </div>
                     <div class="info">
                         <div class="p-name">${p[0]}</div>
-                        <div class="p-price">
-                            ${isPromoActive ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                            <span class="new-price">฿${displayPrice.toLocaleString()}</span>
+                        <div class="p-desc">${p[2] || ''}</div>
+                        <div class="price-box">
+                            <span class="new-price">฿${finalPrice.toLocaleString()}</span>
+                            ${isPromo ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
                         </div>
-                        <button class="buy-now" style="padding:8px; font-size:12px; margin-top:5px;" 
-                            onclick="openOrder('${p[0]}', ${displayPrice}, ${p[8]||0}, '${p[9]||''}', ${p[12]||10})">สั่งซื้อ</button>
                     </div>
-                </div>
-            `;
+                    <button class="buy-btn" onclick="openOrder('${p[0]}', ${finalPrice}, ${p[8]||0}, '${p[9]||''}', ${p[12]||10})">สั่งซื้อ</button>
+                </div>`;
         }).join('');
-        document.getElementById('productGrid').innerHTML = html;
     }
 
     function openOrder(name, price, ship, optStr, limit) {
         selectedQty = 1;
-        activeP = { name, basePrice: price, ship: parseFloat(ship), limit: parseInt(limit), optLabel: '' };
+        activeP = { name, price, ship: parseFloat(ship), limit: parseInt(limit) };
+        document.getElementById('qtyDisplay').innerText = selectedQty;
         
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
-
-        if (optStr && optStr !== '-') {
-            let options = optStr.split(',').map(o => {
-                let [label, customPrice] = o.includes(':') ? o.split(':') : [o, price];
-                return { label: label.trim(), price: parseFloat(customPrice) || price };
-            });
-
-            let html = `<label style="font-size:12px; color:var(--gold);">เลือกแบบที่ต้องการ:</label>
-                        <select id="pOpt" class="input-slim" onchange="updatePrice()" style="margin-top:5px;">`;
-            options.forEach(opt => {
-                html += `<option value="${opt.price}" data-label="${opt.label}">${opt.label} (฿${opt.price.toLocaleString()})</option>`;
+        if(optStr && optStr !== '-') {
+            let html = `<label style="font-size:12px; color:var(--gold);">เลือกรูปแบบ:</label><select id="pOpt" class="opt-sel" onchange="updateTotal()" style="width:100%; padding:10px; margin-top:5px; border-radius:8px; background:#1a1a1a; color:#fff; border:1px solid #333;">`;
+            optStr.split(',').forEach(o => {
+                let [label, opPrice] = o.includes(':') ? o.split(':') : [o, price];
+                html += `<option value="${opPrice}" data-label="${label}">${label}</option>`;
             });
             box.innerHTML = html + `</select>`;
         }
-
-        updatePrice();
-        openModal('orderModal');
+        updateTotal();
+        document.getElementById('orderModal').style.display = 'flex';
     }
 
-    function updatePrice() {
+    function updateTotal() {
         const sel = document.getElementById('pOpt');
-        const unitPrice = sel ? parseFloat(sel.value) : activeP.basePrice;
-        activeP.optLabel = sel ? ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]` : '';
-        activeP.total = (unitPrice * selectedQty) + activeP.ship;
-
-        document.getElementById('qtyDisplay').innerText = selectedQty;
+        const unitPrice = sel ? parseFloat(sel.value) : activeP.price;
+        const total = (unitPrice * selectedQty) + activeP.ship;
+        
         document.getElementById('orderDetail').innerHTML = `
-            <div style="font-weight:600; color:var(--gold);">${activeP.name}${activeP.optLabel}</div>
-            <div style="font-size:24px; font-weight:800; text-align:center; margin:10px 0;">฿${activeP.total.toLocaleString()}</div>
-            <p style="font-size:11px; color:#888; text-align:center;">สินค้า ฿${unitPrice.toLocaleString()} x ${selectedQty} + ค่าส่ง ฿${activeP.ship}</p>
+            <div style="color:var(--gold); font-weight:600;">${activeP.name}</div>
+            <div style="font-size:24px; font-weight:800; margin:10px 0;">฿${total.toLocaleString()}</div>
+            <div style="font-size:11px; color:#888;">(สินค้า ฿${unitPrice.toLocaleString()} x ${selectedQty}) + ค่าส่ง ฿${activeP.ship}</div>
         `;
     }
 
     function updateQty(v) {
-        if (selectedQty + v >= 1 && selectedQty + v <= activeP.limit) {
+        if(selectedQty + v >= 1 && selectedQty + v <= activeP.limit) {
             selectedQty += v;
-            updatePrice();
+            document.getElementById('qtyDisplay').innerText = selectedQty;
+            updateTotal();
         }
     }
 
-    // ฟังก์ชันจัดการการส่งฟอร์มไป Google Apps Script
-    document.getElementById('orderForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const file = document.getElementById('fileIn').files[0];
-
-        if (!file) return alert("กรุณาแนบสลิปเพื่อยืนยันการโอนเงิน");
-
-        btn.innerText = "กำลังบันทึกข้อมูล..."; btn.disabled = true;
-
-        const reader = new FileReader();
-        reader.onload = async () => {
-            const payload = new URLSearchParams({
-                productDetail: `${activeP.name}${activeP.optLabel} (จำนวน ${selectedQty}) ยอดโอน ฿${activeP.total}`,
-                customerName: document.getElementById('cName').value,
-                customerPhone: document.getElementById('cPhone').value,
-                customerAddress: document.getElementById('cAddr').value,
-                file: reader.result.split(',')[1]
-            });
-
-            try {
-                // ส่งแบบ no-cors เพื่อเลี่ยงปัญหา CORS กับ Google Apps Script
-                await fetch(APPS_URL, { method: 'POST', body: payload, mode: 'no-cors' });
-                alert("🛒 ขอบคุณครับ! เราได้รับคำสั่งซื้อของท่านเรียบร้อยแล้ว");
-                location.reload();
-            } catch (err) {
-                alert("การส่งข้อมูลขัดข้อง กรุณาลองใหม่อีกครั้ง");
-                btn.disabled = false;
-            }
-        };
-        reader.readAsDataURL(file);
-    };
-
-    // ฟังก์ชันย่อยอื่นๆ
     function renderMedia(url, muted) {
-        if (!url) return '';
+        if(!url) return '';
         return url.match(/\.(mp4|webm|mov)$/i) 
-            ? `<video src="${url}" ${muted?'autoplay loop muted playsinline':'controls autoplay'}></video>` 
+            ? `<video src="${url}" ${muted?'autoplay loop muted playsinline':'controls'}></video>` 
             : `<img src="${url}" loading="lazy">`;
     }
 
-    function updateProductTimers() {
-        document.querySelectorAll('.p-timer-badge').forEach(el => {
-            const expire = el.getAttribute('data-expire');
-            if (!expire) return;
-            const diff = new Date(expire).getTime() - Date.now();
-            if (diff > 0) {
+    function startBannerTimer(endStr) {
+        const end = new Date(endStr).getTime();
+        setInterval(() => {
+            const diff = end - Date.now();
+            if(diff > 0) {
                 const h = Math.floor(diff/3600000).toString().padStart(2,'0');
                 const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
                 const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-                el.innerText = `FLASH SALE ${h}:${m}:${s}`;
-            } else { el.style.display = 'none'; }
-        });
+                document.getElementById('bn-timer').innerHTML = `<span style="background:#ff4b2b; color:#fff; padding:2px 6px; border-radius:4px; font-weight:bold; font-size:12px;">หมดเวลาใน ${h}:${m}:${s}</span>`;
+            }
+        }, 1000);
     }
 
-    function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
-    function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     function toggleTheme() { document.body.classList.toggle('light-mode'); }
-    function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; }; r.readAsDataURL(input.files[0]); } }
-    function zoom(url) { window.open(url, '_blank'); }
 
     init();
 </script>
