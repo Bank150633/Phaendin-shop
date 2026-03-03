@@ -25,7 +25,6 @@
 
         header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); z-index: 1000; padding: 5px 10px; border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center; height: 50px; }
         
-        /* สไตล์สำหรับโลโก้ที่หัวเว็บ */
         .logo-img { height: 45px; width: auto; display: block; }
 
         .search-wrap { position: relative; width: 100%; max-width: 500px; margin: 10px auto; padding: 0 10px; display: flex; align-items: center; gap: 8px; }
@@ -51,10 +50,7 @@
             display: flex; justify-content: space-between; align-items: flex-end; 
             z-index: 5;
         }
-        .bn-title-side { flex: 1; margin-right: 10px; }
         .bn-title { font-size: 16px; font-weight: 600; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); line-height: 1.2; }
-        
-        .bn-action-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
         
         .bn-timer-wrap { 
             background: rgba(255, 255, 255, 0.1); 
@@ -119,6 +115,12 @@
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
+
+        /* สไตล์สำหรับการ Copy และป้ายกำกับใน Modal */
+        .copy-toast { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); background: var(--gold-grad); color: #000; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; z-index: 10000; display: none; animation: fadeInUp 0.3s; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        .bank-info-box { text-align:center; margin: 8px 0; background:rgba(212,175,55,0.05); padding:10px; border-radius:12px; border: 1px solid rgba(212,175,55,0.2); cursor: pointer; transition: 0.2s; }
+        .bank-info-box:active { background:rgba(212,175,55,0.15); transform: scale(0.98); }
     </style>
 </head>
 <body class="dark-mode">
@@ -143,6 +145,8 @@
     <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-truck"></i> พัสดุ</div>
     <div class="nav-tab" onclick="openModal('contactModal')"><i class="fa-solid fa-comment-dots"></i> ติดต่อ</div>
 </nav>
+
+<div id="copyToast" class="copy-toast">คัดลอกเลขบัญชีแล้ว!</div>
 
 <div id="contactModal" class="modal">
     <div class="modal-card" style="text-align:center; padding: 15px;">
@@ -174,9 +178,11 @@
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:45px;"></textarea>
             
-            <div style="text-align:center; margin: 5px 0; background:rgba(255,255,255,0.03); padding:6px; border-radius:8px;">
-                <p style="font-size:9px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=0358567622" style="width:75px; margin-top:3px; border:1px solid #fff; border-radius:4px;">
+            <div class="bank-info-box" onclick="copyAccount('0358567622')">
+                <p style="font-size:10px; color:var(--gold); font-weight:600; margin-bottom:3px;">🏦 กสิกรไทย (คลิกเพื่อคัดลอก)</p>
+                <p style="font-size:13px; color:#fff; font-weight:bold; letter-spacing:1px;">035-8-56762-2</p>
+                <p style="font-size:9px; color:var(--text-dim); margin-top:2px;">ชื่อบัญชี: แผ่นดิน & ต้นไม้</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=0358567622" style="width:75px; margin-top:8px; border:2px solid #fff; border-radius:8px;">
             </div>
             
             <div style="border:1px dashed var(--gold); padding:6px; border-radius:8px; text-align:center; cursor:pointer;" onclick="document.getElementById('fileIn').click()">
@@ -223,7 +229,7 @@
                                 </div>
                             </div>
                             <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
-                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}')">
+                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}', ['${b[3]}','${b[4]}','${b[5]}'])">
                                 รับสิทธิ์ด่วน
                             </button>
                         </div>
@@ -237,7 +243,6 @@
             db = rowsP.slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             
             db.sort(() => Math.random() - 0.5); 
-            
             render();
             setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
@@ -257,8 +262,9 @@
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
+            let tags = [p[4], p[5], p[6], p[7]];
             
-            [p[4], p[5], p[6], p[7]].forEach(t => { 
+            tags.forEach(t => { 
                 if(t && t.includes('%')) {
                     let match = t.match(/(\d+)%/);
                     if(match) percentDiscount = parseInt(match[1]);
@@ -277,7 +283,7 @@
                 <div class="media-wrap" onclick="zoom('${p[1]}')">
                     <div class="badge-container">
                         ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                        ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+                        ${tags.filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
                     ${renderMedia(p[1], true)}
                     ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
@@ -290,12 +296,12 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}')">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}', ${JSON.stringify(tags)})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
 
-    function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl) {
+    function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl, tags) {
         selectedQty = 1; 
         activeP = { 
             name: n, 
@@ -305,7 +311,8 @@
             optPrice: 0, 
             optLabel: '', 
             limit: buyLimit,
-            img: imgUrl 
+            img: imgUrl,
+            tags: tags || []
         };
         
         document.getElementById('qtyDisplay').innerText = selectedQty;
@@ -346,6 +353,8 @@
         let discounted = activeP.disc > 0 ? basePrice * (1 - (activeP.disc / 100)) : basePrice;
         activeP.total = (discounted * selectedQty) + activeP.ship;
         
+        let tagHtml = activeP.tags.filter(t => t && t !== '-').map(t => `<span class="badge ${t.includes('%') || t.includes('โปร') ? 'bg-red' : 'bg-gold'}" style="font-size:6px; padding:1px 4px;">${t}</span>`).join(' ');
+
         document.getElementById('orderDetail').innerHTML = `
             <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
                 <div style="width:60px; height:60px; border-radius:8px; overflow:hidden; border:1px solid var(--gold); flex-shrink:0;">
@@ -353,6 +362,7 @@
                 </div>
                 <div style="flex-grow:1;">
                     <div style="font-size:11px; font-weight:600; color:var(--gold); line-height:1.2;">🛒 ${activeP.name}${activeP.optLabel}</div>
+                    <div style="margin-top:3px;">${tagHtml}</div>
                     <div style="font-size:8px; color:var(--text-dim); margin-top:2px;">฿${discounted.toLocaleString()} x ${selectedQty} + ส่ง ฿${activeP.ship}</div>
                 </div>
             </div>
@@ -360,6 +370,15 @@
                 ฿${activeP.total.toLocaleString()}
             </div>
         `;
+    }
+
+    // ฟังก์ชัน Copy เลขบัญชี
+    function copyAccount(num) {
+        navigator.clipboard.writeText(num).then(() => {
+            const toast = document.getElementById('copyToast');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        });
     }
 
     function updateProductTimers() {
