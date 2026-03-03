@@ -223,7 +223,7 @@
                                 </div>
                             </div>
                             <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
-                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10})">
+                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}')">
                                 รับสิทธิ์ด่วน
                             </button>
                         </div>
@@ -290,14 +290,23 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit})">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}')">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
 
-    function openOrder(n, pNormal, s, optStr, discPercent, buyLimit) {
+    function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl) {
         selectedQty = 1; 
-        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, optPrice: 0, optLabel: '', limit: buyLimit };
+        activeP = { 
+            name: n, 
+            pNormal: parseFloat(pNormal), 
+            ship: parseFloat(s), 
+            disc: discPercent, 
+            optPrice: 0, 
+            optLabel: '', 
+            limit: buyLimit,
+            img: imgUrl 
+        };
         
         document.getElementById('qtyDisplay').innerText = selectedQty;
         const box = document.getElementById('optionBox');
@@ -338,9 +347,18 @@
         activeP.total = (discounted * selectedQty) + activeP.ship;
         
         document.getElementById('orderDetail').innerHTML = `
-            <div style="font-size:10px; font-weight:500;">🛒 ${activeP.name}${activeP.optLabel}</div>
-            <div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:4px;">฿${activeP.total.toLocaleString()}</div>
-            <div style="font-size:8px; text-align:center; color:var(--text-dim);">฿${discounted.toLocaleString()} x ${selectedQty} + ส่ง ฿${activeP.ship}</div>
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                <div style="width:60px; height:60px; border-radius:8px; overflow:hidden; border:1px solid var(--gold); flex-shrink:0;">
+                    ${renderMedia(activeP.img, true)}
+                </div>
+                <div style="flex-grow:1;">
+                    <div style="font-size:11px; font-weight:600; color:var(--gold); line-height:1.2;">🛒 ${activeP.name}${activeP.optLabel}</div>
+                    <div style="font-size:8px; color:var(--text-dim); margin-top:2px;">฿${discounted.toLocaleString()} x ${selectedQty} + ส่ง ฿${activeP.ship}</div>
+                </div>
+            </div>
+            <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px;">
+                ฿${activeP.total.toLocaleString()}
+            </div>
         `;
     }
 
