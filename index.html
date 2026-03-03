@@ -31,17 +31,74 @@
         .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 13px; }
         .theme-btn { background: var(--gold-grad); border: none; width: 30px; height: 30px; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; flex-shrink: 0; }
 
-        .banner-box { padding: 8px; margin-top: 5px; } 
-        .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; display: block; height: 200px; background: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.4); position: relative; }
-        .bn-img { width: 100%; height: 100%; position: relative; background: #000; cursor: pointer; }
-        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .bn-badges { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
-        .bn-txt { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px 12px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.6) 60%, transparent 100%); }
-        .bn-title { font-size: 16px; font-weight: 600; color: var(--gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.9); margin-bottom: 5px; }
-        .bn-timer-wrap { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-        .bn-timer { display: flex; gap: 3px; }
-        .timer-unit { background: #ff4b2b; color: #fff; padding: 2px 5px; border-radius: 4px; font-weight: bold; font-size: 11px; min-width: 24px; text-align: center; }
-        .timer-sep { color: #fff; font-weight: bold; font-size: 11px; }
+        /* --- NEW CINEMATIC BANNER DESIGN --- */
+        .banner-box { padding: 12px 10px; margin-top: 5px; perspective: 1000px; } 
+        .bn-card { 
+            border: 1.5px solid rgba(212, 175, 55, 0.7); 
+            border-radius: 20px; 
+            overflow: hidden; 
+            display: block; 
+            height: 220px; 
+            background: #000; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,1); 
+            position: relative; 
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bn-card:active { transform: scale(0.98); }
+        
+        .bn-img { width: 100%; height: 100%; position: relative; background: #000; cursor: pointer; z-index: 1; }
+        .bn-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.85) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+        .bn-img img, .bn-img video { 
+            width: 100%; height: 100%; object-fit: cover; display: block; 
+            filter: contrast(1.1) brightness(0.9);
+        }
+
+        .bn-badges { position: absolute; top: 15px; left: 15px; display: flex; flex-direction: row; gap: 6px; z-index: 10; }
+        
+        .bn-txt { 
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 25px 15px; 
+            display: flex; flex-direction: column; justify-content: flex-end; 
+            background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, transparent 100%); 
+            z-index: 5;
+        }
+        .bn-title { 
+            font-size: 19px; font-weight: 600; color: #fff; 
+            text-shadow: 0 2px 10px rgba(0,0,0,1); 
+            margin-bottom: 8px; letter-spacing: 0.5px;
+        }
+        .bn-timer-wrap { 
+            display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; 
+            background: rgba(0,0,0,0.5); padding: 5px 12px; border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(5px);
+        }
+        .bn-timer { display: flex; gap: 4px; align-items: center; }
+        .timer-unit { 
+            background: #ff4b2b; color: #fff; padding: 2px 6px; border-radius: 4px; 
+            font-weight: 700; font-size: 12px; min-width: 26px; text-align: center;
+            box-shadow: 0 0 10px rgba(255, 75, 43, 0.4);
+        }
+        .timer-sep { color: #fff; font-weight: bold; font-size: 12px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        /* Button Banner Style */
+        .bn-txt .buy-now {
+            width: fit-content !important;
+            padding: 10px 25px !important;
+            border-radius: 50px !important;
+            font-size: 12px !important;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.3) !important;
+        }
+
+        /* --- END NEW BANNER --- */
 
         .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
@@ -188,7 +245,7 @@
                                     <span class="timer-unit" id="ts">00</span>
                                 </div>
                             </div>
-                            <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
+                            <button class="buy-now" style="width:130px; border-radius:50px;" 
                                 onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10})">
                                 รับสิทธิ์ด่วน
                             </button>
@@ -200,10 +257,7 @@
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const rows = (await resP.text()).split('\n').slice(1);
             db = rows.map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-            
-            // --- เพิ่มส่วนนี้: สุ่มเรียงลำดับสินค้าใหม่ทุกครั้งที่โหลดหน้าจอ ---
             db.sort(() => Math.random() - 0.5); 
-            
             render();
             setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
@@ -220,24 +274,20 @@
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
             let buyLimit = p[12] ? parseInt(p[12]) : 10;
             let pDescription = p[2] || '';
-
             let currentPrice = priceNormal;
             let percentDiscount = 0;
-            
             [p[4], p[5], p[6], p[7]].forEach(t => { 
                 if(t && t.includes('%')) {
                     let match = t.match(/(\d+)%/);
                     if(match) percentDiscount = parseInt(match[1]);
                 }
             });
-
             if (pricePromo > 0 && expiryDate > now) {
                 currentPrice = pricePromo;
                 percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
             } else if (percentDiscount > 0) {
                 currentPrice = priceNormal * (1 - (percentDiscount / 100));
             }
-
             return `
             <div class="card">
                 <div class="media-wrap" onclick="zoom('${p[1]}')">
@@ -264,7 +314,6 @@
     function openOrder(n, pNormal, s, optStr, discPercent, buyLimit) {
         selectedQty = 1; 
         activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, optPrice: 0, optLabel: '', limit: buyLimit };
-        
         document.getElementById('qtyDisplay').innerText = selectedQty;
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
@@ -293,7 +342,6 @@
     function updatePrice() {
         document.getElementById('btnPlus').disabled = (selectedQty >= activeP.limit);
         document.getElementById('btnMinus').disabled = (selectedQty <= 1);
-
         const sel = document.getElementById('pOpt');
         let basePrice = activeP.pNormal;
         if(sel) {
@@ -302,7 +350,6 @@
         }
         let discounted = activeP.disc > 0 ? basePrice * (1 - (activeP.disc / 100)) : basePrice;
         activeP.total = (discounted * selectedQty) + activeP.ship;
-        
         document.getElementById('orderDetail').innerHTML = `
             <div style="font-size:10px; font-weight:500;">🛒 ${activeP.name}${activeP.optLabel}</div>
             <div style="font-size:18px; font-weight:800; text-align:center; color:#fff; margin-top:4px;">฿${activeP.total.toLocaleString()}</div>
