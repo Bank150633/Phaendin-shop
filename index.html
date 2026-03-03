@@ -118,6 +118,10 @@
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
+
+        /* สไตล์เพิ่มเติมสำหรับปุ่มก๊อปปี้ */
+        .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
+        .copy-badge:active { background: var(--gold); color: #000; }
     </style>
 </head>
 <body class="dark-mode">
@@ -173,9 +177,14 @@
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:45px;"></textarea>
             
-            <div style="text-align:center; margin: 5px 0; background:rgba(255,255,255,0.03); padding:6px; border-radius:8px;">
-                <p style="font-size:9px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=0358567622" style="width:75px; margin-top:3px; border:1px solid #fff; border-radius:4px;">
+            <div style="text-align:center; margin: 5px 0; background:rgba(255,255,255,0.03); padding:8px; border-radius:10px; border:1px solid rgba(212,175,55,0.1);">
+                <p style="font-size:10px; color:var(--gold); font-weight:500;">🏦 ธนาคารกสิกรไทย</p>
+                <p style="font-size:12px; color:#fff; margin: 2px 0;">
+                    <span id="accNum">035-8-56762-2</span> 
+                    <span class="copy-badge" onclick="copyToClipboard('0358567622')"><i class="fa-solid fa-copy"></i> คัดลอก</span>
+                </p>
+                <p style="font-size:10px; color:var(--text-dim);">ชื่อบัญชี: คุณแผ่นดิน</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=0358567622" style="width:75px; margin-top:5px; border:2px solid #fff; border-radius:6px;">
             </div>
             
             <div style="border:1px dashed var(--gold); padding:6px; border-radius:8px; text-align:center; cursor:pointer;" onclick="document.getElementById('fileIn').click()">
@@ -198,6 +207,13 @@
     
     let db = [], activeP = {}, bannerEnd = null;
     let selectedQty = 1;
+
+    // ฟังก์ชันคัดลอกเลขบัญชี
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("คัดลอกเลขบัญชีเรียบร้อยแล้ว!");
+        });
+    }
 
     async function init() {
         try {
