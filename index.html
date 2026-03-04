@@ -164,6 +164,15 @@
         <form id="orderForm">
             <div id="optionBox"></div>
             
+            <div style="margin-bottom: 8px;">
+                <label style="font-size:9px; color:var(--gold);"><i class="fa-solid fa-truck-fast"></i> เลือกรูปแบบการจัดส่ง:</label>
+                <select id="shipMethod" class="opt-sel" onchange="updatePrice()">
+                    <option value="standard">ส่งพัสดุปกติ (1-3 วัน) - ฿[SHIP]</option>
+                    <option value="express">ส่งด่วนถึงปั๊บ! (เฉพาะพื้นที่) - ฿120</option>
+                    <option value="pickup">มารับเองที่ร้าน - ฟรี</option>
+                </select>
+            </div>
+
             <div class="stepper-wrap">
                 <span class="stepper-label"><i class="fa-solid fa-cart-plus"></i> จำนวน</span>
                 <div class="stepper-ctrl">
@@ -175,7 +184,13 @@
 
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
-            <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:45px;"></textarea>
+            
+            <div id="geoBox" style="display:none; margin-bottom: 4px;">
+                <input type="text" id="cMap" placeholder="วางลิงก์ Google Maps (สำหรับส่งด่วน)" class="input-slim" style="border: 1px solid var(--gold);">
+                <p style="font-size:8px; color:var(--gold); margin-bottom:4px;">*ปักหมุดที่อยู่เพื่อให้ถึงปั๊บได้แม่นยำครับ</p>
+            </div>
+
+            <textarea id="cAddr" placeholder="ที่อยู่จัดส่งโดยละเอียด" required class="input-slim" style="height:45px;"></textarea>
             
             <div style="text-align:center; margin: 5px 0; background:rgba(255,255,255,0.03); padding:8px; border-radius:10px; border:1px solid rgba(212,175,55,0.1);">
                 <p style="font-size:10px; color:var(--gold); font-weight:500;">🏦 ธนาคารกสิกรไทย</p>
@@ -353,15 +368,33 @@
         document.getElementById('btnMinus').disabled = (selectedQty <= 1);
 
         const sel = document.getElementById('pOpt');
+        const shipSel = document.getElementById('shipMethod');
+        const geoBox = document.getElementById('geoBox');
+        
         let basePrice = activeP.pNormal;
         if(sel) {
             basePrice = parseFloat(sel.value);
             activeP.optLabel = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
-        let discounted = activeP.disc > 0 ? basePrice * (1 - (activeP.disc / 100)) : basePrice;
-        activeP.total = (discounted * selectedQty) + activeP.ship;
+
+        // คำนวณค่าส่ง
+        let currentShip = activeP.ship;
+        if(shipSel.value === 'express') {
+            currentShip = 120;
+            geoBox.style.display = 'block';
+        } else if(shipSel.value === 'pickup') {
+            currentShip = 0;
+            geoBox.style.display = 'none';
+        } else {
+            geoBox.style.display = 'none';
+        }
         
-        // ส่วนที่แก้ไขเพิ่ม "โปรโมชั่น" ในหน้าสั่งซื้อ
+        shipSel.options[0].text = `ส่งพัสดุปกติ (1-3 วัน) - ฿${activeP.ship}`;
+
+        let discounted = activeP.disc > 0 ? basePrice * (1 - (activeP.disc / 100)) : basePrice;
+        activeP.total = (discounted * selectedQty) + currentShip;
+        activeP.currentShipText = shipSel.options[shipSel.selectedIndex].text;
+
         let promoInfo = activeP.disc > 0 ? `<div style="background:rgba(255,65,108,0.15); color:#ff4b2b; font-size:9px; padding:2px 6px; border-radius:4px; margin-top:2px; display:inline-block; border:0.5px solid #ff4b2b;"><i class="fa-solid fa-tag"></i> โปรโมชั่น: ลด ${activeP.disc}% แล้ว</div>` : '';
 
         document.getElementById('orderDetail').innerHTML = `
@@ -372,7 +405,7 @@
                 <div style="flex-grow:1;">
                     <div style="font-size:11px; font-weight:600; color:var(--gold); line-height:1.2;">🛒 ${activeP.name}${activeP.optLabel}</div>
                     ${promoInfo}
-                    <div style="font-size:8px; color:var(--text-dim); margin-top:4px;">฿${discounted.toLocaleString()} x ${selectedQty} + ส่ง ฿${activeP.ship}</div>
+                    <div style="font-size:8px; color:var(--text-dim); margin-top:4px;">฿${discounted.toLocaleString()} x ${selectedQty} + ${activeP.currentShipText}</div>
                 </div>
             </div>
             <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px;">
@@ -414,11 +447,15 @@
         btn.innerText = "กำลังส่ง..."; btn.disabled = true;
         const reader = new FileReader();
         reader.onload = async () => {
+            // ปรับปรุงการส่งข้อมูลที่อยู่เพื่อให้รวมลิงก์แผนที่ด้วย
+            const shipMethodText = activeP.currentShipText;
+            const mapLink = document.getElementById('cMap').value ? ` | พิกัด: ${document.getElementById('cMap').value}` : '';
+            
             const data = {
                 productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${selectedQty} | ยอดโอน: ฿${activeP.total}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
-                customerAddress: document.getElementById('cAddr').value,
+                customerAddress: `[${shipMethodText}] ${document.getElementById('cAddr').value}${mapLink}`,
                 file: reader.result.split(',')[1]
             };
             try {
