@@ -119,6 +119,7 @@
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
+        /* สไตล์เพิ่มเติมสำหรับปุ่มก๊อปปี้ */
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
     </style>
@@ -163,17 +164,6 @@
         <form id="orderForm">
             <div id="optionBox"></div>
             
-            <label style="font-size:9px; color:var(--gold);">🚚 วิธีจัดส่ง:</label>
-            <select id="shipMethod" class="opt-sel" onchange="updatePrice()">
-                <option value="standard">ส่งพัสดุปกติ</option>
-                <option value="express">ส่งด่วนถึงปั๊บ!</option>
-                <option value="pickup">มารับเอง (฿0)</option>
-            </select>
-
-            <div id="geoBox" style="display:none;">
-                <input type="text" id="cMaps" placeholder="📍 วางลิงก์ Google Maps พิกัดบ้านท่าน" class="input-slim" style="border: 1px solid var(--gold);">
-            </div>
-
             <div class="stepper-wrap">
                 <span class="stepper-label"><i class="fa-solid fa-cart-plus"></i> จำนวน</span>
                 <div class="stepper-ctrl">
@@ -218,6 +208,7 @@
     let db = [], activeP = {}, bannerEnd = null;
     let selectedQty = 1;
 
+    // ฟังก์ชันคัดลอกเลขบัญชี
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
             alert("คัดลอกเลขบัญชีเรียบร้อยแล้ว!");
@@ -247,7 +238,7 @@
                                 </div>
                             </div>
                             <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
-                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}', '${b[13]||''}')">
+                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}')">
                                 รับสิทธิ์ด่วน
                             </button>
                         </div>
@@ -261,6 +252,7 @@
             db = rowsP.slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             
             db.sort(() => Math.random() - 0.5); 
+            
             render();
             setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
@@ -277,7 +269,6 @@
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
             let buyLimit = p[12] ? parseInt(p[12]) : 10;
             let pDescription = p[2] || '';
-            let expPriceFromSheet = p[13] || ''; // คอลัมน์ N
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
@@ -314,18 +305,22 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}', '${expPriceFromSheet}')">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}')">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
 
-    function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl, expShipPrice) {
+    function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl) {
         selectedQty = 1; 
         activeP = { 
-            name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), 
-            disc: discPercent, optPrice: 0, optLabel: '', limit: buyLimit, 
-            img: imgUrl,
-            expPrice: expShipPrice !== '' ? parseFloat(expShipPrice) : null
+            name: n, 
+            pNormal: parseFloat(pNormal), 
+            ship: parseFloat(s), 
+            disc: discPercent, 
+            optPrice: 0, 
+            optLabel: '', 
+            limit: buyLimit,
+            img: imgUrl 
         };
         
         document.getElementById('qtyDisplay').innerText = selectedQty;
@@ -340,18 +335,6 @@
             });
             box.innerHTML = html + `</select>`;
         }
-
-        // จัดการเมนูส่งด่วนตามข้อมูลในชีท
-        const shipSel = document.getElementById('shipMethod');
-        const expOpt = shipSel.querySelector('option[value="express"]');
-        if(activeP.expPrice === null) {
-            expOpt.style.display = 'none';
-            shipSel.value = 'standard';
-        } else {
-            expOpt.style.display = 'block';
-            expOpt.text = `ส่งด่วนถึงปั๊บ! (฿${activeP.expPrice})`;
-        }
-
         updatePrice();
         openModal('orderModal');
     }
@@ -375,24 +358,10 @@
             basePrice = parseFloat(sel.value);
             activeP.optLabel = ` [${sel.options[sel.selectedIndex].getAttribute('data-label')}]`;
         }
-
-        const shipSel = document.getElementById('shipMethod');
-        const geoBox = document.getElementById('geoBox');
-        let currentShip = activeP.ship;
-
-        if(shipSel.value === 'express') {
-            currentShip = activeP.expPrice;
-            geoBox.style.display = 'block';
-        } else if(shipSel.value === 'pickup') {
-            currentShip = 0;
-            geoBox.style.display = 'none';
-        } else {
-            geoBox.style.display = 'none';
-        }
-
         let discounted = activeP.disc > 0 ? basePrice * (1 - (activeP.disc / 100)) : basePrice;
-        activeP.total = (discounted * selectedQty) + currentShip;
+        activeP.total = (discounted * selectedQty) + activeP.ship;
         
+        // ส่วนที่แก้ไขเพิ่ม "โปรโมชั่น" ในหน้าสั่งซื้อ
         let promoInfo = activeP.disc > 0 ? `<div style="background:rgba(255,65,108,0.15); color:#ff4b2b; font-size:9px; padding:2px 6px; border-radius:4px; margin-top:2px; display:inline-block; border:0.5px solid #ff4b2b;"><i class="fa-solid fa-tag"></i> โปรโมชั่น: ลด ${activeP.disc}% แล้ว</div>` : '';
 
         document.getElementById('orderDetail').innerHTML = `
@@ -403,7 +372,7 @@
                 <div style="flex-grow:1;">
                     <div style="font-size:11px; font-weight:600; color:var(--gold); line-height:1.2;">🛒 ${activeP.name}${activeP.optLabel}</div>
                     ${promoInfo}
-                    <div style="font-size:8px; color:var(--text-dim); margin-top:4px;">฿${discounted.toLocaleString()} x ${selectedQty} + ${shipSel.options[shipSel.selectedIndex].text}</div>
+                    <div style="font-size:8px; color:var(--text-dim); margin-top:4px;">฿${discounted.toLocaleString()} x ${selectedQty} + ส่ง ฿${activeP.ship}</div>
                 </div>
             </div>
             <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px;">
@@ -445,10 +414,8 @@
         btn.innerText = "กำลังส่ง..."; btn.disabled = true;
         const reader = new FileReader();
         reader.onload = async () => {
-            const shipMethod = document.getElementById('shipMethod').value;
-            const mapsLink = document.getElementById('cMaps').value;
             const data = {
-                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${selectedQty} | วิธีส่ง: ${shipMethod}${mapsLink ? ' | Maps: '+mapsLink : ''} | ยอดโอน: ฿${activeP.total}`,
+                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${selectedQty} | ยอดโอน: ฿${activeP.total}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
