@@ -87,6 +87,22 @@
         .bg-green { background: var(--green-grad); }
         .bg-blue { background: var(--blue-grad); }
 
+        /* ส่วนที่เพิ่มใหม่: ป้ายชื่อจังหวัดสีทอง */
+        .province-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--gold-grad);
+            color: #000;
+            font-size: 7.5px;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border: 0.5px solid rgba(255,255,255,0.4);
+        }
+
         .info { padding: 4px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
         .p-name { font-size: 10px; font-weight: 500; color: var(--gold); margin-bottom: 1px; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -269,6 +285,7 @@
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
             let buyLimit = p[12] ? parseInt(p[12]) : 10;
             let pDescription = p[2] || '';
+            let provinceName = p[13] || ''; // ดึงข้อมูลจังหวัดจากคอลัมน์ที่ 14
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
@@ -294,6 +311,9 @@
                         ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
                         ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
+                    
+                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                    
                     ${renderMedia(p[1], true)}
                     ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
@@ -424,7 +444,7 @@
             try {
                 await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
                 alert("สั่งซื้อสำเร็จ!"); location.reload();
-            } catch(err) { alert("ล้มเหลว"); btn.disabled = false; }
+            } catch(err) { alert("ล้มล้ว"); btn.disabled = false; }
         };
         reader.readAsDataURL(file);
     };
