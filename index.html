@@ -218,20 +218,6 @@
 <div id="zoomOverlay" onclick="closeZoom()"><div id="zoomContent"></div></div>
 
 <script>
-  let favorites = JSON.parse(localStorage.getItem("phaendin_fav") || "[]");
-
-function toggleFav(name){
-if(favorites.includes(name)){
-favorites = favorites.filter(x=>x!==name);
-}else{
-favorites.push(name);
-}
-localStorage.setItem("phaendin_fav",JSON.stringify(favorites));
-}
-
-function viewers(){
-return Math.floor(Math.random()*80)+20;
-}
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
     
