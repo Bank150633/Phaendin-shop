@@ -42,7 +42,6 @@
         .bn-timer-wrap { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); padding: 4px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
         .bn-timer { display: flex; gap: 4px; align-items: center; }
         .timer-unit { color: #ff4b2b; font-weight: 700; font-size: 13px; }
-        .timer-sep { color: #fff; font-size: 11px; opacity: 0.8; }
 
         .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
@@ -54,10 +53,11 @@
         .badge { font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.2); }
         .bg-gold { background: var(--gold-grad); color: #000; }
         .bg-red { background: var(--red-grad); }
+
         .province-badge { position: absolute; top: 4px; right: 4px; background: var(--gold-grad); color: #000; font-size: 7.5px; padding: 2px 5px; border-radius: 4px; font-weight: 700; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.3); border: 0.5px solid rgba(255,255,255,0.4); }
 
         .info { padding: 4px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
-        .p-name { font-size: 10px; font-weight: 500; color: var(--gold); margin-bottom: 1px; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .p-name { font-size: 10px; font-weight: 500; color: var(--gold); text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
         .old-price { text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400; }
@@ -71,24 +71,22 @@
         .modal.show { display: flex; opacity: 1; }
         .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
         
-        /* สไตล์ใหม่สำหรับตัวเลือกคละสี */
-        .option-row { display: flex; justify-content: space-between; align-items: center; padding: 6px; background: rgba(255,255,255,0.05); margin-bottom: 4px; border-radius: 6px; border: 1px solid rgba(212,175,55,0.1); }
-        .option-label { font-size: 10px; color: var(--gold); flex: 1; }
-        .option-price { font-size: 9px; color: var(--text-dim); margin: 0 8px; }
-        .option-ctrl { display: flex; align-items: center; gap: 6px; }
+        /* สไตล์สำหรับระบบคละสี/คละแบบ */
+        .opt-row { display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.1); margin-bottom: 5px; }
+        .opt-label { font-size: 10px; color: var(--gold); font-weight: 500; }
+        .opt-ctrl { display: flex; align-items: center; gap: 8px; }
+        .step-btn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
+        .qty-disp { font-size: 14px; font-weight: 700; color: #fff; min-width: 15px; text-align: center; }
 
         .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
-        .step-btn { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--gold); background: transparent; color: var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; }
-        .qty-val { font-size: 12px; color: #fff; min-width: 14px; text-align: center; font-weight: bold; }
-
         nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
         .nav-tab.active { color: var(--gold); }
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
-        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
-        .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
+        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; }
+        .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; }
     </style>
 </head>
 <body class="dark-mode">
@@ -102,7 +100,7 @@
 
 <div class="search-wrap">
     <i class="fa-solid fa-search search-icon"></i>
-    <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
+    <input type="text" id="search" placeholder="ค้นหาชื่อสินค้าที่ท่านต้องการ..." oninput="render()">
 </div>
 
 <div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</div>
@@ -120,7 +118,7 @@
         <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:8px; border-radius:10px; margin-bottom:8px; border:1px solid rgba(212,175,55,0.3);"></div>
         
         <form id="orderForm">
-            <div id="optionBox" style="margin-bottom:8px;"></div>
+            <div id="optionBox"></div>
             
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
@@ -128,8 +126,9 @@
             
             <div style="text-align:center; margin: 5px 0; background:rgba(255,255,255,0.03); padding:8px; border-radius:10px; border:1px solid rgba(212,175,55,0.1);">
                 <p style="font-size:10px; color:var(--gold); font-weight:500;">🏦 ธนาคารกสิกรไทย</p>
-                <p style="font-size:11px; color:#fff; margin: 2px 0;">035-8-56762-2 <span class="copy-badge" onclick="copyToClipboard('0358567622')">คัดลอก</span></p>
+                <p style="font-size:12px; color:#fff; margin: 2px 0;">035-8-56762-2 <span class="copy-badge" onclick="copyToClipboard('0358567622')">คัดลอก</span></p>
                 <p style="font-size:10px; color:var(--text-dim);">ชื่อบัญชี: คุณแผ่นดิน</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=0358567622" style="width:75px; margin-top:5px; border:2px solid #fff; border-radius:6px;">
             </div>
             
             <div style="border:1px dashed var(--gold); padding:6px; border-radius:8px; text-align:center; cursor:pointer;" onclick="document.getElementById('fileIn').click()">
@@ -144,6 +143,14 @@
     </div>
 </div>
 
+<div id="contactModal" class="modal">
+    <div class="modal-card" style="text-align:center; padding: 15px;">
+        <h4 style="color:var(--gold); margin-bottom:12px; font-size:14px;">ติดต่อเรา</h4>
+        <a href="tel:0944159031" style="display:block; background:#28a745; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-solid fa-phone"></i> โทรสายด่วน</a>
+        <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
+    </div>
+</div>
+
 <div id="zoomOverlay" onclick="closeZoom()"><div id="zoomContent"></div></div>
 
 <script>
@@ -151,19 +158,20 @@
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
     
     let db = [], activeP = {}, bannerEnd = null;
-    let selectedOptions = {}; // { "แดง": 1, "เขียว": 2 }
+    let selectedOptions = {}; 
 
-    function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => alert("คัดลอกแล้ว!")); }
+    function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => alert("คัดลอกเรียบร้อย!")); }
 
     async function init() {
         try {
             const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
-            const b = (await resB.text()).split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            const bRaw = await resB.text();
+            const b = bRaw.split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
             if(b) {
                 bannerEnd = new Date(b[2]).getTime();
                 document.getElementById('banner').innerHTML = `
                     <div class="bn-card">
-                        <div class="bn-badges">${[b[3],b[4],b[5]].filter(t => t && t !== '-').map(t => `<span class="badge ${t.includes('โปร')?'bg-red':'bg-gold'}">${t}</span>`).join('')}</div>
+                        <div class="bn-badges">${[b[3], b[4], b[5]].filter(t => t && t !== '-').map(t => `<span class="badge ${t.includes('โปร')?'bg-red':'bg-gold'}">${t}</span>`).join('')}</div>
                         <div class="bn-img" onclick="zoom('${b[0]}')">${renderMedia(b[0], true)}</div>
                         <div class="bn-txt">
                             <div class="bn-title">🔥 ${b[1]}</div>
@@ -173,8 +181,10 @@
                     </div>`;
                 setInterval(tick, 1000);
             }
+
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
-            db = (await resP.text()).split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            const pRaw = await resP.text();
+            db = pRaw.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
             render();
             setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
@@ -187,14 +197,18 @@
             let pNormal = parseFloat(p[3]||0), pPromo = parseFloat(p[10]||0), expiry = p[11]?new Date(p[11]).getTime():0;
             let currentPrice = (pPromo > 0 && expiry > now) ? pPromo : pNormal;
             let disc = (pPromo > 0 && expiry > now) ? Math.round(((pNormal-pPromo)/pNormal)*100) : 0;
-            return `<div class="card">
+            return `
+            <div class="card">
                 <div class="media-wrap" onclick="zoom('${p[1]}')">
                     <div class="badge-container">${disc>0?`<span class="badge bg-red">ลด ${disc}%</span>`:''}${[p[4],p[5],p[6],p[7]].filter(t=>t&&t!=='-').map(t=>`<span class="badge bg-gold">${t}</span>`).join('')}</div>
-                    ${p[13]?`<div class="province-badge">${p[13]}</div>`:''}${renderMedia(p[1], true)}${ (pPromo > 0 && expiry > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>`:'' }
+                    ${p[13]?`<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${p[13]}</div>`:''}
+                    ${renderMedia(p[1], true)}
+                    ${(pPromo > 0 && expiry > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
-                    <div class="p-price">${currentPrice < pNormal ? `<span class="old-price">฿${pNormal}</span>`:''}<span class="new-price">฿${currentPrice}</span></div>
+                    <div class="p-desc">${p[2]||''}</div>
+                    <div class="p-price">${currentPrice < pNormal ? `<span class="old-price">฿${pNormal.toLocaleString()}</span>` : ''}<span class="new-price">฿${currentPrice.toLocaleString()}</span></div>
                 </div>
                 <button class="buy-now" onclick="openOrder('${p[0]}','${pNormal}','${p[8]||0}','${p[9]||''}', ${disc}, ${p[12]||10}, '${p[1]}')">สั่งซื้อ</button>
             </div>`;
@@ -206,34 +220,33 @@
         activeP = { name:n, pNormal:parseFloat(pNormal), ship:parseFloat(s), disc:disc, limit:limit, img:img, opts:[] };
         
         const box = document.getElementById('optionBox');
+        box.innerHTML = '';
         if(optStr && optStr !== '-') {
-            box.innerHTML = `<p style="font-size:10px; color:var(--gold); margin-bottom:4px;">📦 เลือกตัวเลือก (คละได้):</p>`;
+            box.innerHTML = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก (คละได้):</label>`;
             optStr.split(',').forEach(o => {
                 let pts = o.includes(':')?o.split(':'):o.split('=');
                 let label = pts[0].trim(), price = pts[1]?parseFloat(pts[1]):activeP.pNormal;
                 activeP.opts.push({ label, price });
                 selectedOptions[label] = 0;
                 box.innerHTML += `
-                    <div class="option-row">
-                        <span class="option-label">${label}</span>
-                        <span class="option-price">฿${price}</span>
-                        <div class="option-ctrl">
+                    <div class="opt-row">
+                        <span class="opt-label">${label} (฿${price.toLocaleString()})</span>
+                        <div class="opt-ctrl">
                             <button type="button" class="step-btn" onclick="updateOptQty('${label}', -1)"><i class="fa-solid fa-minus"></i></button>
-                            <span class="qty-val" id="opt-qty-${label}">0</span>
+                            <span class="qty-disp" id="qty-${label}">0</span>
                             <button type="button" class="step-btn" onclick="updateOptQty('${label}', 1)"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>`;
             });
         } else {
-            // กรณีไม่มีตัวเลือกย่อย ให้สร้างตัวเลือก "ปกติ" อันเดียว
             selectedOptions["ปกติ"] = 1;
             activeP.opts = [{ label:"ปกติ", price:activeP.pNormal }];
             box.innerHTML = `
-                <div class="option-row">
-                    <span class="option-label">จำนวนสินค้า</span>
-                    <div class="option-ctrl">
+                <div class="opt-row">
+                    <span class="opt-label">จำนวนสินค้า</span>
+                    <div class="opt-ctrl">
                         <button type="button" class="step-btn" onclick="updateOptQty('ปกติ', -1)"><i class="fa-solid fa-minus"></i></button>
-                        <span class="qty-val" id="opt-qty-ปกติ">1</span>
+                        <span class="qty-disp" id="qty-ปกติ">1</span>
                         <button type="button" class="step-btn" onclick="updateOptQty('ปกติ', 1)"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>`;
@@ -243,38 +256,38 @@
     }
 
     function updateOptQty(label, val) {
-        let totalQty = Object.values(selectedOptions).reduce((a, b) => a + b, 0);
-        if(selectedOptions[label] + val >= 0 && (val < 0 || totalQty < activeP.limit)) {
+        let currentTotal = Object.values(selectedOptions).reduce((a, b) => a + b, 0);
+        if(selectedOptions[label] + val >= 0 && (val < 0 || currentTotal < activeP.limit)) {
             selectedOptions[label] += val;
-            document.getElementById(`opt-qty-${label}`).innerText = selectedOptions[label];
+            document.getElementById(`qty-${label}`).innerText = selectedOptions[label];
             updatePrice();
         }
     }
 
     function updatePrice() {
-        let subTotal = 0, totalQty = 0, summaryTxt = [];
+        let sub = 0, totalQty = 0, summary = [];
         activeP.opts.forEach(o => {
-            let qty = selectedOptions[o.label] || 0;
-            if(qty > 0) {
+            let q = selectedOptions[o.label] || 0;
+            if(q > 0) {
                 let p = activeP.disc > 0 ? o.price * (1-(activeP.disc/100)) : o.price;
-                subTotal += (p * qty);
-                totalQty += qty;
-                summaryTxt.push(`${o.label}(${qty})`);
+                sub += (p * q);
+                totalQty += q;
+                summary.push(`${o.label}(${q})`);
             }
         });
-        activeP.finalTotal = subTotal + activeP.ship;
-        activeP.summary = summaryTxt.join(', ');
+        activeP.finalTotal = sub + activeP.ship;
+        activeP.summaryTxt = summary.join(', ');
 
         document.getElementById('orderDetail').innerHTML = `
-            <div style="display:flex; gap:10px; align-items:center;">
-                <div style="width:50px; height:50px; border-radius:8px; overflow:hidden; border:1px solid var(--gold);">${renderMedia(activeP.img, true)}</div>
+            <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                <div style="width:60px; height:60px; border-radius:8px; overflow:hidden; border:1px solid var(--gold);">${renderMedia(activeP.img, true)}</div>
                 <div style="flex:1;">
                     <div style="font-size:11px; font-weight:600; color:var(--gold);">${activeP.name}</div>
-                    <div style="font-size:9px; color:var(--text-dim);">${activeP.summary || 'กรุณาเลือกอย่างน้อย 1 รายการ'}</div>
+                    <div style="font-size:9px; color:var(--text-dim);">${activeP.summaryTxt || 'ยังไม่ได้เลือก'}</div>
                 </div>
             </div>
-            <div style="font-size:20px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px; margin-top:5px;">
-                <span style="font-size:10px; color:var(--gold);">ยอดชำระ: </span>฿${activeP.finalTotal.toLocaleString()}
+            <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px;">
+                <span style="font-size:10px; color:var(--gold);">ยอดสุทธิ: </span>฿${activeP.finalTotal.toLocaleString()}
             </div>
         `;
         document.getElementById('submitBtn').disabled = totalQty === 0;
@@ -289,7 +302,7 @@
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name} [${activeP.summary}] | ยอดโอน: ฿${activeP.finalTotal}`,
+                productDetail: `${activeP.name} [${activeP.summaryTxt}] | ยอด: ฿${activeP.finalTotal}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
