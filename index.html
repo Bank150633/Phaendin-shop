@@ -149,6 +149,21 @@
 .v-price { font-size: 10px; color: var(--gold); font-weight: bold; }
 .v-ctrl { display: flex; align-items: center; gap: 8px; background: #000; padding: 4px 8px; border-radius: 20px; border: 0.5px solid #444; }
 .v-btn { width: 22px; height: 22px; border-radius: 50%; border: none; background: var(--gold-grad); color: #000; cursor: pointer; font-weight: bold; }
+        /* แท็กสถานะในหน้าสรุปการสั่งซื้อ */
+.promo-pill-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; justify-content: center; }
+.pill { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
+.pill-red { background: var(--red-grad); color: #fff; }
+.pill-gold { background: var(--gold-grad); color: #000; }
+.pill-green { background: var(--green-grad); color: #fff; }
+.pill-free-ship { border: 1px solid #38ef7d; color: #38ef7d; background: rgba(56, 239, 125, 0.1); }
+
+/* ปรับปรุงหน้าสรุปยอดให้ดูแพงขึ้น */
+.order-summary-box {
+    background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 12px; padding: 12px; margin-bottom: 12px;
+}
+
  </style>
 </head>
 <body class="dark-mode">
@@ -391,41 +406,48 @@ function changeVQty(label, price, delta) {
             updatePrice();
         }
     }
+function updatePrice() {
+    let subtotal = 0, summaryText = [], totalItems = 0;
 
-    function updatePrice() {
-    let subtotal = 0, summary = [], count = 0;
-    for (let k in selectedOptions) {
-        if(selectedOptions[k].qty > 0) {
-            subtotal += (selectedOptions[k].price * selectedOptions[k].qty);
-            summary.push(`${k} x${selectedOptions[k].qty}`);
-            count += selectedOptions[k].qty;
+    // คำนวณยอดรวมจากตัวเลือกที่เลือก
+    for (let key in selectedOptions) {
+        if(selectedOptions[key].qty > 0) {
+            subtotal += (selectedOptions[key].price * selectedOptions[key].qty);
+            summaryText.push(`${key} x${selectedOptions[key].qty}`);
+            totalItems += selectedOptions[key].qty;
         }
     }
+
+    // คำนวณยอดสุทธิ
     activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
-    activeP.summary = summary.join(', ');
+    activeP.summary = summaryText.join(', ');
+
+    // สร้างป้ายแท็ก (Badges)
+    let badgesHtml = `<div class="promo-pill-container">`;
+    if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red"><i class="fa-solid fa-percent"></i> ลด ${activeP.disc}%</span>`;
+    if (activeP.ship === 0) badgesHtml += `<span class="pill pill-free-ship"><i class="fa-solid fa-truck-fast"></i> ส่งฟรี</span>`;
+    else badgesHtml += `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
+    badgesHtml += `</div>`;
 
     document.getElementById('orderDetail').innerHTML = `
-        <div style="text-align:center; padding:10px; border:1px solid var(--gold); border-radius:10px;">
-            <div style="font-size:12px; color:var(--gold); font-weight:bold;">${activeP.name}</div>
-            <div style="font-size:10px; color:#fff; margin:5px 0;">${activeP.summary || 'ยังไม่ได้เลือกสินค้า'}</div>
-            <div style="font-size:20px; font-weight:bold;">ยอดโอน: ฿${activeP.finalTotal.toLocaleString()}</div>
-        </div>`;
-    document.getElementById('submitBtn').disabled = (count === 0);
+        <div class="order-summary-box">
+            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+            ${badgesHtml}
+            <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0; line-height:1.4;">
+                ${activeP.summary || 'กรุณาเลือกรายการสินค้า'}
+            </div>
+            <div style="border-top: 1px dashed rgba(212,175,55,0.3); margin-top:8px; padding-top:8px; text-align:center;">
+                <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('submitBtn').disabled = (totalItems === 0);
+    document.getElementById('submitBtn').style.opacity = (totalItems === 0) ? "0.5" : "1";
 }
 
-
-    function updateProductTimers() {
-        document.querySelectorAll('.p-timer-badge').forEach(el => {
-            const diff = new Date(el.getAttribute('data-expire')).getTime() - Date.now();
-            if (diff > 0) {
-                const h = Math.floor(diff/3600000).toString().padStart(2,'0');
-                const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-                const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-                el.innerText = `⏳ ${h}:${m}:${s}`;
-            } else { el.style.display = 'none'; }
-        });
-    }
-
+    
     function renderMedia(url, isMuted) {
         if(!url) return '';
         return url.match(/\.(mp4|webm|mov)$/i) 
