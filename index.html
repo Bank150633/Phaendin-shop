@@ -201,34 +201,39 @@
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <h4 style="color:var(--gold); text-align:center; margin-bottom:6px; font-size:13px;">ยืนยันการสั่งซื้อ</h4>
-        <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:8px; border-radius:10px; margin-bottom:8px; border:1px solid rgba(212,175,55,0.3);"></div>
-        <form id="orderForm">
-            <div id="optionBox"></div>
+        <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
+        
+        <div id="orderDetail"></div>
 
+        <form id="orderForm" style="margin-top:10px;">
+            <div id="optionBox" style="margin-bottom:12px;"></div>
+            
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
-            <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:45px;"></textarea>
+            <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
             
-            <div style="text-align:center; margin: 5px 0; background:rgba(255,255,255,0.03); padding:8px; border-radius:10px; border:1px solid rgba(212,175,55,0.1);">
-                <p style="font-size:10px; color:var(--gold); font-weight:500;">🏦 ธนาคารกสิกรไทย</p>
-                <p style="font-size:12px; color:#fff; margin: 2px 0;">
+            <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:10px; border-radius:12px; border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:11px; color:var(--gold); font-weight:500;">🏦 ธนาคารกสิกรไทย</p>
+                <p style="font-size:13px; color:#fff; margin: 4px 0;">
                     <span id="accNum">035-8-56762-2</span> 
-                    <span class="copy-badge" onclick="copyToClipboard('0358567622')"><i class="fa-solid fa-copy"></i> คัดลอก</span>
+                    <span class="copy-badge" onclick="copyToClipboard('0358567622')" style="margin-left:5px;"><i class="fa-solid fa-copy"></i> คัดลอก</span>
                 </p>
                 <p style="font-size:10px; color:var(--text-dim);">ชื่อบัญชี: คุณแผ่นดิน</p>
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=0358567622" style="width:75px; margin-top:5px; border:2px solid #fff; border-radius:6px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=0358567622" style="width:80px; margin-top:8px; border:2px solid #fff; border-radius:8px;">
             </div>
             
-            <div style="border:1px dashed var(--gold); padding:6px; border-radius:8px; text-align:center; cursor:pointer;" onclick="document.getElementById('fileIn').click()">
-                <span id="upTxt" style="font-size:9px; color:var(--gold);">📸 คลิกแนบสลิปโอนเงิน</span>
+            <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center; cursor:pointer; margin-bottom:10px;" onclick="document.getElementById('fileIn').click()">
+                <span id="upTxt" style="font-size:10px; color:var(--gold);"><i class="fa-solid fa-image"></i> คลิกแนบสลิปโอนเงิน</span>
                 <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
-                <img id="preview" style="display:none; width:60px; margin:5px auto; border-radius:4px;">
+                <img id="preview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
             </div>
             
-            <button type="submit" id="submitBtn" class="buy-now" style="margin-top:8px; border-radius:8px; padding: 10px 0;">ยืนยันสั่งซื้อ</button>
-            <p onclick="closeModal('orderModal')" style="text-align:center; color:var(--text-dim); cursor:pointer; margin-top:6px; font-size:10px;">[ ยกเลิก ]</p>
+            <button type="submit" id="submitBtn" class="buy-now" style="border-radius:10px; padding: 12px 0; font-size:13px;">ยืนยันสั่งซื้อ</button>
+            <p onclick="closeModal('orderModal')" style="text-align:center; color:var(--text-dim); cursor:pointer; margin-top:12px; font-size:11px;">[ ยกเลิก ]</p>
         </form>
+    </div>
+</div>
+
     </div>
 </div>
 
