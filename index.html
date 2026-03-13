@@ -53,7 +53,6 @@
         .badge { font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.2); }
         .bg-gold { background: var(--gold-grad); color: #000; }
         .bg-red { background: var(--red-grad); }
-
         .province-badge { position: absolute; top: 4px; right: 4px; background: var(--gold-grad); color: #000; font-size: 7.5px; padding: 2px 5px; border-radius: 4px; font-weight: 700; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.3); border: 0.5px solid rgba(255,255,255,0.4); }
 
         .info { padding: 4px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
@@ -71,12 +70,14 @@
         .modal.show { display: flex; opacity: 1; }
         .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
         
-        /* สไตล์สำหรับระบบคละสี/คละแบบ */
-        .opt-row { display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.1); margin-bottom: 5px; }
-        .opt-label { font-size: 10px; color: var(--gold); font-weight: 500; }
-        .opt-ctrl { display: flex; align-items: center; gap: 8px; }
+        /* สไตล์ใหม่สำหรับตัวเลือกคละได้ */
+        .mix-row { display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.1); margin-bottom: 5px; }
+        .mix-info { display: flex; flex-direction: column; }
+        .mix-label { font-size: 10px; color: var(--gold); font-weight: 500; }
+        .mix-price { font-size: 9px; color: var(--text-dim); }
+        .mix-ctrl { display: flex; align-items: center; gap: 10px; }
         .step-btn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
-        .qty-disp { font-size: 14px; font-weight: 700; color: #fff; min-width: 15px; text-align: center; }
+        .mix-qty { font-size: 14px; font-weight: 700; color: #fff; min-width: 15px; text-align: center; }
 
         .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
         nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
@@ -116,7 +117,6 @@
     <div class="modal-card">
         <h4 style="color:var(--gold); text-align:center; margin-bottom:6px; font-size:13px;">ยืนยันการสั่งซื้อ</h4>
         <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:8px; border-radius:10px; margin-bottom:8px; border:1px solid rgba(212,175,55,0.3);"></div>
-        
         <form id="orderForm">
             <div id="optionBox"></div>
             
@@ -158,7 +158,7 @@
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
     
     let db = [], activeP = {}, bannerEnd = null;
-    let selectedOptions = {}; 
+    let selectedMix = {}; // เก็บจำนวนที่คละ { 'สีแดง': 1, 'สีน้ำเงิน': 2 }
 
     function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => alert("คัดลอกเรียบร้อย!")); }
 
@@ -185,6 +185,7 @@
             const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
             const pRaw = await resP.text();
             db = pRaw.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            db.sort(() => Math.random() - 0.5); 
             render();
             setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
@@ -216,38 +217,39 @@
     }
 
     function openOrder(n, pNormal, s, optStr, disc, limit, img) {
-        selectedOptions = {};
-        activeP = { name:n, pNormal:parseFloat(pNormal), ship:parseFloat(s), disc:disc, limit:limit, img:img, opts:[] };
+        selectedMix = {};
+        activeP = { name:n, pNormal:parseFloat(pNormal), ship:parseFloat(s), disc:disc, limit:limit, img:img, options:[] };
         
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
+        
         if(optStr && optStr !== '-') {
             box.innerHTML = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก (คละได้):</label>`;
             optStr.split(',').forEach(o => {
                 let pts = o.includes(':')?o.split(':'):o.split('=');
                 let label = pts[0].trim(), price = pts[1]?parseFloat(pts[1]):activeP.pNormal;
-                activeP.opts.push({ label, price });
-                selectedOptions[label] = 0;
+                activeP.options.push({ label, price });
+                selectedMix[label] = 0;
                 box.innerHTML += `
-                    <div class="opt-row">
-                        <span class="opt-label">${label} (฿${price.toLocaleString()})</span>
-                        <div class="opt-ctrl">
-                            <button type="button" class="step-btn" onclick="updateOptQty('${label}', -1)"><i class="fa-solid fa-minus"></i></button>
-                            <span class="qty-disp" id="qty-${label}">0</span>
-                            <button type="button" class="step-btn" onclick="updateOptQty('${label}', 1)"><i class="fa-solid fa-plus"></i></button>
+                    <div class="mix-row">
+                        <div class="mix-info"><span class="mix-label">${label}</span><span class="mix-price">฿${price.toLocaleString()}</span></div>
+                        <div class="mix-ctrl">
+                            <button type="button" class="step-btn" onclick="updateMixQty('${label}', -1)"><i class="fa-solid fa-minus"></i></button>
+                            <span class="mix-qty" id="qty-${label}">0</span>
+                            <button type="button" class="step-btn" onclick="updateMixQty('${label}', 1)"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>`;
             });
         } else {
-            selectedOptions["ปกติ"] = 1;
-            activeP.opts = [{ label:"ปกติ", price:activeP.pNormal }];
+            selectedMix["ปกติ"] = 1;
+            activeP.options = [{ label:"ปกติ", price:activeP.pNormal }];
             box.innerHTML = `
-                <div class="opt-row">
-                    <span class="opt-label">จำนวนสินค้า</span>
-                    <div class="opt-ctrl">
-                        <button type="button" class="step-btn" onclick="updateOptQty('ปกติ', -1)"><i class="fa-solid fa-minus"></i></button>
-                        <span class="qty-disp" id="qty-ปกติ">1</span>
-                        <button type="button" class="step-btn" onclick="updateOptQty('ปกติ', 1)"><i class="fa-solid fa-plus"></i></button>
+                <div class="mix-row">
+                    <div class="mix-info"><span class="mix-label">จำนวนสินค้า</span></div>
+                    <div class="mix-ctrl">
+                        <button type="button" class="step-btn" onclick="updateMixQty('ปกติ', -1)"><i class="fa-solid fa-minus"></i></button>
+                        <span class="mix-qty" id="qty-ปกติ">1</span>
+                        <button type="button" class="step-btn" onclick="updateMixQty('ปกติ', 1)"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>`;
         }
@@ -255,27 +257,27 @@
         openModal('orderModal');
     }
 
-    function updateOptQty(label, val) {
-        let currentTotal = Object.values(selectedOptions).reduce((a, b) => a + b, 0);
-        if(selectedOptions[label] + val >= 0 && (val < 0 || currentTotal < activeP.limit)) {
-            selectedOptions[label] += val;
-            document.getElementById(`qty-${label}`).innerText = selectedOptions[label];
+    function updateMixQty(label, val) {
+        let currentTotal = Object.values(selectedMix).reduce((a, b) => a + b, 0);
+        if(selectedMix[label] + val >= 0 && (val < 0 || currentTotal < activeP.limit)) {
+            selectedMix[label] += val;
+            document.getElementById(`qty-${label}`).innerText = selectedMix[label];
             updatePrice();
         }
     }
 
     function updatePrice() {
-        let sub = 0, totalQty = 0, summary = [];
-        activeP.opts.forEach(o => {
-            let q = selectedOptions[o.label] || 0;
+        let subTotal = 0, totalQty = 0, summary = [];
+        activeP.options.forEach(opt => {
+            let q = selectedMix[opt.label] || 0;
             if(q > 0) {
-                let p = activeP.disc > 0 ? o.price * (1-(activeP.disc/100)) : o.price;
-                sub += (p * q);
+                let p = activeP.disc > 0 ? opt.price * (1-(activeP.disc/100)) : opt.price;
+                subTotal += (p * q);
                 totalQty += q;
-                summary.push(`${o.label}(${q})`);
+                summary.push(`${opt.label}(${q})`);
             }
         });
-        activeP.finalTotal = sub + activeP.ship;
+        activeP.finalTotal = subTotal + activeP.ship;
         activeP.summaryTxt = summary.join(', ');
 
         document.getElementById('orderDetail').innerHTML = `
@@ -283,7 +285,7 @@
                 <div style="width:60px; height:60px; border-radius:8px; overflow:hidden; border:1px solid var(--gold);">${renderMedia(activeP.img, true)}</div>
                 <div style="flex:1;">
                     <div style="font-size:11px; font-weight:600; color:var(--gold);">${activeP.name}</div>
-                    <div style="font-size:9px; color:var(--text-dim);">${activeP.summaryTxt || 'ยังไม่ได้เลือก'}</div>
+                    <div style="font-size:9px; color:var(--text-dim);">${activeP.summaryTxt || 'เลือกสินค้า...'}</div>
                 </div>
             </div>
             <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px;">
