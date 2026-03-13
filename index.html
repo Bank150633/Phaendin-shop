@@ -70,11 +70,10 @@
         .modal.show { display: flex; opacity: 1; }
         .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
         
-        /* สไตล์ใหม่สำหรับตัวเลือกคละได้ */
-        .mix-row { display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.1); margin-bottom: 5px; }
-        .mix-info { display: flex; flex-direction: column; }
+        /* สไตล์ใหม่สำหรับการคละตัวเลือกสินค้า */
+        .mix-item { display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,0.05); padding: 8px; border-radius: 8px; border: 1px solid rgba(212,175,55,0.15); margin-bottom: 5px; }
         .mix-label { font-size: 10px; color: var(--gold); font-weight: 500; }
-        .mix-price { font-size: 9px; color: var(--text-dim); }
+        .mix-price-tag { font-size: 9px; color: var(--text-dim); }
         .mix-ctrl { display: flex; align-items: center; gap: 10px; }
         .step-btn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; }
         .mix-qty { font-size: 14px; font-weight: 700; color: #fff; min-width: 15px; text-align: center; }
@@ -84,7 +83,6 @@
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
         .nav-tab.active { color: var(--gold); }
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
-
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; }
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; }
@@ -118,7 +116,7 @@
         <h4 style="color:var(--gold); text-align:center; margin-bottom:6px; font-size:13px;">ยืนยันการสั่งซื้อ</h4>
         <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:8px; border-radius:10px; margin-bottom:8px; border:1px solid rgba(212,175,55,0.3);"></div>
         <form id="orderForm">
-            <div id="optionBox"></div>
+            <div id="mixOptionBox" style="margin-bottom: 10px;"></div>
             
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
@@ -158,9 +156,9 @@
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
     
     let db = [], activeP = {}, bannerEnd = null;
-    let selectedMix = {}; // เก็บจำนวนที่คละ { 'สีแดง': 1, 'สีน้ำเงิน': 2 }
+    let selectedMix = {}; // เก็บข้อมูลการคละ { 'ชื่อตัวเลือก': จำนวน }
 
-    function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => alert("คัดลอกเรียบร้อย!")); }
+    function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => alert("คัดลอกเลขบัญชีแล้ว!")); }
 
     async function init() {
         try {
@@ -193,7 +191,7 @@
 
     function render() {
         const query = document.getElementById('search').value.toLowerCase();
-        const now = new Date().getTime();
+        const now = Date.now();
         document.getElementById('productGrid').innerHTML = db.filter(p => p[0].toLowerCase().includes(query)).map((p) => {
             let pNormal = parseFloat(p[3]||0), pPromo = parseFloat(p[10]||0), expiry = p[11]?new Date(p[11]).getTime():0;
             let currentPrice = (pPromo > 0 && expiry > now) ? pPromo : pNormal;
@@ -218,37 +216,40 @@
 
     function openOrder(n, pNormal, s, optStr, disc, limit, img) {
         selectedMix = {};
-        activeP = { name:n, pNormal:parseFloat(pNormal), ship:parseFloat(s), disc:disc, limit:limit, img:img, options:[] };
+        activeP = { name:n, pNormal:parseFloat(pNormal), ship:parseFloat(s), disc:disc, limit:limit, img:img, opts:[] };
         
-        const box = document.getElementById('optionBox');
+        const box = document.getElementById('mixOptionBox');
         box.innerHTML = '';
-        
+
         if(optStr && optStr !== '-') {
-            box.innerHTML = `<label style="font-size:9px; color:var(--gold);">📦 เลือกตัวเลือก (คละได้):</label>`;
+            box.innerHTML = `<label style="font-size:9px; color:var(--gold);">📦 เลือกรายการ (คละได้):</label>`;
             optStr.split(',').forEach(o => {
                 let pts = o.includes(':')?o.split(':'):o.split('=');
                 let label = pts[0].trim(), price = pts[1]?parseFloat(pts[1]):activeP.pNormal;
-                activeP.options.push({ label, price });
+                activeP.opts.push({ label, price });
                 selectedMix[label] = 0;
                 box.innerHTML += `
-                    <div class="mix-row">
-                        <div class="mix-info"><span class="mix-label">${label}</span><span class="mix-price">฿${price.toLocaleString()}</span></div>
+                    <div class="mix-item">
+                        <div style="display:flex; flex-direction:column;">
+                            <span class="mix-label">${label}</span>
+                            <span class="mix-price-tag">฿${price.toLocaleString()}</span>
+                        </div>
                         <div class="mix-ctrl">
                             <button type="button" class="step-btn" onclick="updateMixQty('${label}', -1)"><i class="fa-solid fa-minus"></i></button>
-                            <span class="mix-qty" id="qty-${label}">0</span>
+                            <span class="mix-qty" id="mix-qty-${label}">0</span>
                             <button type="button" class="step-btn" onclick="updateMixQty('${label}', 1)"><i class="fa-solid fa-plus"></i></button>
                         </div>
                     </div>`;
             });
         } else {
             selectedMix["ปกติ"] = 1;
-            activeP.options = [{ label:"ปกติ", price:activeP.pNormal }];
+            activeP.opts = [{ label:"ปกติ", price:activeP.pNormal }];
             box.innerHTML = `
-                <div class="mix-row">
-                    <div class="mix-info"><span class="mix-label">จำนวนสินค้า</span></div>
+                <div class="mix-item">
+                    <span class="mix-label">จำนวนสินค้า</span>
                     <div class="mix-ctrl">
                         <button type="button" class="step-btn" onclick="updateMixQty('ปกติ', -1)"><i class="fa-solid fa-minus"></i></button>
-                        <span class="mix-qty" id="qty-ปกติ">1</span>
+                        <span class="mix-qty" id="mix-qty-ปกติ">1</span>
                         <button type="button" class="step-btn" onclick="updateMixQty('ปกติ', 1)"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>`;
@@ -258,17 +259,17 @@
     }
 
     function updateMixQty(label, val) {
-        let currentTotal = Object.values(selectedMix).reduce((a, b) => a + b, 0);
-        if(selectedMix[label] + val >= 0 && (val < 0 || currentTotal < activeP.limit)) {
+        let totalCurrent = Object.values(selectedMix).reduce((a, b) => a + b, 0);
+        if(selectedMix[label] + val >= 0 && (val < 0 || totalCurrent < activeP.limit)) {
             selectedMix[label] += val;
-            document.getElementById(`qty-${label}`).innerText = selectedMix[label];
+            document.getElementById(`mix-qty-${label}`).innerText = selectedMix[label];
             updatePrice();
         }
     }
 
     function updatePrice() {
         let subTotal = 0, totalQty = 0, summary = [];
-        activeP.options.forEach(opt => {
+        activeP.opts.forEach(opt => {
             let q = selectedMix[opt.label] || 0;
             if(q > 0) {
                 let p = activeP.disc > 0 ? opt.price * (1-(activeP.disc/100)) : opt.price;
@@ -281,15 +282,15 @@
         activeP.summaryTxt = summary.join(', ');
 
         document.getElementById('orderDetail').innerHTML = `
-            <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
-                <div style="width:60px; height:60px; border-radius:8px; overflow:hidden; border:1px solid var(--gold);">${renderMedia(activeP.img, true)}</div>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <div style="width:55px; height:55px; border-radius:8px; overflow:hidden; border:1px solid var(--gold);">${renderMedia(activeP.img, true)}</div>
                 <div style="flex:1;">
                     <div style="font-size:11px; font-weight:600; color:var(--gold);">${activeP.name}</div>
                     <div style="font-size:9px; color:var(--text-dim);">${activeP.summaryTxt || 'เลือกสินค้า...'}</div>
                 </div>
             </div>
-            <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px;">
-                <span style="font-size:10px; color:var(--gold);">ยอดสุทธิ: </span>฿${activeP.finalTotal.toLocaleString()}
+            <div style="font-size:22px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); margin-top:5px; padding-top:5px;">
+                <span style="font-size:10px; color:var(--gold);">รวมทั้งสิ้น: </span>฿${activeP.finalTotal.toLocaleString()}
             </div>
         `;
         document.getElementById('submitBtn').disabled = totalQty === 0;
@@ -297,14 +298,13 @@
 
     document.getElementById('orderForm').onsubmit = async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const file = document.getElementById('fileIn').files[0];
+        const btn = document.getElementById('submitBtn'), file = document.getElementById('fileIn').files[0];
         if(!file) return alert("กรุณาแนบสลิป!");
         btn.innerText = "กำลังส่ง..."; btn.disabled = true;
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name} [${activeP.summaryTxt}] | ยอด: ฿${activeP.finalTotal}`,
+                productDetail: `${activeP.name} [${activeP.summaryTxt}] | ยอดโอน: ฿${activeP.finalTotal}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
