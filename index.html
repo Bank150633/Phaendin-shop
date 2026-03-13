@@ -43,7 +43,6 @@
         .bn-timer { display: flex; gap: 4px; align-items: center; }
         .timer-unit { color: #ff4b2b; font-weight: 700; font-size: 13px; }
         .timer-sep { color: #fff; font-size: 11px; opacity: 0.8; }
-        .bn-txt .buy-now { width: auto !important; padding: 8px 18px !important; font-size: 11px !important; border-radius: 50px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 
         .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
@@ -65,21 +64,23 @@
         .new-price { color: #ff4b2b; }
 
         .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
-        .buy-now:disabled { background: #555; color: #888; cursor: not-allowed; }
+        .buy-now:disabled { background: #444 !important; color: #888; cursor: not-allowed; animation: none; }
         .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 5px; opacity: 0; transition: 0.3s; }
         .modal.show { display: flex; opacity: 1; }
-        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 340px; padding: 10px; max-height: 95vh; overflow-y: auto; }
+        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 10px; max-height: 95vh; overflow-y: auto; }
         
-        /* สไตล์สำหรับคละตัวเลือกสินค้า */
-        .option-row { display: flex; align-items: center; justify-content: space-between; padding: 6px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 5px; border: 1px solid rgba(212,175,55,0.1); }
-        .opt-info { flex: 1; }
-        .opt-label { font-size: 10px; color: var(--gold); display: block; }
-        .opt-price { font-size: 9px; color: var(--text-dim); }
-        .opt-ctrl { display: flex; align-items: center; gap: 8px; }
-        .opt-qty { font-size: 12px; font-weight: 700; min-width: 15px; text-align: center; }
+        /* สไตล์ใหม่สำหรับระบบคละสี */
+        .mix-container { margin-bottom: 10px; }
+        .mix-row { display: flex; align-items: center; justify-content: space-between; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 5px; border: 1px solid rgba(212,175,55,0.1); }
+        .mix-info { flex: 1; }
+        .mix-label { font-size: 11px; color: var(--gold); display: block; font-weight: 500; }
+        .mix-price { font-size: 9px; color: var(--text-dim); }
+        .mix-ctrl { display: flex; align-items: center; gap: 8px; }
+        .mix-btn { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold); background: transparent; color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; }
+        .mix-qty { font-size: 14px; font-weight: 700; min-width: 18px; text-align: center; color: #fff; }
 
         .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
@@ -101,6 +102,7 @@
 </header>
 
 <div class="banner-box" id="banner"></div>
+
 <div class="search-wrap">
     <i class="fa-solid fa-search search-icon"></i>
     <input type="text" id="search" placeholder="ค้นหาชื่อสินค้าที่ท่านต้องการ..." oninput="render()">
@@ -121,8 +123,8 @@
         <div id="orderDetail" style="background:rgba(212,175,55,0.08); padding:8px; border-radius:10px; margin-bottom:8px; border:1px solid rgba(212,175,55,0.3);"></div>
         
         <form id="orderForm">
-            <div id="mixOptionBox" style="margin-bottom:10px;"></div>
-            
+            <div id="mixOptionsBox" class="mix-container"></div>
+
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:45px;"></textarea>
@@ -155,7 +157,7 @@
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
     
     let db = [], activeP = {}, bannerEnd = null;
-    let selectedOptions = {}; // { "ชื่อตัวเลือก": จำนวน }
+    let currentChoices = {}; // เก็บจำนวนแต่ละตัวเลือก { "สีแดง": 1, "สีเขียว": 2 }
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => alert("คัดลอกเลขบัญชีเรียบร้อยแล้ว!"));
@@ -177,7 +179,7 @@
                         <div class="bn-txt">
                             <div class="bn-title">🔥 ${b[1]}</div>
                             <div class="bn-timer-wrap"><div class="bn-timer"><span class="timer-unit" id="th">00</span><span class="timer-sep">:</span><span class="timer-unit" id="tm">00</span><span class="timer-sep">:</span><span class="timer-unit" id="ts">00</span></div></div>
-                            <button class="buy-now" style="width:110px; border-radius:50px;" onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}', 1)">รับสิทธิ์ด่วน</button>
+                            <button class="buy-now" style="width:110px; border-radius:50px;" onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}', ${b[14]||1})">รับสิทธิ์ด่วน</button>
                         </div>
                     </div>`;
                 setInterval(tick, 1000);
@@ -194,18 +196,14 @@
     function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
-        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
-        
-        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
+        document.getElementById('productGrid').innerHTML = db.filter(p => p[0].toLowerCase().includes(query)).map((p) => {
             let priceNormal = parseFloat(p[3] || 0), pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let buyLimit = p[12] ? parseInt(p[12]) : 10;
             let currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
             let disc = (pricePromo > 0 && expiryDate > now) ? Math.round(((priceNormal-pricePromo)/priceNormal)*100) : 0;
             let minOrder = p[14] ? parseInt(p[14]) : 1;
 
-            return `
-            <div class="card">
+            return `<div class="card">
                 <div class="media-wrap" onclick="zoom('${p[1]}')">
                     <div class="badge-container">${disc > 0 ? `<span class="badge bg-red">ลด ${disc}%</span>`:''}${ [p[4],p[5],p[6],p[7]].filter(t => t && t!=='-' && !t.includes('%')).map(t=>`<span class="badge bg-gold">${t}</span>`).join('') }</div>
                     ${p[13] ? `<div class="province-badge">${p[13]}</div>`:''}
@@ -214,118 +212,115 @@
                 </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
-                    <div class="p-price">${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal}</span>`:''}<span class="new-price">฿${currentPrice}</span></div>
+                    <div class="p-price"><span class="new-price">฿${currentPrice.toLocaleString()}</span></div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${disc}, ${buyLimit}, '${p[1]}', ${minOrder})">สั่งซื้อ ${minOrder>1?`(ขั้นต่ำ ${minOrder})`:''}</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${disc}, ${p[12]||10}, '${p[1]}', ${minOrder})">สั่งซื้อ ${minOrder>1?`(ขั้นต่ำ ${minOrder})`:''}</button>
             </div>`;
         }).join('');
     }
 
     function openOrder(n, pNormal, s, optStr, disc, limit, img, min) {
-        selectedOptions = {}; 
+        currentChoices = {};
         activeP = { name:n, pNormal:parseFloat(pNormal), ship:parseFloat(s), disc:disc, limit:limit, minOrder:min, img:img, options:[] };
         
-        const mixBox = document.getElementById('mixOptionBox');
-        mixBox.innerHTML = `<label style="font-size:10px; color:var(--gold); margin-bottom:5px; display:block;">📦 เลือกรายการสินค้า (คละได้):</label>`;
+        const box = document.getElementById('mixOptionsBox');
+        box.innerHTML = `<label style="font-size:10px; color:var(--gold); margin-bottom:5px; display:block;">📦 เลือกรายการ (คละได้):</label>`;
         
         if(optStr && optStr !== '-') {
-            optStr.split(',').forEach((o, index) => {
+            optStr.split(',').forEach((o, i) => {
                 let pts = o.includes(':') ? o.split(':') : o.split('=');
                 let label = pts[0].trim(), price = pts[1] ? parseFloat(pts[1]) : activeP.pNormal;
-                let discounted = activeP.disc > 0 ? price * (1 - (activeP.disc / 100)) : price;
+                let finalPrice = activeP.disc > 0 ? price * (1 - (activeP.disc / 100)) : price;
                 
-                activeP.options.push({ label, price: discounted });
-                selectedOptions[label] = 0; // เริ่มต้นที่ 0
+                activeP.options.push({ label, price: finalPrice });
+                currentChoices[label] = 0;
 
-                mixBox.innerHTML += `
-                <div class="option-row">
-                    <div class="opt-info"><span class="opt-label">${label}</span><span class="opt-price">฿${discounted.toLocaleString()}</span></div>
-                    <div class="opt-ctrl">
-                        <button type="button" class="step-btn" onclick="updateMixQty('${label}', -1)"><i class="fa-solid fa-minus"></i></button>
-                        <span class="opt-qty" id="qty-${label}">0</span>
-                        <button type="button" class="step-btn" onclick="updateMixQty('${label}', 1)"><i class="fa-solid fa-plus"></i></button>
+                box.innerHTML += `
+                <div class="mix-row">
+                    <div class="mix-info"><span class="mix-label">${label}</span><span class="mix-price">฿${finalPrice.toLocaleString()}</span></div>
+                    <div class="mix-ctrl">
+                        <button type="button" class="mix-btn" onclick="updateMix('${label}', -1)"><i class="fa-solid fa-minus"></i></button>
+                        <span class="mix-qty" id="qty-${i}">0</span>
+                        <button type="button" class="mix-btn" onclick="updateMix('${label}', 1)"><i class="fa-solid fa-plus"></i></button>
                     </div>
                 </div>`;
             });
         } else {
-            // กรณีไม่มีตัวเลือกย่อย ให้สร้างตัวหลัก
-            activeP.options.push({ label: 'สินค้าปกติ', price: activeP.pNormal * (1-(activeP.disc/100)) });
-            selectedOptions['สินค้าปกติ'] = activeP.minOrder; 
-            mixBox.innerHTML += `
-                <div class="option-row">
-                    <div class="opt-info"><span class="opt-label">จำนวน</span></div>
-                    <div class="opt-ctrl">
-                        <button type="button" class="step-btn" onclick="updateMixQty('สินค้าปกติ', -1)"><i class="fa-solid fa-minus"></i></button>
-                        <span class="opt-qty" id="qty-สินค้าปกติ">${activeP.minOrder}</span>
-                        <button type="button" class="step-btn" onclick="updateMixQty('สินค้าปกติ', 1)"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                </div>`;
+            // กรณีไม่มีตัวเลือกย่อย
+            let label = "ปกติ";
+            let finalPrice = activeP.disc > 0 ? activeP.pNormal * (1 - (activeP.disc / 100)) : activeP.pNormal;
+            activeP.options.push({ label, price: finalPrice });
+            currentChoices[label] = activeP.minOrder;
+            box.innerHTML += `
+            <div class="mix-row">
+                <div class="mix-info"><span class="mix-label">จำนวน</span></div>
+                <div class="mix-ctrl">
+                    <button type="button" class="mix-btn" onclick="updateMix('${label}', -1)"><i class="fa-solid fa-minus"></i></button>
+                    <span class="mix-qty" id="qty-0">${activeP.minOrder}</span>
+                    <button type="button" class="mix-btn" onclick="updateMix('${label}', 1)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>`;
         }
-
-        updatePrice();
+        updateSummary();
         openModal('orderModal');
     }
 
-    function updateMixQty(label, val) {
-        let currentTotal = Object.values(selectedOptions).reduce((a, b) => a + b, 0);
-        let newVal = selectedOptions[label] + val;
-
-        if(newVal >= 0 && (val < 0 || currentTotal < activeP.limit)) {
-            selectedOptions[label] = newVal;
-            document.getElementById(`qty-${label}`).innerText = newVal;
-            updatePrice();
+    function updateMix(label, val) {
+        let totalNow = Object.values(currentChoices).reduce((a, b) => a + b, 0);
+        let currentVal = currentChoices[label];
+        
+        if(currentVal + val >= 0 && (val < 0 || totalNow < activeP.limit)) {
+            currentChoices[label] += val;
+            const idx = activeP.options.findIndex(o => o.label === label);
+            document.getElementById(`qty-${idx}`).innerText = currentChoices[label];
+            updateSummary();
         }
     }
 
-    function updatePrice() {
-        let totalQty = Object.values(selectedOptions).reduce((a, b) => a + b, 0);
+    function updateSummary() {
+        let totalQty = Object.values(currentChoices).reduce((a, b) => a + b, 0);
         let totalPrice = 0;
-        let details = [];
+        let summaryTxt = [];
 
         activeP.options.forEach(opt => {
-            if(selectedOptions[opt.label] > 0) {
-                totalPrice += opt.price * selectedOptions[opt.label];
-                details.push(`${opt.label} (${selectedOptions[opt.label]}ชิ้น)`);
+            if(currentChoices[opt.label] > 0) {
+                totalPrice += opt.price * currentChoices[opt.label];
+                summaryTxt.push(`${opt.label}(${currentChoices[opt.label]})`);
             }
         });
 
         activeP.finalTotal = totalPrice + activeP.ship;
-        activeP.summary = details.join(', ');
+        activeP.fullSummary = summaryTxt.join(', ');
 
         const btn = document.getElementById('submitBtn');
-        const minNotice = activeP.minOrder > 1 ? `<div style="color:#ff4b2b; font-size:9px; margin-top:3px;"><i class="fa-solid fa-circle-exclamation"></i> ต้องเลือกคละให้ครบอย่างน้อย ${activeP.minOrder} ชิ้น (ตอนนี้: ${totalQty})</div>` : '';
+        const isValid = totalQty >= activeP.minOrder;
+        btn.disabled = !isValid;
         
-        // ตรวจสอบยอดขั้นต่ำเพื่อเปิด/ปิดปุ่มสั่งซื้อ
-        btn.disabled = totalQty < activeP.minOrder;
-        btn.style.opacity = btn.disabled ? "0.5" : "1";
-
         document.getElementById('orderDetail').innerHTML = `
             <div style="display:flex; gap:10px; align-items:center;">
                 <div style="width:50px; height:50px; border-radius:8px; overflow:hidden; border:1px solid var(--gold);">${renderMedia(activeP.img, true)}</div>
                 <div style="flex:1;">
                     <div style="font-size:11px; font-weight:600; color:var(--gold);">${activeP.name}</div>
-                    <div style="font-size:9px; color:var(--text-dim);">${activeP.summary || 'ยังไม่ได้เลือกสินค้า'}</div>
-                    ${minNotice}
+                    <div style="font-size:9px; color:var(--text-dim);">${activeP.fullSummary || 'ยังไม่ได้เลือกรายการ'}</div>
+                    ${!isValid ? `<div style="color:#ff4b2b; font-size:9px; font-weight:bold;">ต้องเลือกให้ครบอย่างน้อย ${activeP.minOrder} ชิ้น</div>` : ''}
                 </div>
             </div>
             <div style="font-size:20px; font-weight:800; text-align:center; color:#fff; border-top:1px dashed rgba(212,175,55,0.2); padding-top:5px; margin-top:5px;">
-                <span style="font-size:10px; color:var(--gold);">ยอดชำระ: </span>฿${activeP.finalTotal.toLocaleString()}
+                <span style="font-size:10px; color:var(--gold);">ยอดรวม: </span>฿${activeP.finalTotal.toLocaleString()}
             </div>
         `;
     }
 
-    // --- ส่วนที่เหลือ (Submit, Theme, Zoom, Timer) คงเดิมเหมือนโค้ดก่อนหน้า ---
     document.getElementById('orderForm').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         const file = document.getElementById('fileIn').files[0];
         if(!file) return alert("กรุณาแนบสลิป!");
-        
         btn.innerText = "กำลังส่ง..."; btn.disabled = true;
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name} | รายการ: ${activeP.summary} | รวม: ${Object.values(selectedOptions).reduce((a,b)=>a+b,0)}ชิ้น | ยอด: ฿${activeP.finalTotal}`,
+                productDetail: `${activeP.name} | ${activeP.fullSummary} | ยอด: ฿${activeP.finalTotal}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
