@@ -386,11 +386,28 @@ function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl) {
 }
 
 function changeVQty(label, price, delta) {
-    let next = selectedOptions[label].qty + delta;
-    if(next >= 0 && next <= activeP.limit) {
-        selectedOptions[label].qty = next;
-        document.getElementById(`v-qty-${label}`).innerText = next;
-        updatePrice();
+    // 1. คำนวณหาจำนวนรวมที่ลูกค้าเลือกไปแล้ว "ทั้งหมดทุกตัวเลือก"
+    let totalQtySelected = 0;
+    for (let key in selectedOptions) {
+        totalQtySelected += selectedOptions[key].qty;
+    }
+
+    let currentItemQty = selectedOptions[label].qty;
+
+    // 2. ถ้ากดบวก (+) ให้เช็กก่อนว่ายอดรวมทั้งตะกร้าเกิน Max Limit หรือยัง
+    if (delta > 0) {
+        if (totalQtySelected >= activeP.max) {
+            alert(`ขออภัยครับ สั่งซื้อได้รวมสูงสุดไม่เกิน ${activeP.max} ชิ้น`);
+            return; // หยุดการทำงาน ไม่ให้เพิ่มจำนวน
+        }
+    }
+
+    // 3. ปรับปรุงจำนวนเฉพาะตัวเลือกที่กด
+    let nextQty = currentItemQty + delta;
+    if (nextQty >= 0) {
+        selectedOptions[label].qty = nextQty;
+        document.getElementById(`v-qty-${label}`).innerText = nextQty;
+        updatePrice(); // เรียกคำนวณราคาสรุปใหม่
     }
 }
 
