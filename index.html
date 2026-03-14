@@ -87,7 +87,6 @@
         .bg-green { background: var(--green-grad); }
         .bg-blue { background: var(--blue-grad); }
 
-        /* ส่วนที่เพิ่มใหม่: ป้ายชื่อจังหวัดสีทอง */
         .province-badge {
             position: absolute;
             top: 4px;
@@ -135,36 +134,31 @@
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
-        /* สไตล์เพิ่มเติมสำหรับปุ่มก๊อปปี้ */
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
-       .variant-item { 
-    display: flex; align-items: center; gap: 10px; 
-    background: rgba(255,255,255,0.05); padding: 8px; 
-    border-radius: 10px; border: 1px solid rgba(212,175,55,0.2); margin-bottom: 8px;
-}
-.v-img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border: 1px solid var(--gold); }
-.v-info { flex-grow: 1; }
-.v-name { font-size: 11px; color: #fff; }
-.v-price { font-size: 10px; color: var(--gold); font-weight: bold; }
-.v-ctrl { display: flex; align-items: center; gap: 8px; background: #000; padding: 4px 8px; border-radius: 20px; border: 0.5px solid #444; }
-.v-btn { width: 22px; height: 22px; border-radius: 50%; border: none; background: var(--gold-grad); color: #000; cursor: pointer; font-weight: bold; }
-        /* แท็กสถานะในหน้าสรุปการสั่งซื้อ */
-.promo-pill-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; justify-content: center; }
-.pill { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
-.pill-red { background: var(--red-grad); color: #fff; }
-.pill-gold { background: var(--gold-grad); color: #000; }
-.pill-green { background: var(--green-grad); color: #fff; }
-.pill-free-ship { border: 1px solid #38ef7d; color: #38ef7d; background: rgba(56, 239, 125, 0.1); }
-
-/* ปรับปรุงหน้าสรุปยอดให้ดูแพงขึ้น */
-.order-summary-box {
-    background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
-    border: 1px solid rgba(212,175,55,0.3);
-    border-radius: 12px; padding: 12px; margin-bottom: 12px;
-}
-
- </style>
+        .variant-item { 
+            display: flex; align-items: center; gap: 10px; 
+            background: rgba(255,255,255,0.05); padding: 8px; 
+            border-radius: 10px; border: 1px solid rgba(212,175,55,0.2); margin-bottom: 8px;
+        }
+        .v-img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; border: 1px solid var(--gold); }
+        .v-info { flex-grow: 1; }
+        .v-name { font-size: 11px; color: #fff; }
+        .v-price { font-size: 10px; color: var(--gold); font-weight: bold; }
+        .v-ctrl { display: flex; align-items: center; gap: 8px; background: #000; padding: 4px 8px; border-radius: 20px; border: 0.5px solid #444; }
+        .v-btn { width: 22px; height: 22px; border-radius: 50%; border: none; background: var(--gold-grad); color: #000; cursor: pointer; font-weight: bold; }
+        .promo-pill-container { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; justify-content: center; }
+        .pill { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 600; text-transform: uppercase; }
+        .pill-red { background: var(--red-grad); color: #fff; }
+        .pill-gold { background: var(--gold-grad); color: #000; }
+        .pill-green { background: var(--green-grad); color: #fff; }
+        .pill-free-ship { border: 1px solid #38ef7d; color: #38ef7d; background: rgba(56, 239, 125, 0.1); }
+        .order-summary-box {
+            background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 12px; padding: 12px; margin-bottom: 12px;
+        }
+    </style>
 </head>
 <body class="dark-mode">
 
@@ -193,8 +187,8 @@
     <div class="modal-card" style="text-align:center; padding: 15px;">
         <h4 style="color:var(--gold); margin-bottom:12px; font-size:14px;">ติดต่อเรา</h4>
         <a href="tel:0944159031" style="display:block; background:#28a745; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-solid fa-phone"></i> โทรสายด่วน</a>
-        <a href="https://line.me/ti/p/YOUR_ID" style="display:block; background:#06c755; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-brands fa-line"></i> Line OA</a>
-        <a href="https://m.me/YOUR_PAGE_ID" style="display:block; background:var(--fb-grad); color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-brands fa-facebook-messenger"></i> Facebook Messenger</a>
+        <a href="#" style="display:block; background:#06c755; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-brands fa-line"></i> Line OA</a>
+        <a href="#" style="display:block; background:var(--fb-grad); color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-brands fa-facebook-messenger"></i> Facebook Messenger</a>
         <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
     </div>
 </div>
@@ -202,12 +196,9 @@
 <div id="orderModal" class="modal">
     <div class="modal-card">
         <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
-        
         <div id="orderDetail"></div>
-
         <form id="orderForm" style="margin-top:10px;">
             <div id="optionBox" style="margin-bottom:12px;"></div>
-            
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
@@ -234,9 +225,6 @@
     </div>
 </div>
 
-    </div>
-</div>
-
 <div id="zoomOverlay" onclick="closeZoom()"><div id="zoomContent"></div></div>
 
 <script>
@@ -244,9 +232,8 @@
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
     
     let db = [], activeP = {}, bannerEnd = null;
-    let selectedQty = 1;
+    let selectedOptions = {};
 
-    // ฟังก์ชันคัดลอกเลขบัญชี
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
             alert("คัดลอกเลขบัญชีเรียบร้อยแล้ว!");
@@ -276,7 +263,7 @@
                                 </div>
                             </div>
                             <button class="buy-now" style="width:110px; padding:5px 0; font-size:10px; border-radius:50px;" 
-                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}')">
+                                onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}', ${b[12]||1})">
                                 รับสิทธิ์ด่วน
                             </button>
                         </div>
@@ -288,11 +275,8 @@
             const pRaw = await resP.text();
             const rowsP = pRaw.split('\n');
             db = rowsP.slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-            
             db.sort(() => Math.random() - 0.5); 
-            
             render();
-            setInterval(updateProductTimers, 1000);
         } catch(e) { console.error(e); }
     }
 
@@ -305,9 +289,10 @@
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let buyLimit = p[12] ? parseInt(p[12]) : 10;
+            let maxLimit = p[12] ? parseInt(p[12]) : 999; // M = Max
+            let minLimit = p[14] ? parseInt(p[14]) : 1;   // O = Min
             let pDescription = p[2] || '';
-            let provinceName = p[13] || ''; // ดึงข้อมูลจังหวัดจากคอลัมน์ที่ 14
+            let provinceName = p[13] || '';
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
@@ -333,9 +318,7 @@
                         ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
                         ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
-                    
                     ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                    
                     ${renderMedia(p[1], true)}
                     ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
@@ -347,120 +330,107 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}')">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${p[1]}', ${minLimit})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
 
-    let selectedOptions = {}; 
+    function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
+        activeP = { 
+            name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), 
+            disc: discPercent, 
+            max: parseInt(maxLimit) || 999, // M
+            min: parseInt(minLimit) || 1,   // O
+            img: imgUrl 
+        };
+        
+        selectedOptions = {}; 
+        const box = document.getElementById('optionBox');
+        box.innerHTML = `<p style="font-size:10px; color:var(--gold); text-align:center; margin-bottom:8px;">📦 สั่งขั้นต่ำ ${activeP.min} ชิ้น (สูงสุด ${activeP.max})</p>`;
+        
+        if(optStr && optStr !== '-') {
+            optStr.split(',').forEach(o => {
+                let parts = o.split(':').map(v => v?.trim());
+                let label = parts[0];
+                let price = parts[1] ? parseFloat(parts[1]) : activeP.pNormal;
+                let vImg  = parts[2] || imgUrl;
+                let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
 
-function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl) {
-    activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, limit: buyLimit, img: imgUrl };
-    selectedOptions = {}; 
-
-    const box = document.getElementById('optionBox');
-    box.innerHTML = `<label style="font-size:10px; color:var(--gold);">📦 เลือกรายการ:</label>`;
-    
-    if(optStr && optStr !== '-') {
-        optStr.split(',').forEach(o => {
-            let [label, price, vImg] = o.split(':').map(v => v?.trim());
-            let p = price ? parseFloat(price) : activeP.pNormal;
-            let finalP = activeP.disc > 0 ? p * (1 - (activeP.disc/100)) : p;
-            let pic = vImg || imgUrl;
-
-            box.innerHTML += `
-                <div class="variant-item">
-                    <img src="${pic}" class="v-img">
-                    <div class="v-info"><div class="v-name">${label}</div><div class="v-price">฿${finalP.toLocaleString()}</div></div>
-                    <div class="v-ctrl">
-                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
-                        <span id="v-qty-${label}" style="min-width:15px; text-align:center;">0</span>
-                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
-                    </div>
-                </div>`;
-            selectedOptions[label] = { qty: 0, price: finalP };
-        });
-    }
-    updatePrice();
-    openModal('orderModal');
-}
-
-function changeVQty(label, price, delta) {
-    // 1. คำนวณหาจำนวนรวมที่ลูกค้าเลือกไปแล้ว "ทั้งหมดทุกตัวเลือก"
-    let totalQtySelected = 0;
-    for (let key in selectedOptions) {
-        totalQtySelected += selectedOptions[key].qty;
-    }
-
-    let currentItemQty = selectedOptions[label].qty;
-
-    // 2. ถ้ากดบวก (+) ให้เช็กก่อนว่ายอดรวมทั้งตะกร้าเกิน Max Limit หรือยัง
-    if (delta > 0) {
-        if (totalQtySelected >= activeP.max) {
-            alert(`ขออภัยครับ สั่งซื้อได้รวมสูงสุดไม่เกิน ${activeP.max} ชิ้น`);
-            return; // หยุดการทำงาน ไม่ให้เพิ่มจำนวน
+                box.innerHTML += `
+                    <div class="variant-item">
+                        <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
+                        <div class="v-info">
+                            <div class="v-name">${label}</div>
+                            <div class="v-price">฿${finalP.toLocaleString()}</div>
+                        </div>
+                        <div class="v-ctrl">
+                            <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
+                            <span id="v-qty-${label}" style="width:20px; text-align:center; color:#fff; font-weight:bold;">0</span>
+                            <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
+                        </div>
+                    </div>`;
+                selectedOptions[label] = { qty: 0, price: finalP };
+            });
         }
+        updatePrice();
+        openModal('orderModal');
     }
 
-    // 3. ปรับปรุงจำนวนเฉพาะตัวเลือกที่กด
-    let nextQty = currentItemQty + delta;
-    if (nextQty >= 0) {
-        selectedOptions[label].qty = nextQty;
-        document.getElementById(`v-qty-${label}`).innerText = nextQty;
-        updatePrice(); // เรียกคำนวณราคาสรุปใหม่
-    }
-}
-
-    function updateQty(val) {
-        const nextQty = selectedQty + val;
-        if (nextQty >= 1 && nextQty <= activeP.limit) {
-            selectedQty = nextQty;
-            document.getElementById('qtyDisplay').innerText = selectedQty;
+    function changeVQty(label, price, delta) {
+        let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
+        if (delta > 0 && totalNow >= activeP.max) {
+            alert(`สั่งซื้อรวมกันได้ไม่เกิน ${activeP.max} ชิ้นครับ`);
+            return;
+        }
+        let nextQty = selectedOptions[label].qty + delta;
+        if (nextQty >= 0) {
+            selectedOptions[label].qty = nextQty;
+            document.getElementById(`v-qty-${label}`).innerText = nextQty;
             updatePrice();
         }
     }
-function updatePrice() {
-    let subtotal = 0, summaryText = [], totalItems = 0;
 
-    // คำนวณยอดรวมจากตัวเลือกที่เลือก
-    for (let key in selectedOptions) {
-        if(selectedOptions[key].qty > 0) {
-            subtotal += (selectedOptions[key].price * selectedOptions[key].qty);
-            summaryText.push(`${key} x${selectedOptions[key].qty}`);
-            totalItems += selectedOptions[key].qty;
+    function updatePrice() {
+        let subtotal = 0, summaryText = [], totalItems = 0;
+        for (let key in selectedOptions) {
+            if(selectedOptions[key].qty > 0) {
+                subtotal += (selectedOptions[key].price * selectedOptions[key].qty);
+                summaryText.push(`${key} x${selectedOptions[key].qty}`);
+                totalItems += selectedOptions[key].qty;
+            }
+        }
+
+        activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
+        activeP.summary = summaryText.join(', ');
+
+        let badgesHtml = `<div class="promo-pill-container">`;
+        if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
+        badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
+        badgesHtml += `</div>`;
+
+        document.getElementById('orderDetail').innerHTML = `
+            <div class="order-summary-box">
+                <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+                ${badgesHtml}
+                <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">
+                    ${activeP.summary || 'กรุณาเลือกรายการสินค้า'}
+                </div>
+                <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
+                    <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                    <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+                </div>
+            </div>`;
+
+        const btn = document.getElementById('submitBtn');
+        if (totalItems === 0) {
+            btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5";
+        } else if (totalItems < activeP.min) {
+            btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น (ขาดอีก ${activeP.min - totalItems})`; btn.style.opacity = "0.5";
+        } else {
+            btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1";
         }
     }
 
-    // คำนวณยอดสุทธิ
-    activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
-    activeP.summary = summaryText.join(', ');
-
-    // สร้างป้ายแท็ก (Badges)
-    let badgesHtml = `<div class="promo-pill-container">`;
-    if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red"><i class="fa-solid fa-percent"></i> ลด ${activeP.disc}%</span>`;
-    if (activeP.ship === 0) badgesHtml += `<span class="pill pill-free-ship"><i class="fa-solid fa-truck-fast"></i> ส่งฟรี</span>`;
-    else badgesHtml += `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
-    badgesHtml += `</div>`;
-
-    document.getElementById('orderDetail').innerHTML = `
-        <div class="order-summary-box">
-            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
-            ${badgesHtml}
-            <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0; line-height:1.4;">
-                ${activeP.summary || 'กรุณาเลือกรายการสินค้า'}
-            </div>
-            <div style="border-top: 1px dashed rgba(212,175,55,0.3); margin-top:8px; padding-top:8px; text-align:center;">
-                <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('submitBtn').disabled = (totalItems === 0);
-    document.getElementById('submitBtn').style.opacity = (totalItems === 0) ? "0.5" : "1";
-}
-
-    
     function renderMedia(url, isMuted) {
         if(!url) return '';
         return url.match(/\.(mp4|webm|mov)$/i) 
@@ -483,7 +453,7 @@ function updatePrice() {
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${selectedQty} | ยอดโอน: ฿${activeP.total}`,
+                productDetail: `${activeP.name} [${activeP.summary}] | ยอดโอน: ฿${activeP.finalTotal}`,
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
@@ -492,7 +462,7 @@ function updatePrice() {
             try {
                 await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
                 alert("สั่งซื้อสำเร็จ!"); location.reload();
-            } catch(err) { alert("ล้มล้ว"); btn.disabled = false; }
+            } catch(err) { alert("ล้มเหลว"); btn.disabled = false; }
         };
         reader.readAsDataURL(file);
     };
