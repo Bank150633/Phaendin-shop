@@ -296,7 +296,7 @@
         } catch(e) { console.error(e); }
     }
 
-    function render() {
+        function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
@@ -307,7 +307,8 @@
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
             let buyLimit = p[12] ? parseInt(p[12]) : 10;
             let pDescription = p[2] || '';
-            let provinceName = p[13] || ''; // ดึงข้อมูลจังหวัดจากคอลัมน์ที่ 14
+            let provinceName = p[13] || ''; 
+            let minQty = p[14] ? parseInt(p[14]) : 0; // เพิ่มบรรทัดนี้: ดึงค่าขั้นต่ำจากคอลัมน์ O
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
@@ -322,8 +323,6 @@
             if (pricePromo > 0 && expiryDate > now) {
                 currentPrice = pricePromo;
                 percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-            } else if (percentDiscount > 0) {
-                currentPrice = priceNormal * (1 - (percentDiscount / 100));
             }
 
             return `
@@ -333,9 +332,7 @@
                         ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
                         ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
-                    
                     ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                    
                     ${renderMedia(p[1], true)}
                     ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
@@ -347,19 +344,20 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}')">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${buyLimit}, '${p[1]}', ${minQty})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
-
     let selectedOptions = {}; 
 
-function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl) {
-    activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, limit: buyLimit, img: imgUrl };
+function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl, min) {
+    // เพิ่ม minQty: min เข้าไปใน activeP
+    activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, limit: buyLimit, img: imgUrl, minQty: min };
     selectedOptions = {}; 
 
     const box = document.getElementById('optionBox');
-    box.innerHTML = `<label style="font-size:10px; color:var(--gold);">📦 เลือกรายการ:</label>`;
+    // เพิ่มข้อความบอกขั้นต่ำตรงป้ายชื่อ
+    box.innerHTML = `<label style="font-size:10px; color:var(--gold);">📦 เลือกรายการ (ขั้นต่ำ ${min} ชิ้น):</label>`;
     
     if(optStr && optStr !== '-') {
         optStr.split(',').forEach(o => {
@@ -385,6 +383,7 @@ function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl) {
     openModal('orderModal');
 }
 
+
 function changeVQty(label, price, delta) {
     let next = selectedOptions[label].qty + delta;
     if(next >= 0 && next <= activeP.limit) {
@@ -405,24 +404,29 @@ function changeVQty(label, price, delta) {
 function updatePrice() {
     let subtotal = 0, summaryText = [], totalItems = 0;
 
-    // คำนวณยอดรวมจากตัวเลือกที่เลือก
     for (let key in selectedOptions) {
         if(selectedOptions[key].qty > 0) {
             subtotal += (selectedOptions[key].price * selectedOptions[key].qty);
             summaryText.push(`${key} x${selectedOptions[key].qty}`);
-            totalItems += selectedOptions[key].qty;
+            totalItems += selectedOptions[key].qty; // นับจำนวนชิ้นรวม
         }
     }
 
-    // คำนวณยอดสุทธิ
     activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
     activeP.summary = summaryText.join(', ');
 
-    // สร้างป้ายแท็ก (Badges)
+    // เช็คเงื่อนไขขั้นต่ำ
+    let isMinMet = totalItems >= (activeP.minQty || 0);
+    let minWarning = "";
+    if (activeP.minQty > 0 && totalItems < activeP.minQty) {
+        minWarning = `<div style="color:#ff4b2b; font-size:11px; margin-top:5px; font-weight:bold;">⚠️ ขาดอีก ${activeP.minQty - totalItems} ชิ้น (ต้องสั่งขั้นต่ำ ${activeP.minQty} ชิ้น)</div>`;
+    }
+
     let badgesHtml = `<div class="promo-pill-container">`;
     if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red"><i class="fa-solid fa-percent"></i> ลด ${activeP.disc}%</span>`;
     if (activeP.ship === 0) badgesHtml += `<span class="pill pill-free-ship"><i class="fa-solid fa-truck-fast"></i> ส่งฟรี</span>`;
     else badgesHtml += `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
+    if (activeP.minQty > 0) badgesHtml += `<span class="pill" style="background:#fff; color:#000; border:1px solid #000;">ขั้นต่ำ ${activeP.minQty} ชิ้น</span>`;
     badgesHtml += `</div>`;
 
     document.getElementById('orderDetail').innerHTML = `
@@ -431,6 +435,7 @@ function updatePrice() {
             ${badgesHtml}
             <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0; line-height:1.4;">
                 ${activeP.summary || 'กรุณาเลือกรายการสินค้า'}
+                ${minWarning}
             </div>
             <div style="border-top: 1px dashed rgba(212,175,55,0.3); margin-top:8px; padding-top:8px; text-align:center;">
                 <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
@@ -439,8 +444,11 @@ function updatePrice() {
         </div>
     `;
 
-    document.getElementById('submitBtn').disabled = (totalItems === 0);
-    document.getElementById('submitBtn').style.opacity = (totalItems === 0) ? "0.5" : "1";
+    // ล็อคปุ่มยืนยัน
+    const sBtn = document.getElementById('submitBtn');
+    sBtn.disabled = (totalItems === 0 || !isMinMet);
+    sBtn.style.opacity = (totalItems === 0 || !isMinMet) ? "0.5" : "1";
+    sBtn.innerText = isMinMet ? "ยืนยันสั่งซื้อ" : `สั่งขั้นต่ำ ${activeP.minQty} ชิ้น`;
 }
 
     
