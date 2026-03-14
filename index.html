@@ -383,14 +383,36 @@ function openOrder(n, pNormal, s, optStr, discPercent, buyLimit, imgUrl, min) {
     openModal('orderModal');
 }
 
-
 function changeVQty(label, price, delta) {
-    let next = selectedOptions[label].qty + delta;
-    if(next >= 0 && next <= activeP.limit) {
-        selectedOptions[label].qty = next;
-        document.getElementById(`v-qty-${label}`).innerText = next;
-        updatePrice();
+    // 1. หาจำนวนรวมปัจจุบันก่อน (นับรวมทุกรสชาติที่ลูกค้ากดไว้)
+    let totalInCart = 0;
+    for (let key in selectedOptions) {
+        totalInCart += selectedOptions[key].qty;
     }
+
+    // 2. คำนวณจำนวนใหม่เฉพาะของตัวเลือกนี้
+    let nextQtyForThisVariant = selectedOptions[label].qty + delta;
+
+    // 3. ตรวจสอบเงื่อนไข
+    if (delta > 0) { 
+        // ถ้าจะ "เพิ่ม" ชิ้น: ต้องเช็คว่ายอดรวม (totalInCart) ยังไม่ถึง Limit (activeP.limit)
+        if (totalInCart < activeP.limit) {
+            selectedOptions[label].qty = nextQtyForThisVariant;
+        } else {
+            // ถ้าเต็มแล้ว แจ้งเตือนลูกค้าเล็กน้อย
+            alert(`สินค้านี้จำกัดจำนวนรวมสูงสุด ${activeP.limit} ชิ้นครับ`);
+            return; // หยุดการทำงาน ไม่ให้เพิ่มเลข
+        }
+    } else {
+        // ถ้าจะ "ลด" ชิ้น: แค่ไม่ให้ติดลบก็พอ
+        if (nextQtyForThisVariant >= 0) {
+            selectedOptions[label].qty = nextQtyForThisVariant;
+        }
+    }
+
+    // 4. แสดงผลตัวเลขบนหน้าจอและอัปเดตยอดเงิน
+    document.getElementById(`v-qty-${label}`).innerText = selectedOptions[label].qty;
+    updatePrice();
 }
 
     function updateQty(val) {
