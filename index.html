@@ -9,17 +9,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
-            --gold: #D4AF37; 
-            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
-            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ff416c 100%);
-            --green-grad: linear-gradient(145deg, #11998e 0%, #38ef7d 100%);
-            --blue-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
-            --fb-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
-            --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --text-dim: #BBBBBB; --input-bg: #1A1A1A; 
-        }
-        body.light-mode {
-            --bg: #F2F2F7; --card: #FFFFFF; --text: #1C1C1E; --text-dim: #636366; --input-bg: #FFFFFF;
-        }
+    --gold: #D4AF37; 
+    --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
+    --bg: #0A0A0A; 
+    --card: #141414; 
+    --text: #FFFFFF; 
+    --text-dim: #BBBBBB; 
+    --input-bg: #1A1A1A; 
+    --header-bg: rgba(0,0,0,0.9);
+}
+
+body.light-mode {
+    --bg: #F2F2F7; 
+    --card: #FFFFFF; 
+    --text: #1C1C1E; 
+    --text-dim: #3A3A3C; /* ปรับให้เข้มขึ้นเพื่อให้เห็นชัดบนพื้นขาว */
+    --input-bg: #FFFFFF;
+    --header-bg: rgba(255,255,255,0.9);
+}
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
 
@@ -104,9 +112,24 @@
         }
 
         .info { padding: 4px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
-        .p-name { font-size: 10px; font-weight: 500; color: var(--gold); margin-bottom: 1px; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+       .p-name { 
+    font-size: 13px; 
+    font-weight: 600; 
+    color: var(--text); /* ใช้สีตามโหมด */
+    margin-bottom: 4px;
+}
+.p-desc { 
+    font-size: 10px; 
+    color: var(--text-dim); /* ใช้สีเทาตามโหมด */
+    margin-bottom: 8px;
+}
+.p-price { 
+    font-size: 16px; 
+    font-weight: 700; 
+    color: var(--gold); /* ราคาใช้สีทองตลอดเพื่อให้เด่น */
+}
+
+ : 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
         .old-price { text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400; }
         .new-price { color: #ff4b2b; }
 
@@ -127,7 +150,14 @@
         .step-btn { width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--gold); background: transparent; color: var(--gold); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 10px; }
         #qtyDisplay { font-size: 14px; font-weight: 700; color: #fff; min-width: 15px; text-align: center; }
 
-        nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
+        nav {
+    position: fixed; bottom: 0; width: 100%; max-width: 500px;
+    background: var(--card); /* จะเปลี่ยนเป็นขาวในโหมดสว่าง */
+    display: flex; justify-content: space-around;
+    padding: 10px 0; border-top: 1px solid rgba(128,128,128,0.1);
+    z-index: 999;
+}
+
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
         .nav-tab.active { color: var(--gold); }
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
