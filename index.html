@@ -407,12 +407,12 @@
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
-        const p = prompt("เบอร์โทรที่ใช้สั่งซื้อ:"); if(!p) return;
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
-        const rows = (await res.text()).split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'')));
-        const f = rows.find(r => r[0] === p);
-        if(f) alert(`คุณ ${f[1]}\nสถานะ: ${f[2]}\nพัสดุ: ${f[3]}`); else alert("ไม่พบข้อมูล");
-    }
+    const p = prompt("เบอร์โทรที่ใช้สั่งซื้อ:"); if(!p) return;
+    const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
+    const rows = (await res.text()).split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'')));
+    const f = rows.find(r => r[0] === p); // <--- ปัญหาอยู่ที่บรรทัดนี้ มันหาแค่ตัวเดียว
+    if(f) alert(`คุณ ${f[1]}\nสถานะ: ${f[2]}\nพัสดุ: ${f[3]}`); else alert("ไม่พบข้อมูล");
+}
     init();
 </script>
 </body>
