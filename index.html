@@ -474,7 +474,7 @@ function updatePrice() {
         const reader = new FileReader();
         reader.onload = async () => {
             const data = {
-                productDetail: `${activeP.name}${activeP.optLabel} | จำนวน: ${selectedQty} | ยอดโอน: ฿${activeP.total}`,
+                productDetail: "${activeP.name} (${activeP.summary}) | ยอดโอน: ฿${activeP.finalTotal}",
                 customerName: document.getElementById('cName').value,
                 customerPhone: document.getElementById('cPhone').value,
                 customerAddress: document.getElementById('cAddr').value,
