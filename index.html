@@ -143,6 +143,37 @@
             border: 1px solid rgba(212,175,55,0.3);
             border-radius: 12px; padding: 12px; margin-bottom: 12px;
         }
+        /* ส่วนแสดงรูปภาพใหญ่ด้านบน Modal */
+.order-header-gallery {
+    margin: -8px -8px 15px -8px; 
+    position: relative;
+    border-bottom: 1px solid rgba(212,175,55,0.3);
+}
+.main-img-display {
+    width: 100%;
+    aspect-ratio: 1/1; /* อัตราส่วนสี่เหลี่ยมจัตุรัสแบบ Shopee */
+    background: #000;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+}
+.main-img-display img, .main-img-display video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ปรับปรุงตัวเลือกสินค้าให้ดูพรีเมียมขึ้น */
+.variant-item { 
+    display: flex; align-items: center; gap: 12px; 
+    background: rgba(255,255,255,0.05); padding: 10px; 
+    border-radius: 12px; border: 1px solid rgba(212,175,55,0.1); 
+    margin-bottom: 10px; cursor: pointer; transition: 0.2s;
+}
+.variant-item:active { background: rgba(212,175,55,0.15); }
+.v-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #444; }
+.v-name { font-size: 13px; color: #fff; font-weight: 500; }
+.v-price { font-size: 12px; color: var(--gold); font-weight: bold; }
+
     </style>
 </head>
 <body>
@@ -320,37 +351,57 @@
     }
 
     function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
-        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
-        selectedOptions = {}; 
-        const box = document.getElementById('optionBox');
-        box.innerHTML = `<p style="font-size:10px; color:var(--gold); text-align:center; margin-bottom:8px;">📦 สั่งขั้นต่ำ ${activeP.min} ชิ้น (สูงสุด ${activeP.max})</p>`;
-        
-        if(optStr && optStr !== '-') {
-            optStr.split(',').forEach(o => {
-                let parts = o.split(':').map(v => v?.trim());
-                let label = parts[0];
-                let price = parts[1] ? parseFloat(parts[1]) : activeP.pNormal;
-                let vImg  = parts[2] || imgUrl;
-                let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
-                box.innerHTML += `
-                    <div class="variant-item">
-                        <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
-                        <div class="v-info">
-                            <div class="v-name">${label}</div>
-                            <div class="v-price">฿${finalP.toLocaleString()}</div>
-                        </div>
-                        <div class="v-ctrl">
-                            <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
-                            <span id="v-qty-${label}" style="width:20px; text-align:center; color:#fff; font-weight:bold;">0</span>
-                            <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
-                        </div>
-                    </div>`;
-                selectedOptions[label] = { qty: 0, price: finalP };
-            });
-        }
-        updatePrice();
-        openModal('orderModal');
+    activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
+    selectedOptions = {}; 
+    
+    // สร้างโครงสร้างหน้าสั่งซื้อ: มีรูปใหญ่ (Gallery) อยู่บนสุด
+    document.getElementById('orderDetail').innerHTML = `
+        <div class="order-header-gallery">
+            <div class="main-img-display" id="mainView">
+                ${renderMedia(imgUrl, true)}
+            </div>
+        </div>
+        <div id="priceSummary"></div>
+    `;
+
+    const box = document.getElementById('optionBox');
+    box.innerHTML = `<p style="font-size:10px; color:var(--gold); text-align:center; margin-bottom:12px;">📦 สั่งขั้นต่ำ ${activeP.min} ชิ้น (สูงสุด ${activeP.max})</p>`;
+    
+    if(optStr && optStr !== '-') {
+        optStr.split(',').forEach(o => {
+            let parts = o.split(':').map(v => v?.trim());
+            let label = parts[0];
+            let price = parts[1] ? parseFloat(parts[1]) : activeP.pNormal;
+            let vImg  = parts[2] || imgUrl;
+            let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
+            
+            // เมื่อคลิกที่แถวตัวเลือก จะเรียก changePreview เพื่อเปลี่ยนรูปใหญ่
+            box.innerHTML += `
+                <div class="variant-item" onclick="changePreview('${vImg}')">
+                    <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
+                    <div class="v-info">
+                        <div class="v-name">${label}</div>
+                        <div class="v-price">฿${finalP.toLocaleString()}</div>
+                    </div>
+                    <div class="v-ctrl" onclick="event.stopPropagation()">
+                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
+                        <span id="v-qty-${label}" style="width:20px; text-align:center; color:#fff; font-weight:bold;">0</span>
+                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
+                    </div>
+                </div>`;
+            selectedOptions[label] = { qty: 0, price: finalP };
+        });
     }
+    updatePrice();
+    openModal('orderModal');
+}
+
+// ฟังก์ชันสำหรับเปลี่ยนรูปภาพใหญ่ด้านบน
+function changePreview(url) {
+    const mainView = document.getElementById('mainView');
+    mainView.innerHTML = renderMedia(url, true);
+}
+
 
     function changeVQty(label, price, delta) {
         let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
@@ -360,29 +411,39 @@
     }
 
     function updatePrice() {
-        let subtotal = 0, summaryText = [], totalItems = 0;
-        for (let key in selectedOptions) { if(selectedOptions[key].qty > 0) { subtotal += (selectedOptions[key].price * selectedOptions[key].qty); summaryText.push(`${key} x${selectedOptions[key].qty}`); totalItems += selectedOptions[key].qty; } }
-        activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
-        activeP.summary = summaryText.join(', ');
-        let badgesHtml = `<div class="promo-pill-container">`;
-        if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
-        badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
-        badgesHtml += `</div>`;
-        document.getElementById('orderDetail').innerHTML = `
-            <div class="order-summary-box">
-                <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
-                ${badgesHtml}
-                <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
-                <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
-                    <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                    <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
-                </div>
-            </div>`;
-        const btn = document.getElementById('submitBtn');
-        if (totalItems === 0) { btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; }
-        else if (totalItems < activeP.min) { btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น (ขาดอีก ${activeP.min - totalItems})`; btn.style.opacity = "0.5"; }
-        else { btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; }
+    let subtotal = 0, summaryText = [], totalItems = 0;
+    for (let key in selectedOptions) { 
+        if(selectedOptions[key].qty > 0) { 
+            subtotal += (selectedOptions[key].price * selectedOptions[key].qty); 
+            summaryText.push(`${key} x${selectedOptions[key].qty}`); 
+            totalItems += selectedOptions[key].qty; 
+        } 
     }
+    activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
+    activeP.summary = summaryText.join(', ');
+
+    let badgesHtml = `<div class="promo-pill-container">`;
+    if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
+    badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
+    badgesHtml += `</div>`;
+
+    // อัปเดตข้อมูลลงใน div#priceSummary
+    document.getElementById('priceSummary').innerHTML = `
+        <div class="order-summary-box">
+            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+            ${badgesHtml}
+            <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
+            <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
+                <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+            </div>
+        </div>`;
+    
+    const btn = document.getElementById('submitBtn');
+    if (totalItems === 0) { btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; }
+    else if (totalItems < activeP.min) { btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; }
+    else { btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; }
+}
 
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
