@@ -124,19 +124,15 @@
         .copy-badge:active { background: var(--gold); color: #000; }
         /* ส่วนที่ทำให้สไลด์ข้างได้ */
 #optionBox { 
-    display: flex; 
-    gap: 10px; 
-    overflow-x: auto; 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); /* แบ่งเป็น 2 คอลัมน์ซ้าย-ขวา */
+    gap: 8px; 
     padding: 10px 5px; 
-    scroll-snap-type: x mandatory; 
-    scrollbar-width: none;
+    /* ลบ overflow-x ออกเพื่อให้แสดงผลแนวตั้ง */
 }
-#optionBox::-webkit-scrollbar { display: none; }
 
-/* ส่วนที่ปรับกล่องสินค้าให้เป็นแนวตั้งและเล็กลง */
+/* ส่วนที่ปรับกล่องสินค้าให้ดูพอดีกับ 2 คอลัมน์ */
 .variant-item { 
-    flex: 0 0 110px; 
-    scroll-snap-align: start;
     background: rgba(255,255,255,0.05); 
     padding: 8px; 
     border-radius: 12px; 
@@ -144,12 +140,17 @@
     display: flex;
     flex-direction: column; 
     align-items: center;
-    margin-bottom: 0;
+    width: 100%; /* ให้กว้างเต็มคอลัมน์ */
 }
-.v-img { width: 90px; height: 90px; border-radius: 8px; object-fit: contain; background: #000; margin-bottom: 5px; }
-.v-info { text-align: center; width: 100%; }
-.v-name { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #fff; }
-.v-price { font-size: 11px; color: var(--gold); font-weight: bold; }
+
+.v-img { 
+    width: 100%; 
+    aspect-ratio: 1/1; /* บังคับให้รูปเป็นจัตุรัส จะดูเป็นระเบียบมาก */
+    border-radius: 8px; 
+    object-fit: cover; 
+    background: #000; 
+    margin-bottom: 5px; 
+}
 
         .v-info { flex-grow: 1; }
         .v-name { font-size: 11px; color: #fff; }
