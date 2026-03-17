@@ -122,34 +122,46 @@
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
-        /* ส่วนที่ทำให้สไลด์ข้างได้ */
+    
 #optionBox { 
     display: grid; 
-    grid-template-columns: repeat(2, 1fr); /* แบ่งเป็น 2 คอลัมน์ซ้าย-ขวา */
-    gap: 8px; 
-    padding: 10px 5px; 
-    /* ลบ overflow-x ออกเพื่อให้แสดงผลแนวตั้ง */
+    grid-template-columns: repeat(3, 1fr); /* แบ่งเป็น 3 คอลัมน์จิ๋ว */
+    gap: 6px; /* ลดช่องว่างระหว่างชิ้นให้แคบลง */
+    padding: 8px 5px; 
+    max-height: 45vh; /* จำกัดความสูงของโซนสินค้า ไม่ให้บังฟอร์มสั่งซื้อ */
+    overflow-y: auto; /* ถ้าสินค้าเยอะเกิน ให้เลื่อนขึ้น-ลงแทน */
 }
 
-/* ส่วนที่ปรับกล่องสินค้าให้ดูพอดีกับ 2 คอลัมน์ */
+/* ปรับกล่องสินค้าจิ๋ว (Mini Variant Item) */
 .variant-item { 
     background: rgba(255,255,255,0.05); 
-    padding: 8px; 
-    border-radius: 12px; 
-    border: 1px solid rgba(212,175,55,0.2); 
+    padding: 6px; /* ลด Padding ข้างในให้กระชับ */
+    border-radius: 10px; 
+    border: 1px solid rgba(212,175,55,0.1); 
     display: flex;
     flex-direction: column; 
     align-items: center;
-    width: 100%; /* ให้กว้างเต็มคอลัมน์ */
+    text-align: center;
 }
 
 .v-img { 
     width: 100%; 
-    aspect-ratio: 1/1; /* บังคับให้รูปเป็นจัตุรัส จะดูเป็นระเบียบมาก */
-    border-radius: 8px; 
+    aspect-ratio: 1/1; /* บังคับให้เป็นจัตุรัส จะดูเรียบร้อยมาก */
+    border-radius: 6px; 
     object-fit: cover; 
     background: #000; 
-    margin-bottom: 5px; 
+    margin-bottom: 4px; 
+}
+
+/* ปรับปุ่ม เพิ่ม-ลด ให้จิ๋วลงเพื่อให้กดง่ายในกรอบเล็ก */
+.v-btn { 
+    width: 20px; 
+    height: 20px; 
+    font-size: 10px; 
+}
+
+#v-qty { 
+    font-size: 10px; 
 }
 
         .v-info { flex-grow: 1; }
