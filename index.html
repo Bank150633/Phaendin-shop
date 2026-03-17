@@ -4,86 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PHAENDIN | CURATED SELECTION</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* บังคับใช้ธีมมืดเป็นค่าพื้นฐาน */
         :root { 
             --gold: #D4AF37; 
             --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
             --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ff416c 100%);
+            --green-grad: linear-gradient(145deg, #11998e 0%, #38ef7d 100%);
+            --blue-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
+            --fb-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
             --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --text-dim: #BBBBBB; --input-bg: #1A1A1A; 
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 55px; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
 
-        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 1000; padding: 5px; border-bottom: 1px solid var(--gold); display: flex; justify-content: center; align-items: center; height: 50px; }
-        .logo-img { height: 40px; }
+        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 1000; padding: 5px 10px; border-bottom: 1px solid var(--gold); display: flex; justify-content: center; align-items: center; height: 50px; }
+        .logo-img { height: 45px; width: auto; display: block; }
 
-        .search-wrap { position: relative; width: 100%; max-width: 500px; margin: 10px auto; padding: 0 10px; display: flex; align-items: center; }
-        #search { width: 100%; padding: 8px 10px 8px 35px; border-radius: 12px; border: 1px solid var(--gold); background: var(--input-bg); color: #fff; font-size: 12px; outline: none; }
-        .search-icon { position: absolute; left: 22px; color: var(--gold); font-size: 13px; }
+        .search-wrap { position: relative; width: 100%; max-width: 500px; margin: 10px auto; padding: 0 10px; display: flex; align-items: center; gap: 8px; }
+        #search { flex-grow: 1; padding: 8px 10px 8px 35px; border-radius: 12px; border: 1px solid var(--gold); background: var(--input-bg); color: var(--text); font-size: 12px; outline: none; }
+        .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 13px; }
 
-        .banner-box { padding: 8px; } 
-        .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; height: 200px; background: #000; position: relative; }
-        .bn-img { width: 100%; height: 100%; }
-        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; }
-        .bn-txt { position: absolute; bottom: 0; width: 100%; padding: 12px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); display: flex; justify-content: space-between; align-items: flex-end; }
-        .bn-title { font-size: 15px; font-weight: 600; color: #fff; }
-
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px; }
-        .card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid rgba(212,175,55,0.1); position: relative; display: flex; flex-direction: column; }
-        .media-wrap { width: 100%; aspect-ratio: 1/1; position: relative; }
-        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: cover; }
-        .province-badge { position: absolute; top: 5px; right: 5px; background: var(--gold-grad); color: #000; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+        .banner-box { padding: 8px; margin-top: 5px; } 
+        .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; display: block; height: 220px; background: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); position: relative; }
+        .bn-img { width: 100%; height: 100%; position: relative; background: #000; cursor: pointer; }
+        .bn-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, transparent 100%); z-index: 2; }
+        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .bn-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 5px; z-index: 10; }
         
-        .info { padding: 8px; flex-grow: 1; text-align: center; }
-        .p-name { font-size: 12px; color: var(--gold); font-weight: 500; margin-bottom: 4px; }
-        .p-price { font-size: 14px; font-weight: 700; color: #ff4b2b; }
-        .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 8px; font-weight: 700; font-size: 11px; cursor: pointer; text-transform: uppercase; }
+        .bn-txt { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 5; }
+        .bn-title { font-size: 16px; font-weight: 600; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); line-height: 1.2; }
+        
+        .bn-timer-wrap { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); padding: 4px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .bn-timer { display: flex; gap: 4px; align-items: center; }
+        .timer-unit { color: #ff4b2b; font-weight: 700; font-size: 13px; }
+        .timer-sep { color: #fff; font-size: 11px; opacity: 0.8; }
 
-        /* SHOPEE STYLE OPTION SLIDER */
-        .option-container { margin: 10px 0; }
-        .option-label { font-size: 12px; color: var(--gold); margin-bottom: 8px; padding-left: 5px; }
-        .variant-slider { 
-            display: flex; gap: 10px; overflow-x: auto; padding: 5px; 
+        .sec-title { padding: 10px 10px 5px; font-size: 13px; font-weight: 600; color: var(--gold); text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
+        .card { background: var(--card); border: 1px solid rgba(212,175,55,0.15); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; }
+        
+        .p-timer-badge { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(255, 65, 108, 0.9); color: #fff; font-size: 8.5px; text-align: center; padding: 2px 0; font-weight: bold; z-index: 6; }
+        .badge-container { position: absolute; top: 4px; left: 4px; display: flex; flex-direction: column; gap: 3px; z-index: 5; }
+        .badge { font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.2); }
+        .bg-gold { background: var(--gold-grad); color: #000; }
+        .bg-red { background: var(--red-grad); }
+        
+        .province-badge { position: absolute; top: 4px; right: 4px; background: var(--gold-grad); color: #000; font-size: 7.5px; padding: 2px 5px; border-radius: 4px; font-weight: 700; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.3); border: 0.5px solid rgba(255,255,255,0.4); }
+
+        .info { padding: 4px; flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+        .p-name { font-size: 10px; font-weight: 500; color: var(--gold); margin-bottom: 1px; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+        .old-price { text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400; }
+        .new-price { color: #ff4b2b; }
+
+        .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
+        .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
+        @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
+
+        /* --- SHOPEE STYLE OPTION BOX --- */
+        #optionBox { 
+            display: flex; gap: 10px; overflow-x: auto; padding: 10px 5px; 
             scrollbar-width: none; -ms-overflow-style: none;
         }
-        .variant-slider::-webkit-scrollbar { display: none; }
+        #optionBox::-webkit-scrollbar { display: none; }
         
         .variant-item { 
-            flex: 0 0 100px; background: #1A1A1A; border-radius: 10px; 
-            padding: 8px; border: 1px solid #333; transition: 0.2s;
-            text-align: center;
+            flex: 0 0 110px; background: rgba(255,255,255,0.05); padding: 8px; 
+            border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); 
+            text-align: center; transition: 0.3s;
         }
-        .variant-item.active { border-color: var(--gold); background: rgba(212,175,55,0.1); }
-        .v-img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; margin-bottom: 6px; }
-        .v-name { font-size: 10px; color: #fff; height: 2.4em; overflow: hidden; margin-bottom: 5px; }
-        .v-price { font-size: 11px; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
-        
-        /* MODERN COUNTER */
-        .v-ctrl { display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .v-btn { width: 24px; height: 24px; border-radius: 50%; border: none; background: #333; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; }
-        .v-btn.plus { background: var(--gold-grad); color: #000; }
-        .v-qty { font-size: 13px; font-weight: 700; color: #fff; min-width: 15px; }
+        .variant-item.active { border-color: var(--gold); background: rgba(212,175,55,0.1); transform: translateY(-3px); }
+        .v-img { width: 90px; height: 90px; border-radius: 8px; object-fit: cover; margin-bottom: 6px; border: 0.5px solid #444; }
+        .v-name { font-size: 10px; color: #fff; line-height: 1.2; height: 2.4em; overflow: hidden; }
+        .v-price { font-size: 11px; color: var(--gold); font-weight: bold; margin: 5px 0; }
+        .v-ctrl { display: flex; align-items: center; justify-content: space-between; background: #000; padding: 4px 8px; border-radius: 20px; border: 0.5px solid #444; }
+        .v-btn { width: 22px; height: 22px; border-radius: 50%; border: none; background: var(--gold-grad); color: #000; font-weight: bold; }
+        /* ------------------------------- */
 
-        /* MODAL */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; align-items: flex-end; justify-content: center; }
-        .modal.show { display: flex; }
-        .modal-card { 
-            background: #111; border-radius: 20px 20px 0 0; width: 100%; 
-            max-width: 500px; padding: 20px; max-height: 90vh; overflow-y: auto;
-            border-top: 2px solid var(--gold);
-        }
-        .input-slim { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; background: #1A1A1A; color: #fff; border: 1px solid #333; outline: none; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 5px; opacity: 0; transition: 0.3s; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 340px; padding: 10px; max-height: 95vh; overflow-y: auto; }
+        .input-slim { width: 100%; padding: 8px; margin-bottom: 6px; border-radius: 8px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 12px; outline: none; }
 
-        .order-summary-box { background: #1A1A1A; border-radius: 15px; padding: 15px; margin-bottom: 15px; text-align: center; }
-        .total-price { font-size: 28px; font-weight: 800; color: #fff; }
-
-        nav { position: fixed; bottom: 0; width: 100%; height: 55px; background: #000; display: flex; border-top: 1px solid #222; z-index: 1000; }
-        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #888; font-size: 10px; }
+        nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
+        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
         .nav-tab.active { color: var(--gold); }
-        .nav-tab i { font-size: 18px; margin-bottom: 3px; }
+        .nav-tab i { font-size: 15px; margin-bottom: 2px; }
+
+        .order-summary-box { background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+        #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
+        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
     </style>
 </head>
 <body>
@@ -94,186 +112,207 @@
 
 <div class="search-wrap">
     <i class="fa-solid fa-search search-icon"></i>
-    <input type="text" id="search" placeholder="ค้นหาของอร่อยที่นี่..." oninput="render()">
+    <input type="text" id="search" placeholder="ค้นหาชื่อสินค้าที่ท่านต้องการ..." oninput="render()">
 </div>
 
+<div class="sec-title"><i class="fa-solid fa-layer-group"></i> สินค้าทั้งหมด</div>
 <main class="grid" id="productGrid"></main>
+
+<nav>
+    <div class="nav-tab active" onclick="location.reload()"><i class="fa-solid fa-house"></i> หน้าแรก</div>
+    <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-truck"></i> พัสดุ</div>
+    <div class="nav-tab" onclick="openModal('contactModal')"><i class="fa-solid fa-comment-dots"></i> ติดต่อ</div>
+</nav>
+
+<div id="contactModal" class="modal">
+    <div class="modal-card" style="text-align:center; padding: 15px;">
+        <h4 style="color:var(--gold); margin-bottom:12px; font-size:14px;">ติดต่อเรา</h4>
+        <a href="tel:0944159031" style="display:block; background:#28a745; color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-solid fa-phone"></i> โทรสายด่วน</a>
+        <a href="https://m.me/PhaendinLifestyle" style="display:block; background:var(--fb-grad); color:#fff; padding:8px; border-radius:6px; text-decoration:none; margin-bottom:8px; font-size:12px;"><i class="fa-brands fa-facebook-messenger"></i> Facebook Messenger</a>
+        <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
+    </div>
+</div>
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <div id="mainPreview" style="width:100%; aspect-ratio:1/1; border-radius:15px; overflow:hidden; margin-bottom:15px;"></div>
-        
-        <div class="option-container">
-            <div class="option-label"><i class="fa-solid fa-list"></i> เลือกรายการสินค้า</div>
-            <div class="variant-slider" id="optionBox"></div>
-        </div>
-
-        <div class="order-summary-box">
-            <div id="summaryItems" style="font-size:11px; color:#888; margin-bottom:5px;">ยังไม่ได้เลือกสินค้า</div>
-            <div class="total-price" id="totalDisplay">฿0</div>
-            <div style="font-size:10px; color:var(--gold);" id="shippingInfo"></div>
-        </div>
-
+        <div id="mainView" style="width:100%; aspect-ratio:1/1; background:#000; border-radius:10px; overflow:hidden; margin-bottom:10px;"></div>
+        <div id="optionBox"></div>
+        <div id="orderDetail"></div>
         <form id="orderForm">
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
-            <textarea id="cAddr" placeholder="ที่อยู่จัดส่งโดยละเอียด" required class="input-slim" style="height:60px;"></textarea>
+            <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
             
-            <div style="background:#000; padding:15px; border-radius:12px; margin-bottom:15px; text-align:center; border:1px solid #333;">
-                <p style="color:var(--gold); font-size:12px;">กสิกรไทย: 035-8-56762-2</p>
-                <p style="font-size:10px; color:#888;">ชื่อบัญชี: คุณวัชระ ชันสิน</p>
+            <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:10px; border-radius:12px; border:1px solid rgba(212,175,55,0.2);">
+                <p style="font-size:11px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
+                <p style="font-size:10px; color:var(--text-dim);">ชื่อบัญชี: คุณวัชระ ชันสิน</p>
             </div>
-
-            <div style="border:2px dashed #333; padding:15px; border-radius:12px; text-align:center; margin-bottom:15px;" onclick="document.getElementById('fileIn').click()">
-                <span id="upTxt" style="font-size:12px; color:var(--gold);"><i class="fa-solid fa-upload"></i> กดแนบสลิปโอนเงิน</span>
+            
+            <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center; cursor:pointer; margin-bottom:10px;" onclick="document.getElementById('fileIn').click()">
+                <span id="upTxt" style="font-size:10px; color:var(--gold);"><i class="fa-solid fa-image"></i> แนบสลิปโอนเงิน</span>
                 <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
-                <img id="preview" style="display:none; width:100px; margin:10px auto; border-radius:8px;">
+                <img id="preview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
             </div>
-
-            <button type="submit" id="submitBtn" class="buy-now" style="border-radius:12px; padding:15px; font-size:14px;">ยืนยันการสั่งซื้อ</button>
-            <p onclick="closeModal('orderModal')" style="text-align:center; color:#555; cursor:pointer; margin-top:15px; font-size:12px;">กลับไปหน้าหลัก</p>
+            
+            <button type="submit" id="submitBtn" class="buy-now" style="border-radius:10px; padding: 12px 0; font-size:13px;">ยืนยันสั่งซื้อ</button>
+            <p onclick="closeModal('orderModal')" style="text-align:center; color:var(--text-dim); cursor:pointer; margin-top:12px; font-size:11px;">[ ยกเลิก ]</p>
         </form>
     </div>
 </div>
 
-<nav>
-    <div class="nav-tab active" onclick="location.reload()"><i class="fa-solid fa-home"></i> หน้าแรก</div>
-    <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-box"></i> เช็คพัสดุ</div>
-</nav>
+<div id="zoomOverlay" onclick="closeZoom()"><div id="zoomContent"></div></div>
 
 <script>
+    // ดึงระบบ Logic ทั้งหมดจากโค้ดล่าสุดของคุณ
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbw3qMiabmL5xQqU5rKcYuRapRSm_-aQvJ0EqKoCTX9dYXy1ongtzetK2jKvhhU0pU3gfw/exec';
-    let db = [], activeP = {}, selectedOptions = {};
+    let db = [], activeP = {}, bannerEnd = null, selectedOptions = {};
 
     async function init() {
-        const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
-        const pRaw = await resP.text();
-        db = pRaw.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-        render();
+        try {
+            const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
+            const bRaw = await resB.text();
+            const b = bRaw.split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            if(b) {
+                bannerEnd = new Date(b[2]).getTime();
+                document.getElementById('banner').innerHTML = `
+                    <div class="bn-card">
+                        <div class="bn-badges">${[b[3], b[4], b[5]].filter(t => t && t !== '-').map(t => `<span class="badge ${t.includes('โปร')?'bg-red':'bg-gold'}">${t}</span>`).join('')}</div>
+                        <div class="bn-img" onclick="zoom('${b[0]}')">${renderMedia(b[0], true)}</div>
+                        <div class="bn-txt">
+                            <div class="bn-title">🔥 ${b[1]}</div>
+                            <div class="bn-timer-wrap"><div class="bn-timer"><span class="timer-unit" id="th">00</span>:<span class="timer-unit" id="tm">00</span>:<span class="timer-unit" id="ts">00</span></div></div>
+                            <button class="buy-now" style="width:100px; border-radius:50px; font-size:9px;" onclick="openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||10}, '${b[0]}', ${b[12]||1})">รับสิทธิ์ด่วน</button>
+                        </div>
+                    </div>`;
+                setInterval(tick, 1000);
+            }
+            const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
+            const pRaw = await resP.text();
+            db = pRaw.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            db.sort(() => Math.random() - 0.5); 
+            render();
+        } catch(e) { console.error(e); }
     }
 
     function render() {
         const query = document.getElementById('search').value.toLowerCase();
-        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
-        document.getElementById('productGrid').innerHTML = filtered.map(p => `
+        const now = new Date().getTime();
+        document.getElementById('productGrid').innerHTML = db.filter(p => p[0].toLowerCase().includes(query)).map(p => {
+            let pNormal = parseFloat(p[3]||0), pPromo = parseFloat(p[10]||0), exp = p[11]?new Date(p[11]).getTime():0;
+            let current = (pPromo>0 && exp>now) ? pPromo : pNormal;
+            let disc = Math.round(((pNormal-current)/pNormal)*100);
+            return `
             <div class="card">
-                <div class="media-wrap">
-                    ${p[13] ? `<div class="province-badge">${p[13]}</div>` : ''}
-                    ${renderMedia(p[1])}
+                <div class="media-wrap" onclick="zoom('${p[1]}')">
+                    <div class="badge-container">${disc>0?`<span class="badge bg-red">ลด ${disc}%</span>`:''}${[p[4],p[5],p[6],p[7]].filter(t=>t&&t!=='-'&&!t.includes('%')).map(t=>`<span class="badge bg-gold">${t}</span>`).join('')}</div>
+                    ${p[13]?`<div class="province-badge">${p[13]}</div>`:''}
+                    ${renderMedia(p[1], true)}
+                    ${(pPromo>0 && exp>now)?`<div class="p-timer-badge">⏳ โปรโมชั่น</div>`:''}
                 </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
-                    <div class="p-price">฿${parseFloat(p[10]||p[3]).toLocaleString()}</div>
+                    <div class="p-desc">${p[2]||''}</div>
+                    <div class="p-price">${current<pNormal?`<span class="old-price">฿${pNormal.toLocaleString()}</span>`:''}<span class="${current<pNormal?'new-price':''}">฿${current.toLocaleString()}</span></div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${p[3]}','${p[8]||0}','${p[9]}','${p[1]}','${p[14]||1}','${p[12]||99}')">สั่งซื้อ</button>
-            </div>`).join('');
+                <button class="buy-now" onclick="openOrder('${p[0]}','${pNormal}','${p[8]||0}','${p[9]||''}', ${disc}, ${p[12]||999}, '${p[1]}', ${p[14]||1})">สั่งซื้อ</button>
+            </div>`;
+        }).join('');
     }
 
-    function openOrder(n, price, ship, optStr, img, min, max) {
-        activeP = { name: n, ship: parseFloat(ship), img, min: parseInt(min), max: parseInt(max) };
-        selectedOptions = {};
-        document.getElementById('mainPreview').innerHTML = renderMedia(img);
-        document.getElementById('shippingInfo').innerText = activeP.ship > 0 ? `+ ค่าส่ง ฿${activeP.ship}` : 'จัดส่งฟรี!';
-        
+    function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
+        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit), min: parseInt(minLimit), img: imgUrl };
+        selectedOptions = {}; 
+        document.getElementById('mainView').innerHTML = renderMedia(imgUrl, true);
         const box = document.getElementById('optionBox');
         box.innerHTML = '';
         if(optStr && optStr !== '-') {
             optStr.split(',').forEach(o => {
-                let [label, p, vImg] = o.split(':').map(v => v?.trim());
-                let finalP = parseFloat(p || price);
+                let [label, priceRaw, vImg] = o.split(':').map(v => v?.trim());
+                let price = priceRaw ? parseFloat(priceRaw) : activeP.pNormal;
+                let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
                 box.innerHTML += `
-                    <div class="variant-item" id="v-item-${label}">
-                        <img src="${vImg||img}" class="v-img" onclick="changePreview('${vImg||img}', '${label}')">
+                    <div class="variant-item" id="v-box-${label}" onclick="changePreview('${vImg||imgUrl}', '${label}')">
+                        <img src="${vImg||imgUrl}" class="v-img">
                         <div class="v-name">${label}</div>
                         <div class="v-price">฿${finalP.toLocaleString()}</div>
-                        <div class="v-ctrl">
-                            <button type="button" class="v-btn" onclick="updateQty('${label}', ${finalP}, -1)">-</button>
-                            <span class="v-qty" id="qty-${label}">0</span>
-                            <button type="button" class="v-btn plus" onclick="updateQty('${label}', ${finalP}, 1)">+</button>
+                        <div class="v-ctrl" onclick="event.stopPropagation()">
+                            <button type="button" class="v-btn" onclick="updateVQty('${label}', ${finalP}, -1)">-</button>
+                            <span id="v-qty-${label}" style="width:20px; color:#fff; font-size:11px;">0</span>
+                            <button type="button" class="v-btn" onclick="updateVQty('${label}', ${finalP}, 1)">+</button>
                         </div>
                     </div>`;
                 selectedOptions[label] = { qty: 0, price: finalP };
             });
         }
-        updateTotal();
+        updateFinalPrice();
         openModal('orderModal');
     }
 
     function changePreview(url, label) {
-        document.getElementById('mainPreview').innerHTML = renderMedia(url);
+        document.getElementById('mainView').innerHTML = renderMedia(url, true);
         document.querySelectorAll('.variant-item').forEach(el => el.classList.remove('active'));
-        document.getElementById(`v-item-${label}`).classList.add('active');
+        document.getElementById(`v-box-${label}`).classList.add('active');
     }
 
-    function updateQty(label, price, delta) {
-        let currentQty = selectedOptions[label].qty;
-        let totalItems = Object.values(selectedOptions).reduce((s, i) => s + i.qty, 0);
-        
-        if (delta > 0 && totalItems >= activeP.max) return alert("ขออภัย สั่งได้สูงสุด " + activeP.max + " ชิ้นครับ");
-        if (currentQty + delta >= 0) {
+    function updateVQty(label, price, delta) {
+        let totalNow = Object.values(selectedOptions).reduce((s, i) => s + i.qty, 0);
+        if (delta > 0 && totalNow >= activeP.max) return alert("เกินขีดจำกัด");
+        if (selectedOptions[label].qty + delta >= 0) {
             selectedOptions[label].qty += delta;
-            document.getElementById(`qty-${label}`).innerText = selectedOptions[label].qty;
-            
-            // Toggle active class
-            if(selectedOptions[label].qty > 0) document.getElementById(`v-item-${label}`).classList.add('active');
-            else document.getElementById(`v-item-${label}`).classList.remove('active');
-            
-            updateTotal();
+            document.getElementById(`v-qty-${label}`).innerText = selectedOptions[label].qty;
+            updateFinalPrice();
         }
     }
 
-    function updateTotal() {
+    function updateFinalPrice() {
         let subtotal = 0, items = [], count = 0;
-        for (let k in selectedOptions) {
-            if(selectedOptions[k].qty > 0) {
-                subtotal += (selectedOptions[k].price * selectedOptions[k].qty);
-                items.push(`${k} x${selectedOptions[k].qty}`);
-                count += selectedOptions[k].qty;
-            }
-        }
-        let total = subtotal > 0 ? subtotal + activeP.ship : 0;
-        document.getElementById('totalDisplay').innerText = `฿${total.toLocaleString()}`;
-        document.getElementById('summaryItems').innerText = items.join(', ') || 'ยังไม่ได้เลือกสินค้า';
-        
+        for (let k in selectedOptions) { if(selectedOptions[k].qty > 0) { subtotal += (selectedOptions[k].price * selectedOptions[k].qty); items.push(`${k} x${selectedOptions[k].qty}`); count += selectedOptions[k].qty; } }
+        activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
+        activeP.summary = items.join(', ');
+        document.getElementById('orderDetail').innerHTML = `
+            <div class="order-summary-box">
+                <div style="font-size:12px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+                <div style="font-size:10px; color:#888; text-align:center; margin: 4px 0;">${activeP.summary || 'โปรดเลือกรายการ'}</div>
+                <div style="text-align:center;"><span style="font-size:24px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</span></div>
+                <p style="font-size:9px; color:var(--gold); text-align:center;">ขั้นต่ำ ${activeP.min} / สูงสุด ${activeP.max} ชิ้น</p>
+            </div>`;
         const btn = document.getElementById('submitBtn');
         btn.disabled = count < activeP.min;
         btn.style.opacity = btn.disabled ? "0.5" : "1";
-        if(count > 0 && count < activeP.min) btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น (ขาดอีก ${activeP.min - count})`;
-        else btn.innerText = "ยืนยันการสั่งซื้อ";
-        
-        activeP.finalTotal = total;
-        activeP.summary = items.join(', ');
     }
 
-    function renderMedia(url) { return url.match(/\.(mp4|webm)$/i) ? `<video src="${url}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
+    // ฟังก์ชัน Utility เดิมๆ
+    function renderMedia(url, muted) { if(!url) return ''; return url.match(/\.(mp4|webm)$/i) ? `<video src="${url}" ${muted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
+    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; }
     function openModal(id) { document.getElementById(id).style.display='flex'; setTimeout(()=>document.getElementById(id).classList.add('show'),10); }
     function closeModal(id) { document.getElementById(id).classList.remove('show'); setTimeout(()=>document.getElementById(id).style.display='none', 300); }
     function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
+    function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
 
     document.getElementById('orderForm').onsubmit = async (e) => {
         e.preventDefault();
         const file = document.getElementById('fileIn').files[0];
-        if(!file) return alert("กรุณาแนบสลิปโอนเงินครับ");
-        
-        document.getElementById('submitBtn').innerText = "กำลังสั่งซื้อ...";
-        document.getElementById('submitBtn').disabled = true;
-
+        if(!file) return alert("แนบสลิปด้วยครับ");
+        document.getElementById('submitBtn').innerText = "กำลังส่ง...";
         const reader = new FileReader();
         reader.onload = async () => {
-            const data = {
-                productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${activeP.finalTotal}`,
-                customerName: document.getElementById('cName').value,
-                customerPhone: document.getElementById('cPhone').value,
-                customerAddress: document.getElementById('cAddr').value,
-                file: reader.result.split(',')[1]
-            };
+            const data = { productDetail: `${activeP.name} [${activeP.summary}] | ฿${activeP.finalTotal}`, customerName: document.getElementById('cName').value, customerPhone: document.getElementById('cPhone').value, customerAddress: document.getElementById('cAddr').value, file: reader.result.split(',')[1] };
             await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
-            alert("สั่งซื้อสำเร็จแล้ว! เราจะรีบจัดส่งให้โดยเร็วที่สุด");
-            location.reload();
+            alert("สั่งซื้อสำเร็จ!"); location.reload();
         };
         reader.readAsDataURL(file);
     };
+
+    async function checkShip() {
+        const p = prompt("เบอร์โทรศัพท์:"); if(!p) return;
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
+        const rows = (await res.text()).split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'').trim()));
+        const orders = rows.filter(r => r[0] === p);
+        if(orders.length > 0) alert(orders.map(f => `คุณ ${f[1]}\nสถานะ: ${f[2]}\nเลขพัสดุ: ${f[3]}`).join('\n---\n'));
+        else alert("ไม่พบข้อมูล");
+    }
 
     init();
 </script>
