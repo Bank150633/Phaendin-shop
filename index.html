@@ -343,41 +343,45 @@
     }
 
         function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
-        activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
-        selectedOptions = {}; 
-        const box = document.getElementById('optionBox');
-        box.innerHTML = ''; 
+    activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
+    selectedOptions = {}; 
+    const box = document.getElementById('optionBox');
+    box.innerHTML = ''; 
 
-        if(optStr && optStr !== '-') {
-            optStr.split(',').forEach(o => {
-                let parts = o.split(':').map(v => v?.trim());
-                let label = parts[0];
-                let price = (parts[1] && !isNaN(parts[1]) && parts[1] !== '') ? parseFloat(parts[1]) : activeP.pNormal;
-                
-                // แก้ตรงนี้: ถ้า parts[2] (ช่องที่ 3 ใน Sheets) ไม่มี ให้ใช้ imgUrl (รูปหลัก)
-                let vImg = (parts[2] && parts[2] !== '') ? parts[2] : imgUrl; 
-                
-                let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
-                
-                box.innerHTML += `
-    <div class="variant-item">
-        <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
-        <div class="v-info">
-            <div class="v-name">${label}</div>
-            <div class="v-price">฿${finalP.toLocaleString()}</div>
-        </div>
-        <div class="v-ctrl" style="width:100%; margin-top:5px; display:flex; justify-content:space-between;">
-            <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
-            <span id="v-qty-${label}" style="width:20px; text-align:center; color:#fff; font-size:11px;">0</span>
-            <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
-        </div>
-    </div>`;
-                selectedOptions[label] = { qty: 0, price: finalP };
-            });
-        }
-        updatePrice();
-        openModal('orderModal');
+    if(optStr && optStr !== '-') {
+        optStr.split(',').forEach(o => {
+            // แก้ไขตรงนี้: จำกัดการ split แค่ 3 ส่วน เพื่อไม่ให้ไปหั่นโดนเครื่องหมาย : ในลิงก์ http
+            let p = o.trim().split(':');
+            let label = p[0] ? p[0].trim() : '';
+            let price = (p[1] && !isNaN(p[1]) && p[1].trim() !== '') ? parseFloat(p[1]) : activeP.pNormal;
+            
+            // ดึงส่วนที่เหลือทั้งหมดมาเป็นลิงก์รูป (เผื่อในลิงก์มีเครื่องหมายโคลอน)
+            let vImg = (p.length > 2) ? p.slice(2).join(':').trim() : imgUrl;
+            
+            // ถ้า vImg ไม่ใช่ลิงก์ที่ถูกต้อง ให้ใช้รูปหลัก
+            if(!vImg.toLowerCase().startsWith('http')) vImg = imgUrl;
+
+            let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
+            
+            box.innerHTML += `
+<div class="variant-item">
+    <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
+    <div class="v-info">
+        <div class="v-name">${label}</div>
+        <div class="v-price">฿${finalP.toLocaleString()}</div>
+    </div>
+    <div class="v-ctrl" style="width:100%; margin-top:5px; display:flex; justify-content:space-between;">
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
+        <span id="v-qty-${label}" style="width:20px; text-align:center; color:#fff; font-size:11px;">0</span>
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
+    </div>
+</div>`;
+            selectedOptions[label] = { qty: 0, price: finalP };
+        });
     }
+    updatePrice();
+    openModal('orderModal');
+}
 
     function changeVQty(label, price, delta) {
         let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
