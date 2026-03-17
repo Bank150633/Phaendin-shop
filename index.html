@@ -125,11 +125,12 @@
     
 #optionBox { 
     display: grid; 
-    grid-template-columns: repeat(3, 1fr); /* แบ่ง 3 คอลัมน์เท่ากันเป๊ะ */
-    gap: 5px; /* ลดช่องว่างลงเล็กน้อยเพื่อให้มีพื้นที่โชว์รูปมากขึ้น */
-    padding: 5px; 
+    grid-template-columns: repeat(3, 1fr); /* แบ่ง 3 ส่วนเท่ากัน 33.33% */
+    gap: 5px; /* เว้นช่องว่างระหว่างกล่องเล็กน้อย */
+    padding: 10px 5px; 
     width: 100%;
-    box-sizing: border-box; /* ป้องกันไม่ให้ Padding ดันขอบจนหลุดหน้าจอ */
+    box-sizing: border-box; /* บังคับให้ขนาดรวมทุกอย่างอยู่ใน 100% ไม่ล้นขวา */
+    overflow-x: hidden; /* ป้องกันการไถออกข้าง */
 }
 
 .variant-item { 
@@ -140,26 +141,55 @@
     display: flex;
     flex-direction: column; 
     align-items: center;
-    width: 100%;
+    width: 100%; /* ให้กว้างตามคอลัมน์ของ Grid */
     box-sizing: border-box;
 }
 
 .v-img { 
-    width: 100%; /* ให้กว้างเต็มคอลัมน์ */
-    aspect-ratio: 1/1; /* บังคับเป็นจัตุรัสเพื่อให้เห็นรูปเต็มใบและสัดส่วนไม่เพี้ยน */
+    width: 100%; 
+    aspect-ratio: 1 / 1; /* บังคับเป็นจัตุรัสเป๊ะๆ รูปจะไม่แบน */
     border-radius: 6px; 
-    object-fit: cover; /* ตัดส่วนเกินให้พอดีกรอบจัตุรัสเพื่อให้ดูเป็นระเบียบ */
+    object-fit: cover; /* ถ้ารูปสัดส่วนไม่พอดี มันจะตัดเข้ากลางให้เอง รูปจะดูเต็มใบสวย */
     background: #000; 
     margin-bottom: 4px; 
     display: block;
 }
 
-/* ปรับตัวหนังสือและปุ่มให้เล็กลงเพื่อให้เข้ากับกริด 3 */
-.v-name { font-size: 9px; line-height: 1.2; height: 22px; margin-bottom: 2px; }
-.v-price { font-size: 10px; margin-bottom: 4px; }
-.v-btn { width: 18px; height: 18px; font-size: 9px; }
-#v-qty { font-size: 9px; }
+/* ปรับขนาดตัวอักษรและปุ่มให้จิ๋วลงเพื่อให้พอดีกับ 3 ช่อง */
+.v-name { 
+    font-size: 9px; 
+    color: #fff; 
+    text-align: center;
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; /* ถ้าชื่อยาวเกินจะขึ้น ... แทนที่จะดันกรอบจนพัง */
+    width: 100%;
+}
 
+.v-price { 
+    font-size: 10px; 
+    color: var(--gold); 
+    font-weight: bold; 
+    margin: 2px 0;
+}
+
+.v-ctrl { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 4px; 
+    width: 100%;
+}
+
+.v-btn { 
+    width: 18px; 
+    height: 18px; 
+    font-size: 10px; 
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
         .v-info { flex-grow: 1; }
         .v-name { font-size: 11px; color: #fff; }
