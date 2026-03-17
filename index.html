@@ -347,8 +347,8 @@
         activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
         selectedOptions = {}; 
         const box = document.getElementById('optionBox');
-        box.innerHTML = `<p style="font-size:10px; color:var(--gold); text-align:center; margin-bottom:8px;">📦 สั่งขั้นต่ำ ${activeP.min} ชิ้น (สูงสุด ${activeP.max})</p>`;
-        
+        box.innerHTML = ``; // ลบข้อความข้างในทิ้งเพื่อให้หน้าเว็บโล่งขึ้น
+
         if(optStr && optStr !== '-') {
             optStr.split(',').forEach(o => {
                 let parts = o.split(':').map(v => v?.trim());
