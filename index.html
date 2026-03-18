@@ -125,71 +125,43 @@
     
 #optionBox { 
     display: grid; 
-    grid-template-columns: repeat(3, 1fr); /* แบ่ง 3 ส่วนเท่ากัน 33.33% */
-    gap: 5px; /* เว้นช่องว่างระหว่างกล่องเล็กน้อย */
-    padding: 10px 5px; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 6px; 
+    padding: 10px 8px; /* เพิ่มระยะห่างขอบซ้าย-ขวา */
     width: 100%;
-    box-sizing: border-box; /* บังคับให้ขนาดรวมทุกอย่างอยู่ใน 100% ไม่ล้นขวา */
-    overflow-x: hidden; /* ป้องกันการไถออกข้าง */
-}
-
-.variant-item { 
-    background: rgba(255,255,255,0.05); 
-    padding: 5px; 
-    border-radius: 8px; 
-    border: 1px solid rgba(212,175,55,0.1); 
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    width: 100%; /* ให้กว้างตามคอลัมน์ของ Grid */
     box-sizing: border-box;
 }
 
-.v-img { 
-    width: 100%; 
-    aspect-ratio: 1 / 1; /* บังคับเป็นจัตุรัสเป๊ะๆ รูปจะไม่แบน */
-    border-radius: 6px; 
-    object-fit: cover; /* ถ้ารูปสัดส่วนไม่พอดี มันจะตัดเข้ากลางให้เอง รูปจะดูเต็มใบสวย */
-    background: #000; 
-    margin-bottom: 4px; 
-    display: block;
+.variant-item { 
+    padding: 4px; /* ลด padding เพื่อเพิ่มพื้นที่ให้ของข้างใน */
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
 }
 
-/* ปรับขนาดตัวอักษรและปุ่มให้จิ๋วลงเพื่อให้พอดีกับ 3 ช่อง */
 .v-name { 
-    font-size: 9px; 
-    color: #fff; 
-    text-align: center;
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; /* ถ้าชื่อยาวเกินจะขึ้น ... แทนที่จะดันกรอบจนพัง */
-    width: 100%;
+    font-size: 8.5px; /* เล็กลงนิดแต่ชัดเจน */
+    height: 24px; /* บังคับสูง 2 บรรทัด */
+    line-height: 1.2;
+    margin-bottom: 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.v-price { 
-    font-size: 10px; 
-    color: var(--gold); 
-    font-weight: bold; 
-    margin: 2px 0;
-}
+.v-price { font-size: 9px; margin-bottom: 3px; }
 
 .v-ctrl { 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 4px; 
-    width: 100%;
+    gap: 2px; /* กระชับปุ่มเข้ามา */
 }
 
 .v-btn { 
     width: 18px; 
     height: 18px; 
-    font-size: 10px; 
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: 8px; 
 }
+
+#v-qty { font-size: 10px; width: 14px; }
 
         .v-info { flex-grow: 1; }
         .v-name { font-size: 11px; color: #fff; }
