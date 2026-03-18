@@ -123,45 +123,70 @@
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
     
+/* ส่วนแก้ไข Grid 3 คอลัมน์ */
 #optionBox { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 6px; 
-    padding: 10px 8px; /* เพิ่มระยะห่างขอบซ้าย-ขวา */
+    display: grid !important; 
+    grid-template-columns: repeat(3, 1fr) !important; 
+    gap: 8px; 
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box; /* สำคัญมาก: กันขอบขวาแหว่ง */
+    overflow: hidden;
+}
+
+.variant-item { 
+    background: rgba(255,255,255,0.05); 
+    padding: 6px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(212,175,55,0.1); 
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
     width: 100%;
     box-sizing: border-box;
 }
 
-.variant-item { 
-    padding: 4px; /* ลด padding เพื่อเพิ่มพื้นที่ให้ของข้างใน */
-    border-radius: 8px;
-    background: rgba(255,255,255,0.03);
+.v-img { 
+    width: 100% !important; 
+    aspect-ratio: 1/1 !important; /* ล็อคทรงจัตุรัส */
+    border-radius: 6px; 
+    object-fit: cover; /* ถ้ารูปยาวไปจะตัดเข้ากลางให้สวยๆ */
+    background: #000; 
+    margin-bottom: 6px;
+    display: block;
 }
 
+/* ปรับขนาดตัวอักษรและปุ่มให้จิ๋วลงเพื่อให้พอดี 3 ช่อง */
 .v-name { 
-    font-size: 8.5px; /* เล็กลงนิดแต่ชัดเจน */
-    height: 24px; /* บังคับสูง 2 บรรทัด */
-    line-height: 1.2;
-    margin-bottom: 2px;
+    font-size: 9px !important; 
+    height: 22px !important; 
+    line-height: 1.1 !important;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    overflow: hidden;
 }
 
-.v-price { font-size: 9px; margin-bottom: 3px; }
+.v-price { font-size: 10px !important; color: var(--gold); font-weight: bold; margin-bottom: 4px; }
 
 .v-ctrl { 
-    gap: 2px; /* กระชับปุ่มเข้ามา */
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    background: transparent !important; /* เอาพื้นหลังดำออกเพื่อให้ดูสะอาดตาในกรอบเล็ก */
+    border: none !important;
+    padding: 0 !important;
 }
 
 .v-btn { 
-    width: 18px; 
-    height: 18px; 
-    font-size: 8px; 
+    width: 20px !important; 
+    height: 20px !important; 
+    font-size: 10px !important; 
+    border-radius: 50% !important;
 }
-
-#v-qty { font-size: 10px; width: 14px; }
 
         .v-info { flex-grow: 1; }
         .v-name { font-size: 11px; color: #fff; }
@@ -375,19 +400,20 @@
 
             let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
             
-            box.innerHTML += `
+                        box.innerHTML += `
 <div class="variant-item">
     <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
     <div class="v-info">
         <div class="v-name">${label}</div>
         <div class="v-price">฿${finalP.toLocaleString()}</div>
     </div>
-    <div class="v-ctrl" style="width:100%; margin-top:5px; display:flex; justify-content:space-between;">
+    <div class="v-ctrl">
         <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
-        <span id="v-qty-${label}" style="width:20px; text-align:center; color:#fff; font-size:11px;">0</span>
+        <span id="v-qty-${label}" style="color:#fff; font-size:11px; font-weight:bold;">0</span>
         <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
     </div>
 </div>`;
+
             selectedOptions[label] = { qty: 0, price: finalP };
         });
     }
