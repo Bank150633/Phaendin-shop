@@ -424,7 +424,7 @@
             
                         box.innerHTML += `
 <div class="variant-item">
-    <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
+    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')" style="cursor:zoom-in;" onerror="this.src='${imgUrl}'">
     <div class="v-info">
         <div class="v-name">${label}</div>
         <div class="v-price">฿${finalP.toLocaleString()}</div>
