@@ -123,7 +123,23 @@
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
-        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
+        /* แก้เพื่อให้หน้าขยายรูดปัดซ้ายขวาได้ */
+#zoomContent { 
+    display: flex; 
+    overflow-x: auto; 
+    scroll-snap-type: x mandatory; 
+    width: 100vw; 
+    scrollbar-width: none; 
+}
+#zoomContent::-webkit-scrollbar { display: none; }
+
+#zoomContent img, #zoomContent video { 
+    min-width: 100vw; 
+    max-height: 85vh; 
+    object-fit: contain; 
+    scroll-snap-align: start; 
+    flex-shrink: 0; 
+}
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
