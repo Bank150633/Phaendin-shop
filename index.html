@@ -430,7 +430,7 @@
                 </div>
                 ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
                 
-                <div class="slider-container">
+                <div class="slider-container" onscroll="updateDots(this)">
                     ${images.map(img => `
                         <div class="slide-item" onclick="zoom('${img}')">
                             ${renderMedia(img, true)}
