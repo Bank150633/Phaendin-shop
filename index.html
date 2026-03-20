@@ -225,6 +225,42 @@
             border: 1px solid rgba(212,175,55,0.3);
             border-radius: 12px; padding: 12px; margin-bottom: 12px;
         }
+        /* สไตล์สำหรับการสไลด์รูปในหน้าแรก */
+.slider-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.slider-container::-webkit-scrollbar { display: none; }
+
+.slide-item {
+    min-width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    position: relative;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    z-index: 10;
+    pointer-events: none;
+}
+.dot {
+    width: 5px;
+    height: 5px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+}
+        
     </style>
 </head>
 <body>
@@ -347,60 +383,77 @@
     }
 
     function render() {
-        const query = document.getElementById('search').value.toLowerCase();
-        const now = new Date().getTime();
-        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+    const query = document.getElementById('search').value.toLowerCase();
+    const now = new Date().getTime();
+    const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+    
+    document.getElementById('productGrid').innerHTML = filtered.map((p) => {
+        let priceNormal = parseFloat(p[3] || 0);    
+        let pricePromo = parseFloat(p[10] || 0);   
+        let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
+        let maxLimit = p[12] ? parseInt(p[12]) : 999;
+        let minLimit = p[14] ? parseInt(p[14]) : 1;
+        let pDescription = p[2] || '';
+        let provinceName = p[13] || '';
+
+        // แยกรูปภาพจากคอลัมน์ B ด้วยคอมม่า
+        let images = p[1].split(',').map(img => img.trim());
+
+        let currentPrice = priceNormal;
+        let percentDiscount = 0;
         
-        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
-            let priceNormal = parseFloat(p[3] || 0);    
-            let pricePromo = parseFloat(p[10] || 0);   
-            let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let maxLimit = p[12] ? parseInt(p[12]) : 999;
-            let minLimit = p[14] ? parseInt(p[14]) : 1;
-            let pDescription = p[2] || '';
-            let provinceName = p[13] || '';
-
-            let currentPrice = priceNormal;
-            let percentDiscount = 0;
-            
-            [p[4], p[5], p[6], p[7]].forEach(t => { 
-                if(t && t.includes('%')) {
-                    let match = t.match(/(\d+)%/);
-                    if(match) percentDiscount = parseInt(match[1]);
-                }
-            });
-
-            if (pricePromo > 0 && expiryDate > now) {
-                currentPrice = pricePromo;
-                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-            } else if (percentDiscount > 0) {
-                currentPrice = priceNormal * (1 - (percentDiscount / 100));
+        [p[4], p[5], p[6], p[7]].forEach(t => { 
+            if(t && t.includes('%')) {
+                let match = t.match(/(\d+)%/);
+                if(match) percentDiscount = parseInt(match[1]);
             }
+        });
 
-            return `
-            <div class="card">
-                <div class="media-wrap" onclick="zoom('${p[1]}')">
-                    <div class="badge-container">
-                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                        ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                    </div>
-                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                    ${renderMedia(p[1], true)}
-                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+        if (pricePromo > 0 && expiryDate > now) {
+            currentPrice = pricePromo;
+            percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
+        } else if (percentDiscount > 0) {
+            currentPrice = priceNormal * (1 - (percentDiscount / 100));
+        }
+
+        return `
+        <div class="card">
+            <div class="media-wrap">
+                <div class="badge-container">
+                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                    ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                 </div>
-                <div class="info">
-                    <div class="p-name">${p[0]}</div>
-                    <div class="p-desc">${pDescription}</div>
-                    <div class="p-price">
-                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
-                    </div>
+                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                
+                <div class="slider-container">
+                    ${images.map(img => `
+                        <div class="slide-item" onclick="zoom('${img}')">
+                            ${renderMedia(img, true)}
+                        </div>
+                    `).join('')}
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${p[1]}', ${minLimit})">สั่งซื้อ</button>
-            </div>`;
-        }).join('');
+
+                ${images.length > 1 ? `
+                    <div class="slider-dots">
+                        ${images.map(() => `<div class="dot"></div>`).join('')}
+                    </div>
+                ` : ''}
+
+                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ Flash Sale</div>` : ''}
+            </div>
+            <div class="info">
+                <div class="p-name">${p[0]}</div>
+                <div class="p-desc">${pDescription}</div>
+                <div class="p-price">
+                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                </div>
+            </div>
+            <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${images[0]}', ${minLimit})">สั่งซื้อ</button>
+        </div>`;
+    }).join('');
     }
-
+    
         function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
     activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
     selectedOptions = {}; 
