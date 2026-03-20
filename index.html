@@ -250,32 +250,6 @@
     line-height: 1;
 }
 
-/* จุดไข่ปลา: แก้ไขไม่ให้มันยืดเป็นเส้น */
-.dots-container {
-    position: absolute;
-    bottom: 30px; /* ยกขึ้นมาหน่อย */
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    z-index: 10001;
-    pointer-events: none; /* กันไม่ให้มือไปโดนแล้วรูดรูปไม่ได้ */
-}
-
-.dot {
-    width: 8px !important;
-    height: 8px !important;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 50% !important;
-    transition: all 0.3s ease;
-    flex-shrink: 0; /* กันมันโดนบีบ */
-}
-
-.dot.active {
-    background: var(--gold);
-    width: 20px !important; /* จุดที่เลือกให้ยาวเป็นวงรีสวยๆ */
-    border-radius: 10px !important;
-}
     </style>
 </head>
 <body>
