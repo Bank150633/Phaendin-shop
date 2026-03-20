@@ -118,10 +118,7 @@
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
-        /* ทำให้รูปใหญ่รูดได้ */
-#zoomContent { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100vw; }
-#zoomContent div { min-width: 100vw; display: flex; align-items: center; justify-content: center; scroll-snap-align: start; }
-#zoomContent::-webkit-scrollbar { display: none; }
+        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
@@ -228,28 +225,6 @@
             border: 1px solid rgba(212,175,55,0.3);
             border-radius: 12px; padding: 12px; margin-bottom: 12px;
         }
-        /* ปุ่มปิด: บังคับให้เป็นวงกลมเป๊ะๆ */
-.close-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 45px !important;  /* กำหนดขนาดที่แน่นอน */
-    height: 45px !important;
-    background: rgba(0, 0, 0, 0.5) !important; /* พื้นหลังมืดลงหน่อยจะได้เห็น X ชัดๆ */
-    backdrop-filter: blur(10px);
-    border-radius: 50% !important; /* บังคับวงกลม */
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    color: var(--gold); /* ใช้สีทองตามแบรนด์ Phaendin */
-    font-size: 24px;
-    z-index: 10001;
-    cursor: pointer;
-    border: 2px solid var(--gold); /* ขอบทองบางๆ ให้ดูหรู */
-    padding: 0 !important;
-    line-height: 1;
-}
-
     </style>
 </head>
 <body>
@@ -283,18 +258,13 @@
         <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
     </div>
 </div>
+
 <div id="orderModal" class="modal">
     <div class="modal-card">
         <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
-        
-        <div id="orderSlider" style="width: 100%; aspect-ratio: 1/1; overflow-x: auto; display: flex; scroll-snap-type: x mandatory; border-radius: 12px; margin-bottom: 12px; scrollbar-width: none; background: #000;">
-            </div>
-
         <div id="orderDetail"></div>
-
         <form id="orderForm" style="margin-top:10px;">
             <div id="optionBox" style="margin-bottom:12px;"></div>
-
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
@@ -376,72 +346,62 @@
         } catch(e) { console.error(e); }
     }
 
-         function render() {
+    function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
-        document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
-            let images = p[1].split(',').map(img => img.trim());
-            // ส่วนคำนวณราคาคงเดิม...
+        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
+            let maxLimit = p[12] ? parseInt(p[12]) : 999;
+            let minLimit = p[14] ? parseInt(p[14]) : 1;
+            let pDescription = p[2] || '';
+            let provinceName = p[13] || '';
+
+            let currentPrice = priceNormal;
+            let percentDiscount = 0;
+            
+            [p[4], p[5], p[6], p[7]].forEach(t => { 
+                if(t && t.includes('%')) {
+                    let match = t.match(/(\d+)%/);
+                    if(match) percentDiscount = parseInt(match[1]);
+                }
+            });
+
+            if (pricePromo > 0 && expiryDate > now) {
+                currentPrice = pricePromo;
+                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
+            } else if (percentDiscount > 0) {
+                currentPrice = priceNormal * (1 - (percentDiscount / 100));
+            }
 
             return `
             <div class="card">
-                <div class="media-wrap" style="position: relative;">
-                    <div id="p-slider-${pIndex}" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;" 
-                         onscroll="const idx = Math.round(this.scrollLeft / this.offsetWidth); 
-                                   document.querySelectorAll('#p-dots-${pIndex} .p-dot').forEach((d, i) => d.style.background = (i === idx ? 'var(--gold)' : 'rgba(255,255,255,0.3)'))">
-                        ${images.map(img => `
-                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;">
-                                ${renderMedia(img, true)}
-                            </div>
-                        `).join('')}
+                <div class="media-wrap" onclick="zoom('${p[1]}')">
+                    <div class="badge-container">
+                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                        ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
-
-                    ${images.length > 1 ? `
-                    <div id="p-dots-${pIndex}" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 3px; z-index: 10;">
-                        ${images.map((_, i) => `<div class="p-dot" style="width: 4px; height: 4px; border-radius: 50%; background: ${i === 0 ? 'var(--gold)' : 'rgba(255,255,255,0.3)'}; transition: 0.3s;"></div>`).join('')}
-                    </div>` : ''}
+                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                    ${renderMedia(p[1], true)}
+                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
-                    <div class="p-price">฿${currentPrice.toLocaleString()}</div>
+                    <div class="p-desc">${pDescription}</div>
+                    <div class="p-price">
+                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                    </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', 0, 999, '${images[0]}', 1)">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${p[1]}', ${minLimit})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
-   
-    // เพิ่มฟังก์ชันสำหรับอัปเดตจุดไข่ปลา
-    function updateDots(index, scrollLeft, width) {
-        const dots = document.querySelectorAll(`#p-dots-${index} .dot`);
-        const activeIndex = Math.round(scrollLeft / width);
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === activeIndex);
-        });
-    }    
 
-    function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
-    // 1. ส่วนสำคัญ: คำสั่งดึงรูปภาพทั้งหมดมาใส่ในกล่องสไลด์
-    const productData = db.find(p => p[0] === n);
-    const allImages = productData ? productData[1].split(',').map(img => img.trim()) : [imgUrl];
-    const slider = document.getElementById('orderSlider');
-    
-    // ใส่รูปเข้าไปในกล่องที่สร้างไว้
-    if (slider) {
-        slider.innerHTML = allImages.map(img => `
-            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;">
-                ${renderMedia(img, true)}
-            </div>
-        `).join('');
-        slider.scrollLeft = 0; // ให้เริ่มที่รูปแรกเสมอ
-    }
-
-    // 2. ส่วนจัดการข้อมูลสินค้า (เหมือนเดิมของคุณ)
+        function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
     activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
     selectedOptions = {}; 
     const box = document.getElementById('optionBox');
@@ -449,34 +409,40 @@
 
     if(optStr && optStr !== '-') {
         optStr.split(',').forEach(o => {
+            // แก้ไขตรงนี้: จำกัดการ split แค่ 3 ส่วน เพื่อไม่ให้ไปหั่นโดนเครื่องหมาย : ในลิงก์ http
             let p = o.trim().split(':');
             let label = p[0] ? p[0].trim() : '';
             let price = (p[1] && !isNaN(p[1]) && p[1].trim() !== '') ? parseFloat(p[1]) : activeP.pNormal;
+            
+            // ดึงส่วนที่เหลือทั้งหมดมาเป็นลิงก์รูป (เผื่อในลิงก์มีเครื่องหมายโคลอน)
             let vImg = (p.length > 2) ? p.slice(2).join(':').trim() : imgUrl;
+            
+            // ถ้า vImg ไม่ใช่ลิงก์ที่ถูกต้อง ให้ใช้รูปหลัก
             if(!vImg.toLowerCase().startsWith('http')) vImg = imgUrl;
 
             let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
             
-            box.innerHTML += `
-            <div class="variant-item">
-                <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
-                <div class="v-info">
-                    <div class="v-name">${label}</div>
-                    <div class="v-price">฿${finalP.toLocaleString()}</div>
-                </div>
-                <div class="v-ctrl">
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
-                    <span id="v-qty-${label}" style="color:#fff; font-size:11px; font-weight:bold;">0</span>
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
-                </div>
-            </div>`;
+                        box.innerHTML += `
+<div class="variant-item">
+    <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
+    <div class="v-info">
+        <div class="v-name">${label}</div>
+        <div class="v-price">฿${finalP.toLocaleString()}</div>
+    </div>
+    <div class="v-ctrl">
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
+        <span id="v-qty-${label}" style="color:#fff; font-size:11px; font-weight:bold;">0</span>
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
+    </div>
+</div>`;
+
             selectedOptions[label] = { qty: 0, price: finalP };
         });
     }
     updatePrice();
     openModal('orderModal');
 }
-    
+
     function changeVQty(label, price, delta) {
         let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
         if (delta > 0 && totalNow >= activeP.max) { alert(`สั่งซื้อรวมกันได้ไม่เกิน ${activeP.max} ชิ้นครับ`); return; }
@@ -510,59 +476,8 @@
     }
 
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
-    function zoom(imgs) {
-    const overlay = document.getElementById('zoomOverlay');
-    const imgList = Array.isArray(imgs) ? imgs : [imgs];
-    
-    // 1. สร้าง HTML: แยกปุ่ม X และ dots ออกมาจาก scroll container (zoomContent)
-    let closeBtnHtml = `
-        <div class="close-btn" onclick="event.stopPropagation(); closeZoom();">
-            <i class="fa-solid fa-xmark"></i>
-        </div>
-    `;
-    
-    let imagesHtml = imgList.map(img => `
-        <div style="min-width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; scroll-snap-align: start;">
-            ${renderMedia(img, false)}
-        </div>
-    `).join('');
-
-    let dotsHtml = '';
-    if (imgList.length > 1) {
-        dotsHtml = `<div class="dots-container">`;
-        imgList.forEach((_, i) => {
-            dotsHtml += `<div class="dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`;
-        });
-        dotsHtml += `</div>`;
-    }
-
-    // 2. จัดโครงสร้างใหม่ใน zoomOverlay
-    // ให้ปุ่ม X และ จุด อยู่ซ้อนทับบน zoomContent อีกที
-    overlay.innerHTML = `
-        ${closeBtnHtml}
-        <div id="zoomContent" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100vw; height: 100vh;">
-            ${imagesHtml}
-        </div>
-        ${dotsHtml}
-    `;
-    
-    overlay.style.display = 'flex';
-    const content = document.getElementById('zoomContent');
-
-    // 3. จัดการเรื่องการรูด (Scroll) เพื่อเปลี่ยนสถานะจุด
-    content.onscroll = () => {
-        const index = Math.round(content.scrollLeft / window.innerWidth);
-        const dots = document.querySelectorAll('.dot');
-        dots.forEach((d, i) => {
-            d.classList.toggle('active', i === index);
-        });
-    };
-}
-function closeZoom() { 
-    const overlay = document.getElementById('zoomOverlay');
-    overlay.style.display = 'none'; 
-    document.getElementById('zoomContent').innerHTML = ''; 
-}
+    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
     function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
