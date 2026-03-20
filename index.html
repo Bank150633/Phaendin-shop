@@ -545,6 +545,15 @@
 }
 
     init();
+    function updateDots(el, idx) {
+    const dotsRow = document.getElementById(`dots-${idx}`);
+    if (!dotsRow) return;
+    const dots = dotsRow.querySelectorAll('.dot');
+    const index = Math.round(el.scrollLeft / el.offsetWidth);
+    dots.forEach((dot, i) => {
+        dot.style.background = i === index ? 'var(--gold)' : 'rgba(255,255,255,0.4)';
+    });
+}
 </script>
 </body>
 </html>
