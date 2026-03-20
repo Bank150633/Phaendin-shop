@@ -543,19 +543,21 @@
     const overlay = document.getElementById('zoomOverlay');
     const imgList = Array.isArray(imgs) ? imgs : [imgs];
     
-    // 1. สร้างปุ่มปิด (X) ลอยไว้ด้านบน
-    let html = `<div class="close-btn" onclick="event.stopPropagation(); closeZoom();">
-                    <i class="fa-solid fa-xmark"></i>
-                </div>`;
+    // สร้าง HTML โดยแยกปุ่มปิดออกมา
+    let html = `
+        <div class="close-btn" onclick="event.stopPropagation(); closeZoom();">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+    `;
     
-    // 2. สร้างรายการรูปภาพ
+    // ส่วนของรูปภาพ
     html += imgList.map(img => `
-        <div style="min-width: 100vw; display: flex; align-items: center; justify-content: center; scroll-snap-align: start;">
+        <div style="min-width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; scroll-snap-align: start;">
             ${renderMedia(img, false)}
         </div>
     `).join('');
 
-    // 3. สร้างจุดไข่ปลา (ถ้ามีมากกว่า 1 รูป)
+    // ส่วนของจุดไข่ปลา
     if (imgList.length > 1) {
         html += `<div class="dots-container">`;
         imgList.forEach((_, i) => {
@@ -567,7 +569,6 @@
     content.innerHTML = html;
     overlay.style.display = 'flex';
 
-    // 4. ตั้งค่าให้จุดไข่ปลาเปลี่ยนสีตามการรูดรูป
     content.onscroll = () => {
         const index = Math.round(content.scrollLeft / window.innerWidth);
         const dots = document.querySelectorAll('.dot');
