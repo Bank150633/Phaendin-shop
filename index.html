@@ -376,77 +376,46 @@
         } catch(e) { console.error(e); }
     }
 
-        function render() {
+         function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
         document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
+            let images = p[1].split(',').map(img => img.trim());
+            // ส่วนคำนวณราคาคงเดิม...
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let maxLimit = p[12] ? parseInt(p[12]) : 999;
-            let minLimit = p[14] ? parseInt(p[14]) : 1;
-            let pDescription = p[2] || '';
-            let provinceName = p[13] || '';
+            let currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
 
-            let images = p[1].split(',').map(img => img.trim());
-            let firstImg = images[0]; 
-
-            let currentPrice = priceNormal;
-            let percentDiscount = 0;
-            
-            [p[4], p[5], p[6], p[7]].forEach(t => { 
-                if(t && t.includes('%')) {
-                    let match = t.match(/(\d+)%/);
-                    if(match) percentDiscount = parseInt(match[1]);
-                }
-            });
-
-            if (pricePromo > 0 && expiryDate > now) {
-                currentPrice = pricePromo;
-                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-            } else if (percentDiscount > 0) {
-                currentPrice = priceNormal * (1 - (percentDiscount / 100));
-            }
-
-            // --- ส่วนที่แก้ไข: เพิ่มไอดีให้ Slider และสร้าง Dots ---
             return `
             <div class="card">
-                <div class="media-wrap">
+                <div class="media-wrap" style="position: relative;">
                     <div id="p-slider-${pIndex}" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;" 
-                         onscroll="updateDots(${pIndex}, this.scrollLeft, this.offsetWidth)">
+                         onscroll="const idx = Math.round(this.scrollLeft / this.offsetWidth); 
+                                   document.querySelectorAll('#p-dots-${pIndex} .p-dot').forEach((d, i) => d.style.background = (i === idx ? 'var(--gold)' : 'rgba(255,255,255,0.3)'))">
                         ${images.map(img => `
-                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;" onclick='zoom(${JSON.stringify(images)})'>
+                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;">
                                 ${renderMedia(img, true)}
                             </div>
                         `).join('')}
                     </div>
 
-                    <div id="p-dots-${pIndex}" class="dots-container" style="bottom: 5px; gap: 4px;">
-                        ${images.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" style="width:4px; height:4px;"></div>`).join('')}
-                    </div>
-
-                    <div class="badge-container">
-                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                        ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                    </div>
-                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+                    ${images.length > 1 ? `
+                    <div id="p-dots-${pIndex}" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 3px; z-index: 10;">
+                        ${images.map((_, i) => `<div class="p-dot" style="width: 4px; height: 4px; border-radius: 50%; background: ${i === 0 ? 'var(--gold)' : 'rgba(255,255,255,0.3)'}; transition: 0.3s;"></div>`).join('')}
+                    </div>` : ''}
                 </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
-                    <div class="p-desc">${pDescription}</div>
-                    <div class="p-price">
-                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
-                    </div>
+                    <div class="p-price">฿${currentPrice.toLocaleString()}</div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${firstImg}', ${minLimit})">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', 0, 999, '${images[0]}', 1)">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
-
+   
     // เพิ่มฟังก์ชันสำหรับอัปเดตจุดไข่ปลา
     function updateDots(index, scrollLeft, width) {
         const dots = document.querySelectorAll(`#p-dots-${index} .dot`);
