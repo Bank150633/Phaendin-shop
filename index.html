@@ -465,42 +465,57 @@
 
         function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
     activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
+    
+    // --- ส่วนที่เพิ่ม: ดึงรูปทั้งหมดมาทำสไลด์ด้านบน ---
+    const productData = db.find(p => p[0] === n);
+    const allImages = productData ? productData[1].split(',').map(img => img.trim()) : [imgUrl];
+    
+    // สร้าง HTML สำหรับ Slider ไว้บนสุด
+    let sliderHtml = `
+        <div id="orderSlider" style="width: 100%; aspect-ratio: 1/1; overflow-x: auto; display: flex; scroll-snap-type: x mandatory; border-radius: 12px; margin-bottom: 12px; scrollbar-width: none; background: #000;">
+            ${allImages.map(img => `
+                <div style="min-width: 100%; height: 100%; scroll-snap-align: start;">
+                    ${renderMedia(img, true)}
+                </div>
+            `).join('')}
+        </div>
+    `;
+
     selectedOptions = {}; 
     const box = document.getElementById('optionBox');
     box.innerHTML = ''; 
 
     if(optStr && optStr !== '-') {
         optStr.split(',').forEach(o => {
-            // แก้ไขตรงนี้: จำกัดการ split แค่ 3 ส่วน เพื่อไม่ให้ไปหั่นโดนเครื่องหมาย : ในลิงก์ http
             let p = o.trim().split(':');
             let label = p[0] ? p[0].trim() : '';
             let price = (p[1] && !isNaN(p[1]) && p[1].trim() !== '') ? parseFloat(p[1]) : activeP.pNormal;
-            
-            // ดึงส่วนที่เหลือทั้งหมดมาเป็นลิงก์รูป (เผื่อในลิงก์มีเครื่องหมายโคลอน)
             let vImg = (p.length > 2) ? p.slice(2).join(':').trim() : imgUrl;
-            
-            // ถ้า vImg ไม่ใช่ลิงก์ที่ถูกต้อง ให้ใช้รูปหลัก
             if(!vImg.toLowerCase().startsWith('http')) vImg = imgUrl;
 
             let finalP = activeP.disc > 0 ? price * (1 - (activeP.disc/100)) : price;
             
-                        box.innerHTML += `
-<div class="variant-item">
-    <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
-    <div class="v-info">
-        <div class="v-name">${label}</div>
-        <div class="v-price">฿${finalP.toLocaleString()}</div>
-    </div>
-    <div class="v-ctrl">
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
-        <span id="v-qty-${label}" style="color:#fff; font-size:11px; font-weight:bold;">0</span>
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
-    </div>
-</div>`;
-
+            box.innerHTML += `
+            <div class="variant-item">
+                <img src="${vImg}" class="v-img" onerror="this.src='${imgUrl}'">
+                <div class="v-info">
+                    <div class="v-name">${label}</div>
+                    <div class="v-price">฿${finalP.toLocaleString()}</div>
+                </div>
+                <div class="v-ctrl">
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, -1)">-</button>
+                    <span id="v-qty-${label}" style="color:#fff; font-size:11px; font-weight:bold;">0</span>
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${finalP}, 1)">+</button>
+                </div>
+            </div>`;
             selectedOptions[label] = { qty: 0, price: finalP };
         });
     }
+
+    // เอา Slider ที่สร้างไว้ไปใส่ในหน้า Modal (ใส่ไว้ก่อน OptionBox)
+    const detailBox = document.getElementById('orderDetail');
+    detailBox.innerHTML = sliderHtml + detailBox.innerHTML; 
+
     updatePrice();
     openModal('orderModal');
 }
