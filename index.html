@@ -73,12 +73,7 @@
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
         .card { background: var(--card); border: 1px solid rgba(212,175,55,0.15); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .media-wrap img, .media-wrap video { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    flex-shrink: 0; /* เพิ่มบรรทัดนี้ครับ */
-}
+        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; }
         .p-timer-badge { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(255, 65, 108, 0.9); color: #fff; font-size: 8.5px; text-align: center; padding: 2px 0; font-weight: bold; z-index: 6; }
         .badge-container { position: absolute; top: 4px; left: 4px; display: flex; flex-direction: column; gap: 3px; z-index: 5; }
         .badge { font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.2); }
@@ -123,23 +118,7 @@
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
-        /* แก้เพื่อให้หน้าขยายรูดปัดซ้ายขวาได้ */
-#zoomContent { 
-    display: flex; 
-    overflow-x: auto; 
-    scroll-snap-type: x mandatory; 
-    width: 100vw; 
-    scrollbar-width: none; 
-}
-#zoomContent::-webkit-scrollbar { display: none; }
-
-#zoomContent img, #zoomContent video { 
-    min-width: 100vw; 
-    max-height: 85vh; 
-    object-fit: contain; 
-    scroll-snap-align: start; 
-    flex-shrink: 0; 
-}
+        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
@@ -246,42 +225,6 @@
             border: 1px solid rgba(212,175,55,0.3);
             border-radius: 12px; padding: 12px; margin-bottom: 12px;
         }
-        /* สไตล์สำหรับการสไลด์รูปในหน้าแรก */
-.slider-container {
-    width: 100%;
-    aspect-ratio: 1/1;
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-.slider-container::-webkit-scrollbar { display: none; }
-
-.slide-item {
-    min-width: 100%;
-    height: 100%;
-    scroll-snap-align: start;
-    position: relative;
-}
-
-.slider-dots {
-    position: absolute;
-    bottom: 8px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    z-index: 10;
-    pointer-events: none;
-}
-.dot {
-    width: 5px;
-    height: 5px;
-    background: rgba(255,255,255,0.4);
-    border-radius: 50%;
-}
-        
     </style>
 </head>
 <body>
@@ -404,79 +347,60 @@
     }
 
     function render() {
-    const query = document.getElementById('search').value.toLowerCase();
-    const now = new Date().getTime();
-    const filtered = db.filter(p => p[0].toLowerCase().includes(query));
-    
-    document.getElementById('productGrid').innerHTML = filtered.map((p) => {
-        let priceNormal = parseFloat(p[3] || 0);    
-        let pricePromo = parseFloat(p[10] || 0);   
-        let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-        let maxLimit = p[12] ? parseInt(p[12]) : 999;
-        let minLimit = p[14] ? parseInt(p[14]) : 1;
-        let pDescription = p[2] || '';
-        let provinceName = p[13] || '';
-
-        // แยกรูปภาพจากคอลัมน์ B ด้วยคอมม่า
-        let images = p[1].split(',').map(img => img.trim());
-
-        let currentPrice = priceNormal;
-        let percentDiscount = 0;
+        const query = document.getElementById('search').value.toLowerCase();
+        const now = new Date().getTime();
+        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
-        [p[4], p[5], p[6], p[7]].forEach(t => { 
-            if(t && t.includes('%')) {
-                let match = t.match(/(\d+)%/);
-                if(match) percentDiscount = parseInt(match[1]);
+        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
+            let priceNormal = parseFloat(p[3] || 0);    
+            let pricePromo = parseFloat(p[10] || 0);   
+            let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
+            let maxLimit = p[12] ? parseInt(p[12]) : 999;
+            let minLimit = p[14] ? parseInt(p[14]) : 1;
+            let pDescription = p[2] || '';
+            let provinceName = p[13] || '';
+
+            let currentPrice = priceNormal;
+            let percentDiscount = 0;
+            
+            [p[4], p[5], p[6], p[7]].forEach(t => { 
+                if(t && t.includes('%')) {
+                    let match = t.match(/(\d+)%/);
+                    if(match) percentDiscount = parseInt(match[1]);
+                }
+            });
+
+            if (pricePromo > 0 && expiryDate > now) {
+                currentPrice = pricePromo;
+                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
+            } else if (percentDiscount > 0) {
+                currentPrice = priceNormal * (1 - (percentDiscount / 100));
             }
-        });
 
-        if (pricePromo > 0 && expiryDate > now) {
-            currentPrice = pricePromo;
-            percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-        } else if (percentDiscount > 0) {
-            currentPrice = priceNormal * (1 - (percentDiscount / 100));
-        }
-
-        return `
-        <div class="card">
-            <div class="media-wrap">
-                <div class="badge-container">
-                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                    ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                </div>
-                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                
-                <div class="slider-container" onscroll="updateDots(this)">
-                    ${images.map(img => `
-                        <div class="slide-item" onclick='zoom(${JSON.stringify(images)})'>
-    ${renderMedia(img, true)}
-</div>
-                            ${renderMedia(img, true)}
-                        </div>
-                    `).join('')}
-                </div>
-
-                ${images.length > 1 ? `
-                    <div class="slider-dots">
-                        ${images.map(() => `<div class="dot"></div>`).join('')}
+            return `
+            <div class="card">
+                <div class="media-wrap" onclick="zoom('${p[1]}')">
+                    <div class="badge-container">
+                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                        ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
-                ` : ''}
-
-                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ Flash Sale</div>` : ''}
-            </div>
-            <div class="info">
-                <div class="p-name">${p[0]}</div>
-                <div class="p-desc">${pDescription}</div>
-                <div class="p-price">
-                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                    ${renderMedia(p[1], true)}
+                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
-            </div>
-            <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${images[0]}', ${minLimit})">สั่งซื้อ</button>
-        </div>`;
-    }).join('');
+                <div class="info">
+                    <div class="p-name">${p[0]}</div>
+                    <div class="p-desc">${pDescription}</div>
+                    <div class="p-price">
+                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                    </div>
+                </div>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${p[1]}', ${minLimit})">สั่งซื้อ</button>
+            </div>`;
+        }).join('');
     }
-    
+
         function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
     activeP = { name: n, pNormal: parseFloat(pNormal), ship: parseFloat(s), disc: discPercent, max: parseInt(maxLimit) || 999, min: parseInt(minLimit) || 1, img: imgUrl };
     selectedOptions = {}; 
@@ -552,21 +476,7 @@
     }
 
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
-    // เปลี่ยนให้รับ 'urls' (รูปทั้งหมด) แทนที่จะรับแค่รูปเดียว
-function zoom(urls) {
-    // ถ้าส่งมาเป็นข้อความเดียวให้เปลี่ยนเป็นชุดข้อมูล (Array)
-    let imgList = Array.isArray(urls) ? urls : [urls];
-    
-    let html = imgList.map(url => `
-        <div style="min-width:100vw; display:flex; align-items:center; justify-content:center;">
-            ${renderMedia(url, false)}
-        </div>
-    `).join('');
-
-    document.getElementById('zoomContent').innerHTML = html;
-    document.getElementById('zoomOverlay').style.display = 'flex';
-}
-
+    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
@@ -621,14 +531,6 @@ function zoom(urls) {
 }
 
     init();
-    function updateDots(el) {
-    const index = Math.round(el.scrollLeft / el.offsetWidth);
-    const dots = el.parentElement.querySelectorAll('.dot');
-    dots.forEach((dot, i) => {
-        dot.style.background = i === index ? 'var(--gold)' : 'rgba(255,255,255,0.4)';
-    });
-}
-
 </script>
 </body>
 </html>
