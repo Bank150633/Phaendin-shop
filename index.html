@@ -550,7 +550,21 @@
     }
 
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
-    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    // เปลี่ยนให้รับ 'urls' (รูปทั้งหมด) แทนที่จะรับแค่รูปเดียว
+function zoom(urls) {
+    // ถ้าส่งมาเป็นข้อความเดียวให้เปลี่ยนเป็นชุดข้อมูล (Array)
+    let imgList = Array.isArray(urls) ? urls : [urls];
+    
+    let html = imgList.map(url => `
+        <div style="min-width:100vw; display:flex; align-items:center; justify-content:center;">
+            ${renderMedia(url, false)}
+        </div>
+    `).join('');
+
+    document.getElementById('zoomContent').innerHTML = html;
+    document.getElementById('zoomOverlay').style.display = 'flex';
+}
+
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
