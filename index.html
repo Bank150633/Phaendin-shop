@@ -118,7 +118,10 @@
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
 
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
-        #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
+        /* ทำให้รูปใหญ่รูดได้ */
+#zoomContent { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100vw; }
+#zoomContent div { min-width: 100vw; display: flex; align-items: center; justify-content: center; scroll-snap-align: start; }
+#zoomContent::-webkit-scrollbar { display: none; }
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
@@ -379,7 +382,10 @@
 
             return `
             <div class="card">
-                <div class="media-wrap" onclick="zoom('${p[1]}')">
+               // เปลี่ยนจาก onclick="zoom('${p[1]}')" เป็นแบบนี้:
+<div class="slide-item" onclick='zoom(${JSON.stringify(images)})'>
+    ${renderMedia(img, true)}
+</div>
                     <div class="badge-container">
                         ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
                         ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
@@ -476,7 +482,24 @@
     }
 
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
-    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    function zoom(imgs) {
+    const content = document.getElementById('zoomContent');
+    // รองรับทั้งแบบคลิกจากแบนเนอร์ (รูปเดียว) และคลิกจากสินค้า (หลายรูป)
+    const imgList = Array.isArray(imgs) ? imgs : [imgs];
+    
+    content.innerHTML = imgList.map(img => `
+        <div>
+            ${renderMedia(img, false)}
+        </div>
+    `).join('');
+    
+    document.getElementById('zoomOverlay').style.display = 'flex';
+}
+
+function closeZoom() { 
+    document.getElementById('zoomOverlay').style.display = 'none'; 
+    document.getElementById('zoomContent').innerHTML = ''; 
+}
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
