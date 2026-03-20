@@ -448,7 +448,9 @@
                 
                 <div class="slider-container" onscroll="updateDots(this)">
                     ${images.map(img => `
-                        <div class="slide-item" onclick="zoom('${img}')">
+                        <div class="slide-item" onclick='zoom(${JSON.stringify(images)})'>
+    ${renderMedia(img, true)}
+</div>
                             ${renderMedia(img, true)}
                         </div>
                     `).join('')}
