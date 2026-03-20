@@ -379,15 +379,29 @@
 
             return `
             <div class="card">
-                <div class="media-wrap" onclick="zoom('${p[1]}')">
-                    <div class="badge-container">
-                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                        ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                    </div>
-                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                    ${renderMedia(p[1], true)}
-                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+    <div class="media-wrap">
+        <div class="badge-container">
+            ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+            ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+        </div>
+        ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+        
+        <div class="slider-container" onscroll="updateDots(this, ${db.indexOf(p)})">
+            ${images.map(img => `
+                <div class="slide-item" onclick='zoom(${JSON.stringify(images)})'>
+                    ${renderMedia(img, true)}
                 </div>
+            `).join('')}
+        </div>
+
+        ${images.length > 1 ? `
+            <div class="slider-dots" id="dots-${db.indexOf(p)}">
+                ${images.map((_, i) => `<div class="dot" style="${i === 0 ? 'background:var(--gold)' : ''}"></div>`).join('')}
+            </div>
+        ` : ''}
+
+        ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ Flash Sale</div>` : ''}
+    </div>
                 <div class="info">
                     <div class="p-name">${p[0]}</div>
                     <div class="p-desc">${pDescription}</div>
