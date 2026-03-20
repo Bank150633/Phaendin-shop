@@ -458,25 +458,41 @@
         if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
     }
 
-    function updatePrice() {
+        function updatePrice() {
         let subtotal = 0, summaryText = [], totalItems = 0;
-        for (let key in selectedOptions) { if(selectedOptions[key].qty > 0) { subtotal += (selectedOptions[key].price * selectedOptions[key].qty); summaryText.push(`${key} x${selectedOptions[key].qty}`); totalItems += selectedOptions[key].qty; } }
+        for (let key in selectedOptions) { 
+            if(selectedOptions[key].qty > 0) { 
+                subtotal += (selectedOptions[key].price * selectedOptions[key].qty); 
+                summaryText.push(`${key} x${selectedOptions[key].qty}`); 
+                totalItems += selectedOptions[key].qty; 
+            } 
+        }
         activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
         activeP.summary = summaryText.join(', ');
+
         let badgesHtml = `<div class="promo-pill-container">`;
         if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
         badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
         badgesHtml += `</div>`;
+
+        // --- เพิ่มส่วนนี้เพื่อให้รูปโชว์ด้านบนสุดของ Modal ---
         document.getElementById('orderDetail').innerHTML = `
-            <div class="order-summary-box">
-                <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
-                ${badgesHtml}
-                <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
-                <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
-                    <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                    <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+            <div class="order-summary-box" style="padding: 0; overflow: hidden;">
+                <div style="width: 100%; aspect-ratio: 16/9; background: #000;">
+                    ${renderMedia(activeP.img, true)}
+                </div>
+                
+                <div style="padding: 12px;">
+                    <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+                    ${badgesHtml}
+                    <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
+                    <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
+                        <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                        <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+                    </div>
                 </div>
             </div>`;
+
         const btn = document.getElementById('submitBtn');
         if (totalItems === 0) { btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; }
         else if (totalItems < activeP.min) { btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น (ขาดอีก ${activeP.min - totalItems})`; btn.style.opacity = "0.5"; }
