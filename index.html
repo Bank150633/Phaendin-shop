@@ -407,7 +407,7 @@
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
-        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
+        document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
@@ -416,7 +416,6 @@
             let pDescription = p[2] || '';
             let provinceName = p[13] || '';
 
-            // --- ส่วนที่แก้ไข: ประกาศตัวแปร images เพื่อใช้ทำ Slider ---
             let images = p[1].split(',').map(img => img.trim());
             let firstImg = images[0]; 
 
@@ -437,15 +436,21 @@
                 currentPrice = priceNormal * (1 - (percentDiscount / 100));
             }
 
+            // --- ส่วนที่แก้ไข: เพิ่มไอดีให้ Slider และสร้าง Dots ---
             return `
             <div class="card">
                 <div class="media-wrap">
-                    <div style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;">
+                    <div id="p-slider-${pIndex}" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;" 
+                         onscroll="updateDots(${pIndex}, this.scrollLeft, this.offsetWidth)">
                         ${images.map(img => `
                             <div style="min-width: 100%; height: 100%; scroll-snap-align: start;" onclick='zoom(${JSON.stringify(images)})'>
                                 ${renderMedia(img, true)}
                             </div>
                         `).join('')}
+                    </div>
+
+                    <div id="p-dots-${pIndex}" class="dots-container" style="bottom: 5px; gap: 4px;">
+                        ${images.map((_, i) => `<div class="dot ${i === 0 ? 'active' : ''}" style="width:4px; height:4px;"></div>`).join('')}
                     </div>
 
                     <div class="badge-container">
@@ -467,6 +472,15 @@
             </div>`;
         }).join('');
     }
+
+    // เพิ่มฟังก์ชันสำหรับอัปเดตจุดไข่ปลา
+    function updateDots(index, scrollLeft, width) {
+        const dots = document.querySelectorAll(`#p-dots-${index} .dot`);
+        const activeIndex = Math.round(scrollLeft / width);
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === activeIndex);
+        });
+    }    
 
     function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit) {
     // 1. ส่วนสำคัญ: คำสั่งดึงรูปภาพทั้งหมดมาใส่ในกล่องสไลด์
