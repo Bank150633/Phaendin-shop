@@ -309,13 +309,18 @@
         <p onclick="closeModal('contactModal')" style="color:var(--text-dim); cursor:pointer; font-size:10px; margin-top:8px;">[ ปิด ]</p>
     </div>
 </div>
-
 <div id="orderModal" class="modal">
     <div class="modal-card">
         <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
+        
+        <div id="orderSlider" style="width: 100%; aspect-ratio: 1/1; overflow-x: auto; display: flex; scroll-snap-type: x mandatory; border-radius: 12px; margin-bottom: 12px; scrollbar-width: none; background: #000;">
+            </div>
+
         <div id="orderDetail"></div>
+
         <form id="orderForm" style="margin-top:10px;">
             <div id="optionBox" style="margin-bottom:12px;"></div>
+
             <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
             <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
             <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
