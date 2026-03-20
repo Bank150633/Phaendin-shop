@@ -349,7 +349,7 @@
         } catch(e) { console.error(e); }
     }
 
-    function render() {
+        function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
@@ -362,6 +362,10 @@
             let minLimit = p[14] ? parseInt(p[14]) : 1;
             let pDescription = p[2] || '';
             let provinceName = p[13] || '';
+
+            // --- ส่วนที่แก้ไข: ประกาศตัวแปร images เพื่อใช้ทำ Slider ---
+            let images = p[1].split(',').map(img => img.trim());
+            let firstImg = images[0]; 
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
@@ -382,16 +386,20 @@
 
             return `
             <div class="card">
-               // เปลี่ยนจาก onclick="zoom('${p[1]}')" เป็นแบบนี้:
-<div class="slide-item" onclick='zoom(${JSON.stringify(images)})'>
-    ${renderMedia(img, true)}
-</div>
+                <div class="media-wrap">
+                    <div style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;">
+                        ${images.map(img => `
+                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;" onclick='zoom(${JSON.stringify(images)})'>
+                                ${renderMedia(img, true)}
+                            </div>
+                        `).join('')}
+                    </div>
+
                     <div class="badge-container">
                         ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
                         ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
                     ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                    ${renderMedia(p[1], true)}
                     ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
                 <div class="info">
@@ -402,7 +410,7 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${p[1]}', ${minLimit})">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${firstImg}', ${minLimit})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
