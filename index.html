@@ -400,6 +400,8 @@
             let minLimit = p[14] ? parseInt(p[14]) : 1;
             let pDescription = p[2] || '';
             let provinceName = p[13] || '';
+            // เพิ่มบรรทัดนี้: ดึงค่าจากคอลัมน์ P (คอลัมน์ที่ 16) มาเช็คว่าผ่อนได้ไหม
+            let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
 
             let currentPrice = priceNormal;
             let percentDiscount = 0;
