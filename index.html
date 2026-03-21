@@ -508,7 +508,7 @@
         if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
     }
 
-           function updatePrice() {
+     function updatePrice() {
         let subtotal = 0, summaryText = [], totalItems = 0;
         for (let key in selectedOptions) { 
             if(selectedOptions[key].qty > 0) { 
@@ -526,31 +526,13 @@
         badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
         badgesHtml += `</div>`;
 
-        // ค้นหาบรรทัดที่มี id="orderDetail" แล้ววางทับด้วยส่วนนี้ครับ
-        // --- เริ่มต้นวางทับตรงนี้ ---
         document.getElementById('orderDetail').innerHTML = `
         <div class="order-summary-box" style="padding: 0; overflow: hidden; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; margin-bottom: 8px;">
-            
             <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;">
                 <div id="m-slider" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;">
-                    <style>
-                        #m-slider::-webkit-scrollbar { display: none; }
-                        #m-slider img, #m-slider video { 
-                            width: 100%; height: 100%; object-fit: contain; background: #000;
-                        }
-                    </style>
-                    ${images.map(img => `
-                        <div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">
-                            ${renderMedia(img, true)}
-                        </div>
-                    `).join('')}
+                    ${images.map(img => `<div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">${renderMedia(img, true)}</div>`).join('')}
                 </div>
-                ${images.length > 1 ? `
-                <div id="m-dots" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; z-index: 10;">
-                    ${images.map((_, i) => `<div class="p-dot-mini" style="width: 5px; height: 5px; border-radius: 50%; background: ${i === 0 ? '#D4AF37' : 'rgba(255,255,255,0.3)'};"></div>`).join('')}
-                </div>` : ''}
             </div>
-            
             <div style="padding: 8px;">
                 <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
                 ${badgesHtml}
@@ -562,28 +544,20 @@
             </div>
         </div>`;
 
-        // สคริปต์ควบคุมจุด (Dots) ใต้รูป
-        const slider = document.getElementById('m-slider');
-        if(slider) {
-            slider.onscroll = function() {
-                const idx = Math.round(this.scrollLeft / this.offsetWidth);
-                document.querySelectorAll('#m-dots .p-dot-mini').forEach((d, i) => {
-                    d.style.background = (i === idx ? '#D4AF37' : 'rgba(255,255,255,0.3)');
-                });
-            };
-        }
-
-        // เช็คเงื่อนไขปุ่มสั่งซื้อ
         const btn = document.getElementById('submitBtn');
         if (totalItems === 0) { 
             btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
         } else if (totalItems < activeP.min) { 
-            btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น (ขาดอีก ${activeP.min - totalItems})`; btn.style.opacity = "0.5"; 
+            btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
         } else { 
             btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
         }
-    } // <-- ปิดฟังก์ชัน updatePrice
-    // --- สิ้นสุดส่วนที่ต้องวางทับ ---
+
+        // --- ส่วนที่สำคัญที่สุด: สั่งให้ยอดผ่อนคำนวณใหม่ทันที ---
+        const currentPayType = document.querySelector('input[name="payType"]:checked').value;
+        togglePay(currentPayType);
+    }
+
 
      
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
