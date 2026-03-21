@@ -276,6 +276,20 @@
             <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display:none">
         </div>
     </div>
+<div id="installmentInfo" style="display:none; margin-bottom:12px; padding:12px; background:rgba(212,175,55,0.1); border-radius:12px; border:1px solid var(--gold); text-align:center;">
+    <p style="font-size:11px; color:var(--gold);">💰 ยอดผ่อนชำระ (บวกบริการ 20%)</p>
+    <div style="font-size:20px; font-weight:800; color:#fff; margin:5px 0;" id="instTotal">฿0</div>
+    <div style="display:flex; justify-content:space-around; margin-top:8px; border-top:1px solid rgba(255,255,255,0.1); padding-top:8px;">
+        <div>
+            <p style="font-size:9px; color:#aaa;">ผ่อน 3 งวดๆ ละ</p>
+            <p style="font-size:13px; font-weight:bold; color:var(--gold);" id="instMonth">฿0</p>
+        </div>
+        <div>
+            <p style="font-size:9px; color:#aaa;">งวดที่ 2 เริ่มวันที่</p>
+            <p style="font-size:13px; font-weight:bold; color:#38ef7d;" id="instNextDate">-</p>
+        </div>
+    </div>
+</div>
 
     <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid rgba(212,175,55,0.2);">
         <label style="display:block; color:var(--gold); font-size:10px; margin-bottom:8px; font-weight:600;">📸 ยืนยันตัวตนสำหรับระบบผ่อน</label>
@@ -649,17 +663,35 @@ document.getElementById('orderDetail').innerHTML = `
     init();
     function togglePay(type) {
     const sec = document.getElementById('securitySection');
+    const instBox = document.getElementById('installmentInfo');
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
 
     if(type === 'จ่ายเต็ม') {
         sec.style.display = 'none';
+        instBox.style.display = 'none';
         fBox.style.border = '2px solid var(--gold)'; fBox.style.background = 'rgba(212,175,55,0.2)';
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
     } else {
+        // --- ส่วนคำนวณผ่อน ---
+        const total = activeP.finalTotal;
+        const totalWithFee = total * 1.2; // บวก 20%
+        const perMonth = totalWithFee / 3;
+        
+        // คำนวณวันที่งวดที่ 2 (บวกไป 30 วัน)
+        const nextDate = new Date();
+        nextDate.setDate(nextDate.getDate() + 30);
+        const dateThai = nextDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+
+        // แสดงผลในช่อง installmentInfo
+        document.getElementById('instTotal').innerText = `฿${totalWithFee.toLocaleString()}`;
+        document.getElementById('instMonth').innerText = `฿${perMonth.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('instNextDate').innerText = dateThai;
+
         sec.style.display = 'block';
+        instBox.style.display = 'block';
         iBox.style.border = '2px solid var(--gold)'; iBox.style.background = 'rgba(212,175,55,0.2)';
         fBox.style.border = '1px solid rgba(255,255,255,0.1)'; fBox.style.background = 'transparent';
         radios[1].checked = true;
