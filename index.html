@@ -444,63 +444,73 @@
             `;
         }).join('');
     } 
-            function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
-        activeP = { 
-            name: n, 
-            pNormal: parseFloat(pNormal), 
-            ship: parseFloat(s), 
-            disc: discPercent, 
-            max: parseInt(maxLimit) || 999, 
-            min: parseInt(minLimit) || 1, 
-            img: imgUrl,
-            canInstall: isAllowed // เก็บค่าจาก Google Sheets
-        };
+           function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
+    activeP = { 
+        name: n, 
+        pNormal: parseFloat(pNormal), 
+        ship: parseFloat(s), 
+        disc: discPercent, 
+        max: parseInt(maxLimit) || 999, 
+        min: parseInt(minLimit) || 1, 
+        img: imgUrl,
+        canInstall: isAllowed 
+    };
 
-        // แสดง/ซ่อน ปุ่มผ่อน
-        const payInstallBtn = document.getElementById('pay-install');
-        if (activeP.canInstall === 'YES') {
-            payInstallBtn.style.display = 'block';
-        } else {
-            payInstallBtn.style.display = 'none';
-            togglePay('จ่ายเต็ม');
-        }
-
-        const box = document.getElementById('optionBox');
-        box.innerHTML = '';
-        selectedOptions = {};
-
-        if (optStr && optStr !== '-') {
-            const opts = optStr.split('|');
-            const images = imgUrl.split(',');
-            opts.forEach((opt, i) => {
-                const parts = opt.split(':');
-                const label = parts[0].trim();
-                const price = parseFloat(parts[1] || pNormal);
-                const vImg = images[i] ? images[i].trim() : images[0].trim();
-
-                selectedOptions[label] = { qty: 0, price: price };
-
-                box.innerHTML += `
-                <div class="variant-item">
-                    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
-                    <div class="v-name">${label}</div>
-                    <div class="v-price">฿${price.toLocaleString()}</div>
-                    <div class="v-ctrl">
-                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
-                        <span id="v-qty-${label}">0</span>
-                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
-                    </div>
-                </div>`;
-            });
-        } else {
-            selectedOptions[n] = { qty: 1, price: pNormal };
-        }
-        
-        openModal('orderModal');
-        updatePrice();
+    // แสดง/ซ่อน ปุ่มผ่อน
+    const payInstallBtn = document.getElementById('pay-install');
+    if (activeP.canInstall === 'YES') {
+        payInstallBtn.style.display = 'block';
+    } else {
+        payInstallBtn.style.display = 'none';
+        togglePay('จ่ายเต็ม');
     }
 
+    const box = document.getElementById('optionBox');
+    box.innerHTML = '';
+    selectedOptions = {};
 
+    // --- แก้ไข Logic การแกะข้อมูลตรงนี้ ---
+    if (optStr && optStr !== '-') {
+        // 1. แยกแต่ละชุดตัวเลือกด้วยเครื่องหมาย , (Comma)
+        const opts = optStr.split(',');
+        
+        opts.forEach((opt) => {
+            if (!opt.trim()) return;
+
+            // 2. แยกรายละเอียดด้วย : (Colon)
+            const parts = opt.split(':');
+            const label = parts[0] ? parts[0].trim() : 'สินค้า';
+            const price = parts[1] ? parseFloat(parts[1]) : pNormal;
+            
+            // 3. จัดการเรื่องรูปภาพ (ดึงส่วนที่เหลือทั้งหมดมาเป็น URL เพื่อป้องกัน : ใน https หลุด)
+            let vImg = activeP.img.split(',')[0].trim(); // ค่าเริ่มต้นใช้รูปหลักรูปแรก
+            if (parts.length > 2) {
+                // รวมส่วนตั้งแต่ index ที่ 2 กลับคืนเป็น URL
+                vImg = parts.slice(2).join(':').trim(); 
+            }
+
+            selectedOptions[label] = { qty: 0, price: price };
+
+            box.innerHTML += `
+            <div class="variant-item">
+                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                <div class="v-name">${label}</div>
+                <div class="v-price">฿${price.toLocaleString()}</div>
+                <div class="v-ctrl">
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
+                    <span id="v-qty-${label}">0</span>
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
+                </div>
+            </div>`;
+        });
+    } else {
+        selectedOptions[n] = { qty: 1, price: pNormal };
+    }
+    
+    openModal('orderModal');
+    updatePrice();
+}
+ 
     function changeVQty(label, price, delta) {
         let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
         if (delta > 0 && totalNow >= activeP.max) { alert(`สั่งซื้อรวมกันได้ไม่เกิน ${activeP.max} ชิ้นครับ`); return; }
