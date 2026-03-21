@@ -457,28 +457,26 @@
             // เพิ่มบรรทัดนี้: ดึงค่าจากคอลัมน์ P (คอลัมน์ที่ 16) มาเช็คว่าผ่อนได้ไหม
             let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
 
-            // --- ส่วนการคำนวณราคาที่ถูกต้อง ---
+            // --- ส่วนการคำนวณราคาที่ถูกต้อง (ก๊อปปี้ส่วนนี้ไปวาง) ---
 let currentPrice = priceNormal;
 let percentDiscount = 0;
 
-// 1. เช็คส่วนลดจากป้าย Tag (เช่น ลด 10%)
+// 1. เช็คส่วนลดจากป้าย Tag (เอาค่าที่มากที่สุด)
 [p[4], p[5], p[6], p[7]].forEach(t => { 
     if(t && t.includes('%')) {
         let match = t.match(/(\d+)%/);
-        if(match) percentDiscount = parseInt(match[1]);
+        if(match) percentDiscount = Math.max(percentDiscount, parseInt(match[1]));
     }
 });
 
-// 2. คำนวณราคาตามลำดับความสำคัญ (ราคาโปรโมชั่น > ส่วนลด % > ราคาปกติ)
+// 2. จัดลำดับความสำคัญ: โปรโมชั่นลดราคา > ส่วนลด % > ราคาปกติ
 if (pricePromo > 0 && expiryDate > now) {
     currentPrice = pricePromo;
     percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
 } else if (percentDiscount > 0) {
-    // แก้ไขจุดนี้: ให้คำนวณลดจากราคาปกติจริงๆ
     currentPrice = priceNormal * (1 - (percentDiscount / 100));
 }
-// --- จบส่วนที่แก้ไข ---
-
+// --- จบส่วนที่แก้ราคา ---
 
             return `
             <div class="card">
@@ -600,10 +598,7 @@ if (pricePromo > 0 && expiryDate > now) {
         activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
         activeP.summary = summaryText.join(', ');
 
-        // --- จุดที่แก้: ประกาศตัวแปรให้คอมพิวเตอร์รู้จักก่อนใช้งาน ---
-        let images = activeP.img.split(',').map(img => img.trim());
-        let imgCount = images.length; 
-        // --------------------------------------------------
+     
 
         let badgesHtml = `<div class="promo-pill-container">`;
         if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
