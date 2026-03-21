@@ -360,9 +360,19 @@
                 <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
                 <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
                 
-                <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:10px; border-radius:12px;">
-                    <p style="font-size:11px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
-                </div>
+                <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(212,175,55,0.2);">
+    <p style="font-size:12px; color:var(--gold); font-weight:600; margin-bottom:8px;">🏦 ธนาคารกสิกรไทย</p>
+    
+    <img src="https://promptpay.io/0944159031.png" style="width:150px; background:#fff; padding:5px; border-radius:8px; margin-bottom:10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+    
+    <p style="font-size:13px; color:#fff; font-weight:bold; letter-spacing:1px;">035-8-56762-2</p>
+    <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">ชื่อบัญชี: บจก. แผ่นดิน (PHAENDIN)</p>
+    
+    <button type="button" onclick="copyToClipboard('0358567622')" style="margin-top:8px; background:transparent; border:1px solid var(--gold); color:var(--gold); font-size:10px; padding:4px 10px; border-radius:20px; cursor:pointer;">
+        <i class="fa-regular fa-copy"></i> คัดลอกเลขบัญชี
+    </button>
+</div>
+
                 
                 <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center; margin-bottom:10px;" onclick="document.getElementById('fileIn').click()">
                     <span id="upTxt" style="font-size:10px; color:var(--gold);">แนบสลิปโอนเงิน</span>
