@@ -603,6 +603,49 @@ document.getElementById('orderDetail').innerHTML = `
 }
 
     init();
+    function togglePay(type) {
+    const sec = document.getElementById('securitySection');
+    const fBox = document.getElementById('pay-full');
+    const iBox = document.getElementById('pay-install');
+    const radios = document.getElementsByName('payType');
+
+    if(type === 'จ่ายเต็ม') {
+        sec.style.display = 'none';
+        fBox.style.border = '2px solid var(--gold)'; fBox.style.background = 'rgba(212,175,55,0.2)';
+        iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
+        radios[0].checked = true;
+    } else {
+        sec.style.display = 'block';
+        iBox.style.border = '2px solid var(--gold)'; iBox.style.background = 'rgba(212,175,55,0.2)';
+        fBox.style.border = '1px solid rgba(255,255,255,0.1)'; fBox.style.background = 'transparent';
+        radios[1].checked = true;
+    }
+}
+
+function getLocation() {
+    const btn = document.getElementById('btnLocation');
+    if (navigator.geolocation) {
+        btn.innerText = "กำลังหาพิกัด...";
+        navigator.geolocation.getCurrentPosition((p) => {
+            document.getElementById('userLocation').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> ปักหมุดสำเร็จ';
+            btn.style.background = "#28a745";
+        }, () => alert("โปรดอนุญาตให้เข้าถึงตำแหน่ง (GPS)"));
+    }
+}
+
+function handleSelfie(input) {
+    if(input.files[0]) {
+        const r = new FileReader();
+        r.onload = e => {
+            document.getElementById('selfiePreview').src = e.target.result;
+            document.getElementById('selfiePreview').style.display = 'block';
+            document.getElementById('selfieTxt').style.display = 'none';
+        };
+        r.readAsDataURL(input.files[0]);
+    }
+}
+
 </script>
 </body>
 </html>
