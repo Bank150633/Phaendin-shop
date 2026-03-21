@@ -713,7 +713,7 @@ function getLocation() {
     if (navigator.geolocation) {
         btn.innerText = "กำลังหาพิกัด...";
         navigator.geolocation.getCurrentPosition((p) => {
-            document.getElementById('userLocation').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+            document.getElementById('userLocation').value =`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
 
             btn.innerHTML = '<i class="fa-solid fa-check"></i> ปักหมุดสำเร็จ';
             btn.style.background = "#28a745";
