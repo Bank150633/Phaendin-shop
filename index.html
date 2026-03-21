@@ -555,18 +555,62 @@ document.getElementById('orderDetail').innerHTML = `
     function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
 
     document.getElementById('orderForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const file = document.getElementById('fileIn').files[0];
-        if(!file) return alert("กรุณาแนบสลิป!");
-        btn.innerText = "กำลังส่ง..."; btn.disabled = true;
+    e.preventDefault();
+    
+    // ดึงค่าใหม่ๆ ที่เพิ่มเข้ามา
+    const payType = document.querySelector('input[name="payType"]:checked').value;
+    const gps = document.getElementById('userLocation').value;
+    const selfieFile = document.getElementById('selfieIn').files[0];
+    const slipFile = document.getElementById('fileIn').files[0];
+
+    // เช็คเงื่อนไขกรณี "ผ่อน"
+    if (payType === 'ผ่อนไปใช้ไป') {
+        if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
+        if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
+    }
+    
+    // เช็คสลิป (ต้องมีทั้งสดและผ่อน)
+    if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
+
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+
+    // ฟังก์ชันแปลงรูปภาพเป็น Base64
+    const toBase64 = file => new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = async () => {
-            const data = { productDetail: `${activeP.name} [${activeP.summary}] | ยอดโอน: ฿${activeP.finalTotal}`, customerName: document.getElementById('cName').value, customerPhone: document.getElementById('cPhone').value, customerAddress: document.getElementById('cAddr').value, file: reader.result.split(',')[1] };
-            try { await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); alert("สั่งซื้อสำเร็จ!"); location.reload(); } catch(err) { alert("ล้มเหลว"); btn.disabled = false; }
-        };
         reader.readAsDataURL(file);
-    };
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+    });
+
+    try {
+        const slipBase64 = await toBase64(slipFile);
+        let selfieBase64 = "";
+        
+        // ถ้ามีรูปเซลฟี่ (กรณีผ่อน) ให้แปลงไฟล์ด้วย
+        if (selfieFile) {
+            selfieBase64 = await toBase64(selfieFile);
+        }
+
+        const data = { 
+            productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${activeP.finalTotal}`, 
+            customerName: document.getElementById('cName').value, 
+            customerPhone: document.getElementById('cPhone').value, 
+            customerAddress: document.getElementById('cAddr').value,
+            payType: payType,      // ส่งประเภทการชำระ
+            gps: gps || "-",       // ส่งพิกัด GPS (ถ้าไม่มีให้เป็นขีด)
+            file: slipBase64,      // ส่งรูปสลิป
+            selfie: selfieBase64   // ส่งรูปเซลฟี่
+        };
+
+        // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
+        await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); 
+        alert("สั่งซื้อสำเร็จเรียบร้อยครับ!"); 
+        location.reload(); 
+    } catch(err) { 
+        alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
+        btn.disabled = false; 
+    }
+};
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
