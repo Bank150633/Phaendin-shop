@@ -634,7 +634,7 @@ document.getElementById('orderDetail').innerHTML = `
     alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
     btn.disabled = false; 
 }
-
+};
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
