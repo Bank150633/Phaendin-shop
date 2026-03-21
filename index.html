@@ -625,12 +625,22 @@ if (pricePromo > 0 && expiryDate > now) {
                 <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
                 ${badgesHtml}
                 <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 4px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
-                <div style="border-top: 1px dashed rgba(212,175,55,0.2); padding-top:4px; text-align:center;">
-                    <span style="font-size:10px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                    <div style="font-size:24px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
-                </div>
-            </div>
-        </div>`;
+                <div style="border-top: 1px dashed rgba(212,175,55,0.2); padding-top:8px; text-align:center;">
+    <span style="font-size:10px; color:var(--gold);">ยอดชำระสุทธิ</span>
+    
+    <div style="display:flex; justify-content:center; align-items:baseline; gap:6px;">
+        ${activeP.disc > 0 ? `
+            <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: 400;">
+                ฿${Math.round(Object.values(selectedOptions).reduce((sum, item) => sum + (item.price * item.qty), 0) + activeP.ship).toLocaleString()}
+            </span>
+        ` : ''}
+        
+        <div style="font-size:28px; font-weight:800; color:#fff;">
+            ฿${activeP.finalTotal.toLocaleString()}
+        </div>
+    </div>
+</div>
+
 
         const btn = document.getElementById('submitBtn');
         if (totalItems === 0) { 
