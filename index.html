@@ -450,25 +450,67 @@
         if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
     }
 
-    function updatePrice() {
+        function updatePrice() {
         let subtotal = 0, summaryText = [], totalItems = 0;
-        for (let key in selectedOptions) { if(selectedOptions[key].qty > 0) { subtotal += (selectedOptions[key].price * selectedOptions[key].qty); summaryText.push(`${key} x${selectedOptions[key].qty}`); totalItems += selectedOptions[key].qty; } }
+        for (let key in selectedOptions) { 
+            if(selectedOptions[key].qty > 0) { 
+                subtotal += (selectedOptions[key].price * selectedOptions[key].qty); 
+                summaryText.push(`${key} x${selectedOptions[key].qty}`); 
+                totalItems += selectedOptions[key].qty; 
+            } 
+        }
         activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
         activeP.summary = summaryText.join(', ');
+
+        // แยกรูปภาพออกมาเป็น Array สำหรับทำสไลด์
+        let images = activeP.img.split(',').map(img => img.trim());
+
         let badgesHtml = `<div class="promo-pill-container">`;
         if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
         badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
         badgesHtml += `</div>`;
+
+        // แก้ไขส่วนแสดงผลด้านบนให้สไลด์ได้
         document.getElementById('orderDetail').innerHTML = `
-            <div class="order-summary-box">
-                <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
-                ${badgesHtml}
-                <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
-                <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
-                    <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                    <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+            <div class="order-summary-box" style="padding: 0; overflow: hidden; border: 1px solid rgba(212,175,55,0.4);">
+                <div style="position: relative; width: 100%; aspect-ratio: 16/8; background: #000; overflow: hidden;">
+                    <div id="m-slider" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+                        <style>#m-slider::-webkit-scrollbar { display: none; }</style>
+                        ${images.map(img => `
+                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;">
+                                ${renderMedia(img, true)}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${images.length > 1 ? `
+                    <div id="m-dots" style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 4px; z-index: 10;">
+                        ${images.map((_, i) => `<div class="p-dot-mini" style="width: 5px; height: 5px; border-radius: 50%; background: ${i === 0 ? '#D4AF37' : 'rgba(255,255,255,0.3)'}; transition: 0.3s;"></div>`).join('')}
+                    </div>` : ''}
+                </div>
+                
+                <div style="padding: 12px;">
+                    <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+                    ${badgesHtml}
+                    <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
+                    <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
+                        <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                        <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+                    </div>
                 </div>
             </div>`;
+
+        // เพิ่ม Event ลิสเนอร์ให้จุดไข่ปลาทำงานเวลาเลื่อนรูด
+        const slider = document.getElementById('m-slider');
+        if(slider) {
+            slider.onscroll = function() {
+                const idx = Math.round(this.scrollLeft / this.offsetWidth);
+                document.querySelectorAll('#m-dots .p-dot-mini').forEach((d, i) => {
+                    d.style.background = (i === idx ? '#D4AF37' : 'rgba(255,255,255,0.3)');
+                });
+            };
+        }
+
         const btn = document.getElementById('submitBtn');
         if (totalItems === 0) { btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; }
         else if (totalItems < activeP.min) { btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น (ขาดอีก ${activeP.min - totalItems})`; btn.style.opacity = "0.5"; }
