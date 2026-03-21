@@ -225,12 +225,6 @@
             border: 1px solid rgba(212,175,55,0.3);
             border-radius: 12px; padding: 12px; margin-bottom: 12px;
         }
-                /* สไตล์สำหรับจุดไข่ปลาหน้าแรก */
-        .p-dot-mini { width: 4px; height: 4px; border-radius: 50%; transition: 0.3s; pointer-events: none; }
-        /* ซ่อน Scrollbar สำหรับรูปสินค้า */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -webkit-overflow-scrolling: touch; }
-
     </style>
 </head>
 <body>
@@ -352,13 +346,12 @@
         } catch(e) { console.error(e); }
     }
 
-        function render() {
+    function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
-        document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
-            // ... (ส่วนคำนวณราคาคงเดิมทุกประการ) ...
+        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
@@ -366,34 +359,33 @@
             let minLimit = p[14] ? parseInt(p[14]) : 1;
             let pDescription = p[2] || '';
             let provinceName = p[13] || '';
-            let currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
-            let percentDiscount = (pricePromo > 0 && expiryDate > now) ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
 
-            let images = p[1].split(',').map(img => img.trim());
+            let currentPrice = priceNormal;
+            let percentDiscount = 0;
+            
+            [p[4], p[5], p[6], p[7]].forEach(t => { 
+                if(t && t.includes('%')) {
+                    let match = t.match(/(\d+)%/);
+                    if(match) percentDiscount = parseInt(match[1]);
+                }
+            });
+
+            if (pricePromo > 0 && expiryDate > now) {
+                currentPrice = pricePromo;
+                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
+            } else if (percentDiscount > 0) {
+                currentPrice = priceNormal * (1 - (percentDiscount / 100));
+            }
 
             return `
             <div class="card">
-                <div class="media-wrap" style="position: relative;">
-                    <div id="p-slider-${pIndex}" class="no-scrollbar" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%;" 
-                         onscroll="const idx = Math.round(this.scrollLeft / this.offsetWidth); 
-                                   document.querySelectorAll('#p-dots-${pIndex} .p-dot-mini').forEach((d, i) => d.style.background = (i === idx ? '#D4AF37' : 'rgba(255,255,255,0.3)'))">
-                        ${images.map(img => `
-                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;" onclick='zoom(${JSON.stringify(images)})'>
-                                ${renderMedia(img, true)}
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    ${images.length > 1 ? `
-                    <div id="p-dots-${pIndex}" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); display: flex; gap: 3px; z-index: 10;">
-                        ${images.map((_, i) => `<div class="p-dot-mini" style="background: ${i === 0 ? '#D4AF37' : 'rgba(255,255,255,0.3)'};"></div>`).join('')}
-                    </div>` : ''}
-
+                <div class="media-wrap" onclick="zoom('${p[1]}')">
                     <div class="badge-container">
                         ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
                         ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                     </div>
                     ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                    ${renderMedia(p[1], true)}
                     ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
                 <div class="info">
@@ -404,7 +396,7 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>
                 </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${images[0]}', ${minLimit})">สั่งซื้อ</button>
+                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${p[1]}', ${minLimit})">สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
@@ -458,41 +450,25 @@
         if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
     }
 
-        function updatePrice() {
+    function updatePrice() {
         let subtotal = 0, summaryText = [], totalItems = 0;
-        for (let key in selectedOptions) { 
-            if(selectedOptions[key].qty > 0) { 
-                subtotal += (selectedOptions[key].price * selectedOptions[key].qty); 
-                summaryText.push(`${key} x${selectedOptions[key].qty}`); 
-                totalItems += selectedOptions[key].qty; 
-            } 
-        }
+        for (let key in selectedOptions) { if(selectedOptions[key].qty > 0) { subtotal += (selectedOptions[key].price * selectedOptions[key].qty); summaryText.push(`${key} x${selectedOptions[key].qty}`); totalItems += selectedOptions[key].qty; } }
         activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
         activeP.summary = summaryText.join(', ');
-
         let badgesHtml = `<div class="promo-pill-container">`;
         if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
         badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
         badgesHtml += `</div>`;
-
-        // --- เพิ่มส่วนนี้เพื่อให้รูปโชว์ด้านบนสุดของ Modal ---
         document.getElementById('orderDetail').innerHTML = `
-            <div class="order-summary-box" style="padding: 0; overflow: hidden;">
-                <div style="width: 100%; aspect-ratio: 16/9; background: #000;">
-                    ${renderMedia(activeP.img, true)}
-                </div>
-                
-                <div style="padding: 12px;">
-                    <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
-                    ${badgesHtml}
-                    <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
-                    <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
-                        <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                        <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
-                    </div>
+            <div class="order-summary-box">
+                <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+                ${badgesHtml}
+                <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 8px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
+                <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:8px; text-align:center;">
+                    <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                    <div style="font-size:26px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
                 </div>
             </div>`;
-
         const btn = document.getElementById('submitBtn');
         if (totalItems === 0) { btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; }
         else if (totalItems < activeP.min) { btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น (ขาดอีก ${activeP.min - totalItems})`; btn.style.opacity = "0.5"; }
