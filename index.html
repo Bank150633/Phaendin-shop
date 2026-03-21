@@ -444,29 +444,62 @@
             `;
         }).join('');
     } 
-        function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
-    activeP = { 
-        name: n, 
-        pNormal: parseFloat(pNormal), 
-        ship: parseFloat(s), 
-        disc: discPercent, 
-        max: parseInt(maxLimit) || 999, 
-        min: parseInt(minLimit) || 1, 
-        img: imgUrl,
-        canInstall: isAllowed // เก็บค่า YES/NO ไว้ที่นี่
-    };
+            function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
+        activeP = { 
+            name: n, 
+            pNormal: parseFloat(pNormal), 
+            ship: parseFloat(s), 
+            disc: discPercent, 
+            max: parseInt(maxLimit) || 999, 
+            min: parseInt(minLimit) || 1, 
+            img: imgUrl,
+            canInstall: isAllowed // เก็บค่าจาก Google Sheets
+        };
 
-    // เช็คว่าถ้าใน Google Sheets ไม่ได้พิมพ์ว่า YES ให้ซ่อนปุ่มผ่อนทันที
-    const payInstallBtn = document.getElementById('pay-install');
-    if (activeP.canInstall === 'YES') {
-        payInstallBtn.style.display = 'block'; 
-    } else {
-        payInstallBtn.style.display = 'none';  
-        togglePay('จ่ายเต็ม'); // บังคับให้เลือกจ่ายเต็มเท่านั้น
+        // แสดง/ซ่อน ปุ่มผ่อน
+        const payInstallBtn = document.getElementById('pay-install');
+        if (activeP.canInstall === 'YES') {
+            payInstallBtn.style.display = 'block';
+        } else {
+            payInstallBtn.style.display = 'none';
+            togglePay('จ่ายเต็ม');
+        }
+
+        const box = document.getElementById('optionBox');
+        box.innerHTML = '';
+        selectedOptions = {};
+
+        if (optStr && optStr !== '-') {
+            const opts = optStr.split('|');
+            const images = imgUrl.split(',');
+            opts.forEach((opt, i) => {
+                const parts = opt.split(':');
+                const label = parts[0].trim();
+                const price = parseFloat(parts[1] || pNormal);
+                const vImg = images[i] ? images[i].trim() : images[0].trim();
+
+                selectedOptions[label] = { qty: 0, price: price };
+
+                box.innerHTML += `
+                <div class="variant-item">
+                    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
+                    <div class="v-name">${label}</div>
+                    <div class="v-price">฿${price.toLocaleString()}</div>
+                    <div class="v-ctrl">
+                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
+                        <span id="v-qty-${label}">0</span>
+                        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
+                    </div>
+                </div>`;
+            });
+        } else {
+            selectedOptions[n] = { qty: 1, price: pNormal };
+        }
+        
+        openModal('orderModal');
+        updatePrice();
     }
 
-    const box = document.getElementById('optionBox');
-    box.innerHTML = ''; 
 
     function changeVQty(label, price, delta) {
         let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
