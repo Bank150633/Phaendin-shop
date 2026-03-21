@@ -605,26 +605,36 @@ document.getElementById('orderDetail').innerHTML = `
             selfieBase64 = await toBase64(selfieFile);
         }
 
-        const data = { 
-            productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${activeP.finalTotal}`, 
-            customerName: document.getElementById('cName').value, 
-            customerPhone: document.getElementById('cPhone').value, 
-            customerAddress: document.getElementById('cAddr').value,
-            payType: payType,      // ส่งประเภทการชำระ
-            gps: gps || "-",       // ส่งพิกัด GPS (ถ้าไม่มีให้เป็นขีด)
-            file: slipBase64,      // ส่งรูปสลิป
-            selfie: selfieBase64   // ส่งรูปเซลฟี่
-        };
+            // --- เริ่มต้นส่วนที่แก้ใหม่ ---
+    const isInstall = payType === 'ผ่อนไปใช้ไป';
+    const finalPrice = isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal;
+    
+    // ดึงวันที่นัดงวด 2 จากหน้าจอ (ถ้ามี)
+    let nextPayDate = "-";
+    const dateEl = document.getElementById('instNextDate');
+    if(dateEl) nextPayDate = dateEl.innerText;
 
-        // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
-        await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); 
-        alert("สั่งซื้อสำเร็จเรียบร้อยครับ!"); 
-        location.reload(); 
-    } catch(err) { 
-        alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
-        btn.disabled = false; 
-    }
-};
+    const data = { 
+        productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${finalPrice.toLocaleString()}${isInstall ? ' (ผ่อน 3 งวด)' : ''}`, 
+        customerName: document.getElementById('cName').value, 
+        customerPhone: document.getElementById('cPhone').value, 
+        customerAddress: document.getElementById('cAddr').value,
+        payType: isInstall ? `ผ่อน (งวด2: ${nextPayDate})` : payType, 
+        gps: gps || "-",       
+        file: slipBase64,      
+        selfie: selfieBase64   
+    };
+    // --- จบส่วนที่แก้ใหม่ ---
+
+    // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
+    await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); 
+    alert("สั่งซื้อสำเร็จเรียบร้อยครับ!"); 
+    location.reload(); 
+} catch(err) { 
+    alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
+    btn.disabled = false; 
+}
+
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
