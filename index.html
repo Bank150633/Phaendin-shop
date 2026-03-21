@@ -569,14 +569,34 @@ if (pricePromo > 0 && expiryDate > now) {
     }
 
          function updatePrice() {
-        let subtotal = 0, summaryText = [], totalItems = 0;
-        for (let key in selectedOptions) { 
-            if(selectedOptions[key].qty > 0) { 
-                subtotal += (selectedOptions[key].price * selectedOptions[key].qty); 
-                summaryText.push(`${key} x${selectedOptions[key].qty}`); 
-                totalItems += selectedOptions[key].qty; 
-            } 
-        }
+    let subtotal = 0, summaryText = [], totalItems = 0;
+    
+    // 1. ดึงเปอร์เซ็นต์ส่วนลดที่เก็บไว้ใน activeP (ที่ได้มาจากหน้าแรก)
+    let discP = parseFloat(activeP.disc) || 0; 
+
+    for (let key in selectedOptions) { 
+        if(selectedOptions[key].qty > 0) {
+            // 2. คำนวณราคาหักส่วนลดต่อชิ้นก่อนรวมยอด
+            let itemPrice = selectedOptions[key].price;
+            let discountedPrice = itemPrice * (1 - (discP / 100)); // คำนวณลด % ตรงนี้
+            
+            subtotal += (discountedPrice * selectedOptions[key].qty); 
+            summaryText.push(`${key} x${selectedOptions[key].qty}`); 
+            totalItems += selectedOptions[key].qty; 
+        } 
+    }
+    
+    // 3. ปัดเศษให้เป็นเลขกลมๆ
+    subtotal = Math.round(subtotal);
+
+    activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
+    activeP.summary = summaryText.join(', ');
+
+    // --- ส่วนแสดงผล Slider (คงเดิมตามโค้ดคุณ) ---
+    let images = activeP.img.split(',').map(img => img.trim());
+    let imgCount = images.length; 
+    // ... (โค้ดส่วนแสดงผล HTML ด้านล่างใช้ของเดิมได้เลย) ...
+
         activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
         activeP.summary = summaryText.join(', ');
 
