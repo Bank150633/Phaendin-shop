@@ -471,7 +471,7 @@
             `;
         }).join('');
     } 
-           function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
+          function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
     activeP = { 
         name: n, 
         pNormal: parseFloat(pNormal), 
@@ -483,7 +483,6 @@
         canInstall: isAllowed 
     };
 
-    // แสดง/ซ่อน ปุ่มผ่อน
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
         payInstallBtn.style.display = 'block';
@@ -496,31 +495,19 @@
     box.innerHTML = '';
     selectedOptions = {};
 
-    // --- แก้ไข Logic การแกะข้อมูลตรงนี้ ---
     if (optStr && optStr !== '-') {
-        // 1. แยกแต่ละชุดตัวเลือกด้วยเครื่องหมาย , (Comma)
         const opts = optStr.split(',');
-        
         opts.forEach((opt) => {
             if (!opt.trim()) return;
-
-            // 2. แยกรายละเอียดด้วย : (Colon)
             const parts = opt.split(':');
             const label = parts[0] ? parts[0].trim() : 'สินค้า';
             const price = parts[1] ? parseFloat(parts[1]) : pNormal;
-            
-            // 3. จัดการเรื่องรูปภาพ (ดึงส่วนที่เหลือทั้งหมดมาเป็น URL เพื่อป้องกัน : ใน https หลุด)
-            let vImg = activeP.img.split(',')[0].trim(); // ค่าเริ่มต้นใช้รูปหลักรูปแรก
-            if (parts.length > 2) {
-                // รวมส่วนตั้งแต่ index ที่ 2 กลับคืนเป็น URL
-                vImg = parts.slice(2).join(':').trim(); 
-            }
-
+            let vImg = activeP.img.split(',')[0].trim();
+            if (parts.length > 2) { vImg = parts.slice(2).join(':').trim(); }
             selectedOptions[label] = { qty: 0, price: price };
-
             box.innerHTML += `
             <div class="variant-item">
-                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
                 <div class="v-name">${label}</div>
                 <div class="v-price">฿${price.toLocaleString()}</div>
                 <div class="v-ctrl">
@@ -536,6 +523,9 @@
     
     openModal('orderModal');
     updatePrice();
+
+    // จุดสำคัญ: สั่งให้เปิดมาเจอหน้า 1 ทุกครั้ง
+    nextStep(1); 
 }
  
     function changeVQty(label, price, delta) {
