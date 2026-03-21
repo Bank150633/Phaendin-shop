@@ -457,22 +457,28 @@
             // เพิ่มบรรทัดนี้: ดึงค่าจากคอลัมน์ P (คอลัมน์ที่ 16) มาเช็คว่าผ่อนได้ไหม
             let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
 
-            let currentPrice = priceNormal;
-            let percentDiscount = 0;
-            
-            [p[4], p[5], p[6], p[7]].forEach(t => { 
-                if(t && t.includes('%')) {
-                    let match = t.match(/(\d+)%/);
-                    if(match) percentDiscount = parseInt(match[1]);
-                }
-            });
+            // --- ส่วนการคำนวณราคาที่ถูกต้อง ---
+let currentPrice = priceNormal;
+let percentDiscount = 0;
 
-            if (pricePromo > 0 && expiryDate > now) {
-                currentPrice = pricePromo;
-                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-            } else if (percentDiscount > 0) {
-                currentPrice = priceNormal * (1 - (percentDiscount / 100));
-            }
+// 1. เช็คส่วนลดจากป้าย Tag (เช่น ลด 10%)
+[p[4], p[5], p[6], p[7]].forEach(t => { 
+    if(t && t.includes('%')) {
+        let match = t.match(/(\d+)%/);
+        if(match) percentDiscount = parseInt(match[1]);
+    }
+});
+
+// 2. คำนวณราคาตามลำดับความสำคัญ (ราคาโปรโมชั่น > ส่วนลด % > ราคาปกติ)
+if (pricePromo > 0 && expiryDate > now) {
+    currentPrice = pricePromo;
+    percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
+} else if (percentDiscount > 0) {
+    // แก้ไขจุดนี้: ให้คำนวณลดจากราคาปกติจริงๆ
+    currentPrice = priceNormal * (1 - (percentDiscount / 100));
+}
+// --- จบส่วนที่แก้ไข ---
+
 
             return `
             <div class="card">
