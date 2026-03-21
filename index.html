@@ -616,15 +616,26 @@
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
-    function handleFile(input) { if(input.files[0]) { const r = new FileReader(); r.onload = e => { document.getElementById('preview').src = e.target.result; document.getElementById('preview').style.display = 'block'; document.getElementById('upTxt').style.display = 'none'; }; r.readAsDataURL(input.files[0]); } }
-// ... ฟังก์ชันเดิมที่มีอยู่ ...
-    function handleFile(input) { 
-    if(input.files[0]) { 
-        // ... โค้ดใน handleFile ...
-    } 
+    
+function handleFile(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewImg = document.getElementById('preview');
+            const uploadText = document.getElementById('upTxt');
+            
+            // แสดงรูปภาพที่เลือก
+            previewImg.src = e.target.result;
+            previewImg.style.display = 'block';
+            
+            // ซ่อนข้อความ "แนบสลิปโอนเงิน" เพื่อให้ดูเนี๊ยบขึ้น
+            if (uploadText) uploadText.style.display = 'none';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
-// วางฟังก์ชันใหม่ตรงนี้ครับ
+
 function nextStep(step) {
     const s1 = document.getElementById('step-1');
     const s2 = document.getElementById('step-2');
