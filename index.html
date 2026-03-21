@@ -300,10 +300,18 @@
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
+        <div style="text-align: right; margin-bottom: -15px;">
+            <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:20px; padding:5px;"></i>
+        </div>
+
         <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
         <form id="orderForm">
             
             <div id="step-1">
+                <p onclick="closeModal('orderModal')" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px; display: inline-block;"> 
+                    <i class="fa-solid fa-chevron-left"></i> กลับไปเลือกสินค้าหน้าหลัก
+                </p>
+
                 <div id="orderDetail"></div>
                 <div id="optionBox" style="margin-bottom:12px;"></div>
 
@@ -318,7 +326,7 @@
                     </div>
                 </div>
 
-                                <div id="installmentInfo" style="display:none; margin-bottom:12px; padding:12px; background:rgba(212,175,55,0.1); border-radius:12px; border:1px solid var(--gold); text-align:center;">
+                <div id="installmentInfo" style="display:none; margin-bottom:12px; padding:12px; background:rgba(212,175,55,0.1); border-radius:12px; border:1px solid var(--gold); text-align:center;">
                     <p style="font-size:11px; color:var(--gold);">💰 ยอดรวมผ่อน (บวกบริการ 20%)</p>
                     <div style="font-size:20px; font-weight:800; color:#fff; margin:5px 0;" id="instTotal">฿0</div>
                     <div style="display:flex; justify-content:space-around; margin-top:8px; border-top:1px solid rgba(255,255,255,0.1); padding-top:8px;">
@@ -333,13 +341,11 @@
                     </div>
                 </div>
 
-
                 <button type="button" class="buy-now" onclick="nextStep(2)" style="border-radius:10px; padding: 12px 0;">ถัดไป (กรอกที่อยู่)</button>
             </div>
 
             <div id="step-2" style="display:none;">
                 <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> <i class="fa-solid fa-chevron-left"></i> กลับไปเลือกสินค้า</p>
-
                 <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
                     <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">ปักหมุด GPS</button>
                     <input type="hidden" id="userLocation">
