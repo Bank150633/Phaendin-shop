@@ -817,22 +817,23 @@ function handleFile(input) {
     }
 }
 
-
 function nextStep(step) {
     const s1 = document.getElementById('step-1');
     const s2 = document.getElementById('step-2');
+    const f1 = document.getElementById('step-1-footer');
+    const f2 = document.getElementById('step-2-footer');
+    
     if (step === 2) {
-        // เช็คก่อนว่าเลือกสินค้าหรือยัง (กันลูกค้ากดข้ามไปหน้า 2 ทั้งที่ยังไม่เลือกของ)
         let totalItems = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
         if (totalItems < activeP.min) {
             alert(`กรุณาเลือกสินค้าอย่างน้อย ${activeP.min} ชิ้นก่อนครับ`);
             return;
         }
-        s1.style.display = 'none';
-        s2.style.display = 'block';
+        s1.style.display = 'none'; f1.style.display = 'none';
+        s2.style.display = 'block'; f2.style.display = 'block';
     } else {
-        s1.style.display = 'block';
-        s2.style.display = 'none';
+        s1.style.display = 'block'; f1.style.display = 'block';
+        s2.style.display = 'none'; f2.style.display = 'none';
     }
 }
 
