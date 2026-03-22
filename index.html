@@ -509,9 +509,13 @@
         <div class="card">
             <div class="media-wrap" style="position: relative;">
                 <div class="badge-container">
-                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                    ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                </div>
+    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+    
+    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
+    
+    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+</div>
+
                 ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
                 
                 <div id="p-slider-${pIndex}" onscroll="updateMainDots(${pIndex}, this, ${imgCount})" 
