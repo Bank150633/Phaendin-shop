@@ -590,17 +590,31 @@ function updateMainDots(pIndex, el, total) {
             let vImg = activeP.img.split(',')[0].trim();
             if (parts.length > 2) { vImg = parts.slice(2).join(':').trim(); }
             selectedOptions[label] = { qty: 0, price: price };
-            box.innerHTML += `
-            <div class="variant-item">
-                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
-                <div class="v-name">${label}</div>
-                <div class="v-price">฿${price.toLocaleString()}</div>
-                <div class="v-ctrl">
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
-                    <span id="v-qty-${label}">0</span>
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
-                </div>
-            </div>`;
+            // ดึงค่า % ส่วนลดที่มาจาก Google Sheets (เช่น 17, 20 หรือ 30)
+const dP = parseFloat(discPercent) || 0; 
+
+// คำนวณราคาที่ลดแล้วตาม % ของสินค้านั้นๆ
+const discountedPrice = Math.round(price * (1 - (dP / 100)));
+
+box.innerHTML += `
+<div class="variant-item">
+    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
+    <div class="v-name">${label}</div>
+    <div class="v-price" style="display:flex; flex-direction:column; align-items:center; gap:2px;">
+        ${dP > 0 ? `
+            <span style="text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400;">฿${price.toLocaleString()}</span>
+            <span style="color: #ff4b2b; font-size: 11px;">฿${discountedPrice.toLocaleString()}</span>
+        ` : `
+            <span style="color: var(--gold); font-size: 11px;">฿${price.toLocaleString()}</span>
+        `}
+    </div>
+    <div class="v-ctrl">
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
+        <span id="v-qty-${label}" style="color:#fff; font-size:10px;">0</span>
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
+    </div>
+</div>`;
+
         });
     } else {
         selectedOptions[n] = { qty: 1, price: pNormal };
