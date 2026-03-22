@@ -659,11 +659,22 @@ function updateMainDots(pIndex, el, total) {
     let images = activeP.img.split(',').map(img => img.trim());
     let imgCount = images.length; 
 
-    let badgesHtml = `<div class="promo-pill-container">`;
-    if (activeP.disc > 0) badgesHtml += `<span class="pill pill-red">ลด ${activeP.disc}%</span>`;
-    badgesHtml += activeP.ship === 0 ? `<span class="pill pill-free-ship">ส่งฟรี</span>` : `<span class="pill pill-gold">ค่าส่ง ฿${activeP.ship}</span>`;
+       // --- จุดที่ 1: แก้ไขการสร้างป้ายแท็กให้รองรับ Class และ Style ---
+    let badgesHtml = `<div class="promo-pill-container" style="display: flex; justify-content: center; gap: 5px; margin-top: 5px;">`;
+    
+    // ป้ายลดเปอร์เซ็นต์
+    if (activeP.disc > 0) {
+        badgesHtml += `<span class="pill pill-red" style="background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:4px; font-size:10px;">ลด ${activeP.disc}%</span>`;
+    }
+    
+    // ป้ายส่งฟรี / ค่าส่ง
+    if (activeP.ship === 0) {
+        badgesHtml += `<span class="pill pill-free-ship" style="border:1px solid #38ef7d; color:#38ef7d; background:rgba(56,239,125,0.1); padding:2px 8px; border-radius:4px; font-size:10px;">ส่งฟรี</span>`;
+    } else {
+        badgesHtml += `<span class="pill pill-gold" style="background:var(--gold-grad); color:#000; padding:2px 8px; border-radius:4px; font-size:10px;">ค่าส่ง ฿${activeP.ship}</span>`;
+    }
     badgesHtml += `</div>`;
-
+ 
     document.getElementById('orderDetail').innerHTML = `
     <div class="order-summary-box" style="padding: 0; overflow: hidden; position: relative; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; margin-bottom: 8px;">
         
