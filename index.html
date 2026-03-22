@@ -263,6 +263,17 @@
     width: 15px; /* จุดที่เลือกจะยาวขึ้นนิดนึง */
     border-radius: 10px;
 }
+/* 1. สร้างท่าทาง (Animation) ชื่อว่า pulse */
+@keyframes pulse {
+  0% { transform: scale(1); }       /* เริ่มต้น: ขนาดปกติ */
+  50% { transform: scale(1.05); }   /* กลางทาง: ขยายใหญ่ขึ้น 5% */
+  100% { transform: scale(1); }     /* จบ: กลับมาขนาดปกติ */
+}
+
+/* 2. สั่งให้ปุ่มที่มีคลาส .buy-now ใช้ท่าทางนี้ */
+.buy-now {
+  animation: pulse 2s infinite !important; /* เล่นท่า pulse นาน 2 วินาที วนซ้ำไม่รู้จบ */
+}
 
     </style>
 </head>
