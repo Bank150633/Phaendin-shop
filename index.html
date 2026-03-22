@@ -276,6 +276,36 @@
   /* 1.2s คือทำให้ครบรอบเร็วขึ้น จากเดิม 2s */
   /* ease-in-out คือทำให้จังหวะเด้งดูสมูทเหมือนลูกบอลยาง */
 }
+/* จัดการโครงสร้าง Modal ให้เป็นระเบียบ */
+.modal-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important; /* เคลียร์ padding ออกเพื่อให้ส่วนหัวและท้ายติดขอบ */
+    overflow: hidden !important; /* ห้ามตัวแม่ Scroll */
+}
+
+/* ส่วนหัว Modal */
+.modal-header {
+    padding: 10px;
+    border-bottom: 1px solid rgba(212,175,55,0.1);
+}
+
+/* ส่วนเนื้อหาที่เลื่อนขึ้นลงได้ */
+.modal-body-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ส่วนปุ่มที่ล็อคไว้ด้านล่าง (Footer) */
+.modal-footer-fixed {
+    padding: 15px;
+    background: var(--bg);
+    border-top: 1px solid rgba(212,175,55,0.3);
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    z-index: 100;
+}
 
     </style>
 </head>
