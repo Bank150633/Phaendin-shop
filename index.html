@@ -343,74 +343,30 @@
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <div style="text-align: right; margin-bottom: -15px;">
-            <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:20px; padding:5px;"></i>
+        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="color:var(--gold); font-size:14px; margin-left: 10px;">ยืนยันการสั่งซื้อ</h4>
+            <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:22px; padding:10px;"></i>
         </div>
 
-        <h4 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
-        <form id="orderForm">
-            
-            <div id="step-1">
-                <p onclick="closeModal('orderModal')" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px; display: inline-block;"> 
-                    <i class="fa-solid fa-chevron-left"></i> กลับไปเลือกสินค้าหน้าหลัก
-                </p>
-
-                <div id="orderDetail"></div>
-                <div id="optionBox" style="margin-bottom:12px;"></div>
-
-                <div style="display: flex; gap: 8px; margin-bottom: 12px; padding: 0 5px;">
-                    <div id="pay-full" onclick="togglePay('จ่ายเต็ม')" style="flex:1; border:2px solid var(--gold); background:rgba(212,175,55,0.2); padding:10px; border-radius:12px; text-align:center; cursor:pointer;">
-                        <div style="font-size:12px; font-weight:bold; color:#fff;">ชำระสด</div>
-                        <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display:none">
-                    </div>
-                    <div id="pay-install" onclick="togglePay('ผ่อนไปใช้ไป')" style="flex:1; border:1px solid rgba(255,255,255,0.1); padding:10px; border-radius:12px; text-align:center; cursor:pointer;">
-                        <div style="font-size:12px; font-weight:bold; color:#fff;">ผ่อนชำระ</div>
-                        <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display:none">
-                    </div>
-                </div>
-
-                <div id="installmentInfo" style="display:none; margin-bottom:12px; padding:12px; background:rgba(212,175,55,0.1); border-radius:12px; border:1px solid var(--gold); text-align:center;">
-                    <p style="font-size:11px; color:var(--gold);">💰 ยอดรวมผ่อน (บวกบริการ 20%)</p>
-                    <div style="font-size:20px; font-weight:800; color:#fff; margin:5px 0;" id="instTotal">฿0</div>
-                    <div style="display:flex; justify-content:space-around; margin-top:8px; border-top:1px solid rgba(255,255,255,0.1); padding-top:8px;">
-                        <div>
-                            <p style="font-size:9px; color:#aaa;">ผ่อน 3 งวดๆ ละ</p>
-                            <p style="font-size:13px; font-weight:bold; color:var(--gold);" id="instMonth">฿0</p>
-                        </div>
-                        <div>
-                            <p style="font-size:9px; color:#aaa;">งวดที่ 2 เริ่มวันที่</p>
-                            <p style="font-size:13px; font-weight:bold; color:#38ef7d;" id="instNextDate">-</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="button" class="buy-now" onclick="nextStep(2)" style="border-radius:10px; padding: 12px 0;">ถัดไป (กรอกที่อยู่)</button>
-            </div>
-
-            <div id="step-2" style="display:none;">
-                <div id="orderModal" class="modal">
-    <div class="modal-card">
-        <div class="modal-header" style="text-align: right;">
-            <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:20px; padding:5px;"></i>
-        </div>
-
-        <form id="orderForm" style="display: flex; flex-direction: column; height: 100%;">
-            
+        <form id="orderForm" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
             <div class="modal-body-scroll">
-                <h4 style="color:var(--gold); text-align:center; margin-bottom:15px; font-size:14px;">ยืนยันการสั่งซื้อ</h4>
-                
                 <div id="step-1">
-                    <p onclick="closeModal('orderModal')" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px; display: inline-block;"> 
+                    <p onclick="closeModal('orderModal')" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
                         <i class="fa-solid fa-chevron-left"></i> กลับไปเลือกสินค้าหน้าหลัก
                     </p>
                     <div id="orderDetail"></div>
-                    <div id="optionBox" style="margin-bottom:12px;"></div>
+                    <div id="optionBox"></div>
                 </div>
 
                 <div id="step-2" style="display:none;">
-                    <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> <i class="fa-solid fa-chevron-left"></i> กลับไปเลือกสินค้า</p>
+                    <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
+                        <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
+                    </p>
+                    
                     <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
-                        <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">ปักหมุด GPS</button>
+                        <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
+                            <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS
+                        </button>
                         <input type="hidden" id="userLocation">
                         <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('selfieIn').click()">
                             <span id="selfieTxt" style="font-size:10px; color:var(--gold);">ถ่ายรูปเซลฟี่คู่กับบัตร</span>
@@ -418,19 +374,20 @@
                             <img id="selfiePreview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
                         </div>
                     </div>
+
                     <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
                     <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim">
                     <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
                     
                     <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(212,175,55,0.2);">
-                        <p style="font-size:12px; color:var(--gold); font-weight:600; margin-bottom:8px;">🏦 ธนาคารกสิกรไทย</p>
-                        <img src="https://i.ibb.co/0yYSsMDh/004999092296200-20260322-004801.jpg" style="width:150px; background:#fff; padding:5px; border-radius:8px; margin-bottom:10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-                        <p style="font-size:13px; color:#fff; font-weight:bold; letter-spacing:1px;">035-8-56762-2</p>
-                        <p style="font-size:11px; color:var(--text-dim); margin-top:4px;">ชื่อบัญชี: วัชระ ชันสิน</p>
+                        <p style="font-size:11px; color:var(--gold);">🏦 ธนาคารกสิกรไทย</p>
+                        <img src="https://i.ibb.co/0yYSsMDh/004999092296200-20260322-004801.jpg" style="width:140px; border-radius:8px; margin: 8px 0;">
+                        <p style="font-size:13px; color:#fff; font-weight:bold;">035-8-56762-2</p>
+                        <p style="font-size:10px; color:var(--text-dim);">ชื่อบัญชี: วัชระ ชันสิน</p>
                         <button type="button" onclick="copyToClipboard('0358567622')" style="margin-top:8px; background:transparent; border:1px solid var(--gold); color:var(--gold); font-size:10px; padding:4px 10px; border-radius:20px;">คัดลอกเลขบัญชี</button>
                     </div>
 
-                    <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center; margin-bottom:10px;" onclick="document.getElementById('fileIn').click()">
+                    <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('fileIn').click()">
                         <span id="upTxt" style="font-size:10px; color:var(--gold);">แนบสลิปโอนเงิน</span>
                         <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
                         <img id="preview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
@@ -450,10 +407,11 @@
                             <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display:none">
                         </div>
                     </div>
-
+                    
                     <div id="installmentInfo" style="display:none; margin-bottom:12px; padding:8px; background:rgba(212,175,55,0.1); border-radius:10px; border:1px solid var(--gold); text-align:center;">
                         <p style="font-size:10px; color:var(--gold);">ยอดรวมผ่อน (+20%): <span id="instTotal" style="color:#fff; font-weight:bold;">฿0</span></p>
                         <p style="font-size:10px; color:#aaa;">งวดละ: <span id="instMonth" style="color:var(--gold); font-weight:bold;">฿0</span></p>
+                        <p style="font-size:9px; color:#38ef7d;">งวดที่ 2: <span id="instNextDate">-</span></p>
                     </div>
 
                     <button type="button" class="buy-now" onclick="nextStep(2)" style="border-radius:10px; padding: 12px 0;">ถัดไป (กรอกที่อยู่)</button>
@@ -463,10 +421,10 @@
                     <button type="submit" id="submitBtn" class="buy-now" style="border-radius:10px; padding: 12px 0;">ยืนยันสั่งซื้อ</button>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
+
 
 <div id="zoomOverlay" onclick="closeZoom()"><div id="zoomContent"></div></div>
 
