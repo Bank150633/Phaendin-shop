@@ -936,6 +936,9 @@ function nextStep(step) {
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
+    
+    // ดึง Element ตัวเลขใหญ่ข้างบน (ต้องไปแก้ใน updatePrice ให้มี ID นี้ด้วย)
+    const topPriceDisplay = document.getElementById('finalTotalDisplay');
 
     if(type === 'จ่ายเต็ม') {
         sec.style.display = 'none';
@@ -943,43 +946,42 @@ function nextStep(step) {
         fBox.style.border = '2px solid var(--gold)'; fBox.style.background = 'rgba(212,175,55,0.2)';
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
+        
+        // แสดงยอดเต็มข้างบน
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+        
     } else {
-        // --- คำนวณยอดผ่อน 3 งวด ---
         const total = activeP.finalTotal;
-        const totalWithFee = total * 1.2; // บวกค่าธรรมเนียม 20%
+        const totalWithFee = total * 1.2; 
         const perMonth = (totalWithFee / 3).toFixed(2);
         
-        // คำนวณวันที่งวดที่ 2 (บวกไป 30 วัน)
         const nextDate = new Date();
         nextDate.setDate(nextDate.getDate() + 30);
         const dateThai = nextDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
 
-        // แสดงผลแบบแจกแจง 3 งวด
+        // แสดงยอดงวดแรกข้างบน (ให้ลูกค้ารู้สึกว่าถูกลงทันที!)
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth}`;
+
         instBox.innerHTML = `
             <div style="text-align:left; padding:5px;">
-<p style="color:#38ef7d; font-weight:bold; font-size:13px; margin-bottom:8px; text-align:center;">
-   🚀 จ่ายแค่ ฿${perMonth} รับของไปก่อนเลย!
-</p>
-                
+                <p style="color:#38ef7d; font-weight:bold; font-size:13px; margin-bottom:8px; text-align:center;">
+                   🚀 จ่ายแค่ ฿${perMonth} รับของไปก่อนเลย!
+                </p>
                 <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
                     <span>🟢 งวดที่ 1 (จ่ายตอนนี้):</span>
                     <span style="color:#38ef7d; font-weight:bold;">฿${perMonth}</span>
                 </div>
-                
                 <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; color:#aaa;">
                     <span>⚪ งวดที่ 2 (${dateThai}):</span>
                     <span>฿${perMonth}</span>
                 </div>
-                
                 <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px; color:#aaa;">
                     <span>⚪ งวดที่ 3 (อีก 30 วันถัดไป):</span>
                     <span>฿${perMonth}</span>
                 </div>
-                
                 <p style="font-size:10px; color:var(--gold); border-top:1px dashed rgba(212,175,55,0.3); padding-top:5px; text-align:right;">
                     ยอดรวมผ่อน (+20%): ฿${totalWithFee.toLocaleString()}
                 </p>
-                <input type="hidden" id="instNextDate" value="${dateThai}">
             </div>
         `;
 
