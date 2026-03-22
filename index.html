@@ -442,66 +442,80 @@
     }
 
     function render() {
-        const query = document.getElementById('search').value.toLowerCase();
-        const now = new Date().getTime();
-        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
-        
-        document.getElementById('productGrid').innerHTML = filtered.map((p) => {
-            let priceNormal = parseFloat(p[3] || 0);    
-            let pricePromo = parseFloat(p[10] || 0);   
-            let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let maxLimit = p[12] ? parseInt(p[12]) : 999;
-            let minLimit = p[14] ? parseInt(p[14]) : 1;
-            let pDescription = p[2] || '';
-            let provinceName = p[13] || '';
-            // เพิ่มบรรทัดนี้: ดึงค่าจากคอลัมน์ P (คอลัมน์ที่ 16) มาเช็คว่าผ่อนได้ไหม
-            let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
+    const query = document.getElementById('search').value.toLowerCase();
+    const now = new Date().getTime();
+    const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+    
+    document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
+        let priceNormal = parseFloat(p[3] || 0);    
+        let pricePromo = parseFloat(p[10] || 0);   
+        let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
+        let provinceName = p[13] || '';
+        let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
 
-            // --- ส่วนการคำนวณราคาที่ถูกต้อง (ก๊อปปี้ส่วนนี้ไปวาง) ---
-let currentPrice = priceNormal;
-let percentDiscount = 0;
+        // จัดการเรื่องรูปภาพ (รองรับหลายรูป)
+        let images = p[1].split(',').map(img => img.trim());
+        let imgCount = images.length;
 
-// 1. เช็คส่วนลดจากป้าย Tag (เอาค่าที่มากที่สุด)
-[p[4], p[5], p[6], p[7]].forEach(t => { 
-    if(t && t.includes('%')) {
-        let match = t.match(/(\d+)%/);
-        if(match) percentDiscount = Math.max(percentDiscount, parseInt(match[1]));
-    }
-});
+        // คำนวณราคา (ตาม Logic เดิมของคุณ)
+        let currentPrice = priceNormal;
+        let percentDiscount = 0;
+        if (pricePromo > 0 && expiryDate > now) {
+            currentPrice = pricePromo;
+            percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
+        }
 
-// 2. จัดลำดับความสำคัญ: โปรโมชั่นลดราคา > ส่วนลด % > ราคาปกติ
-if (pricePromo > 0 && expiryDate > now) {
-    currentPrice = pricePromo;
-    percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-} else if (percentDiscount > 0) {
-    currentPrice = priceNormal * (1 - (percentDiscount / 100));
-}
-// --- จบส่วนที่แก้ราคา ---
-
-            return `
-            <div class="card">
-                <div class="media-wrap" onclick="zoom('${p[1]}')">
-                    <div class="badge-container">
-                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                        ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                    </div>
-                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                    ${renderMedia(p[1], true)}
-                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+        return `
+        <div class="card">
+            <div class="media-wrap" style="position: relative;">
+                <div class="badge-container">
+                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                    ${[p[4], p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                 </div>
-                <div class="info">
-                    <div class="p-name">${p[0]}</div>
-                    <div class="p-desc">${pDescription}</div>
-                    <div class="p-price">
-                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
-                    </div>
-                    </div>
-                <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${maxLimit}, '${p[1]}', ${minLimit}, '${canInstall}')">สั่งซื้อ</button>
+                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                
+                <div id="p-slider-${pIndex}" onscroll="updateMainDots(${pIndex}, this, ${imgCount})" 
+                     style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+                    ${images.map(img => `
+                        <div style="min-width: 100%; height: 100%; scroll-snap-align: start;" onclick="zoom('${img}')">
+                            ${renderMedia(img, true)}
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${imgCount > 1 ? `
+                <div class="dot-container" style="bottom: 5px; gap: 3px;">
+                    ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${pIndex}-${i}" style="width:4px; height:4px;"></div>`).join('')}
+                </div>` : ''}
+
+                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
             </div>
-            `;
-        }).join('');
-    } 
+            <div class="info">
+                <div class="p-name">${p[0]}</div>
+                <div class="p-desc">${p[2] || ''}</div>
+                <div class="p-price">
+                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                </div>
+            </div>
+            <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${p[12]||999}, '${p[1]}', ${p[14]||1}, '${canInstall}')">สั่งซื้อ</button>
+        </div>
+        `;
+    }).join('');
+}
+
+// เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
+function updateMainDots(pIndex, el, total) {
+    const index = Math.round(el.scrollLeft / el.offsetWidth);
+    for (let i = 0; i < total; i++) {
+        const dot = document.getElementById(`dot-${pIndex}-${i}`);
+        if (dot) {
+            if (i === index) dot.classList.add('active');
+            else dot.classList.remove('active');
+        }
+    }
+}
+
           function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
     activeP = { 
         name: n, 
