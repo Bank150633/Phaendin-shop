@@ -1002,6 +1002,26 @@ function updateDots(el, total) {
         }
     }
 }
+// ฟังก์ชันสั่งให้ป้ายนับถอยหลังในรายการสินค้า (Grid) ทำงาน
+setInterval(() => {
+    const timerBadges = document.querySelectorAll('.p-timer-badge');
+    const now = new Date().getTime();
+
+    timerBadges.forEach(badge => {
+        const expireTime = new Date(badge.getAttribute('data-expire')).getTime();
+        const diff = expireTime - now;
+
+        if (diff > 0) {
+            const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+            const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+            const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+            badge.innerText = `⏳ ${h}:${m}:${s}`;
+        } else {
+            badge.innerText = "🚩 หมดเวลาโปรโมชั่น";
+            badge.style.background = "#555"; // เปลี่ยนเป็นสีเทาเมื่อหมดเวลา
+        }
+    });
+}, 1000);
 
 </script>
 </body>
