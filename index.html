@@ -675,34 +675,38 @@ function updateMainDots(pIndex, el, total) {
     // คำนวณยอดผ่อนใหม่ตามราคาที่อัปเดต
     const currentPayType = document.querySelector('input[name="payType"]:checked').value;
     togglePay(currentPayType);
-}
-   
+} 
      
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
-    // 1. แยก URL รูปภาพออกมาเป็นกลุ่ม (Array)
-    const images = url.split(',').map(img => img.trim());
+    // 1. แยกรูปภาพออกมา (รองรับทั้งแบบรูปเดียว หรือหลายรูปคั่นด้วยคอมม่า)
+    const images = url.split(',').filter(img => img.trim() !== "").map(img => img.trim());
     const imgCount = images.length;
 
-    // 2. สร้างโครงสร้าง Slider ใส่เข้าไปในหน้า Zoom
+    // 2. ปรับโครงสร้างหน้า Zoom ให้พอดีจอและสไลด์ได้
     document.getElementById('zoomContent').innerHTML = `
-        <div style="position: relative; width: 95vw; height: 80vh;">
-            ${imgCount > 1 ? `<div class="img-counter" id="zoomNum">1 / ${imgCount}</div>` : ''}
+        <div style="position: relative; width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            
+            ${imgCount > 1 ? `<div id="zoomNum" style="color: white; margin-bottom: 10px; font-size: 16px; background: rgba(0,0,0,0.5); padding: 2px 10px; border-radius: 10px;">1 / ${imgCount}</div>` : ''}
             
             <div onscroll="updateZoomDots(this, ${imgCount})" 
-                 style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+                 style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; max-height: 70vh; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
                 ${images.map(img => `
-                    <div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">
-                        ${renderMedia(img, false)}
+                    <div style="min-width: 100%; display: flex; align-items: center; justify-content: center; scroll-snap-align: start;">
+                        <img src="${img}" style="max-width: 95%; max-height: 70vh; object-fit: contain; border-radius: 8px;">
                     </div>
                 `).join('')}
             </div>
+
+            <div onclick="document.getElementById('zoomOverlay').style.display='none'" 
+                 style="position: absolute; top: -40px; right: 20px; color: white; font-size: 30px; cursor: pointer;">&times;</div>
         </div>
     `;
+    
     document.getElementById('zoomOverlay').style.display = 'flex';
 }
 
-// ฟังก์ชันช่วยอัปเดตเลข 1/2, 1/3 ในหน้าซูม
+// ฟังก์ชันอัปเดตตัวเลข 1/2, 1/3 เวลาเราปัดรูป
 function updateZoomDots(el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
     const numEl = document.getElementById('zoomNum');
