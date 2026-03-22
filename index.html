@@ -679,7 +679,36 @@ function updateMainDots(pIndex, el, total) {
    
      
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
-    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    function zoom(url) {
+    // 1. แยก URL รูปภาพออกมาเป็นกลุ่ม (Array)
+    const images = url.split(',').map(img => img.trim());
+    const imgCount = images.length;
+
+    // 2. สร้างโครงสร้าง Slider ใส่เข้าไปในหน้า Zoom
+    document.getElementById('zoomContent').innerHTML = `
+        <div style="position: relative; width: 95vw; height: 80vh;">
+            ${imgCount > 1 ? `<div class="img-counter" id="zoomNum">1 / ${imgCount}</div>` : ''}
+            
+            <div onscroll="updateZoomDots(this, ${imgCount})" 
+                 style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+                ${images.map(img => `
+                    <div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">
+                        ${renderMedia(img, false)}
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+    document.getElementById('zoomOverlay').style.display = 'flex';
+}
+
+// ฟังก์ชันช่วยอัปเดตเลข 1/2, 1/3 ในหน้าซูม
+function updateZoomDots(el, total) {
+    const index = Math.round(el.scrollLeft / el.offsetWidth);
+    const numEl = document.getElementById('zoomNum');
+    if (numEl) numEl.innerText = `${index + 1} / ${total}`;
+}
+
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
     function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
