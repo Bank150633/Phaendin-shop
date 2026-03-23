@@ -932,14 +932,14 @@ function nextStep(step) {
 }
 
     init();
-    function togglePay(type) {
+    
+function togglePay(type) {
     const sec = document.getElementById('securitySection');
     const instBox = document.getElementById('installmentInfo');
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
     
-    // ดึง Element ตัวเลขใหญ่ข้างบน (ต้องไปแก้ใน updatePrice ให้มี ID นี้ด้วย)
     const topPriceDisplay = document.getElementById('finalTotalDisplay');
 
     if(type === 'จ่ายเต็ม') {
@@ -949,7 +949,6 @@ function nextStep(step) {
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
         
-        // แสดงยอดเต็มข้างบน
         if(topPriceDisplay) topPriceDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
         
     } else {
@@ -961,7 +960,6 @@ function nextStep(step) {
         nextDate.setDate(nextDate.getDate() + 30);
         const dateThai = nextDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
 
-        // แสดงยอดงวดแรกข้างบน (ให้ลูกค้ารู้สึกว่าถูกลงทันที!)
         if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth}`;
 
         instBox.innerHTML = `
@@ -993,6 +991,9 @@ function nextStep(step) {
         fBox.style.border = '1px solid rgba(255,255,255,0.1)'; fBox.style.background = 'transparent';
         radios[1].checked = true;
     }
+
+    // --- นี่คือคำสั่งที่เพิ่มเข้าไปครับ ---
+    checkBlacklist(); 
 }
 
 function getLocation() {
@@ -1058,13 +1059,14 @@ setInterval(() => {
     });
 }, 1000);
 async function checkBlacklist() {
-    // 1. ดึงค่าจากปุ่ม "ซื้อสด/ผ่อน" ในฟอร์มของคุณ
-    const payTypeRadio = document.querySelector('input[name="payType"]:checked');
-    const payType = payTypeRadio ? payTypeRadio.value : 'จ่ายเต็ม';
     const confirmBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('statusMsg');
+    
+    // ดึงค่าประเภทการจ่ายปัจจุบัน
+    const payTypeRadio = document.querySelector('input[name="payType"]:checked');
+    const payType = payTypeRadio ? payTypeRadio.value : 'จ่ายเต็ม';
 
-    // 2. ถ้าเลือก "จ่ายเต็ม" (ซื้อสด) -> ปลดล็อกทันที ไม่ต้องเช็คแบล็กลิสต์
+    // 1. ถ้าเลือก "จ่ายเต็ม" -> ปลดล็อกปุ่มทันที ไม่ต้องดูแบล็กลิสต์
     if (payType === 'จ่ายเต็ม') {
         confirmBtn.disabled = false;
         confirmBtn.style.opacity = "1";
@@ -1073,60 +1075,60 @@ async function checkBlacklist() {
         return; 
     }
 
-    // 3. ลิงก์ดึงข้อมูลจากชีท Blacklist ของคุณ
+    // 2. ถ้าเลือก "ผ่อน" -> เข้าสู่กระบวนการเช็คข้อมูล
+    const nameInput = document.getElementById('cName').value.trim();
+    const phoneInput = document.getElementById('cPhone').value.trim();
+
+    // ถ้ายังไม่กรอกชื่อหรือเบอร์ตอนเลือกผ่อน ให้ล็อกปุ่มไว้ก่อนเพื่อความปลอดภัย
+    if (!nameInput && !phoneInput) {
+        confirmBtn.disabled = true;
+        confirmBtn.style.opacity = "0.5";
+        statusDiv.innerHTML = "<span style='color: #aaa;'>กรุณากรอกชื่อ/เบอร์ เพื่อเช็คประวัติผ่อน</span>";
+        return;
+    }
+
     const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEdsQEBKv58LTpR9FHTo8m8A4lh2Uvao4mHdXKIsO7kAInqESneZoTIAqaNi6oFXua43bkyumr7FU9/pub?gid=1416026715&single=true&output=csv';
     
     try {
-        const nameInput = document.getElementById('cName').value.trim();
-        const phoneInput = document.getElementById('cPhone').value.trim();
-
-        if (!nameInput && !phoneInput) {
-            confirmBtn.disabled = false;
-            statusDiv.innerHTML = "<span style='color: #aaa;'>กรุณากรอกข้อมูลเพื่อเช็คประวัติ</span>";
-            return;
-        }
-
         const response = await fetch(url);
         const data = await response.text();
-        // แยกแถวข้อมูล
         const rows = data.split('\n').map(row => row.split(','));
         
         let isBlacklisted = false;
         let blacklistReason = "";
 
-        // วนลูปเช็คข้อมูลในชีท (เริ่มแถวที่ 2 เป็นต้นไป)
         for (let i = 1; i < rows.length; i++) {
             const row = rows[i];
             if (!row || row.length < 3) continue;
 
-            const sheetName = row[0]?.replace(/"/g, '').trim();  // คอลัมน์ A: ชื่อ
-            const sheetPhone = row[1]?.replace(/"/g, '').trim(); // คอลัมน์ B: เบอร์
-            const sheetStatus = row[2]?.replace(/"/g, '').trim(); // คอลัมน์ C: สถานะ
+            const sheetName = row[0]?.replace(/"/g, '').trim();
+            const sheetPhone = row[1]?.replace(/"/g, '').trim();
+            const sheetStatus = row[2]?.replace(/"/g, '').trim();
 
-            // ถ้าชื่อหรือเบอร์ตรง และสถานะในชีทคือ "ติดผ่อน"
+            // เช็คชื่อหรือเบอร์ และต้องมีสถานะ "ติดผ่อน" ในชีท
             if ((nameInput === sheetName || phoneInput === sheetPhone) && sheetStatus === "ติดผ่อน") {
                 isBlacklisted = true;
                 blacklistReason = row[3]?.replace(/"/g, '').trim() || "มียอดค้างชำระ";
-                break; // เจอแล้วหยุดหาทันที
+                break;
             }
         }
 
         if (isBlacklisted) {
-            // เจอแบล็กลิสต์ -> ล็อกปุ่มยืนยัน
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
             confirmBtn.style.cursor = "not-allowed";
             statusDiv.innerHTML = `<span style='color: #ff4444;'>❌ ประวัติเสีย: ${blacklistReason} (งดรับผ่อน)</span>`;
         } else {
-            // ประวัติปกติ -> ปลดล็อกปุ่ม
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
-            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ประวัติปกติ (สั่งซื้อได้)</span>";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ประวัติปกติ (สั่งซื้อแบบผ่อนได้)</span>";
         }
     } catch (e) {
         console.error("Blacklist Error:", e);
+        statusDiv.innerHTML = "<span style='color: orange;'>⚠️ ไม่สามารถตรวจสอบประวัติได้ชั่วคราว</span>";
     }
 }
+
 
 </script>
 </body>
