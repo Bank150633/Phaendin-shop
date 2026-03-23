@@ -1066,7 +1066,7 @@ setInterval(() => {
     const payTypeRadio = document.querySelector('input[name="payType"]:checked');
     const payType = payTypeRadio ? payTypeRadio.value : 'จ่ายเต็ม';
 
-    // 1. ถ้าจ่ายสด ให้ผ่านปกติ
+    // 1. จ่ายสด ปล่อยผ่าน
     if (payType === 'จ่ายเต็ม' || payType === 'สด') {
         confirmBtn.disabled = false;
         confirmBtn.style.opacity = "1";
@@ -1074,7 +1074,7 @@ setInterval(() => {
         return; 
     }
 
-    // 2. ดึงค่าจากช่องพิมพ์ (ลบเว้นวรรคออกให้หมด)
+    // 2. ดึงค่าจากช่องพิมพ์ (ทำตัวเล็ก/ลบเว้นวรรค/ลบขีด)
     const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim();
     const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
 
@@ -1083,36 +1083,36 @@ setInterval(() => {
         return;
     }
 
-    // 3. ดึงข้อมูล (ใส่ตัวแปร t เพื่อป้องกันข้อมูลไม่อัปเดต)
-    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEdsQEBKv58LTpR9FHTo8m8A4lh2Uvao4mHdXKIsO7kAInqESneZoTIAqaNi6oFXua43bkyumr7FU9/pub?gid=1416026715&single=true&output=csv&t=' + new Date().getTime();
+    // 3. URL ดึงข้อมูล (เพิ่มตัวแปรสุ่มป้องกัน Cache)
+    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEdsQEBKv58LTpR9FHTo8m8A4lh2Uvao4mHdXKIsO7kAInqESneZoTIAqaNi6oFXua43bkyumr7FU9/pub?gid=1416026715&single=true&output=csv&cache=' + new Date().getTime();
     
     try {
         const response = await fetch(url);
         const csvText = await response.text();
-        const rows = csvText.split('\n').map(row => row.split(','));
+        const rows = csvText.split('\n');
         
         let isBad = false;
         let badReason = "";
 
-        for (let i = 0; i < rows.length; i++) {
-            const row = rows[i];
-            if (!row || row.length < 2) continue;
+        // เริ่มตรวจตั้งแต่แถวที่ 2 (i=1) เผื่อแถวแรกเป็นหัวข้อ
+        for (let i = 1; i < rows.length; i++) {
+            let currentRow = rows[i].replace(/["']/g, ''); // ลบเครื่องหมายคำพูดออกทั้งแถว
+            
+            // ลบเว้นวรรคออกให้หมดทั้งแถวเพื่อเอามาเทียบ
+            let cleanRow = currentRow.replace(/\s+/g, '');
 
-            // --- จุดสำคัญ: ล้างเครื่องหมาย " และเว้นวรรคออกจากข้อมูลใน Google Sheets ---
-            const sName = (row[0] || "").replace(/["']/g, '').replace(/\s+/g, '').trim();
-            const sPhone = (row[1] || "").replace(/["']/g, '').replace(/[^0-9]/g, '').trim();
-            const sStatus = (row[2] || "").replace(/["']/g, '').trim();
-
-            // เช็คว่าชื่อที่พิมพ์มา "อยู่ใน" ชื่อในแบล็คลิสต์ หรือไม่
-            const matchName = (nameInput !== "" && sName.includes(nameInput));
-            const matchPhone = (phoneInput !== "" && sPhone.includes(phoneInput));
+            // ตรวจสอบ: ถ้าในแถวนี้ "มีชื่อที่พิมพ์" หรือ "มีเบอร์ที่พิมพ์" อยู่ข้างใน
+            const matchName = (nameInput !== "" && cleanRow.includes(nameInput));
+            const matchPhone = (phoneInput !== "" && cleanRow.includes(phoneInput));
 
             if (matchName || matchPhone) {
-                // รายการคำที่ถือว่าเป็น Blacklist
+                // เช็คสถานะแบล็คลิสต์ (กวาดดูว่าในแถวนั้นมีคำต้องห้ามไหม)
                 const blackTerms = ["ติดผ่อน", "ประวัติเสีย", "Blacklist", "ไม่ผ่าน", "เสีย", "ระงับ"];
-                if (blackTerms.some(term => sStatus.includes(term))) {
+                if (blackTerms.some(term => cleanRow.includes(term))) {
                     isBad = true;
-                    badReason = (row[3] || "มียอดค้างชำระ").replace(/["']/g, '');
+                    // พยายามดึงเหตุผล (ถ้าแยกคอมม่าได้) หรือใช้ข้อความกลาง
+                    let cols = rows[i].split(',');
+                    badReason = cols[3] ? cols[3].replace(/["']/g, '') : "พบประวัติในระบบแบล็คลิสต์";
                     break;
                 }
             }
@@ -1128,6 +1128,7 @@ setInterval(() => {
             statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ผ่านการตรวจสอบ (สั่งซื้อแบบผ่อนได้)</span>";
         }
     } catch (e) {
+        console.log("Error:", e);
         confirmBtn.disabled = false; 
     }
 }
