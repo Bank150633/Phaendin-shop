@@ -571,7 +571,9 @@ function updateMainDots(pIndex, el, total) {
 }
 
           function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
-              selectedOptions = {};
+    // 1. ล้างค่าตะกร้าให้ว่างสะอาดกริบ (วางไว้บนสุดที่เดียวพอ)
+    selectedOptions = {}; 
+    
     activeP = { 
         name: n, 
         pNormal: parseFloat(pNormal), 
@@ -583,6 +585,7 @@ function updateMainDots(pIndex, el, total) {
         canInstall: isAllowed 
     };
 
+    // จัดการปุ่มผ่อน
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
         payInstallBtn.style.display = 'block';
@@ -592,10 +595,9 @@ function updateMainDots(pIndex, el, total) {
     }
 
     const box = document.getElementById('optionBox');
-    box.innerHTML = '';
-    selectedOptions = {};
+    box.innerHTML = ''; // ล้างหน้าจอตัวเลือกสินค้าเดิม
 
-    if (optStr && optStr !== '-') {
+    if (optStr && optStr !== '-' && optStr !== '') {
         const opts = optStr.split(',');
         opts.forEach((opt) => {
             if (!opt.trim()) return;
@@ -604,43 +606,43 @@ function updateMainDots(pIndex, el, total) {
             const price = parts[1] ? parseFloat(parts[1]) : pNormal;
             let vImg = activeP.img.split(',')[0].trim();
             if (parts.length > 2) { vImg = parts.slice(2).join(':').trim(); }
+            
+            // บันทึกค่าเริ่มต้นในตะกร้า
             selectedOptions[label] = { qty: 0, price: price };
-            // ดึงค่า % ส่วนลดที่มาจาก Google Sheets (เช่น 17, 20 หรือ 30)
-const dP = parseFloat(discPercent) || 0; 
+            
+            const dP = parseFloat(activeP.disc) || 0; 
+            const discountedPrice = Math.round(price * (1 - (dP / 100)));
 
-// คำนวณราคาที่ลดแล้วตาม % ของสินค้านั้นๆ
-const discountedPrice = Math.round(price * (1 - (dP / 100)));
-
-box.innerHTML += `
-<div class="variant-item">
-    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
-    <div class="v-name">${label}</div>
-    <div class="v-price" style="display:flex; flex-direction:column; align-items:center; gap:2px;">
-        ${dP > 0 ? `
-            <span style="text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400;">฿${price.toLocaleString()}</span>
-            <span style="color: #ff4b2b; font-size: 11px;">฿${discountedPrice.toLocaleString()}</span>
-        ` : `
-            <span style="color: var(--gold); font-size: 11px;">฿${price.toLocaleString()}</span>
-        `}
-    </div>
-    <div class="v-ctrl">
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
-        <span id="v-qty-${label}" style="color:#fff; font-size:10px;">0</span>
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
-    </div>
-</div>`;
-
+            box.innerHTML += `
+            <div class="variant-item">
+                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
+                <div class="v-name">${label}</div>
+                <div class="v-price">
+                    ${dP > 0 ? `
+                        <span style="text-decoration: line-through; color: #888; font-size: 9px;">฿${price.toLocaleString()}</span>
+                        <span style="color: #ff4b2b; font-size: 11px;">฿${discountedPrice.toLocaleString()}</span>
+                    ` : `
+                        <span style="color: var(--gold); font-size: 11px;">฿${price.toLocaleString()}</span>
+                    `}
+                </div>
+                <div class="v-ctrl">
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
+                    <span id="v-qty-${label}">0</span>
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
+                </div>
+            </div>`;
         });
     } else {
+        // กรณีไม่มีตัวเลือกย่อย (เช่น สินค้าชิ้นเดียว)
         selectedOptions[n] = { qty: 1, price: pNormal };
     }
     
-    openModal('orderModal');
+    // อัปเดตราคาและแสดงหน้าต่าง
     updatePrice();
-
-    // จุดสำคัญ: สั่งให้เปิดมาเจอหน้า 1 ทุกครั้ง
     nextStep(1); 
+    openModal('orderModal');
 }
+
  
     function changeVQty(label, price, delta) {
         let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
