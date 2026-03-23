@@ -1057,6 +1057,48 @@ setInterval(() => {
         }
     });
 }, 1000);
+async function checkBlacklist() {
+    const nameInput = document.getElementById('cName').value.trim();
+    const phoneInput = document.getElementById('cPhone').value.trim();
+    const msg = document.getElementById('statusMsg');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // 🚩 สำคัญ: ใส่ลิงก์ CSV จาก Google Sheets (Blacklist) ของคุณที่นี่
+    const blacklistCsvUrl = 'ใส่ลิงก์_CSV_ตรงนี้ครับ'; 
+
+    if (phoneInput.length >= 10 || nameInput.length > 3) {
+        msg.innerHTML = "🔍 กำลังตรวจสอบประวัติ...";
+        msg.style.color = "var(--gold)";
+
+        try {
+            const res = await fetch(blacklistCsvUrl);
+            const data = await res.text();
+            const rows = data.split('\n').map(row => row.split(','));
+
+            // ตรวจสอบทั้งชื่อ และ เบอร์ ว่าตรงกับในชีท "ติดผ่อน" หรือไม่
+            const isBlacklisted = rows.find(row => {
+                const nameInSheet = row[0] ? row[0].replace(/"/g, '').trim() : "";
+                const phoneInSheet = row[1] ? row[1].replace(/"/g, '').trim() : "";
+                const status = row[2] ? row[2].replace(/"/g, '').trim() : "";
+                return (nameInSheet === nameInput || phoneInSheet === phoneInput) && status.includes("ติดผ่อน");
+            });
+
+            if (isBlacklisted) {
+                msg.innerHTML = "⚠️ พบประวัติยอดค้างชำระ ไม่สามารถสั่งซื้อได้";
+                msg.style.color = "#ff4d4d";
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.3";
+            } else {
+                msg.innerHTML = "✅ ประวัติปกติ";
+                msg.style.color = "#38ef7d";
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+            }
+        } catch (e) {
+            console.error("Blacklist Error:", e);
+        }
+    }
+}
 
 </script>
 </body>
