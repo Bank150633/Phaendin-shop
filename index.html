@@ -1020,19 +1020,6 @@ function togglePay(type) {
     // --- นี่คือคำสั่งที่เพิ่มเข้าไปครับ ---
     checkBlacklist(); 
 }
-// เพิ่มบรรทัดนี้ไว้ท้ายสุดของฟังก์ชัน togglePay(type)
-const amountDisplay = document.getElementById('transferAmount');
-const labelDisplay = document.getElementById('transferLabel');
-if(amountDisplay && labelDisplay) {
-    if(type === 'จ่ายเต็ม') {
-        amountDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
-        labelDisplay.innerText = "ชำระสด (รวมค่าส่งเรียบร้อยแล้ว)";
-    } else {
-        const perMonth = (activeP.finalTotal * 1.2 / 3);
-        amountDisplay.innerText = `฿${Math.round(perMonth).toLocaleString()}`;
-        labelDisplay.innerText = `ชำระงวดแรก (ยอดผ่อนรวม ฿${Math.round(activeP.finalTotal * 1.2).toLocaleString()})`;
-    }
-}
 
 function getLocation() {
     const btn = document.getElementById('btnLocation');
