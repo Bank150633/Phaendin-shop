@@ -1081,19 +1081,15 @@ setInterval(() => {
         }
     });
 }, 1000);
-  
-async function checkBlacklist() {
+  async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('statusMsg');
     if (!confirmBtn) return;
 
-    // --- ด่านที่ 1: ปลดล็อคปุ่มรอไว้ก่อนเลย เพื่อความลื่น ---
-    confirmBtn.disabled = false; 
-    confirmBtn.style.opacity = "1";
-    confirmBtn.style.pointerEvents = "auto";
-
-    // เช็คจำนวนสินค้า
+    // เช็คจำนวนสินค้าก่อน
     let totalItems = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
+    
+    // ด่านที่ 1: ถ้าของไม่ครบ ล็อคสถานเดียว
     if (totalItems === 0 || totalItems < activeP.min) {
         confirmBtn.disabled = true;
         confirmBtn.style.opacity = "0.5";
@@ -1103,44 +1099,34 @@ async function checkBlacklist() {
 
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
-    // --- ด่านที่ 2: ถ้าจ่ายสด ไม่ต้องเช็คอะไรอีก ให้กดได้เลย 100% ---
+    // ด่านที่ 2: ถ้าจ่ายสด ปลดล็อคให้กดได้ทันที 100%
     if (payType === 'จ่ายเต็ม') {
+        confirmBtn.disabled = false;
+        confirmBtn.style.opacity = "1";
         confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
         if(statusDiv) statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ พร้อมสั่งซื้อ (ชำระสด)</span>";
         return; 
     }
 
-    // --- ด่านที่ 3: ถ้าเลือกผ่อน ค่อยเริ่มเช็คข้อมูล ---
+    // ด่านที่ 3: ถ้าผ่อน ต้องกรอกข้อมูลให้ครบก่อนปุ่มถึงจะโผล่
     const nameInput = document.getElementById('cName').value.trim();
     const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '');
 
-    // ถ้ายังกรอกไม่ครบ ไม่ต้องวิ่งไปหา Google Sheets (ประหยัดเวลา/ลดอาการปุ่มตาย)
     if (nameInput.length < 3 || phoneInput.length < 10) {
         confirmBtn.disabled = true;
         confirmBtn.style.opacity = "0.5";
-        confirmBtn.innerText = "รอเช็คสิทธิ์ผ่อน";
-        if(statusDiv) statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบ</span>";
+        confirmBtn.innerText = "กรุณากรอกชื่อ-เบอร์";
+        if(statusDiv) statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ ตรวจสอบสิทธิ์ผ่อนจากชื่อ-เบอร์</span>";
         return;
     }
 
-    // ส่วนที่วิ่งไปหา Google Sheets ให้คงเดิมไว้ แต่ใส่ Try-Catch กันรวน
-    try {
-        if(statusDiv) statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบ...</span>";
-        // ... โค้ด fetch ข้อมูลของคุณ ...
-    } catch (e) {
-        confirmBtn.disabled = false; // ถ้าเน็ตเน่า ให้เปิดปุ่มไว้ก่อน ลูกค้าจะได้สั่งได้
-    }
+    // ถ้าผ่านทุกด่าน ปลดล็อคปุ่ม!
+    confirmBtn.disabled = false;
+    confirmBtn.style.opacity = "1";
+    confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
 }
 
 </script>
-    <script>
-window.onpageshow = function(event) {
-    // ถ้ามีการย้อนกลับมาที่หน้านี้ ให้รีโหลดระบบใหม่ทันที
-    if (event.persisted) {
-        window.location.reload(); 
-    }
-};
-</script>
-
+    
 </body>
 </html>
