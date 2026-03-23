@@ -380,13 +380,6 @@
 
                     <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
 <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
-<div id="statusMsg" style="font-size: 12px; color: #ffaa00; margin: 5px 0; text-align: center; font-weight: bold;"></div>
-
-<div id="transferBox" style="margin: 15px 0; padding: 15px; background: rgba(212,175,55,0.1); border-radius: 15px; border: 2px solid #D4AF37; text-align: center;">
-    <div style="font-size: 12px; color: #D4AF37; font-weight: bold;">💰 ยอดเงินที่ต้องโอนชำระ</div>
-    <div id="transferAmount" style="font-size: 32px; font-weight: 900; color: #fff; margin: 5px 0;">฿0</div>
-    <div id="transferDetail" style="font-size: 11px; color: #aaa;">(กรุณาเลือกวิธีการชำระเงินด้านบน)</div>
-</div>
 
 <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>
                     <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
@@ -939,34 +932,68 @@ function nextStep(step) {
 }
 
     init();
-    function togglePay(type) {
-    const transferAmountEl = document.getElementById('transferAmount');
-    const transferDetailEl = document.getElementById('transferDetail');
+    
+function togglePay(type) {
+    const sec = document.getElementById('securitySection');
+    const instBox = document.getElementById('installmentInfo');
+    const fBox = document.getElementById('pay-full');
+    const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
+    
+    const topPriceDisplay = document.getElementById('finalTotalDisplay');
 
     if(type === 'จ่ายเต็ม') {
+        sec.style.display = 'none';
+        instBox.style.display = 'none';
+        fBox.style.border = '2px solid var(--gold)'; fBox.style.background = 'rgba(212,175,55,0.2)';
+        iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
-        // แสดงยอดเต็มจากราคาสินค้าที่เลือก
-        transferAmountEl.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
-        transferDetailEl.innerHTML = `(ชำระเต็มจำนวน รวมค่าส่งแล้ว)`;
         
-        // ซ่อนส่วนข้อมูลผ่อน
-        document.getElementById('securitySection').style.display = 'none';
-        document.getElementById('installmentInfo').style.display = 'none';
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+        
     } else {
-        radios[1].checked = true;
-        // คำนวณยอดผ่อนงวดที่ 1 (ราคารวมส่ง * 1.2 หาร 3)
-        const perMonth = (activeP.finalTotal * 1.2 / 3).toFixed(2);
-        transferAmountEl.innerText = `฿${parseFloat(perMonth).toLocaleString()}`;
-        transferDetailEl.innerHTML = `<b style="color:#38ef7d;">โอนงวดที่ 1 เพื่อรับของทันที!</b>`;
+        const total = activeP.finalTotal;
+        const totalWithFee = total * 1.2; 
+        const perMonth = (totalWithFee / 3).toFixed(2);
         
-        // โชว์ส่วนข้อมูลผ่อน
-        document.getElementById('securitySection').style.display = 'block';
-        document.getElementById('installmentInfo').style.display = 'block';
+        const nextDate = new Date();
+        nextDate.setDate(nextDate.getDate() + 30);
+        const dateThai = nextDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth}`;
+
+        instBox.innerHTML = `
+            <div style="text-align:left; padding:5px;">
+                <p style="color:#38ef7d; font-weight:bold; font-size:13px; margin-bottom:8px; text-align:center;">
+                   🚀 จ่ายแค่ ฿${perMonth} รับของไปก่อนเลย!
+                </p>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                    <span>🟢 งวดที่ 1 (จ่ายตอนนี้):</span>
+                    <span style="color:#38ef7d; font-weight:bold;">฿${perMonth}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; color:#aaa;">
+                    <span>⚪ งวดที่ 2 (${dateThai}):</span>
+                    <span>฿${perMonth}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px; color:#aaa;">
+                    <span>⚪ งวดที่ 3 (อีก 30 วันถัดไป):</span>
+                    <span>฿${perMonth}</span>
+                </div>
+                <p style="font-size:10px; color:var(--gold); border-top:1px dashed rgba(212,175,55,0.3); padding-top:5px; text-align:right;">
+                    ยอดรวมผ่อน (+20%): ฿${totalWithFee.toLocaleString()}
+                </p>
+            </div>
+        `;
+
+        sec.style.display = 'block';
+        instBox.style.display = 'block';
+        iBox.style.border = '2px solid var(--gold)'; iBox.style.background = 'rgba(212,175,55,0.2)';
+        fBox.style.border = '1px solid rgba(255,255,255,0.1)'; fBox.style.background = 'transparent';
+        radios[1].checked = true;
     }
-    
-    // อย่าลืมเรียกเช็คแบล็คลิสต์ด้วย
-    checkBlacklist();
+
+    // --- นี่คือคำสั่งที่เพิ่มเข้าไปครับ ---
+    checkBlacklist(); 
 }
 
 function getLocation() {
