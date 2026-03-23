@@ -1063,79 +1063,80 @@ setInterval(() => {
     const confirmBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('statusMsg');
     
-    const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim();
+    // 1. ดึงค่าชื่อและเบอร์ + ล้างช่องว่างทิ้งให้หมด
+    const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim().toLowerCase();
     const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
     
-    const payTypeRadio = document.querySelector('input[name="payType"]:checked');
-    const payType = payTypeRadio ? payTypeRadio.value : 'จ่ายเต็ม';
+    // 2. เช็คว่าเค้าเลือก "ผ่อน" หรือเปล่า?
+    const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
-    // ถ้าจ่ายสด ให้ผ่านฉลุย
-    if (payType === 'จ่ายเต็ม' || payType === 'สด') {
+    // ถ้าจ่ายสด ไม่ต้องเช็ค ปล่อยผ่านเลย
+    if (payType !== 'ผ่อนไปใช้ไป') {
         confirmBtn.disabled = false;
         confirmBtn.style.opacity = "1";
         statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
         return; 
     }
 
-    // ถ้าจะผ่อน ต้องกรอกข้อมูลให้ครบก่อนเช็ค
-    if (nameInput.length < 2 || phoneInput.length < 9) {
+    // 3. ถ้าเลือกผ่อน แต่ยังกรอกไม่ครบ ล็อคปุ่มไว้ก่อน
+    if (nameInput.length < 3 || phoneInput.length < 9) {
         confirmBtn.disabled = true;
         confirmBtn.style.opacity = "0.5";
-        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อและเบอร์เพื่อเช็คสิทธิ์ผ่อน</span>";
+        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์จริง เพื่อเช็คสิทธิ์ผ่อน</span>";
         return;
     }
 
-    statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบประวัติ...</span>";
+    statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังเช็คแบล็คลิสต์ (ห้ามปิดหน้าจอ)...</span>";
 
-    // แนะนำ: ตรวจสอบ GID (1416026715) ว่าตรงกับหน้าที่มีรายชื่อ Blacklist หรือไม่
-    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEdsQEBKv58LTpR9FHTo8m8A4lh2Uvao4mHdXKIsO7kAInqESneZoTIAqaNi6oFXua43bkyumr7FU9/pub?gid=1416026715&single=true&output=csv&t=' + new Date().getTime();
+    // 4. ลิงก์ดึงข้อมูล (ตรวจสอบ ID และ GID ให้ชัวร์นะครับ)
+    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; // ID ของไฟล์ Google Sheets
+    const GID = '1416026715'; // เลข GID ของหน้า "Blacklist"
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}&refresh=${Date.now()}`;
     
     try {
         const response = await fetch(url);
-        const csvText = await response.text();
-        const rows = csvText.split('\n');
+        const csvData = await response.text();
+        const rows = csvData.split('\n');
         
-        let isBad = false;
-        let badReason = "";
+        let foundBad = false;
+        let reason = "";
 
-        // เริ่มวนลูปเช็คตั้งแต่แถวที่ 2 (i=1)
+        // วนลูปเช็คทีละแถว (เริ่มแถวที่ 2)
         for (let i = 1; i < rows.length; i++) {
-            let rowData = rows[i].toLowerCase(); 
-            let cleanRow = rowData.replace(/["']/g, '').replace(/\s+/g, '');
+            // ล้างฟันหนูและช่องว่างในแถวนั้นให้เกลี้ยง
+            let cleanRow = rows[i].toLowerCase().replace(/["']/g, '').replace(/\s+/g, '');
 
-            // เช็คทั้งชื่อ และ เบอร์โทร (ถ้าเจออย่างใดอย่างหนึ่งในแถวที่มีคำสั่งห้าม)
-            const matchName = nameInput !== "" && cleanRow.includes(nameInput.toLowerCase());
+            // ถ้าเจอ "ชื่อ" หรือ "เบอร์" ในแถวที่มีคำว่า ติดผ่อน/blacklist/ค้าง/ไม่ผ่าน
+            const matchName = nameInput !== "" && cleanRow.includes(nameInput);
             const matchPhone = phoneInput !== "" && cleanRow.includes(phoneInput);
 
             if (matchName || matchPhone) {
-                const blackTerms = ["ติดผ่อน", "ประวัติเสีย", "blacklist", "ไม่ผ่าน", "เสีย", "ระงับ", "ค้าง", "ระวัง"];
-                if (blackTerms.some(term => cleanRow.includes(term))) {
-                    isBad = true;
-                    // พยายามดึงเหตุผลจากคอลัมน์ที่ 4 (ถ้ามี)
+                const keywords = ["ติดผ่อน", "ประวัติเสีย", "blacklist", "ไม่ผ่าน", "ระงับ", "ค้าง", "โกง"];
+                if (keywords.some(k => cleanRow.includes(k))) {
+                    foundBad = true;
                     let cols = rows[i].split(',');
-                    badReason = cols[3] ? cols[3].replace(/"/g, '').trim() : "พบประวัติไม่พึงประสงค์ในระบบ";
+                    reason = cols[3] ? cols[3].replace(/"/g, '').trim() : "ติดประวัติค้างชำระ/แบล็คลิสต์";
                     break;
                 }
             }
         }
 
-        if (isBad) {
+        if (foundBad) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
-            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ งดรับผ่อน: ${badReason}</b>`;
+            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่สามารถผ่อนได้: ${reason}</b>`;
         } else {
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
-            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ท่านได้รับสิทธิ์ผ่อนชำระ</span>";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! ท่านสามารถผ่อนได้</span>";
         }
     } catch (e) {
-        console.error("Blacklist check error:", e);
-        // หากระบบเช็คขัดข้อง ให้กันเหนียวโดยการให้ผ่าน (หรือจะล็อคไว้ก็ได้ตามต้องการ)
-        statusDiv.innerHTML = "<span style='color: #888;'>เชื่อมต่อฐานข้อมูลไม่ได้ชั่วคราว</span>";
+        // ถ้าดึงข้อมูลไม่ได้ (เช่น เน็ตหลุด) ให้ล็อคปุ่มผ่อนไว้ก่อนเพื่อความปลอดภัย
+        confirmBtn.disabled = true;
+        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง กรุณาลองใหม่</span>";
     }
 }
 
-  
 </script>
 </body>
 </html>
