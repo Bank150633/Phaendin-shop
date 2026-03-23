@@ -349,6 +349,7 @@
         <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
             <h4 style="color:var(--gold); font-size:14px; margin-left: 10px;">ยืนยันการสั่งซื้อ</h4>
             <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:22px; padding:10px;"></i>
+        </div>
 
         <form id="orderForm" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
             <div class="modal-body-scroll">
@@ -820,36 +821,6 @@ function nextStep(step) {
             alert(`กรุณาเลือกสินค้าอย่างน้อย ${activeP.min} ชิ้นก่อนครับ`);
             return;
         }
-
-        // --- ส่วนที่ผมเพิ่มให้: แสดงราคาสรุปในหน้าโอนเงิน ---
-        const payType = document.querySelector('input[name="payType"]:checked').value;
-        let displayPrice = "";
-        let subLabel = "";
-
-        if (payType === 'ผ่อนไปใช้ไป') {
-            const perMonth = ((activeP.finalTotal * 1.2) / 3).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            displayPrice = `฿${perMonth}`;
-            subLabel = "ยอดโอนงวดแรก เพื่อรับสินค้า";
-        } else {
-            displayPrice = `฿${activeP.finalTotal.toLocaleString()}`;
-            subLabel = "ยอดโอนชำระเต็ม (รวมค่าส่งแล้ว)";
-        }
-
-        // แทรกกล่องแจ้งราคาไว้ด้านบนสุดของ Step 2
-        const priceBox = `
-            <div id="priceNotice" style="background:rgba(212,175,55,0.1); border:1px solid var(--gold); border-radius:12px; padding:15px; text-align:center; margin-bottom:15px;">
-                <p style="font-size:12px; color:var(--gold); margin:0;">ยอดเงินที่ต้องโอนชำระ</p>
-                <h2 style="font-size:32px; color:#fff; margin:5px 0;">${displayPrice}</h2>
-                <p style="font-size:11px; color:#38ef7d; margin:0;">${subLabel}</p>
-            </div>
-        `;
-        
-        // ตรวจสอบว่ามีกล่องเก่าอยู่หรือยัง ถ้ามีให้ลบแล้วใส่ใหม่
-        const oldBox = document.getElementById('priceNotice');
-        if(oldBox) oldBox.remove();
-        s2.insertAdjacentHTML('afterbegin', priceBox);
-        // ----------------------------------------------
-
         s1.style.display = 'none'; f1.style.display = 'none';
         s2.style.display = 'block'; f2.style.display = 'block';
     } else {
@@ -858,52 +829,110 @@ function nextStep(step) {
     }
 }
 
-    function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
+    document.getElementById('orderForm').onsubmit = async (e) => {
+    e.preventDefault();
     
-    init();
-    async function checkShip() {
-    const phone = prompt("กรุณากรอกเบอร์โทรศัพท์เพื่อเช็คพัสดุ:"); 
-    if(!phone) return;
-    
-    const resultDiv = document.getElementById('trackingResult');
-    if(!resultDiv) return;
+    // ดึงค่าใหม่ๆ ที่เพิ่มเข้ามา
+    const payType = document.querySelector('input[name="payType"]:checked').value;
+    const gps = document.getElementById('userLocation').value;
+    const selfieFile = document.getElementById('selfieIn').files[0];
+    const slipFile = document.getElementById('fileIn').files[0];
 
-    resultDiv.innerHTML = `<div style="text-align:center; padding:20px; color:var(--gold);">⏳ กำลังค้นหาข้อมูล...</div>`;
-    openModal('trackingModal');
+    // เช็คเงื่อนไขกรณี "ผ่อน"
+    if (payType === 'ผ่อนไปใช้ไป') {
+        if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
+        if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
+    }
+    
+    // เช็คสลิป (ต้องมีทั้งสดและผ่อน)
+    if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
+
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+
+    // ฟังก์ชันแปลงรูปภาพเป็น Base64
+    const toBase64 = file => new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+    });
 
     try {
-        // ดึงข้อมูลจาก Sheet "Tracking"
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking&refresh=${Date.now()}`);
+        const slipBase64 = await toBase64(slipFile);
+        let selfieBase64 = "";
+        
+        // ถ้ามีรูปเซลฟี่ (กรณีผ่อน) ให้แปลงไฟล์ด้วย
+        if (selfieFile) {
+            selfieBase64 = await toBase64(selfieFile);
+        }
+
+            // --- เริ่มต้นส่วนที่แก้ใหม่ ---
+    const isInstall = payType === 'ผ่อนไปใช้ไป';
+    const finalPrice = isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal;
+    
+    // ดึงวันที่นัดงวด 2 จากหน้าจอ (ถ้ามี)
+    let nextPayDate = "-";
+    const dateEl = document.getElementById('instNextDate');
+    if(dateEl) nextPayDate = dateEl.innerText;
+
+    const data = { 
+        productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${finalPrice.toLocaleString()}${isInstall ? ' (ผ่อน 3 งวด)' : ''}`, 
+        customerName: document.getElementById('cName').value, 
+        customerPhone: document.getElementById('cPhone').value, 
+        customerAddress: document.getElementById('cAddr').value,
+        payType: isInstall ? `ผ่อน (งวด2: ${nextPayDate})` : payType, 
+        gps: gps || "-",       
+        file: slipBase64,      
+        selfie: selfieBase64   
+    };
+    // --- จบส่วนที่แก้ใหม่ ---
+
+    // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
+    await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); 
+    alert("สั่งซื้อสำเร็จเรียบร้อยครับ!"); 
+    location.reload(); 
+} catch(err) { 
+    alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
+    btn.disabled = false; 
+}
+};
+
+    function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
+    async function checkShip() {
+    const p = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้สั่งซื้อ:"); 
+    if(!p) return;
+    
+    try {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
         const text = await res.text();
         const rows = text.split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'').trim()));
         
-        // ล้างเบอร์ที่รับมาให้เหลือแต่ตัวเลขเพื่อไปเทียบ
-        const cleanSearchPhone = phone.replace(/[^0-9]/g, '');
-        const myOrders = rows.filter(r => r[0].replace(/[^0-9]/g, '') === cleanSearchPhone);
+        // กรองเอาทุกรายการที่เบอร์โทรตรงกัน
+        const allOrders = rows.filter(r => r[0] === p);
         
-        if(myOrders.length > 0) {
-            let html = '';
-            myOrders.reverse().forEach((f) => {
-                // อิงตามรูป: f[0]=เบอร์, f[1]=ชื่อ, f[2]=สถานะ, f[3]=เลขพัสดุ
-                html += `
-                <div style="background:rgba(212,175,55,0.05); border:1px solid var(--gold); border-radius:15px; padding:15px; margin-bottom:15px; color:#fff;">
-                    <h5 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">📦 สถานะการจัดส่ง</h5>
-                    <p style="font-size:12px; margin-bottom:5px;">👤 คุณ: <b>${f[1]}</b></p>
-                    <div style="background:#000; padding:10px; border-radius:8px; border:1px solid #333;">
-                        <p style="font-size:11px; color:#38ef7d;">🚚 สถานะ: ${f[2] || 'กำลังเตรียมจัดส่ง'}</p>
-                        <p style="font-size:11px; color:#fff; margin-top:5px;">🔢 เลขพัสดุ: <span style="color:var(--gold);">${f[3] || 'รออัปเดต'}</span></p>
-                    </div>
-                </div>`;
+        if(allOrders.length > 0) {
+            let message = `พบข้อมูลการจัดส่ง ${allOrders.length} รายการ:\n`;
+            message += `------------------------\n`;
+            
+            // วนลูปโชว์ทุกรายการ (เอาอันล่าสุดขึ้นก่อน)
+            allOrders.reverse().forEach((f, index) => {
+                message += `${index + 1}. คุณ ${f[1]}\n`;
+                message += `   สถานะ: ${f[2] || 'กำลังเตรียมจัดส่ง'}\n`;
+                message += `   เลขพัสดุ: ${f[3] || 'ยังไม่มีข้อมูล'}\n`;
+                message += `------------------------\n`;
             });
-            resultDiv.innerHTML = html;
+            
+            alert(message);
         } else {
-            resultDiv.innerHTML = `<div style="text-align:center; padding:40px; color:#ff4b2b;">❌ ไม่พบข้อมูลสำหรับเบอร์นี้ครับ</div>`;
+            alert("ไม่พบข้อมูลการจัดส่งสำหรับเบอร์นี้ครับ");
         }
     } catch(e) {
-        resultDiv.innerHTML = `<div style="text-align:center; padding:40px; color:#ff4b2b;">ระบบขัดข้อง กรุณาลองใหม่ภายหลัง</div>`;
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล");
     }
 }
 
+    init();
+    
 function togglePay(type) {
     const sec = document.getElementById('securitySection');
     const instBox = document.getElementById('installmentInfo');
