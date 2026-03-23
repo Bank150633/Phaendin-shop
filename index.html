@@ -350,6 +350,21 @@
             <h4 style="color:var(--gold); font-size:14px; margin-left: 10px;">ยืนยันการสั่งซื้อ</h4>
             <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:22px; padding:10px;"></i>
         </div>
+<div id="trackingModal" class="modal">
+    <div class="modal-card" style="max-width: 350px;">
+        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid rgba(212,175,55,0.2);">
+            <h4 style="color:var(--gold); font-size:16px;"><i class="fa-solid fa-file-invoice-dollar"></i> ข้อมูลการผ่อนของท่าน</h4>
+            <i class="fa-solid fa-xmark" onclick="closeModal('trackingModal')" style="cursor:pointer; color:var(--gold); font-size:22px;"></i>
+        </div>
+        <div id="trackingResult" class="modal-body-scroll" style="padding: 15px; max-height: 70vh;">
+            </div>
+        <div class="modal-footer-fixed" style="padding: 15px; text-align: center;">
+            <button type="button" class="buy-now" onclick="window.location.href='https://line.me/ti/p/@197uadhw'" style="border-radius:10px; background:#06c755; color:#fff; font-size:12px; width: 100%;">
+                <i class="fa-brands fa-line"></i> แจ้งโอนเงินงวดถัดไปที่นี่
+            </button>
+        </div>
+    </div>
+</div>
 
         <form id="orderForm" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
             <div class="modal-body-scroll">
