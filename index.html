@@ -378,9 +378,8 @@
                         </div>
                     </div>
 
-                    <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()">
-<input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()">
-<div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center;"></div>
+                    <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
+<input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
 
                     <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
                     
