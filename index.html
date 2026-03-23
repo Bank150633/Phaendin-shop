@@ -106,18 +106,28 @@
         .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 5px; opacity: 0; transition: 0.3s; }
-        .modal.show { display: flex; opacity: 1; }
-        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
-        
-        .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
+        /* แก้ไข: บังคับให้หายไปจริงๆ ไม่ขวางนิ้ว (วางทับที่เดิมได้เลย) */
+.modal, #zoomOverlay { 
+    display: none !important; 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.95); 
+    z-index: -1; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: 0.3s; 
+    align-items: center; 
+    justify-content: center;
+}
 
-        nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
-        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
-        .nav-tab.active { color: var(--gold); }
-        .nav-tab i { font-size: 15px; margin-bottom: 2px; }
+/* เมื่อสั่งเปิด ถึงจะให้โผล่มาข้างหน้าและกดได้ */
+.modal.show, #zoomOverlay.active { 
+    display: flex !important; 
+    opacity: 1; 
+    z-index: 9999; 
+    pointer-events: auto; 
+}
 
-        #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
