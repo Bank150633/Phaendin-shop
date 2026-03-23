@@ -1059,30 +1059,28 @@ setInterval(() => {
         }
     });
 }, 1000);
-async function checkBlacklist() {
+    async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('statusMsg');
     
-    // 1. เช็คประเภทการจ่าย
     const payTypeRadio = document.querySelector('input[name="payType"]:checked');
     const payType = payTypeRadio ? payTypeRadio.value : 'จ่ายเต็ม';
 
-    // 2. ถ้าซื้อสด ปลดล็อกทันที
-    if (payType === 'จ่ายเต็ม') {
+    // 1. ถ้าจ่ายสด ปลดล็อกทันที
+    if (payType === 'จ่ายเต็ม' || payType === 'สด') {
         confirmBtn.disabled = false;
         confirmBtn.style.opacity = "1";
-        statusDiv.innerHTML = "<span style='color: #38ef7d;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
         return; 
     }
 
-    // 3. ถ้าเลือกผ่อน ต้องเช็คประวัติ
     const nameInput = document.getElementById('cName').value.trim();
     const phoneInput = document.getElementById('cPhone').value.trim();
 
     if (!nameInput && !phoneInput) {
         confirmBtn.disabled = true;
         confirmBtn.style.opacity = "0.5";
-        statusDiv.innerHTML = "<span style='color: #aaa;'>กรอกชื่อ/เบอร์ เพื่อตรวจประวัติผ่อน</span>";
+        statusDiv.innerHTML = "<span style='color: #aaa;'>กรุณากรอกชื่อ/เบอร์ เพื่อตรวจสอบสิทธิ์ผ่อน</span>";
         return;
     }
 
@@ -1090,45 +1088,58 @@ async function checkBlacklist() {
     
     try {
         const response = await fetch(url);
-        const csvData = await response.text();
-        const rows = csvData.split('\n').map(row => row.split(',').map(cell => cell.replace(/^"|"$/g, '').trim()));
+        const csvText = await response.text();
         
-        let isBadHistory = false;
-        let reason = "";
+        // แยกแถวและล้างเครื่องหมายคำพูดออกให้สะอาดที่สุด
+        const rows = csvText.split('\n').map(row => 
+            row.split(',').map(cell => cell.replace(/"/g, '').trim())
+        );
+        
+        let isBad = false;
+        let badReason = "";
+
+        // ล้างค่าที่คนพิมพ์ (ลบช่องว่างออกให้หมดเพื่อเทียบชัวร์ๆ)
+        const cleanNameInput = nameInput.replace(/\s+/g, '');
+        const cleanPhoneInput = phoneInput.replace(/[^0-9]/g, '');
 
         for (let i = 1; i < rows.length; i++) {
             const row = rows[i];
             if (!row || row.length < 3) continue;
 
-            const sName = row[0];
-            const sPhone = row[1];
-            const sStatus = row[2]; // สถานะในชีท
+            const sName = (row[0] || "").replace(/\s+/g, ''); // ชื่อในชีท (ลบช่องว่าง)
+            const sPhone = (row[1] || "").replace(/[^0-9]/g, ''); // เบอร์ในชีท (เอาแต่ตัวเลข)
+            const sStatus = (row[2] || "").trim(); // สถานะ
 
-            // เช็คว่าชื่อตรง หรือเบอร์ตรง
-            const isMatch = (nameInput !== "" && nameInput === sName) || (phoneInput !== "" && phoneInput === sPhone);
-            
-            // ถ้าชื่อตรง และสถานะ "ไม่ใช่" ปกติ/ผ่าน (แปลว่าประวัติเสีย)
-            if (isMatch && (sStatus === "ติดผ่อน" || sStatus === "ประวัติเสีย" || sStatus === "Blacklist" || sStatus === "ค้างชำระ")) {
-                isBadHistory = true;
-                reason = row[3] || "มียอดค้างชำระ";
-                break;
+            // เงื่อนไขการเจอตัว: ชื่อตรงกันเป๊ะ หรือ เบอร์ตรงกันเป๊ะ
+            const isMatch = (cleanNameInput !== "" && cleanNameInput === sName) || 
+                          (cleanPhoneInput !== "" && cleanPhoneInput === sPhone);
+
+            if (isMatch) {
+                // ถ้าเจอตัวแล้วเช็คสถานะ (ถ้าในชีทไม่ใช่ 'ปกติ' หรือ 'ผ่าน' ให้ถือว่าเสีย)
+                if (sStatus === "ติดผ่อน" || sStatus === "ประวัติเสีย" || sStatus === "Blacklist") {
+                    isBad = true;
+                    badReason = row[3] || "มียอดค้างชำระ";
+                    break;
+                }
             }
         }
 
-        if (isBadHistory) {
+        if (isBad) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
-            statusDiv.innerHTML = `<span style='color: #ff416c;'>❌ ประวัติเสีย: ${reason} (งดรับผ่อน)</span>`;
+            confirmBtn.style.cursor = "not-allowed";
+            statusDiv.innerHTML = `<span style='color: #ff4444;'>❌ งดรับผ่อน: ${badReason}</span>`;
         } else {
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
-            statusDiv.innerHTML = "<span style='color: #38ef7d;'>✅ ประวัติปกติ (สั่งซื้อแบบผ่อนได้)</span>";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ผ่านการตรวจสอบ (สั่งซื้อแบบผ่อนได้)</span>";
         }
     } catch (e) {
-        console.error(e);
-        confirmBtn.disabled = false; // ถ้า Error ให้ปล่อยผ่านไปก่อน
+        console.error("Error:", e);
+        confirmBtn.disabled = false; 
     }
 }
+
 
 </script>
 </body>
