@@ -1066,7 +1066,7 @@ setInterval(() => {
     const payTypeRadio = document.querySelector('input[name="payType"]:checked');
     const payType = payTypeRadio ? payTypeRadio.value : 'จ่ายเต็ม';
 
-    // 1. ถ้าจ่ายสด ปลดล็อกทันที
+    // 1. ถ้าจ่ายสด ปล่อยผ่านทันที
     if (payType === 'จ่ายเต็ม' || payType === 'สด') {
         confirmBtn.disabled = false;
         confirmBtn.style.opacity = "1";
@@ -1074,8 +1074,9 @@ setInterval(() => {
         return; 
     }
 
-    const nameInput = document.getElementById('cName').value.trim();
-    const phoneInput = document.getElementById('cPhone').value.trim();
+    // 2. ล้างค่าที่คนพิมพ์ (ลบช่องว่าง/อักขระพิเศษออกให้หมด)
+    const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim();
+    const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
 
     if (!nameInput && !phoneInput) {
         confirmBtn.disabled = true;
@@ -1089,36 +1090,30 @@ setInterval(() => {
     try {
         const response = await fetch(url);
         const csvText = await response.text();
-        
-        // แยกแถวและล้างเครื่องหมายคำพูดออกให้สะอาดที่สุด
-        const rows = csvText.split('\n').map(row => 
-            row.split(',').map(cell => cell.replace(/"/g, '').trim())
-        );
+        const rows = csvText.split('\n').map(row => row.split(','));
         
         let isBad = false;
         let badReason = "";
 
-        // ล้างค่าที่คนพิมพ์ (ลบช่องว่างออกให้หมดเพื่อเทียบชัวร์ๆ)
-        const cleanNameInput = nameInput.replace(/\s+/g, '');
-        const cleanPhoneInput = phoneInput.replace(/[^0-9]/g, '');
-
-        for (let i = 1; i < rows.length; i++) {
+        for (let i = 0; i < rows.length; i++) {
             const row = rows[i];
-            if (!row || row.length < 3) continue;
+            if (!row || row.length < 2) continue;
 
-            const sName = (row[0] || "").replace(/\s+/g, ''); // ชื่อในชีท (ลบช่องว่าง)
-            const sPhone = (row[1] || "").replace(/[^0-9]/g, ''); // เบอร์ในชีท (เอาแต่ตัวเลข)
-            const sStatus = (row[2] || "").trim(); // สถานะ
+            // ล้างค่าจาก Google Sheets ให้สะอาด (ลบ " และเว้นวรรค)
+            const sName = (row[0] || "").replace(/"/g, '').replace(/\s+/g, '').trim();
+            const sPhone = (row[1] || "").replace(/"/g, '').replace(/[^0-9]/g, '').trim();
+            const sStatus = (row[2] || "").replace(/"/g, '').trim();
 
-            // เงื่อนไขการเจอตัว: ชื่อตรงกันเป๊ะ หรือ เบอร์ตรงกันเป๊ะ
-            const isMatch = (cleanNameInput !== "" && cleanNameInput === sName) || 
-                          (cleanPhoneInput !== "" && cleanPhoneInput === sPhone);
+            // เทียบค่า (ต้องตรงกันแบบไม่สนช่องว่าง)
+            const matchName = (nameInput !== "" && nameInput === sName);
+            const matchPhone = (phoneInput !== "" && phoneInput === sPhone);
 
-            if (isMatch) {
-                // ถ้าเจอตัวแล้วเช็คสถานะ (ถ้าในชีทไม่ใช่ 'ปกติ' หรือ 'ผ่าน' ให้ถือว่าเสีย)
-                if (sStatus === "ติดผ่อน" || sStatus === "ประวัติเสีย" || sStatus === "Blacklist") {
+            if (matchName || matchPhone) {
+                // ถ้าในช่องสถานะมีคำว่า ติดผ่อน/เสีย/Blacklist/ไม่ผ่าน
+                const blackTerms = ["ติดผ่อน", "ประวัติเสีย", "Blacklist", "ไม่ผ่าน", "เสีย"];
+                if (blackTerms.some(term => sStatus.includes(term))) {
                     isBad = true;
-                    badReason = row[3] || "มียอดค้างชำระ";
+                    badReason = (row[3] || "มียอดค้างชำระ").replace(/"/g, '');
                     break;
                 }
             }
@@ -1127,7 +1122,6 @@ setInterval(() => {
         if (isBad) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
-            confirmBtn.style.cursor = "not-allowed";
             statusDiv.innerHTML = `<span style='color: #ff4444;'>❌ งดรับผ่อน: ${badReason}</span>`;
         } else {
             confirmBtn.disabled = false;
@@ -1135,7 +1129,6 @@ setInterval(() => {
             statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ผ่านการตรวจสอบ (สั่งซื้อแบบผ่อนได้)</span>";
         }
     } catch (e) {
-        console.error("Error:", e);
         confirmBtn.disabled = false; 
     }
 }
