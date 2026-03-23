@@ -1062,31 +1062,32 @@ async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('statusMsg');
     
-    // ดึงค่าประเภทการจ่ายปัจจุบัน
+    // 1. ดึงประเภทการจ่ายปัจจุบัน
     const payTypeRadio = document.querySelector('input[name="payType"]:checked');
     const payType = payTypeRadio ? payTypeRadio.value : 'จ่ายเต็ม';
 
-    // 1. ถ้าเลือก "จ่ายเต็ม" -> ปลดล็อกปุ่มทันที ไม่ต้องดูแบล็กลิสต์
+    // 2. ถ้าเลือก "จ่ายเต็ม" (ซื้อสด) -> ปลดล็อกปุ่มทันที ไม่ต้องสนเงื่อนไขอื่น
     if (payType === 'จ่ายเต็ม') {
         confirmBtn.disabled = false;
         confirmBtn.style.opacity = "1";
         confirmBtn.style.cursor = "pointer";
-        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ เลือกชำระสด (สั่งซื้อได้ปกติ)</span>";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
         return; 
     }
 
-    // 2. ถ้าเลือก "ผ่อน" -> เข้าสู่กระบวนการเช็คข้อมูล
+    // 3. ถ้าเลือก "ผ่อน" -> ต้องเช็คชื่อและเบอร์
     const nameInput = document.getElementById('cName').value.trim();
     const phoneInput = document.getElementById('cPhone').value.trim();
 
-    // ถ้ายังไม่กรอกชื่อหรือเบอร์ตอนเลือกผ่อน ให้ล็อกปุ่มไว้ก่อนเพื่อความปลอดภัย
+    // กรณีเลือกผ่อนแต่ยังไม่กรอกข้อมูล -> ล็อกปุ่มไว้ก่อน
     if (!nameInput && !phoneInput) {
         confirmBtn.disabled = true;
         confirmBtn.style.opacity = "0.5";
-        statusDiv.innerHTML = "<span style='color: #aaa;'>กรุณากรอกชื่อ/เบอร์ เพื่อเช็คประวัติผ่อน</span>";
+        statusDiv.innerHTML = "<span style='color: #aaa;'>กรุณากรอกชื่อ/เบอร์ เพื่อตรวจสอบสิทธิ์ผ่อน</span>";
         return;
     }
 
+    // ลิงก์ฐานข้อมูล Blacklist ของคุณ
     const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEdsQEBKv58LTpR9FHTo8m8A4lh2Uvao4mHdXKIsO7kAInqESneZoTIAqaNi6oFXua43bkyumr7FU9/pub?gid=1416026715&single=true&output=csv';
     
     try {
@@ -1105,7 +1106,7 @@ async function checkBlacklist() {
             const sheetPhone = row[1]?.replace(/"/g, '').trim();
             const sheetStatus = row[2]?.replace(/"/g, '').trim();
 
-            // เช็คชื่อหรือเบอร์ และต้องมีสถานะ "ติดผ่อน" ในชีท
+            // เช็คชื่อหรือเบอร์ตรงกัน และสถานะต้องเป็น "ติดผ่อน"
             if ((nameInput === sheetName || phoneInput === sheetPhone) && sheetStatus === "ติดผ่อน") {
                 isBlacklisted = true;
                 blacklistReason = row[3]?.replace(/"/g, '').trim() || "มียอดค้างชำระ";
@@ -1117,18 +1118,18 @@ async function checkBlacklist() {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
             confirmBtn.style.cursor = "not-allowed";
-            statusDiv.innerHTML = `<span style='color: #ff4444;'>❌ ประวัติเสีย: ${blacklistReason} (งดรับผ่อน)</span>`;
+            statusDiv.innerHTML = `<span style='color: #ff4444;'>❌ งดรับผ่อน: ${blacklistReason}</span>`;
         } else {
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
-            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ประวัติปกติ (สั่งซื้อแบบผ่อนได้)</span>";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ผ่านการตรวจสอบ (สั่งซื้อแบบผ่อนได้)</span>";
         }
     } catch (e) {
         console.error("Blacklist Error:", e);
-        statusDiv.innerHTML = "<span style='color: orange;'>⚠️ ไม่สามารถตรวจสอบประวัติได้ชั่วคราว</span>";
+        // ถ้าเช็คไม่ได้ ให้ปลดล็อกไว้ก่อนเผื่อเน็ตลูกค้ามีปัญหา หรือจะล็อกไว้ก็ได้แล้วแต่คุณ Phaendin ครับ
+        confirmBtn.disabled = false; 
     }
 }
-
 
 </script>
 </body>
