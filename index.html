@@ -1071,35 +1071,54 @@ setInterval(() => {
   async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('statusMsg');
-    
-    // 1. ดึงค่าชื่อและเบอร์ + ล้างช่องว่างทิ้งให้หมด
-    const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim().toLowerCase();
-    const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
-    
-    // 2. เช็คว่าเค้าเลือก "ผ่อน" หรือเปล่า?
-    const payType = document.querySelector('input[name="payType"]:checked')?.value;
+    if (!confirmBtn) return;
 
-    // ถ้าจ่ายสด ไม่ต้องเช็ค ปล่อยผ่านเลย
-    if (payType !== 'ผ่อนไปใช้ไป') {
-        confirmBtn.disabled = false;
-        confirmBtn.style.opacity = "1";
-        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
-        return; 
-    }
-
-    // 3. ถ้าเลือกผ่อน แต่ยังกรอกไม่ครบ ล็อคปุ่มไว้ก่อน
-    if (nameInput.length < 3 || phoneInput.length < 9) {
+    // --- 1. เช็คจำนวนสินค้าก่อน (พื้นฐาน) ---
+    let totalItems = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
+    
+    if (totalItems === 0) {
         confirmBtn.disabled = true;
+        confirmBtn.innerText = "กรุณาเลือกสินค้า";
         confirmBtn.style.opacity = "0.5";
-        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์จริง เพื่อเช็คสิทธิ์ผ่อน</span>";
         return;
     }
 
-    statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังเช็คแบล็คลิสต์ (ห้ามปิดหน้าจอ)...</span>";
+    if (totalItems < activeP.min) {
+        confirmBtn.disabled = true;
+        confirmBtn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`;
+        confirmBtn.style.opacity = "0.5";
+        return;
+    }
 
-    // 4. ลิงก์ดึงข้อมูล (ตรวจสอบ ID และ GID ให้ชัวร์นะครับ)
-    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; // ID ของไฟล์ Google Sheets
-    const GID = '1416026715'; // เลข GID ของหน้า "Blacklist"
+    // --- 2. เช็คประเภทการชำระ ---
+    const payType = document.querySelector('input[name="payType"]:checked')?.value;
+
+    // ** ถ้าจ่ายสด ให้ผ่านทันที! ไม่ต้องเช็คอะไรเพิ่ม **
+    if (payType !== 'ผ่อนไปใช้ไป') {
+        confirmBtn.disabled = false;
+        confirmBtn.style.opacity = "1";
+        confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (กดสั่งซื้อได้เลย)</span>";
+        return; 
+    }
+
+    // --- 3. ถ้าเลือกผ่อน ต้องกรอกชื่อ/เบอร์ให้ครบก่อนถึงจะเช็คแบล็คลิสต์ ---
+    const nameInput = document.getElementById('cName').value.trim();
+    const phoneInput = document.getElementById('cPhone').value.trim();
+
+    if (nameInput.length < 3 || phoneInput.length < 10) {
+        confirmBtn.disabled = true;
+        confirmBtn.style.opacity = "0.5";
+        confirmBtn.innerText = "กรอกข้อมูลเพื่อเช็คสิทธิ์ผ่อน";
+        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอก ชื่อ-เบอร์ ให้ครบเพื่อเช็คสิทธิ์</span>";
+        return;
+    }
+
+    // --- 4. เริ่มเช็คแบล็คลิสต์จาก Google Sheets ---
+    statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบสิทธิ์ผ่อน...</span>";
+    
+    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+    const GID = '1416026715'; 
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}&refresh=${Date.now()}`;
     
     try {
@@ -1107,44 +1126,36 @@ setInterval(() => {
         const csvData = await response.text();
         const rows = csvData.split('\n');
         
-        let foundBad = false;
-        let reason = "";
+        let isBlacklisted = false;
+        let msg = "";
 
-        // วนลูปเช็คทีละแถว (เริ่มแถวที่ 2)
         for (let i = 1; i < rows.length; i++) {
-            // ล้างฟันหนูและช่องว่างในแถวนั้นให้เกลี้ยง
-            let cleanRow = rows[i].toLowerCase().replace(/["']/g, '').replace(/\s+/g, '');
-
-            // ถ้าเจอ "ชื่อ" หรือ "เบอร์" ในแถวที่มีคำว่า ติดผ่อน/blacklist/ค้าง/ไม่ผ่าน
-            const matchName = nameInput !== "" && cleanRow.includes(nameInput);
-            const matchPhone = phoneInput !== "" && cleanRow.includes(phoneInput);
-
-            if (matchName || matchPhone) {
-                const keywords = ["ติดผ่อน", "ประวัติเสีย", "blacklist", "ไม่ผ่าน", "ระงับ", "ค้าง", "โกง"];
-                if (keywords.some(k => cleanRow.includes(k))) {
-                    foundBad = true;
-                    let cols = rows[i].split(',');
-                    reason = cols[3] ? cols[3].replace(/"/g, '').trim() : "ติดประวัติค้างชำระ/แบล็คลิสต์";
+            let row = rows[i].toLowerCase().replace(/["']/g, '');
+            if (row.includes(nameInput.toLowerCase()) || row.includes(phoneInput)) {
+                if (row.includes("ไม่ผ่าน") || row.includes("blacklist") || row.includes("ค้าง")) {
+                    isBlacklisted = true;
+                    msg = "ติดประวัติการชำระ/แบล็คลิสต์";
                     break;
                 }
             }
         }
 
-        if (foundBad) {
+        if (isBlacklisted) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
-            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่สามารถผ่อนได้: ${reason}</b>`;
+            confirmBtn.innerText = "ไม่สามารถผ่อนได้";
+            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ${msg}</b>`;
         } else {
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
-            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! ท่านสามารถผ่อนได้</span>";
+            confirmBtn.innerText = "ยืนยันการสั่งซื้อ (ผ่อน)";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! ท่านได้รับสิทธิ์ผ่อน</span>";
         }
     } catch (e) {
-        // ถ้าดึงข้อมูลไม่ได้ (เช่น เน็ตหลุด) ให้ล็อคปุ่มผ่อนไว้ก่อนเพื่อความปลอดภัย
-        confirmBtn.disabled = true;
-        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง กรุณาลองใหม่</span>";
+        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบขัดข้อง (ลองใหม่อีกครั้ง)</span>";
     }
 }
+
 
 </script>
 </body>
