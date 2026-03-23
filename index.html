@@ -549,7 +549,19 @@
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>
             </div>
-            <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${p[12]||999}, '${p[1]}', ${p[14]||1}, '${canInstall}')">สั่งซื้อ</button>
+            // ก๊อปปี้ส่วนนี้ไปวางแทนที่ปุ่มเดิมในฟังก์ชัน render() ครับ
+<button class="buy-now" onclick="openOrder(
+    \`${p[0].replace(/`/g, "")}\`, 
+    '${priceNormal}', 
+    '${p[8] || 0}', 
+    \`${(p[9] || '').replace(/`/g, "")}\`, 
+    ${percentDiscount}, 
+    ${p[12] || 999}, 
+    '${p[1]}', 
+    ${p[14] || 1}, 
+    '${canInstall}'
+)">สั่งซื้อ</button>
+
         </div>
         `;
     }).join('');
