@@ -365,7 +365,12 @@
                     <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
                         <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
                     </p>
-                    
+                    <div id="finalTransferBox" style="margin-bottom: 15px; background: var(--gold-grad); padding: 15px; border-radius: 12px; text-align: center; color: #000; box-shadow: 0 4px 15px rgba(212,175,55,0.3);">
+    <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; opacity: 0.8;">ยอดเงินที่ต้องโอนตอนนี้</div>
+    <div id="transferAmount" style="font-size: 32px; font-weight: 800; line-height: 1;">฿0</div>
+    <div id="transferLabel" style="font-size: 10px; margin-top: 5px; font-weight: bold; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 5px;"></div>
+</div>
+
                     <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
                         <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
                             <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS
@@ -821,6 +826,22 @@ function nextStep(step) {
             alert(`กรุณาเลือกสินค้าอย่างน้อย ${activeP.min} ชิ้นก่อนครับ`);
             return;
         }
+
+        // --- เพิ่มการแสดงผลยอดโอนใน Step 2 ---
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        const amountDisplay = document.getElementById('transferAmount');
+        const labelDisplay = document.getElementById('transferLabel');
+
+        if (payType === 'จ่ายเต็ม') {
+            amountDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+            labelDisplay.innerText = "ชำระสด (รวมค่าส่งเรียบร้อยแล้ว)";
+        } else {
+            const perMonth = (activeP.finalTotal * 1.2 / 3);
+            amountDisplay.innerText = `฿${Math.round(perMonth).toLocaleString()}`;
+            labelDisplay.innerText = `ชำระงวดแรก (ยอดผ่อนรวม ฿${Math.round(activeP.finalTotal * 1.2).toLocaleString()})`;
+        }
+        // -----------------------------------
+
         s1.style.display = 'none'; f1.style.display = 'none';
         s2.style.display = 'block'; f2.style.display = 'block';
     } else {
@@ -828,6 +849,7 @@ function nextStep(step) {
         s2.style.display = 'none'; f2.style.display = 'none';
     }
 }
+
 
     document.getElementById('orderForm').onsubmit = async (e) => {
     e.preventDefault();
@@ -994,6 +1016,19 @@ function togglePay(type) {
 
     // --- นี่คือคำสั่งที่เพิ่มเข้าไปครับ ---
     checkBlacklist(); 
+}
+// เพิ่มบรรทัดนี้ไว้ท้ายสุดของฟังก์ชัน togglePay(type)
+const amountDisplay = document.getElementById('transferAmount');
+const labelDisplay = document.getElementById('transferLabel');
+if(amountDisplay && labelDisplay) {
+    if(type === 'จ่ายเต็ม') {
+        amountDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+        labelDisplay.innerText = "ชำระสด (รวมค่าส่งเรียบร้อยแล้ว)";
+    } else {
+        const perMonth = (activeP.finalTotal * 1.2 / 3);
+        amountDisplay.innerText = `฿${Math.round(perMonth).toLocaleString()}`;
+        labelDisplay.innerText = `ชำระงวดแรก (ยอดผ่อนรวม ฿${Math.round(activeP.finalTotal * 1.2).toLocaleString()})`;
+    }
 }
 
 function getLocation() {
