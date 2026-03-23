@@ -380,6 +380,13 @@
 
                     <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
 <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
+<div id="statusMsg" style="font-size: 12px; color: #ffaa00; margin: 5px 0; text-align: center; font-weight: bold;"></div>
+
+<div id="transferBox" style="margin: 15px 0; padding: 15px; background: rgba(212,175,55,0.1); border-radius: 15px; border: 2px solid #D4AF37; text-align: center;">
+    <div style="font-size: 12px; color: #D4AF37; font-weight: bold;">💰 ยอดเงินที่ต้องโอนชำระ</div>
+    <div id="transferAmount" style="font-size: 32px; font-weight: 900; color: #fff; margin: 5px 0;">฿0</div>
+    <div id="transferDetail" style="font-size: 11px; color: #aaa;">(กรุณาเลือกวิธีการชำระเงินด้านบน)</div>
+</div>
 
 <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>
                     <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
