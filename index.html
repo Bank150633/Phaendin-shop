@@ -500,11 +500,9 @@
         let provinceName = p[13] || '';
         let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
 
-        // จัดการเรื่องรูปภาพ (รองรับหลายรูป)
         let images = p[1].split(',').map(img => img.trim());
         let imgCount = images.length;
 
-        // คำนวณราคา (ตาม Logic เดิมของคุณ)
         let currentPrice = priceNormal;
         let percentDiscount = 0;
         if (pricePromo > 0 && expiryDate > now) {
@@ -516,15 +514,11 @@
         <div class="card">
             <div class="media-wrap" style="position: relative;">
                 <div class="badge-container">
-    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-    
-    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
-    
-    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-</div>
-
+                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
+                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+                </div>
                 ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                
                 <div id="p-slider-${pIndex}" onscroll="updateMainDots(${pIndex}, this, ${imgCount})" 
                      style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
                     ${images.map(img => `
@@ -533,12 +527,10 @@
                         </div>
                     `).join('')}
                 </div>
-
                 ${imgCount > 1 ? `
                 <div class="dot-container" style="bottom: 5px; gap: 3px;">
                     ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${pIndex}-${i}" style="width:4px; height:4px;"></div>`).join('')}
                 </div>` : ''}
-
                 ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
             </div>
             <div class="info">
@@ -549,23 +541,22 @@
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>
             </div>
-            // ก๊อปปี้ส่วนนี้ไปวางแทนที่ปุ่มเดิมในฟังก์ชัน render() ครับ
-<button class="buy-now" onclick="openOrder(
-    \`${p[0].replace(/`/g, "")}\`, 
-    '${priceNormal}', 
-    '${p[8] || 0}', 
-    \`${(p[9] || '').replace(/`/g, "")}\`, 
-    ${percentDiscount}, 
-    ${p[12] || 999}, 
-    '${p[1]}', 
-    ${p[14] || 1}, 
-    '${canInstall}'
-)">สั่งซื้อ</button>
-
+            <button class="buy-now" onclick="openOrder(
+                \`${p[0].replace(/`/g, "")}\`, 
+                '${priceNormal}', 
+                '${p[8] || 0}', 
+                \`${(p[9] || '').replace(/`/g, "")}\`, 
+                ${percentDiscount}, 
+                ${p[12] || 999}, 
+                '${p[1]}', 
+                ${p[14] || 1}, 
+                '${canInstall}'
+            )">สั่งซื้อ</button>
         </div>
         `;
     }).join('');
 }
+
 
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
