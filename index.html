@@ -1058,45 +1058,67 @@ setInterval(() => {
     });
 }, 1000);
 async function checkBlacklist() {
-    const nameInput = document.getElementById('cName').value.trim();
-    const phoneInput = document.getElementById('cPhone').value.trim();
-    const msg = document.getElementById('statusMsg');
-    const submitBtn = document.getElementById('submitBtn');
+    // 1. ดึงค่าจากปุ่ม "ซื้อสด/ผ่อน"
+    const payType = document.querySelector('input[name="payType"]:checked').value;
+    const confirmBtn = document.getElementById('submit-btn'); // เช็ค ID ปุ่มยืนยันของคุณ
+    const statusDiv = document.getElementById('blacklist-status'); // ส่วนแสดง "ประวัติปกติ/เสีย"
 
-    // 🚩 สำคัญ: ใส่ลิงก์ CSV จาก Google Sheets (Blacklist) ของคุณที่นี่
-    const blacklistCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEdsQEBKv58LTpR9FHTo8m8A4Ih2Uvao4mHdXKisO7kAInqESneZoTlAQaNi6oFXua43bkyumr7FU9/pub?gid=1416026715&single=true&output=csv'; 
+    // 2. ถ้าลูกค้าเลือก "ซื้อสด" -> ปลดล็อกทุกอย่างทันที
+    if (payType === 'cash') {
+        confirmBtn.disabled = false;
+        confirmBtn.style.opacity = "1";
+        confirmBtn.style.cursor = "pointer";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ เลือกซื้อสด (พร้อมสั่งซื้อ)</span>";
+        return; // จบการทำงาน ไม่ต้องไปเช็คใน Google Sheets
+    }
 
-    if (phoneInput.length >= 10 || nameInput.length > 3) {
-        msg.innerHTML = "🔍 กำลังตรวจสอบประวัติ...";
-        msg.style.color = "var(--gold)";
+    // 3. ถ้าเลือก "ผ่อน" -> เริ่มกระบวนการเช็คชื่อ/เบอร์ใน Blacklist
+    const url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTEdsQEBKv58LTpR9FHTo8m8A4lh2Uvao4mHdXKIsO7kAInqESneZoTIAqaNi6oFXua43bkyumr7FU9/pub?gid=1416026715&single=true&output=csv'; // ลิงก์ของคุณ
+    
+    try {
+        const nameInput = document.getElementById('name').value.trim();
+        const phoneInput = document.getElementById('phone').value.trim();
 
-        try {
-            const res = await fetch(blacklistCsvUrl);
-            const data = await res.text();
-            const rows = data.split('\n').map(row => row.split(','));
-
-            // ตรวจสอบทั้งชื่อ และ เบอร์ ว่าตรงกับในชีท "ติดผ่อน" หรือไม่
-            const isBlacklisted = rows.find(row => {
-                const nameInSheet = row[0] ? row[0].replace(/"/g, '').trim() : "";
-                const phoneInSheet = row[1] ? row[1].replace(/"/g, '').trim() : "";
-                const status = row[2] ? row[2].replace(/"/g, '').trim() : "";
-                return (nameInSheet === nameInput || phoneInSheet === phoneInput) && status.includes("ติดผ่อน");
-            });
-
-            if (isBlacklisted) {
-                msg.innerHTML = "⚠️ พบประวัติยอดค้างชำระ ไม่สามารถสั่งซื้อได้";
-                msg.style.color = "#ff4d4d";
-                submitBtn.disabled = true;
-                submitBtn.style.opacity = "0.3";
-            } else {
-                msg.innerHTML = "✅ ประวัติปกติ";
-                msg.style.color = "#38ef7d";
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = "1";
-            }
-        } catch (e) {
-            console.error("Blacklist Error:", e);
+        // ถ้ายังไม่ได้กรอกชื่อหรือเบอร์ ให้ปลดล็อกปุ่มไว้ก่อนจนกว่าจะพิมพ์
+        if (!nameInput && !phoneInput) {
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = "1";
+            statusDiv.innerHTML = "<span>กรุณากรอกข้อมูลเพื่อเช็คประวัติผ่อน</span>";
+            return;
         }
+
+        const response = await fetch(url);
+        const data = await response.text();
+        const rows = data.split('\n').slice(1);
+        
+        let isBlacklisted = false;
+
+        rows.forEach(row => {
+            const cols = row.split(',');
+            const sheetName = cols[0]?.trim();
+            const sheetPhone = cols[1]?.trim();
+            const sheetStatus = cols[2]?.trim();
+
+            // เช็คว่าชื่อหรือเบอร์ ตรงกับในชีทที่มีสถานะ "ติดผ่อน" ไหม
+            if ((nameInput === sheetName || phoneInput === sheetPhone) && sheetStatus === "ติดผ่อน") {
+                isBlacklisted = true;
+            }
+        });
+
+        if (isBlacklisted) {
+            // เจอ Blacklist -> ล็อกปุ่ม
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = "0.5";
+            confirmBtn.style.cursor = "not-allowed";
+            statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ประวัติเสีย (งดรับผ่อน กรุณาเลือกซื้อสด)</span>";
+        } else {
+            // ไม่เจอ -> ปลดล็อก
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = "1";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ประวัติปกติ (สั่งซื้อได้)</span>";
+        }
+    } catch (e) {
+        console.error("Error:", e);
     }
 }
 
