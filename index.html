@@ -861,35 +861,86 @@ function nextStep(step) {
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
-    const p = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้สั่งซื้อ:"); 
-    if(!p) return;
+    const phone = prompt("กรุณากรอกเบอร์โทรศัพท์เพื่อเช็คยอดผ่อน/พัสดุ:"); 
+    if(!phone) return;
     
+    // สร้างหน้าต่างผลลัพธ์ (ใช้ Modal เดิมที่มีอยู่หรือสร้างใหม่)
+    const resultDiv = document.getElementById('trackingResult'); // ถ้ายังไม่มี ID นี้ ให้ดูขั้นตอนที่ 2
+    if(!resultDiv) {
+        // ถ้ายังไม่ได้เพิ่ม HTML Modal ให้ใช้ Alert แบบละเอียดแทนไปก่อน (แต่แนะนำให้ทำข้อ 2)
+        fetchTrackingData(phone);
+        return;
+    }
+
+    resultDiv.innerHTML = `<div style="text-align:center; padding:20px; color:var(--gold);">⏳ กำลังดึงข้อมูลบัญชีผ่อน...</div>`;
+    openModal('trackingModal');
+
     try {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
+        // ดึงข้อมูลจาก Sheet "Tracking" (ตรวจสอบชื่อ Sheet ให้ตรงกัน)
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking&refresh=${Date.now()}`);
         const text = await res.text();
         const rows = text.split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'').trim()));
         
-        // กรองเอาทุกรายการที่เบอร์โทรตรงกัน
-        const allOrders = rows.filter(r => r[0] === p);
+        const myOrders = rows.filter(r => r[0] === phone);
         
-        if(allOrders.length > 0) {
-            let message = `พบข้อมูลการจัดส่ง ${allOrders.length} รายการ:\n`;
-            message += `------------------------\n`;
-            
-            // วนลูปโชว์ทุกรายการ (เอาอันล่าสุดขึ้นก่อน)
-            allOrders.reverse().forEach((f, index) => {
-                message += `${index + 1}. คุณ ${f[1]}\n`;
-                message += `   สถานะ: ${f[2] || 'กำลังเตรียมจัดส่ง'}\n`;
-                message += `   เลขพัสดุ: ${f[3] || 'ยังไม่มีข้อมูล'}\n`;
-                message += `------------------------\n`;
+        if(myOrders.length > 0) {
+            let html = '';
+            myOrders.reverse().forEach((f) => {
+                // คำนวณยอดเงิน (Column E=งวด1, F=งวด2, G=สถานะ2, H=งวด3, I=สถานะ3)
+                let g1 = parseFloat(f[4] || 0);
+                let g2 = parseFloat(f[5] || 0);
+                let g3 = parseFloat(f[7] || 0);
+                let totalPaid = g1 + (f[6] === 'จ่ายแล้ว' ? g2 : 0) + (f[8] === 'จ่ายแล้ว' ? g3 : 0);
+                let totalBill = g1 + g2 + g3;
+                let balance = totalBill - totalPaid;
+                let percent = totalBill > 0 ? Math.round((totalPaid / totalBill) * 100) : 0;
+
+                html += `
+                <div style="background:rgba(212,175,55,0.05); border:1px solid var(--gold); border-radius:15px; padding:15px; margin-bottom:20px; color:#fff;">
+                    <h5 style="color:var(--gold); text-align:center; margin-bottom:10px; font-size:14px;">📄 บัญชีผ่อน: ${f[1]}</h5>
+                    
+                    <div style="background:#222; height:8px; border-radius:10px; margin-bottom:12px; overflow:hidden;">
+                        <div style="background:linear-gradient(90deg, var(--gold), #fff); width:${percent}%; height:100%;"></div>
+                    </div>
+                    <p style="text-align:right; font-size:9px; color:#aaa; margin-top:-10px;">ชำระแล้ว ${percent}%</p>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+                        <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:10px; text-align:center;">
+                            <p style="font-size:9px; color:#aaa;">ชำระแล้ว</p>
+                            <p style="font-size:13px; color:#38ef7d; font-weight:bold;">฿${totalPaid.toLocaleString()}</p>
+                        </div>
+                        <div style="background:rgba(255,64,64,0.1); padding:8px; border-radius:10px; text-align:center; border:1px solid rgba(255,64,64,0.3);">
+                            <p style="font-size:9px; color:#ff4b2b;">คงเหลือ</p>
+                            <p style="font-size:13px; color:#ff4b2b; font-weight:bold;">฿${balance.toLocaleString()}</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:15px; border-top:1px solid #333; padding-top:10px;">
+                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+                            <span>งวดที่ 1 (เงินดาวน์)</span> <span style="color:#38ef7d;">✅ จ่ายแล้ว</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+                            <span>งวดที่ 2 (฿${g2.toLocaleString()})</span> 
+                            <span style="color:${f[6]==='จ่ายแล้ว'?'#38ef7d':'#ffcc00'};">${f[6]==='จ่ายแล้ว'?'✅ จ่ายแล้ว':'⏳ รอชำระ'}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+                            <span>งวดที่ 3 (฿${g3.toLocaleString()})</span> 
+                            <span style="color:${f[8]==='จ่ายแล้ว'?'#38ef7d':'#ffcc00'};">${f[8]==='จ่ายแล้ว'?'✅ จ่ายแล้ว':'⏳ รอชำระ'}</span>
+                        </div>
+                    </div>
+
+                    <div style="background:#000; padding:8px; border-radius:8px; margin-top:10px; text-align:center;">
+                         <p style="font-size:10px; color:#aaa;">📦 พัสดุ: <span style="color:#fff;">${f[3] || 'รออัปเดต'}</span></p>
+                         <p style="font-size:10px; color:var(--gold); margin-top:4px;">📅 กำหนดชำระงวดหน้า: <b>${f[9] || '-'}</b></p>
+                    </div>
+                </div>`;
             });
-            
-            alert(message);
+            resultDiv.innerHTML = html;
         } else {
-            alert("ไม่พบข้อมูลการจัดส่งสำหรับเบอร์นี้ครับ");
+            resultDiv.innerHTML = `<div style="text-align:center; padding:40px; color:#ff4b2b;">❌ ไม่พบข้อมูลสำหรับเบอร์นี้ครับ</div>`;
         }
     } catch(e) {
-        alert("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล");
+        resultDiv.innerHTML = `<div style="text-align:center; padding:40px; color:#ff4b2b;">ระบบขัดข้อง กรุณาลองใหม่ภายหลัง</div>`;
     }
 }
 
