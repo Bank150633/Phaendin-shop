@@ -932,6 +932,7 @@ function nextStep(step) {
 }
 
     init();
+    
 function togglePay(type) {
     const sec = document.getElementById('securitySection');
     const instBox = document.getElementById('installmentInfo');
@@ -939,10 +940,7 @@ function togglePay(type) {
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
     
-    // ตัวแปรสำหรับแสดงยอดสุทธิแบบเน้นๆ
     const topPriceDisplay = document.getElementById('finalTotalDisplay');
-    let transferAmount = 0;
-    let labelText = "";
 
     if(type === 'จ่ายเต็ม') {
         sec.style.display = 'none';
@@ -951,40 +949,38 @@ function togglePay(type) {
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
         
-        transferAmount = activeP.finalTotal;
-        labelText = "ยอดโอนชำระเต็มจำนวน";
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
         
     } else {
         const total = activeP.finalTotal;
         const totalWithFee = total * 1.2; 
-        const perMonth = Math.round(totalWithFee / 3); // ปัดเศษให้เป็นเลขจำนวนเต็มเพื่อความง่ายในการโอน
+        const perMonth = (totalWithFee / 3).toFixed(2);
         
         const nextDate = new Date();
         nextDate.setDate(nextDate.getDate() + 30);
         const dateThai = nextDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
 
-        transferAmount = perMonth;
-        labelText = "ยอดโอนงวดแรก (รับของทันที)";
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth}`;
 
         instBox.innerHTML = `
-            <div style="text-align:left; padding:8px; background: rgba(0,0,0,0.3); border-radius: 8px;">
-                <p style="color:#38ef7d; font-weight:bold; font-size:13px; margin-bottom:10px; text-align:center;">
-                   🚀 จ่ายเพียง ฿${perMonth.toLocaleString()} รับของไปใช้ก่อน!
+            <div style="text-align:left; padding:5px;">
+                <p style="color:#38ef7d; font-weight:bold; font-size:13px; margin-bottom:8px; text-align:center;">
+                   🚀 จ่ายแค่ ฿${perMonth} รับของไปก่อนเลย!
                 </p>
-                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;">
-                    <span>🟢 งวดที่ 1 (ชำระตอนนี้):</span>
-                    <span style="color:#38ef7d; font-weight:bold;">฿${perMonth.toLocaleString()}</span>
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
+                    <span>🟢 งวดที่ 1 (จ่ายตอนนี้):</span>
+                    <span style="color:#38ef7d; font-weight:bold;">฿${perMonth}</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px; color:#aaa;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; color:#aaa;">
                     <span>⚪ งวดที่ 2 (${dateThai}):</span>
-                    <span>฿${perMonth.toLocaleString()}</span>
+                    <span>฿${perMonth}</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:10px; color:#aaa;">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px; color:#aaa;">
                     <span>⚪ งวดที่ 3 (อีก 30 วันถัดไป):</span>
-                    <span>฿${perMonth.toLocaleString()}</span>
+                    <span>฿${perMonth}</span>
                 </div>
                 <p style="font-size:10px; color:var(--gold); border-top:1px dashed rgba(212,175,55,0.3); padding-top:5px; text-align:right;">
-                    ยอดรวมรวมดอกเบี้ยผ่อน: ฿${totalWithFee.toLocaleString()}
+                    ยอดรวมผ่อน (+20%): ฿${totalWithFee.toLocaleString()}
                 </p>
             </div>
         `;
@@ -996,19 +992,10 @@ function togglePay(type) {
         radios[1].checked = true;
     }
 
-    // อัปเดตการแสดงผลยอดสุทธิที่ด้านบนให้ชัดเจนที่สุด
-    if(topPriceDisplay) {
-        topPriceDisplay.parentElement.previousElementSibling.innerText = labelText; // เปลี่ยนคำอธิบาย (ยอดชำระสุทธิ)
-        topPriceDisplay.innerHTML = `<span style="color:var(--gold); font-size:18px; margin-right:5px;">฿</span>${transferAmount.toLocaleString()}`;
-        
-        // เพิ่ม Animation กระพริบเบาๆ เมื่อเปลี่ยนยอด เพื่อดึงดูดสายตา
-        topPriceDisplay.style.animation = 'none';
-        setTimeout(() => { topPriceDisplay.style.animation = 'pulse 0.5s ease-in-out'; }, 10);
-    }
-
+    // --- นี่คือคำสั่งที่เพิ่มเข้าไปครับ ---
     checkBlacklist(); 
 }
-    
+
 function getLocation() {
     const btn = document.getElementById('btnLocation');
     if (navigator.geolocation) {
