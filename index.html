@@ -791,8 +791,21 @@ function updateZoomDots(el, total) {
 
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
-    function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
-    
+    function closeModal(id) { 
+    const m = document.getElementById(id); 
+    m.classList.remove('show'); 
+    setTimeout(() => {
+        m.style.display = 'none';
+        // --- ส่วนที่เพิ่ม: ปลดล็อคปุ่มสั่งซื้อทุกครั้งที่ปิดหน้าต่าง ---
+        const btn = document.getElementById('submitBtn');
+        if(btn) {
+            btn.disabled = false;
+            btn.style.opacity = "1";
+            btn.innerText = "ยืนยันการสั่งซื้อ";
+        }
+    }, 300); 
+}
+
 function handleFile(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -1145,5 +1158,14 @@ setInterval(() => {
 }
 
 </script>
+    <script>
+window.onpageshow = function(event) {
+    // ถ้ามีการย้อนกลับมาที่หน้านี้ ให้รีโหลดระบบใหม่ทันที
+    if (event.persisted) {
+        window.location.reload(); 
+    }
+};
+</script>
+
 </body>
 </html>
