@@ -106,56 +106,18 @@
         .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
-        /* แก้ไข: บังคับให้หายไปจริงๆ ไม่ขวางนิ้ว (วางทับที่เดิมได้เลย) */
-.modal, #zoomOverlay { 
-    display: none !important; 
-    position: fixed; 
-    inset: 0; 
-    background: rgba(0,0,0,0.95); 
-    z-index: -1; 
-    opacity: 0; 
-    pointer-events: none; 
-    transition: 0.3s; 
-    align-items: center; 
-    justify-content: center;
-}
-/* --- เพิ่ม CSS ของแถบเมนู (Nav) ที่หายไป --- */
-nav { 
-    position: fixed; 
-    bottom: 0; 
-    width: 100%; 
-    background: rgba(0,0,0,0.95); 
-    display: flex; 
-    justify-content: space-around; 
-    padding: 10px 0; 
-    border-top: 1px solid var(--gold); 
-    z-index: 1000; 
-    backdrop-filter: blur(10px);
-}
-.nav-tab { 
-    color: var(--text-dim); 
-    font-size: 10px; 
-    text-align: center; 
-    flex: 1; 
-    cursor: pointer; 
-}
-.nav-tab i { 
-    display: block; 
-    font-size: 18px; 
-    margin-bottom: 2px; 
-}
-.nav-tab.active { 
-    color: var(--gold); 
-}
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 5px; opacity: 0; transition: 0.3s; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
+        
+        .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
-/* เมื่อสั่งเปิด ถึงจะให้โผล่มาข้างหน้าและกดได้ */
-.modal.show, #zoomOverlay.active { 
-    display: flex !important; 
-    opacity: 1; 
-    z-index: 9999; 
-    pointer-events: auto; 
-}
+        nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
+        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
+        .nav-tab.active { color: var(--gold); }
+        .nav-tab i { font-size: 15px; margin-bottom: 2px; }
 
+        #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
@@ -400,8 +362,6 @@ nav {
                 </div>
 
                 <div id="step-2" style="display:none;">
-                    <div id="step2PriceSummary"></div> 
-
                     <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
                         <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
                     </p>
@@ -538,9 +498,11 @@ nav {
         let provinceName = p[13] || '';
         let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
 
+        // จัดการเรื่องรูปภาพ (รองรับหลายรูป)
         let images = p[1].split(',').map(img => img.trim());
         let imgCount = images.length;
 
+        // คำนวณราคา (ตาม Logic เดิมของคุณ)
         let currentPrice = priceNormal;
         let percentDiscount = 0;
         if (pricePromo > 0 && expiryDate > now) {
@@ -552,11 +514,15 @@ nav {
         <div class="card">
             <div class="media-wrap" style="position: relative;">
                 <div class="badge-container">
-                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
-                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                </div>
+    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+    
+    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
+    
+    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+</div>
+
                 ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                
                 <div id="p-slider-${pIndex}" onscroll="updateMainDots(${pIndex}, this, ${imgCount})" 
                      style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
                     ${images.map(img => `
@@ -565,10 +531,12 @@ nav {
                         </div>
                     `).join('')}
                 </div>
+
                 ${imgCount > 1 ? `
                 <div class="dot-container" style="bottom: 5px; gap: 3px;">
                     ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${pIndex}-${i}" style="width:4px; height:4px;"></div>`).join('')}
                 </div>` : ''}
+
                 ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
             </div>
             <div class="info">
@@ -579,22 +547,11 @@ nav {
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>
             </div>
-            <button class="buy-now" onclick="openOrder(
-                \`${p[0].replace(/`/g, "")}\`, 
-                '${priceNormal}', 
-                '${p[8] || 0}', 
-                \`${(p[9] || '').replace(/`/g, "")}\`, 
-                ${percentDiscount}, 
-                ${p[12] || 999}, 
-                '${p[1]}', 
-                ${p[14] || 1}, 
-                '${canInstall}'
-            )">สั่งซื้อ</button>
+            <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${p[12]||999}, '${p[1]}', ${p[14]||1}, '${canInstall}')">สั่งซื้อ</button>
         </div>
         `;
     }).join('');
 }
-
 
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
@@ -685,11 +642,10 @@ box.innerHTML += `
         let nextQty = selectedOptions[label].qty + delta;
         if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
     }
-// --- ค้นหาฟังก์ชัน updatePrice ในโค้ดของคุณ แล้ววางทับด้วยก้อนนี้ครับ ---
 
-function updatePrice() {
-    let subtotalNormal = 0; 
-    let subtotalDiscounted = 0; 
+      function updatePrice() {
+    let subtotalNormal = 0; // ราคารวมแบบปกติ (ก่อนลด)
+    let subtotalDiscounted = 0; // ราคารวมแบบหัก % แล้ว
     let summaryText = [];
     let totalItems = 0;
     
@@ -700,7 +656,10 @@ function updatePrice() {
             let qty = selectedOptions[key].qty;
             let unitPrice = selectedOptions[key].price;
             
+            // คำนวณยอดรวมปกติ
             subtotalNormal += (unitPrice * qty);
+            
+            // คำนวณยอดรวมแบบลด %
             let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
             
@@ -709,20 +668,29 @@ function updatePrice() {
         } 
     }
     
+    // ปัดเศษให้เรียบร้อย
     subtotalNormal = Math.round(subtotalNormal);
     subtotalDiscounted = Math.round(subtotalDiscounted);
 
+    // ยอดสุทธิ = (ราคาที่ลดแล้ว) + ค่าส่ง
     activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
+    // ยอดก่อนลดสะสม = (ราคาปกติ) + ค่าส่ง (เอาไว้โชว์ตัวขีดฆ่า)
     let totalBeforeDisc = subtotalNormal + activeP.ship;
+    
     activeP.summary = summaryText.join(', ');
 
     let images = activeP.img.split(',').map(img => img.trim());
     let imgCount = images.length; 
 
+       // --- จุดที่ 1: แก้ไขการสร้างป้ายแท็กให้รองรับ Class และ Style ---
     let badgesHtml = `<div class="promo-pill-container" style="display: flex; justify-content: center; gap: 5px; margin-top: 5px;">`;
+    
+    // ป้ายลดเปอร์เซ็นต์
     if (activeP.disc > 0) {
         badgesHtml += `<span class="pill pill-red" style="background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:4px; font-size:10px;">ลด ${activeP.disc}%</span>`;
     }
+    
+    // ป้ายส่งฟรี / ค่าส่ง
     if (activeP.ship === 0) {
         badgesHtml += `<span class="pill pill-free-ship" style="border:1px solid #38ef7d; color:#38ef7d; background:rgba(56,239,125,0.1); padding:2px 8px; border-radius:4px; font-size:10px;">ส่งฟรี</span>`;
     } else {
@@ -732,36 +700,56 @@ function updatePrice() {
  
     document.getElementById('orderDetail').innerHTML = `
     <div class="order-summary-box" style="padding: 0; overflow: hidden; position: relative; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; margin-bottom: 8px;">
+        
         ${imgCount > 1 ? `<div class="img-counter" id="imgNum">1 / ${imgCount}</div>` : ''}
+
         <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;">
             <div id="m-slider" onscroll="updateDots(this, ${imgCount})" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
                 ${images.map(img => `<div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">${renderMedia(img, true)}</div>`).join('')}
             </div>
-            ${imgCount > 1 ? `<div class="dot-container">${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`).join('')}</div>` : ''}
+
+            ${imgCount > 1 ? `
+            <div class="dot-container">
+                ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${i}"></div>`).join('')}
+            </div>` : ''}
         </div>
+        
         <div style="padding: 8px;">
             <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
             ${badgesHtml}
             <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 4px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
             <div style="border-top: 1px dashed rgba(212,175,55,0.2); padding-top:8px; text-align:center;">
                 <span style="font-size:10px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                
                 <div style="display:flex; justify-content:center; align-items:baseline; gap:8px;">
-                    ${(activeP.disc > 0 && totalItems > 0) ? `<span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: 400;">฿${totalBeforeDisc.toLocaleString()}</span>` : ''}
-                    <div id="finalTotalDisplay" style="font-size:28px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+                    ${(activeP.disc > 0 && totalItems > 0) ? `
+                        <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: 400;">
+                            ฿${totalBeforeDisc.toLocaleString()}
+                        </span>
+                    ` : ''}
+                    
+                    <div id="finalTotalDisplay" style="font-size:28px; font-weight:800; color:#fff;">
+                        ฿${activeP.finalTotal.toLocaleString()}
+                    </div>
                 </div>
             </div>
         </div>
     </div>`;
 
-    // อัปเดตยอดผ่อน
+    // อัปเดตสถานะปุ่มสั่งซื้อ
+    const btn = document.getElementById('submitBtn');
+    if (totalItems === 0) { 
+        btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
+    } else if (totalItems < activeP.min) { 
+        btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
+    } else { 
+        btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
+    }
+
+    // คำนวณยอดผ่อนใหม่ตามราคาที่อัปเดต
     const currentPayType = document.querySelector('input[name="payType"]:checked').value;
     togglePay(currentPayType);
-
-    // --- จุดสำคัญ: ส่งหน้าที่คุมปุ่มไปให้ฟังก์ชันเช็คเงื่อนไขหลักทำงานแทน ---
-    checkBlacklist(); 
-}
-
-      
+} 
      
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
@@ -801,21 +789,8 @@ function updateZoomDots(el, total) {
 
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
-    function closeModal(id) { 
-    const m = document.getElementById(id); 
-    m.classList.remove('show'); 
-    setTimeout(() => {
-        m.style.display = 'none';
-        // --- ส่วนที่เพิ่ม: ปลดล็อคปุ่มสั่งซื้อทุกครั้งที่ปิดหน้าต่าง ---
-        const btn = document.getElementById('submitBtn');
-        if(btn) {
-            btn.disabled = false;
-            btn.style.opacity = "1";
-            btn.innerText = "ยืนยันการสั่งซื้อ";
-        }
-    }, 300); 
-}
-
+    function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
+    
 function handleFile(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -834,38 +809,6 @@ function handleFile(input) {
     }
 }
 
-// ฟังก์ชันใหม่สำหรับคำนวณและโชว์ยอดเงิน
-function updateStep2Summary() {
-    const payType = document.querySelector('input[name="payType"]:checked').value;
-    const summaryBox = document.getElementById('step2PriceSummary');
-    let transferAmount = 0;
-    let label = "";
-
-    if (payType === 'จ่ายเต็ม') {
-        transferAmount = activeP.finalTotal;
-        label = "ยอดโอนชำระเต็มจำนวน";
-    } else {
-        // ยอดผ่อนงวดแรก (รวมค่าธรรมเนียม 20% แล้วหาร 3)
-        const totalWithFee = activeP.finalTotal * 1.2;
-        transferAmount = Math.round(totalWithFee / 3);
-        label = "ยอดโอนงวดแรก (รับของทันที)";
-    }
-
-    if (summaryBox) {
-        summaryBox.innerHTML = `
-            <div style="background: linear-gradient(145deg, rgba(212,175,55,0.2) 0%, rgba(0,0,0,0.6) 100%); 
-                        border: 2px solid var(--gold); padding: 15px; border-radius: 15px; 
-                        text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(212,175,55,0.2);">
-                <div style="font-size: 13px; color: var(--gold); font-weight: 500; margin-bottom: 5px;">${label}</div>
-                <div style="font-size: 38px; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(212,175,55,0.5);">
-                    <span style="font-size: 20px; color: var(--gold); margin-right: 2px;">฿</span>${transferAmount.toLocaleString()}
-                </div>
-            </div>
-        `;
-    }
-}
-
-// ฟังก์ชันเปลี่ยนหน้า (ที่ปรับปรุงแล้ว)
 function nextStep(step) {
     const s1 = document.getElementById('step-1');
     const s2 = document.getElementById('step-2');
@@ -878,88 +821,113 @@ function nextStep(step) {
             alert(`กรุณาเลือกสินค้าอย่างน้อย ${activeP.min} ชิ้นก่อนครับ`);
             return;
         }
-
-        updateStep2Summary(); // เรียกฟังก์ชันโชว์ยอดเงิน
-        
         s1.style.display = 'none'; f1.style.display = 'none';
         s2.style.display = 'block'; f2.style.display = 'block';
-
-        const modalBody = document.querySelector('.modal-body-scroll');
-        if(modalBody) modalBody.scrollTop = 0;
     } else {
         s1.style.display = 'block'; f1.style.display = 'block';
         s2.style.display = 'none'; f2.style.display = 'none';
     }
 }
 
+    document.getElementById('orderForm').onsubmit = async (e) => {
+    e.preventDefault();
+    
+    // ดึงค่าใหม่ๆ ที่เพิ่มเข้ามา
+    const payType = document.querySelector('input[name="payType"]:checked').value;
+    const gps = document.getElementById('userLocation').value;
+    const selfieFile = document.getElementById('selfieIn').files[0];
+    const slipFile = document.getElementById('fileIn').files[0];
+
+    // เช็คเงื่อนไขกรณี "ผ่อน"
+    if (payType === 'ผ่อนไปใช้ไป') {
+        if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
+        if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
+    }
+    
+    // เช็คสลิป (ต้องมีทั้งสดและผ่อน)
+    if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
+
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+
+    // ฟังก์ชันแปลงรูปภาพเป็น Base64
+    const toBase64 = file => new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+    });
+
+    try {
+        const slipBase64 = await toBase64(slipFile);
+        let selfieBase64 = "";
+        
+        // ถ้ามีรูปเซลฟี่ (กรณีผ่อน) ให้แปลงไฟล์ด้วย
+        if (selfieFile) {
+            selfieBase64 = await toBase64(selfieFile);
+        }
+
+            // --- เริ่มต้นส่วนที่แก้ใหม่ ---
+    const isInstall = payType === 'ผ่อนไปใช้ไป';
+    const finalPrice = isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal;
+    
+    // ดึงวันที่นัดงวด 2 จากหน้าจอ (ถ้ามี)
+    let nextPayDate = "-";
+    const dateEl = document.getElementById('instNextDate');
+    if(dateEl) nextPayDate = dateEl.innerText;
+
+    const data = { 
+        productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${finalPrice.toLocaleString()}${isInstall ? ' (ผ่อน 3 งวด)' : ''}`, 
+        customerName: document.getElementById('cName').value, 
+        customerPhone: document.getElementById('cPhone').value, 
+        customerAddress: document.getElementById('cAddr').value,
+        payType: isInstall ? `ผ่อน (งวด2: ${nextPayDate})` : payType, 
+        gps: gps || "-",       
+        file: slipBase64,      
+        selfie: selfieBase64   
+    };
+    // --- จบส่วนที่แก้ใหม่ ---
+
+    // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
+    await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); 
+    alert("สั่งซื้อสำเร็จเรียบร้อยครับ!"); 
+    location.reload(); 
+} catch(err) { 
+    alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
+    btn.disabled = false; 
+}
+};
+
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
-     
     async function checkShip() {
     const p = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้สั่งซื้อ:"); 
     if(!p) return;
     
     try {
-        // ดึงข้อมูลจากชีท Tracking
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking&refresh=${Date.now()}`);
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
         const text = await res.text();
+        const rows = text.split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'').trim()));
         
-        // แยกข้อมูล CSV (A=0, B=1, C=2, D=3, E=4, F=5)
-        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()));
-        
-        const allOrders = rows.filter(r => r[0] === p); // กรองด้วยเบอร์โทร (คอลัมน์ A)
+        // กรองเอาทุกรายการที่เบอร์โทรตรงกัน
+        const allOrders = rows.filter(r => r[0] === p);
         
         if(allOrders.length > 0) {
-            let htmlContent = `<div style="text-align:left; padding:10px;">
-                <h3 style="color:var(--gold); text-align:center; margin-bottom:15px; font-size:16px;">📦 ข้อมูลการสั่งซื้อของคุณ</h3>`;
-
+            let message = `พบข้อมูลการจัดส่ง ${allOrders.length} รายการ:\n`;
+            message += `------------------------\n`;
+            
+            // วนลูปโชว์ทุกรายการ (เอาอันล่าสุดขึ้นก่อน)
             allOrders.reverse().forEach((f, index) => {
-                const customerName = f[1];  // คอลัมน์ B: ชื่อ
-                const productName = f[2];   // คอลัมน์ C: สินค้า
-                const status = f[3] || 'เตรียมจัดส่ง'; // คอลัมน์ D: สถานะ
-                const trackNum = f[4] || 'รอดำเนินการ';  // คอลัมน์ E: เลขพัสดุ
-                const totalPrice = parseFloat(f[5]) || 0; // คอลัมน์ F: ราคารวม
-
-                const perMonth = Math.round(totalPrice / 3);
-                const d2 = new Date(); d2.setDate(d2.getDate() + 30);
-                const d3 = new Date(); d3.setDate(d3.getDate() + 60);
-                const fmt = { day: '2-digit', month: 'short' };
-
-                htmlContent += `
-                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(212,175,55,0.3); border-radius:12px; padding:12px; margin-bottom:15px;">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
-                        <div style="font-size:11px; color:var(--gold);">คุณ${customerName}</div>
-                        <span style="background:var(--gold-grad); color:#000; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:bold;">${status}</span>
-                    </div>
-                    
-                    <div style="font-size:13px; color:#fff; margin-bottom:5px;"><b>สินค้า:</b> ${productName}</div>
-                    <div style="font-size:12px; color:#aaa; margin-bottom:10px;"><b>เลขพัสดุ:</b> <span style="color:#38ef7d;">${trackNum}</span></div>
-                    
-                    ${(status.includes("ผ่อน") || status.includes("ผ่าน")) ? `
-                    <div style="border-top:1px dashed rgba(212,175,55,0.2); padding-top:10px; background:rgba(0,0,0,0.2); border-radius:8px; padding:8px;">
-                        <p style="font-size:11px; color:var(--gold); margin-bottom:8px; font-weight:bold;"><i class="fa-solid fa-calendar-days"></i> ตารางชำระงวดถัดไป</p>
-                        <div style="display:flex; justify-content:space-between; font-size:12px; color:#fff; margin-bottom:6px;">
-                            <span>🗓️ งวดที่ 2 (ประมาณ ${d2.toLocaleDateString('th-TH', fmt)})</span>
-                            <b style="color:#38ef7d;">฿${perMonth.toLocaleString()}</b>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; font-size:12px; color:#fff;">
-                            <span>🗓️ งวดที่ 3 (ประมาณ ${d3.toLocaleDateString('th-TH', fmt)})</span>
-                            <b style="color:#38ef7d;">฿${perMonth.toLocaleString()}</b>
-                        </div>
-                    </div>` : ''}
-                </div>`;
+                message += `${index + 1}. คุณ ${f[1]}\n`;
+                message += `   สถานะ: ${f[2] || 'กำลังเตรียมจัดส่ง'}\n`;
+                message += `   เลขพัสดุ: ${f[3] || 'ยังไม่มีข้อมูล'}\n`;
+                message += `------------------------\n`;
             });
-
-            htmlContent += `<button onclick="closeModal('contactModal')" style="width:100%; background:var(--gold-grad); border:none; padding:12px; border-radius:10px; font-weight:bold; margin-top:10px; color:#000;">ปิดหน้าต่าง</button></div>`;
-
-            const m = document.getElementById('contactModal');
-            m.querySelector('.modal-card').innerHTML = htmlContent;
-            openModal('contactModal');
-
+            
+            alert(message);
         } else {
-            alert("❌ ไม่พบข้อมูลสำหรับเบอร์นี้ครับ\n(ตรวจสอบเบอร์ หรือรอระบบอัปเดตข้อมูลสักครู่)");
+            alert("ไม่พบข้อมูลการจัดส่งสำหรับเบอร์นี้ครับ");
         }
     } catch(e) {
-        alert("⚠️ ระบบขัดข้อง กรุณาลองใหม่ภายหลัง");
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล");
     }
 }
 
@@ -1094,49 +1062,81 @@ setInterval(() => {
   async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('statusMsg');
-    if (!confirmBtn) return;
-
-    // เช็คจำนวนสินค้าก่อน
-    let totalItems = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
     
-    // ด่านที่ 1: ถ้าของไม่ครบ ล็อคสถานเดียว
-    if (totalItems === 0 || totalItems < activeP.min) {
-        confirmBtn.disabled = true;
-        confirmBtn.style.opacity = "0.5";
-        confirmBtn.innerText = totalItems === 0 ? "กรุณาเลือกสินค้า" : `ขั้นต่ำ ${activeP.min} ชิ้น`;
-        return;
-    }
-
+    // 1. ดึงค่าชื่อและเบอร์ + ล้างช่องว่างทิ้งให้หมด
+    const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim().toLowerCase();
+    const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
+    
+    // 2. เช็คว่าเค้าเลือก "ผ่อน" หรือเปล่า?
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
-    // ด่านที่ 2: ถ้าจ่ายสด ปลดล็อคให้กดได้ทันที 100%
-    if (payType === 'จ่ายเต็ม') {
+    // ถ้าจ่ายสด ไม่ต้องเช็ค ปล่อยผ่านเลย
+    if (payType !== 'ผ่อนไปใช้ไป') {
         confirmBtn.disabled = false;
         confirmBtn.style.opacity = "1";
-        confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
-        if(statusDiv) statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ พร้อมสั่งซื้อ (ชำระสด)</span>";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
         return; 
     }
 
-    // ด่านที่ 3: ถ้าผ่อน ต้องกรอกข้อมูลให้ครบก่อนปุ่มถึงจะโผล่
-    const nameInput = document.getElementById('cName').value.trim();
-    const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '');
-
-    if (nameInput.length < 3 || phoneInput.length < 10) {
+    // 3. ถ้าเลือกผ่อน แต่ยังกรอกไม่ครบ ล็อคปุ่มไว้ก่อน
+    if (nameInput.length < 3 || phoneInput.length < 9) {
         confirmBtn.disabled = true;
         confirmBtn.style.opacity = "0.5";
-        confirmBtn.innerText = "กรุณากรอกชื่อ-เบอร์";
-        if(statusDiv) statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ ตรวจสอบสิทธิ์ผ่อนจากชื่อ-เบอร์</span>";
+        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์จริง เพื่อเช็คสิทธิ์ผ่อน</span>";
         return;
     }
 
-    // ถ้าผ่านทุกด่าน ปลดล็อคปุ่ม!
-    confirmBtn.disabled = false;
-    confirmBtn.style.opacity = "1";
-    confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
+    statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังเช็คแบล็คลิสต์ (ห้ามปิดหน้าจอ)...</span>";
+
+    // 4. ลิงก์ดึงข้อมูล (ตรวจสอบ ID และ GID ให้ชัวร์นะครับ)
+    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; // ID ของไฟล์ Google Sheets
+    const GID = '1416026715'; // เลข GID ของหน้า "Blacklist"
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}&refresh=${Date.now()}`;
+    
+    try {
+        const response = await fetch(url);
+        const csvData = await response.text();
+        const rows = csvData.split('\n');
+        
+        let foundBad = false;
+        let reason = "";
+
+        // วนลูปเช็คทีละแถว (เริ่มแถวที่ 2)
+        for (let i = 1; i < rows.length; i++) {
+            // ล้างฟันหนูและช่องว่างในแถวนั้นให้เกลี้ยง
+            let cleanRow = rows[i].toLowerCase().replace(/["']/g, '').replace(/\s+/g, '');
+
+            // ถ้าเจอ "ชื่อ" หรือ "เบอร์" ในแถวที่มีคำว่า ติดผ่อน/blacklist/ค้าง/ไม่ผ่าน
+            const matchName = nameInput !== "" && cleanRow.includes(nameInput);
+            const matchPhone = phoneInput !== "" && cleanRow.includes(phoneInput);
+
+            if (matchName || matchPhone) {
+                const keywords = ["ติดผ่อน", "ประวัติเสีย", "blacklist", "ไม่ผ่าน", "ระงับ", "ค้าง", "โกง"];
+                if (keywords.some(k => cleanRow.includes(k))) {
+                    foundBad = true;
+                    let cols = rows[i].split(',');
+                    reason = cols[3] ? cols[3].replace(/"/g, '').trim() : "ติดประวัติค้างชำระ/แบล็คลิสต์";
+                    break;
+                }
+            }
+        }
+
+        if (foundBad) {
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = "0.5";
+            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่สามารถผ่อนได้: ${reason}</b>`;
+        } else {
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = "1";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! ท่านสามารถผ่อนได้</span>";
+        }
+    } catch (e) {
+        // ถ้าดึงข้อมูลไม่ได้ (เช่น เน็ตหลุด) ให้ล็อคปุ่มผ่อนไว้ก่อนเพื่อความปลอดภัย
+        confirmBtn.disabled = true;
+        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง กรุณาลองใหม่</span>";
+    }
 }
 
 </script>
-    
 </body>
 </html>
