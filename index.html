@@ -870,36 +870,73 @@ function nextStep(step) {
 }
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
+     
     async function checkShip() {
     const p = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้สั่งซื้อ:"); 
     if(!p) return;
     
     try {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking`);
+        // ดึงข้อมูลจากชีท Tracking
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Tracking&refresh=${Date.now()}`);
         const text = await res.text();
-        const rows = text.split('\n').slice(1).map(r => r.split(',').map(v => v.replace(/"/g,'').trim()));
         
-        // กรองเอาทุกรายการที่เบอร์โทรตรงกัน
-        const allOrders = rows.filter(r => r[0] === p);
+        // แยกข้อมูล CSV (A=0, B=1, C=2, D=3, E=4, F=5)
+        const rows = text.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()));
+        
+        const allOrders = rows.filter(r => r[0] === p); // กรองด้วยเบอร์โทร (คอลัมน์ A)
         
         if(allOrders.length > 0) {
-            let message = `พบข้อมูลการจัดส่ง ${allOrders.length} รายการ:\n`;
-            message += `------------------------\n`;
-            
-            // วนลูปโชว์ทุกรายการ (เอาอันล่าสุดขึ้นก่อน)
+            let htmlContent = `<div style="text-align:left; padding:10px;">
+                <h3 style="color:var(--gold); text-align:center; margin-bottom:15px; font-size:16px;">📦 ข้อมูลการสั่งซื้อของคุณ</h3>`;
+
             allOrders.reverse().forEach((f, index) => {
-                message += `${index + 1}. คุณ ${f[1]}\n`;
-                message += `   สถานะ: ${f[2] || 'กำลังเตรียมจัดส่ง'}\n`;
-                message += `   เลขพัสดุ: ${f[3] || 'ยังไม่มีข้อมูล'}\n`;
-                message += `------------------------\n`;
+                const customerName = f[1];  // คอลัมน์ B: ชื่อ
+                const productName = f[2];   // คอลัมน์ C: สินค้า
+                const status = f[3] || 'เตรียมจัดส่ง'; // คอลัมน์ D: สถานะ
+                const trackNum = f[4] || 'รอดำเนินการ';  // คอลัมน์ E: เลขพัสดุ
+                const totalPrice = parseFloat(f[5]) || 0; // คอลัมน์ F: ราคารวม
+
+                const perMonth = Math.round(totalPrice / 3);
+                const d2 = new Date(); d2.setDate(d2.getDate() + 30);
+                const d3 = new Date(); d3.setDate(d3.getDate() + 60);
+                const fmt = { day: '2-digit', month: 'short' };
+
+                htmlContent += `
+                <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(212,175,55,0.3); border-radius:12px; padding:12px; margin-bottom:15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                        <div style="font-size:11px; color:var(--gold);">คุณ${customerName}</div>
+                        <span style="background:var(--gold-grad); color:#000; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:bold;">${status}</span>
+                    </div>
+                    
+                    <div style="font-size:13px; color:#fff; margin-bottom:5px;"><b>สินค้า:</b> ${productName}</div>
+                    <div style="font-size:12px; color:#aaa; margin-bottom:10px;"><b>เลขพัสดุ:</b> <span style="color:#38ef7d;">${trackNum}</span></div>
+                    
+                    ${(status.includes("ผ่อน") || status.includes("ผ่าน")) ? `
+                    <div style="border-top:1px dashed rgba(212,175,55,0.2); padding-top:10px; background:rgba(0,0,0,0.2); border-radius:8px; padding:8px;">
+                        <p style="font-size:11px; color:var(--gold); margin-bottom:8px; font-weight:bold;"><i class="fa-solid fa-calendar-days"></i> ตารางชำระงวดถัดไป</p>
+                        <div style="display:flex; justify-content:space-between; font-size:12px; color:#fff; margin-bottom:6px;">
+                            <span>🗓️ งวดที่ 2 (ประมาณ ${d2.toLocaleDateString('th-TH', fmt)})</span>
+                            <b style="color:#38ef7d;">฿${perMonth.toLocaleString()}</b>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:12px; color:#fff;">
+                            <span>🗓️ งวดที่ 3 (ประมาณ ${d3.toLocaleDateString('th-TH', fmt)})</span>
+                            <b style="color:#38ef7d;">฿${perMonth.toLocaleString()}</b>
+                        </div>
+                    </div>` : ''}
+                </div>`;
             });
-            
-            alert(message);
+
+            htmlContent += `<button onclick="closeModal('contactModal')" style="width:100%; background:var(--gold-grad); border:none; padding:12px; border-radius:10px; font-weight:bold; margin-top:10px; color:#000;">ปิดหน้าต่าง</button></div>`;
+
+            const m = document.getElementById('contactModal');
+            m.querySelector('.modal-card').innerHTML = htmlContent;
+            openModal('contactModal');
+
         } else {
-            alert("ไม่พบข้อมูลการจัดส่งสำหรับเบอร์นี้ครับ");
+            alert("❌ ไม่พบข้อมูลสำหรับเบอร์นี้ครับ\n(ตรวจสอบเบอร์ หรือรอระบบอัปเดตข้อมูลสักครู่)");
         }
     } catch(e) {
-        alert("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล");
+        alert("⚠️ ระบบขัดข้อง กรุณาลองใหม่ภายหลัง");
     }
 }
 
