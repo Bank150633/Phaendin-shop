@@ -333,7 +333,7 @@
         <div class="nav-item" onclick="alert('ระบบสมาชิกระดับโกลด์ เร็วๆ นี้')"><i class="fa-solid fa-crown"></i>สิทธิพิเศษ</div>
     </footer-nav>
 
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoY_2RajmKgO6NHXlyX0cR404kHG7EqElMB4z7I_lmKrOUKezLOVzMPdMjfKZD_5YJyg/exec';
@@ -349,28 +349,25 @@
                 const csvData = await response.text();
                 products = parseCSV(csvData);
                 renderGrid(products);
-                document.getElementById('loader').style.display = 'none'; // ปิดตัวหมุนเมื่อโหลดเสร็จ
+                document.getElementById('loader').style.display = 'none';
             } catch (error) {
                 console.error("Data Fetch Error:", error);
-                alert("ไม่สามารถเชื่อมต่อฐานข้อมูลได้ ตรวจสอบการแชร์ Sheets");
+                alert("ไม่สามารถเชื่อมต่อฐานข้อมูลได้");
             }
         }
 
         function parseCSV(csv) {
-            // กำจัด \r เพื่อป้องกันปัญหาตัวอักษรเกินในคอลัมน์สุดท้าย
             const rows = csv.replace(/\r/g, '').split('\n').slice(1);
             return rows.map(row => {
-                // แก้ไข Regex ให้ถูกต้อง
                 const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                 if(!cols[0]) return null;
 
-                // รวมข้อมูลจาก I(8), J(9), K(10), L(11)
                 const rawVariants = [cols[8], cols[9], cols[10], cols[11]].filter(v => v && v.trim() !== "");
                 const allVariantsStr = rawVariants.join(',');
 
                 return {
                     name: cols[0],
-                    images: cols[1] ? cols[1].split(',') : [],
+                    images: cols[1] ? cols[1].split(',').map(s => s.trim()).filter(s => s !== "") : [],
                     price: parseFloat(cols[3]) || 0,
                     category: cols[5] || 'ทั่วไป',
                     variants: parseVariants(allVariantsStr),
@@ -385,34 +382,34 @@
                 const item = v.trim();
                 if (!item.includes('=')) return null; 
                 
-                const firstSplit = item.split('=');
-                const name = firstSplit[0].trim();
-                const rest = firstSplit[1] ? firstSplit[1].trim() : '';
+                const parts = item.split('=');
+                const name = parts[0].trim();
+                const rest = parts[1] ? parts[1].trim() : '';
                 
                 let price = rest;
                 let images = [];
                 
                 if (rest.includes(':')) {
-                    const secondSplit = rest.split(':');
-                    price = secondSplit[0].trim();
-                    images = secondSplit[1] ? secondSplit[1].split('|') : []; 
+                    const subParts = rest.split(':');
+                    price = subParts[0].trim();
+                    images = subParts[1] ? subParts[1].split('|').map(s => s.trim()).filter(s => s !== "") : []; 
                 }
                 
-                return { name, price, images };
+                return { name, price: parseFloat(price) || 0, images };
             }).filter(v => v !== null);
         }
 
         function renderGrid(data) {
             const grid = document.getElementById('mainGrid');
             if(data.length === 0) {
-                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5;">ไม่พบรายการสินค้าที่คุณค้นหา</p>';
+                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:50px; opacity:0.5;">ไม่พบรายการสินค้า</p>';
                 return;
             }
             grid.innerHTML = data.map((p, idx) => `
                 <div class="product-card" onclick="openOrder(${idx})">
                     <div class="p-media">
                         ${p.isInstallment ? '<div class="badge-inst">ผ่อนได้</div>' : ''}
-                        <img src="${p.images[0]}" loading="lazy">
+                        <img src="${p.images[0] || 'https://via.placeholder.com/300'}" loading="lazy">
                     </div>
                     <div class="p-info">
                         <div class="p-title">${p.name}</div>
@@ -436,7 +433,7 @@
                 vGrid.innerHTML = currentProduct.variants.map((v, i) => `
                     <div class="v-item" id="vitem-${i}" onclick="selectVariant(${i})">
                         <b>${v.name}</b>
-                        <span>฿${parseFloat(v.price).toLocaleString()}</span>
+                        <span>฿${v.price.toLocaleString()}</span>
                     </div>
                 `).join('');
             } else {
@@ -451,26 +448,43 @@
             selectedVariant = currentProduct.variants[i];
             document.querySelectorAll('.v-item').forEach(el => el.classList.remove('active'));
             document.getElementById(`vitem-${i}`).classList.add('active');
-            document.getElementById('modalPPrice').innerText = `฿${parseFloat(selectedVariant.price).toLocaleString()}`;
+            
+            // อัปเดตราคาสินค้าตามตัวเลือก
+            document.getElementById('modalPPrice').innerText = `฿${selectedVariant.price.toLocaleString()}`;
+            
+            // Logic การแสดงภาพ: ถ้ารูปตัวเลือกมี ให้เอาขึ้นก่อน + ตามด้วยรูปหลัก
+            let displayImages = [];
             if(selectedVariant.images && selectedVariant.images.length > 0) {
-                initSwiper(selectedVariant.images);
+                displayImages = [...selectedVariant.images, ...currentProduct.images];
+            } else {
+                displayImages = currentProduct.images;
             }
+            
+            initSwiper(displayImages);
         }
 
         function initSwiper(mediaList) {
             const wrapper = document.getElementById('modalSwiperWrapper');
-            wrapper.innerHTML = mediaList.map(url => {
-                const isVid = url.trim().toLowerCase().endsWith('.mp4');
-                return `<div class="swiper-slide">${isVid ? `<video controls muted loop playsinline><source src="${url.trim()}"></video>` : `<img src="${url.trim()}">`}</div>`;
-            }).join('');
+            // กรองลิ้งก์ที่อาจจะว่างทิ้ง
+            const cleanList = mediaList.filter(url => url && url.length > 5);
+            
+            if(cleanList.length === 0) {
+                wrapper.innerHTML = '<div class="swiper-slide"><img src="https://via.placeholder.com/500"></div>';
+            } else {
+                wrapper.innerHTML = cleanList.map(url => {
+                    const isVid = url.trim().toLowerCase().endsWith('.mp4');
+                    return `<div class="swiper-slide">${isVid ? `<video controls muted loop playsinline><source src="${url.trim()}"></video>` : `<img src="${url.trim()}">`}</div>`;
+                }).join('');
+            }
 
             if(swiperInstance) swiperInstance.destroy();
             swiperInstance = new Swiper('.swiper-container', {
                 pagination: { el: '.swiper-pagination', clickable: true },
-                loop: mediaList.length > 1
+                loop: cleanList.length > 1
             });
         }
 
+        // --- ฟังชั่นเสริมคงเดิม ---
         function filterProducts() {
             const q = document.getElementById('search').value.toLowerCase();
             const filtered = products.filter(p => p.name.toLowerCase().includes(q));
@@ -528,7 +542,7 @@
                 fd.append('customerName', document.getElementById('custName').value);
                 fd.append('customerPhone', document.getElementById('custPhone').value);
                 fd.append('customerAddress', document.getElementById('custAddr').value);
-                fd.append('payType', currentProduct.isInstallment ? 'ผ่อนชำระ (20%)' : 'จ่ายเต็ม');
+                fd.append('payType', currentProduct.isInstallment ? 'ผ่อนชำระ' : 'จ่ายเต็ม');
                 fd.append('gps', document.getElementById('gpsData').value || '-');
                 fd.append('file', await toB64(slip));
                 const selfie = document.getElementById('selfieInput').files[0];
