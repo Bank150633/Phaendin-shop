@@ -106,8 +106,8 @@
         .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 5px; opacity: 0; transition: 0.3s; }
-        .modal.show { display: flex; opacity: 1; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 5px; opacity: 0; transition: 0.3s; pointer-events: none; }
+        .modal.show { display: flex; opacity: 1; pointer-events: auto; }
         .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
         
         .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
