@@ -207,21 +207,56 @@
             } catch (err) { alert("เชื่อมต่อข้อมูลไม่สำเร็จ"); }
         }
 
-        function parseCSV(csv) {
-            const rows = csv.replace(/\r/g, '').split('\n').slice(1);
-            return rows.map(row => {
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                if(!cols[0]) return null;
-                const rawV = [cols[8], cols[9], cols[10], cols[11]].filter(v => v).join(',');
-                return {
-                    name: cols[0],
-                    images: cols[1] ? cols[1].split(',').map(s => s.trim()) : [],
-                    price: parseFloat(cols[3]) || 0,
-                    category: cols[5] || 'ทั่วไป',
-                    variants: parseVariants(rawV)
-                };
-            }).filter(p => p);
+        // 1. ฟังก์ชันดึงข้อมูลจาก Sheets (แก้ตรงส่วนกวาด 4 คอลัมน์)
+function parseCSV(csv) {
+    const rows = csv.replace(/\r/g, '').split('\n').slice(1);
+    return rows.map(row => {
+        const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+        if(!cols[0]) return null;
+
+        // ✨ แก้ตรงนี้: กวาดคอลัมน์ I, J, K, L มาต่อกันด้วย ;
+        const rawV = [cols[8], cols[9], cols[10], cols[11]].filter(v => v && v.length > 2).join(';');
+
+        return {
+            name: cols[0],
+            images: cols[1] ? cols[1].split(',').map(s => s.trim()) : [],
+            price: parseFloat(cols[3]) || 0,
+            category: cols[5] || 'ทั่วไป',
+            variants: parseVariants(rawV) // ส่งไปแยกรายการย่อย
+        };
+    }).filter(p => p);
+}
+
+// 2. ฟังก์ชันแยกรายการย่อย (รองรับ ; และ | สำหรับหลายรูป)
+function parseVariants(vStr) {
+    if (!vStr) return [];
+    
+    // ✨ แยกรายการด้วย ; ทำให้ 1 คอลัมน์ใส่กี่อย่างก็ได้
+    return vStr.split(';').map(v => {
+        v = v.trim();
+        if (!v.includes('=')) return null;
+        
+        const [name, rest] = v.split('=');
+        let price = 0, imgs = [];
+
+        if (rest.includes(':')) {
+            const parts = rest.split(':');
+            price = parts[0].trim();
+            // แยกรูปภาพกรณีใส่หลายรูปด้วย |
+            const rawImgs = parts.slice(1).join(':'); 
+            imgs = rawImgs.split('|').map(s => s.trim());
+        } else {
+            price = rest.trim();
         }
+
+        return { 
+            name: name.trim(), 
+            price: parseFloat(price) || 0, 
+            images: imgs.filter(u => u.length > 5) 
+        };
+    }).filter(v => v);
+}
+
 
         // แก้ไขจุดดึงข้อมูลตัวเลือก
 function parseVariants(vStr) {
