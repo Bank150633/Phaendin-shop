@@ -571,9 +571,14 @@ function updateMainDots(pIndex, el, total) {
 }
 
           function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
-    // 1. ล้างค่าตะกร้าให้ว่างสะอาดกริบ (วางไว้บนสุดที่เดียวพอ)
+    // 1. ล้างค่าตะกร้าและสถานะปุ่มให้สะอาดกริบ
     selectedOptions = {}; 
-    
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = false;
+    btn.style.opacity = "1";
+    btn.innerText = "ยืนยันการสั่งซื้อ";
+
+    // 2. ตั้งค่าสินค้าปัจจุบัน
     activeP = { 
         name: n, 
         pNormal: parseFloat(pNormal), 
@@ -585,7 +590,7 @@ function updateMainDots(pIndex, el, total) {
         canInstall: isAllowed 
     };
 
-    // จัดการปุ่มผ่อน
+    // 3. จัดการปุ่มผ่อน/จ่ายสด
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
         payInstallBtn.style.display = 'block';
@@ -594,8 +599,9 @@ function updateMainDots(pIndex, el, total) {
         togglePay('จ่ายเต็ม');
     }
 
+    // 4. สร้างรายการตัวเลือกสินค้า (Option)
     const box = document.getElementById('optionBox');
-    box.innerHTML = ''; // ล้างหน้าจอตัวเลือกสินค้าเดิม
+    box.innerHTML = ''; 
 
     if (optStr && optStr !== '-' && optStr !== '') {
         const opts = optStr.split(',');
@@ -607,7 +613,7 @@ function updateMainDots(pIndex, el, total) {
             let vImg = activeP.img.split(',')[0].trim();
             if (parts.length > 2) { vImg = parts.slice(2).join(':').trim(); }
             
-            // บันทึกค่าเริ่มต้นในตะกร้า
+            // เตรียมที่ว่างในตะกร้า (เริ่มที่ 0 ชิ้น)
             selectedOptions[label] = { qty: 0, price: price };
             
             const dP = parseFloat(activeP.disc) || 0; 
@@ -633,13 +639,13 @@ function updateMainDots(pIndex, el, total) {
             </div>`;
         });
     } else {
-        // กรณีไม่มีตัวเลือกย่อย (เช่น สินค้าชิ้นเดียว)
+        // กรณีไม่มีตัวเลือกย่อย ให้ตั้งค่าเป็น 1 ชิ้นอัตโนมัติ
         selectedOptions[n] = { qty: 1, price: pNormal };
     }
     
-    // อัปเดตราคาและแสดงหน้าต่าง
+    // 5. อัปเดตราคาและเปิด Modal
     updatePrice();
-    nextStep(1); 
+    nextStep(1); // กลับไปหน้าเลือกจำนวนก่อนเสมอ
     openModal('orderModal');
 }
 
