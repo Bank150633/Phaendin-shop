@@ -806,16 +806,14 @@ function updateZoomDots(el, total) {
 }
 
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
-    function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
+    function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; m.style.pointerEvents = 'auto'; setTimeout(()=>m.classList.add('show'),10); }
    function closeModal(id) { 
     const m = document.getElementById(id); 
     m.classList.remove('show'); 
-    
+   setTimeout(() => { 
     // สลายร่างหน้าต่างใสๆ ไม่ให้ขวางนิ้วทันทีที่กดปิด
     m.style.pointerEvents = 'none'; 
-    
-    setTimeout(() => {
-        m.style.display = 'none';
+        m.style.display = 'auto';
         // เช็คชื่อ ID ให้ตรงกับที่ตั้งไว้ (orderModal)
         if(id === 'orderModal') {
             nextStep(1); // รีเซ็ตกลับไปหน้าเลือกสินค้า
