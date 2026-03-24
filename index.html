@@ -811,13 +811,14 @@ function updateZoomDots(el, total) {
     const m = document.getElementById(id); 
     m.classList.remove('show'); 
     
-    // สั่งให้มัน "ล่องหน" และ "ไม่ขวางนิ้ว" ทันทีที่กดปิด
+    // สลายร่างหน้าต่างใสๆ ไม่ให้ขวางนิ้วทันทีที่กดปิด
     m.style.pointerEvents = 'none'; 
     
     setTimeout(() => {
         m.style.display = 'none';
+        // เช็คชื่อ ID ให้ตรงกับที่ตั้งไว้ (orderModal)
         if(id === 'orderModal') {
-            nextStep(1);
+            nextStep(1); // รีเซ็ตกลับไปหน้าเลือกสินค้า
         }
     }, 300); 
 }
