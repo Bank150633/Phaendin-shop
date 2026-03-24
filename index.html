@@ -3,303 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN | THAI MODERN LUXURY STORE</title>
+    <title>PHAENDIN | MULTI-PHOTO ULTIMATE</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Niramit:wght@300;500;700&family=Kanit:wght@200;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        :root { 
-            --thai-indigo: #0F1D35;   /* น้ำเงินครามลึก */
-            --thai-gold: #C5A059;     /* ทองดอกบวบ */
-            --thai-stone: #F9F7F2;    /* ขาวนวลศิลา */
-            --thai-clay: #3D2B1F;     /* น้ำตาลดินเผา */
-            --thai-accent: #B22222;   /* แดงชาด (สำหรับปุ่มปิดการขาย) */
-            --glass: rgba(255, 255, 255, 0.8);
-        }
+        :root { --thai-indigo: #0F1D35; --thai-gold: #C5A059; --thai-stone: #F9F7F2; --thai-clay: #3D2B1F; --thai-accent: #B22222; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Niramit', sans-serif; }
+        body { background: var(--thai-stone); color: var(--thai-indigo); padding-bottom: 80px; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Niramit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--thai-stone); color: var(--thai-indigo); padding-top: 65px; padding-bottom: 80px; overflow-x: hidden; }
+        header { position: fixed; top: 0; width: 100%; height: 60px; background: rgba(255,255,255,0.8); backdrop-filter: blur(15px); z-index: 1000; border-bottom: 2px solid var(--thai-gold); display: flex; justify-content: center; align-items: center; }
+        .logo-img { height: 40px; }
 
-        /* --- Header: หรูหราแบบไทยร่วมสมัย --- */
-        header { 
-            position: fixed; top: 0; width: 100%; height: 60px;
-            background: var(--glass); backdrop-filter: blur(15px); 
-            z-index: 1000; border-bottom: 2px solid var(--thai-gold);
-            display: flex; justify-content: center; align-items: center;
-        }
-        .logo-img { height: 40px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
+        .search-container { padding: 75px 20px 15px; position: relative; }
+        #search { width: 100%; padding: 12px 45px; border-radius: 50px; border: 1px solid var(--thai-gold); outline: none; }
+        .search-icon { position: absolute; left: 35px; top: 88px; color: var(--thai-gold); }
 
-        /* --- Search Bar --- */
-        .search-container { padding: 15px 20px; position: relative; }
-        #search { 
-            width: 100%; padding: 12px 20px 12px 45px; border-radius: 50px; 
-            border: 1px solid var(--thai-gold); background: #fff; outline: none;
-            font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .search-icon { position: absolute; left: 35px; top: 28px; color: var(--thai-gold); }
-
-        /* --- Banner: สไตล์แบรนด์เนม --- */
-        .banner-box { padding: 0 15px; margin-bottom: 20px; }
-        .bn-card { 
-            border-radius: 25px; overflow: hidden; height: 200px; position: relative;
-            box-shadow: 0 10px 25px rgba(15, 29, 53, 0.15); border: 1px solid rgba(197, 160, 89, 0.3);
-        }
-        .bn-img img { width: 100%; height: 100%; object-fit: cover; }
-        .bn-overlay { 
-            position: absolute; inset: 0; background: linear-gradient(to right, rgba(15, 29, 53, 0.8), transparent); 
-            display: flex; flex-direction: column; justify-content: center; padding: 25px;
-        }
-        .bn-title { color: var(--thai-gold); font-size: 22px; font-weight: 700; margin-bottom: 5px; }
-        .bn-sub { color: #fff; font-size: 13px; opacity: 0.9; letter-spacing: 1px; }
-
-        /* --- Grid สินค้า: 3 คอลัมน์ ขายง่ายบนมือถือ --- */
-        .sec-title { padding: 0 20px 10px; font-size: 14px; font-weight: 700; color: var(--thai-clay); letter-spacing: 1.5px; text-transform: uppercase; }
+        /* --- 3-Column Grid --- */
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 12px; }
+        .card { background: #fff; border-radius: 18px; overflow: hidden; border: 1px solid rgba(197, 160, 89, 0.1); display: flex; flex-direction: column; }
+        .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; overflow: hidden; }
+        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: cover; }
+        .info { padding: 8px 4px; text-align: center; }
+        .p-name { font-size: 10px; font-weight: 600; height: 14px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+        .p-price { font-size: 13px; font-weight: 800; color: var(--thai-gold); }
+
+        /* --- Slider System --- */
+        .slider-box { width: 100%; aspect-ratio: 1/1; position: relative; border-radius: 20px; overflow: hidden; margin-bottom: 15px; background: #000; }
+        .slides { display: flex; transition: transform 0.4s ease; height: 100%; }
+        .slide-item { min-width: 100%; height: 100%; }
+        .slide-item img, .slide-item video { width: 100%; height: 100%; object-fit: contain; }
+        .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.4); color: #fff; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
+        .prev { left: 10px; } .next { right: 10px; }
+
+        /* --- Variant Selection --- */
+        .variant-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
+        .v-item { padding: 10px; border: 1px solid #ddd; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; background: #fff; }
+        .v-item.active { border-color: var(--thai-gold); background: rgba(197, 160, 89, 0.1); }
+        .v-name { font-size: 11px; font-weight: 700; display: block; }
+        .v-price { font-size: 10px; color: var(--thai-gold); }
+
+        /* --- Modal & Form --- */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(15, 29, 53, 0.98); z-index: 5000; align-items: center; justify-content: center; padding: 15px; }
+        .modal.show { display: flex; }
+        .modal-card { background: var(--thai-stone); border-radius: 35px; width: 100%; max-width: 380px; padding: 25px; max-height: 90vh; overflow-y: auto; border: 2px solid var(--thai-gold); }
+        .input-box { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd; outline: none; }
+        .submit-btn { width: 100%; padding: 16px; border-radius: 50px; border: none; background: var(--thai-accent); color: #fff; font-size: 16px; font-weight: 700; margin-top: 10px; cursor: pointer; }
         
-        .card { 
-            background: #fff; border-radius: 18px; overflow: hidden; position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04); border: 1px solid rgba(197, 160, 89, 0.1);
-            display: flex; flex-direction: column; transition: 0.3s;
-        }
-        .card:active { transform: scale(0.96); }
-        .media-wrap { width: 100%; aspect-ratio: 1/1; position: relative; background: #eee; }
-        .media-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .info { padding: 8px 4px; text-align: center; flex-grow: 1; }
-        .p-name { font-size: 10px; font-weight: 500; color: var(--thai-clay); margin-bottom: 2px; height: 14px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-        .p-price { font-size: 13px; font-weight: 700; color: var(--thai-indigo); }
-
-        .btn-buy { 
-            width: 100%; padding: 10px 0; border: none; font-size: 11px; font-weight: 700; 
-            background: var(--thai-indigo); color: var(--thai-gold); border-radius: 0 0 18px 18px;
-            cursor: pointer; text-transform: uppercase;
-        }
-
-        /* --- Modal: ระบบยืนยันการสั่งซื้อที่ครบถ้วน --- */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(15, 29, 53, 0.95); z-index: 5000; align-items: center; justify-content: center; padding: 15px; }
-        .modal.show { display: flex; animation: fadeIn 0.3s; }
-        .modal-card { background: var(--thai-stone); border-radius: 35px; width: 100%; max-width: 380px; padding: 25px; max-height: 85vh; overflow-y: auto; border: 2px solid var(--thai-gold); }
-        
-        .input-box { width: 100%; padding: 12px 15px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #ddd; background: #fff; color: var(--thai-indigo); outline: none; }
-        .input-box:focus { border-color: var(--thai-gold); }
-
-        /* Payment Tab */
-        .pay-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
-        .pay-tab { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #ddd; text-align: center; font-size: 12px; font-weight: 700; color: #777; transition: 0.3s; cursor: pointer; }
-        .pay-tab.active { border-color: var(--thai-gold); background: rgba(197, 160, 89, 0.1); color: var(--thai-indigo); }
-
-        /* Security Section (GPS & Selfie) */
-        .security-box { background: rgba(197, 160, 89, 0.05); padding: 15px; border-radius: 15px; border: 1px dashed var(--thai-gold); margin-bottom: 15px; }
-        .sec-btn { width: 100%; padding: 10px; border-radius: 8px; border: none; font-size: 11px; font-weight: 600; margin-bottom: 10px; cursor: pointer; }
-
-        /* Bottom Nav */
-        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: #fff; display: flex; align-items: center; border-top: 1px solid var(--thai-gold); z-index: 1000; }
-        .nav-tab { flex: 1; text-align: center; color: var(--thai-clay); font-size: 10px; font-weight: 600; opacity: 0.6; }
-        .nav-tab.active { color: var(--thai-indigo); opacity: 1; }
+        nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: #fff; display: flex; border-top: 1px solid var(--thai-gold); z-index: 1000; }
+        .nav-tab { flex: 1; text-align: center; color: var(--thai-clay); font-size: 10px; font-weight: 600; padding-top: 15px; }
         .nav-tab i { font-size: 20px; display: block; margin-bottom: 4px; color: var(--thai-gold); }
-
-        .submit-btn { width: 100%; padding: 16px; border-radius: 50px; border: none; background: var(--thai-accent); color: #fff; font-size: 16px; font-weight: 700; margin-top: 15px; box-shadow: 0 10px 20px rgba(178, 34, 34, 0.2); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <header><img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" class="logo-img"></header>
 
-<div class="search-container">
-    <i class="fa-solid fa-magnifying-glass search-icon"></i>
-    <input type="text" id="search" placeholder="ค้นหาความพิเศษสำหรับคุณ..." oninput="render()">
-</div>
-
-<div class="banner-box" id="banner"></div>
-
-<div class="sec-title">คัดสรรยอดนิยม</div>
+<div class="search-container"><i class="fa-solid fa-magnifying-glass search-icon"></i><input type="text" id="search" placeholder="ค้นหาไอเทมพรีเมียม..." oninput="render()"></div>
 <main class="grid" id="productGrid"></main>
 
 <nav>
     <div class="nav-tab active" onclick="location.reload()"><i class="fa-solid fa-crown"></i>หน้าหลัก</div>
-    <div class="nav-tab" onclick="alert('ระบบกำลังอัปเดตฐานข้อมูลพัสดุ')"><i class="fa-solid fa-box-archive"></i>รายการ</div>
-    <div class="nav-tab" onclick="window.open('https://m.me/YourPageID', '_blank')"><i class="fa-solid fa-paper-plane"></i>ติดต่อ</div>
+    <div class="nav-tab" onclick="alert('ระบบกำลังซิงค์ข้อมูลพัสดุ')"><i class="fa-solid fa-box-archive"></i>รายการ</div>
 </nav>
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <h3 style="text-align:center; color:var(--thai-indigo); margin-bottom:15px; font-weight:700;">ยืนยันคำสั่งซื้อ</h3>
-        
-        <div id="summary" style="background:#fff; padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--thai-gold);">
-            <p id="pName" style="font-weight:700; font-size:13px; color:var(--thai-clay);"></p>
-            <p id="pPrice" style="font-size:18px; font-weight:800; color:var(--thai-indigo); text-align:right;"></p>
+        <div class="slider-box">
+            <div class="slides" id="slideTrack"></div>
+            <button class="slide-btn prev" onclick="moveSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+            <button class="slide-btn next" onclick="moveSlide(1)"><i class="fas fa-chevron-right"></i></button>
         </div>
+        
+        <h3 id="pName" style="text-align:center; margin-bottom:5px;"></h3>
+        <p id="pPrice" style="text-align:center; font-size:22px; font-weight:800; color:var(--thai-gold); margin-bottom:15px;"></p>
+
+        <div class="variant-grid" id="variantGrid"></div>
 
         <form id="orderForm">
-            <div class="pay-tabs">
-                <div id="tabFull" class="pay-tab active" onclick="setPay('จ่ายเต็ม')">ชำระเต็มจำนวน</div>
-                <div id="tabInst" class="pay-tab" onclick="setPay('ผ่อนไปใช้ไป')" style="display:none;">ผ่อนไปใช้ไป</div>
-            </div>
-
-            <div id="instArea" style="display:none; text-align:center; margin-bottom:15px; padding:12px; background:rgba(197, 160, 89, 0.1); border-radius:15px; border:1px dashed var(--thai-gold);">
-                <p style="font-size:11px; color:var(--thai-clay);">ยอดผ่อนชำระรวม (ดอกเบี้ย 20%)</p>
-                <div id="instTotal" style="font-size:20px; font-weight:800; color:var(--thai-indigo);"></div>
-            </div>
-
-            <div id="securityArea" style="display:none;" class="security-box">
-                <button type="button" id="gpsBtn" onclick="getGPS()" class="sec-btn" style="background:#4285F4; color:#fff;">
-                    <i class="fa-solid fa-location-dot"></i> ปักหมุดที่อยู่ GPS
-                </button>
-                <input type="hidden" id="gpsVal">
-                
-                <div onclick="document.getElementById('selfieIn').click()" style="border:1px dashed #aaa; padding:10px; border-radius:10px; text-align:center; cursor:pointer; background:#fff;">
-                    <span id="selfieTxt" style="font-size:11px; color:#666;">📸 ถ่ายรูปเซลฟี่คู่กับบัตร</span>
-                    <input type="file" id="selfieIn" style="display:none" onchange="previewImg(this, 'selfiePrev')" accept="image/*" capture="user">
-                    <img id="selfiePrev" style="display:none; width:50px; margin-top:5px; border-radius:5px;">
-                </div>
-            </div>
-
-            <input type="text" id="cName" placeholder="ชื่อ-นามสกุล ผู้รับ" required class="input-box">
-            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์ติดต่อ" required class="input-box">
-            <textarea id="cAddr" placeholder="ที่อยู่จัดส่งโดยละเอียด" required class="input-box" style="height:60px;"></textarea>
+            <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-box">
+            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-box">
+            <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-box" style="height:60px;"></textarea>
             
-            <div style="text-align:center; margin:10px 0; padding:10px; background:#fff; border-radius:12px; border:1px solid var(--thai-gold);">
-                <p style="font-size:11px; color:var(--thai-gold); font-weight:bold;">บัญชีชำระเงิน (กสิกรไทย)</p>
-                <p style="font-size:13px; font-weight:bold;">035-8-56762-2</p>
-                <p style="font-size:11px;">คุณวัชระ ชันสิน</p>
-            </div>
-
-            <div onclick="document.getElementById('slipIn').click()" style="border:2px dashed var(--thai-gold); padding:12px; border-radius:15px; text-align:center; cursor:pointer; margin-bottom:10px;">
-                <span id="slipTxt" style="font-size:12px; color:var(--thai-gold); font-weight:bold;">📸 แนบสลิปการโอนเงิน</span>
-                <input type="file" id="slipIn" style="display:none" onchange="previewImg(this, 'slipPrev')" accept="image/*">
-                <img id="slipPrev" style="display:none; width:80px; margin:5px auto; border-radius:8px;">
+            <div onclick="document.getElementById('slipIn').click()" style="border:2px dashed var(--thai-gold); padding:10px; border-radius:15px; text-align:center; cursor:pointer; margin-bottom:10px; background:#fff;">
+                <span id="slipTxt" style="font-size:12px; font-weight:bold; color:var(--thai-gold);">📸 แนบสลิปโอนเงิน</span>
+                <input type="file" id="slipIn" style="display:none" onchange="previewSlip(this)" accept="image/*">
+                <img id="slipPrev" style="display:none; width:60px; margin:5px auto; border-radius:5px;">
             </div>
 
             <button type="submit" id="subBtn" class="submit-btn">สั่งซื้อทันที</button>
-            <p onclick="closeModal()" style="text-align:center; color:#999; cursor:pointer; margin-top:15px; font-size:12px;">กลับหน้าหลัก</p>
+            <p onclick="closeModal()" style="text-align:center; color:#999; cursor:pointer; margin-top:10px; font-size:12px;">ปิดหน้าต่าง</p>
         </form>
     </div>
 </div>
 
 <script>
-    // --- ตั้งค่าข้อมูล (แก้ตรงนี้ให้ตรงกับของคุณ) ---
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
     const APPS_URL = 'https://script.google.com/macros/s/AKfycbyoY_2RajmKgO6NHXlyX0cR404kHG7EqElMB4z7I_lmKrOUKezLOVzMPdMjfKZD_5YJyg/exec';
 
-    let db = [], curP = {}, payType = 'จ่ายเต็ม';
+    let db = [], curP = {}, slideIdx = 0, currentMedia = [];
 
-    // --- เริ่มต้นโหลดข้อมูล ---
     async function init() {
-        try {
-            // Load Banner
-            const rb = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
-            const bt = await rb.text();
-            const br = bt.split('\n')[1]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-            if(br) {
-                document.getElementById('banner').innerHTML = `
-                <div class="bn-card">
-                    <div class="bn-img"><img src="${br[0]}"></div>
-                    <div class="bn-overlay">
-                        <div class="bn-title">${br[1]}</div>
-                        <div class="bn-sub">PRECIOUS SELECTION</div>
-                    </div>
-                </div>`;
-            }
-
-            // Load Products
-            const rp = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
-            const pt = await rp.text();
-            db = pt.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
-            render();
-        } catch(e) { console.error("Data error", e); }
+        const rp = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
+        const pt = await rp.text();
+        db = pt.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+        render();
     }
 
     function render() {
         const q = document.getElementById('search').value.toLowerCase();
-        document.getElementById('productGrid').innerHTML = db.filter(p => p[0].toLowerCase().includes(q)).map(p => `
-            <div class="card">
-                <div class="media-wrap"><img src="${p[1]}"></div>
-                <div class="info">
-                    <div class="p-name">${p[0]}</div>
-                    <div class="p-price">฿${parseFloat(p[3]||0).toLocaleString()}</div>
-                </div>
-                <button class="btn-buy" onclick="openOrder('${p[0]}', ${p[3]}, '${p[15]||'NO'}')">สั่งซื้อ</button>
-            </div>`).join('');
+        document.getElementById('productGrid').innerHTML = db.filter(p => p[0].toLowerCase().includes(q)).map((p, idx) => {
+            const firstImg = p[1].split(',')[0];
+            return `<div class="card" onclick="openOrder(${idx})">
+                <div class="media-wrap"><img src="${firstImg}"></div>
+                <div class="info"><div class="p-name">${p[0]}</div><div class="p-price">฿${parseFloat(p[3]||0).toLocaleString()}</div></div>
+            </div>`;
+        }).join('');
     }
 
-    function openOrder(n, p, canInst) {
-        curP = { name: n, price: p, canInst: canInst.toUpperCase() === 'YES' };
-        document.getElementById('pName').innerText = n;
-        document.getElementById('pPrice').innerText = `฿${p.toLocaleString()}`;
-        document.getElementById('tabInst').style.display = curP.canInst ? 'block' : 'none';
-        setPay('จ่ายเต็ม');
+    function openOrder(idx) {
+        const p = db[idx];
+        curP = { 
+            name: p[0], 
+            mainMedia: p[1].split(','), 
+            price: parseFloat(p[3]),
+            variants: p[8] ? p[8].split('|').map(v => {
+                const parts = v.split(':');
+                return { name: parts[0], price: parts[1], images: parts[2] ? parts[2].split(',') : [] };
+            }) : []
+        };
+
+        document.getElementById('pName').innerText = curP.name;
+        document.getElementById('pPrice').innerText = `฿${curP.price.toLocaleString()}`;
+        
+        // Render Variants
+        const vGrid = document.getElementById('variantGrid');
+        vGrid.innerHTML = curP.variants.map((v, i) => `
+            <div class="v-item" id="v-${i}" onclick="selectVariant(${i})">
+                <span class="v-name">${v.name}</span>
+                <span class="v-price">฿${parseFloat(v.price).toLocaleString()}</span>
+            </div>
+        `).join('');
+
+        // Set Initial Media (Main Photos)
+        updateSlider(curP.mainMedia);
         document.getElementById('orderModal').classList.add('show');
     }
 
-    function setPay(t) {
-        payType = t;
-        const isInst = t === 'ผ่อนไปใช้ไป';
-        document.getElementById('tabFull').className = isInst ? 'pay-tab' : 'pay-tab active';
-        document.getElementById('tabInst').className = isInst ? 'pay-tab active' : 'pay-tab';
-        document.getElementById('instArea').style.display = isInst ? 'block' : 'none';
-        document.getElementById('securityArea').style.display = isInst ? 'block' : 'none';
-        if(isInst) {
-            const total = curP.price * 1.2;
-            document.getElementById('instTotal').innerText = `฿${total.toLocaleString()}`;
+    function selectVariant(i) {
+        const v = curP.variants[i];
+        document.querySelectorAll('.v-item').forEach(el => el.classList.remove('active'));
+        document.getElementById(`v-${i}`).classList.add('active');
+        
+        document.getElementById('pPrice').innerText = `฿${parseFloat(v.price).toLocaleString()}`;
+        
+        // หากตัวเลือกมีรูปเฉพาะ ให้เปลี่ยนสไลเดอร์เป็นรูปตัวเลือกนั้น
+        if(v.images.length > 0) {
+            updateSlider(v.images);
+        } else {
+            updateSlider(curP.mainMedia);
         }
     }
 
-    function previewImg(input, prevId) {
+    function updateSlider(mediaArray) {
+        currentMedia = mediaArray;
+        slideIdx = 0;
+        const track = document.getElementById('slideTrack');
+        track.innerHTML = currentMedia.map(m => {
+            const isVid = m.trim().toLowerCase().endsWith('.mp4');
+            return `<div class="slide-item">${isVid ? `<video controls><source src="${m.trim()}"></video>` : `<img src="${m.trim()}">`}</div>`;
+        }).join('');
+        track.style.transform = `translateX(0)`;
+    }
+
+    function moveSlide(d) {
+        slideIdx = (slideIdx + d + currentMedia.length) % currentMedia.length;
+        document.getElementById('slideTrack').style.transform = `translateX(-${slideIdx * 100}%)`;
+    }
+
+    function previewSlip(input) {
         if(input.files[0]) {
             const r = new FileReader();
-            r.onload = e => { 
-                document.getElementById(prevId).src = e.target.result;
-                document.getElementById(prevId).style.display = 'block';
-                document.getElementById(prevId === 'slipPrev' ? 'slipTxt' : 'selfieTxt').style.display = 'none';
-            };
+            r.onload = e => { document.getElementById('slipPrev').src = e.target.result; document.getElementById('slipPrev').style.display='block'; document.getElementById('slipTxt').style.display='none'; };
             r.readAsDataURL(input.files[0]);
         }
     }
 
-    function getGPS() {
-        navigator.geolocation.getCurrentPosition(p => {
-            document.getElementById('gpsVal').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-            document.getElementById('gpsBtn').style.background = "#28a745";
-            document.getElementById('gpsBtn').innerHTML = '<i class="fa-solid fa-check"></i> ปักหมุดสำเร็จ';
-        });
-    }
-
     function closeModal() { document.getElementById('orderModal').classList.remove('show'); }
 
-    // --- ระบบส่งข้อมูลไป App Script ---
     document.getElementById('orderForm').onsubmit = async (e) => {
         e.preventDefault();
-        const slip = document.getElementById('slipIn').files[0];
-        if(!slip) return alert("กรุณาแนบสลิปโอนเงิน!");
-
         const btn = document.getElementById('subBtn');
-        btn.innerText = "กำลังดำเนินการ..."; btn.disabled = true;
+        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+        
+        const slip = document.getElementById('slipIn').files[0];
+        const toB64 = f => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.readAsDataURL(f); });
 
-        const toBase64 = f => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.readAsDataURL(f); });
+        const activeVariant = document.querySelector('.v-item.active');
+        const variantText = activeVariant ? ` (${activeVariant.querySelector('.v-name').innerText})` : "";
 
-        try {
-            const fd = new URLSearchParams();
-            fd.append('productDetail', curP.name);
-            fd.append('customerName', document.getElementById('cName').value);
-            fd.append('customerPhone', document.getElementById('cPhone').value);
-            fd.append('customerAddress', document.getElementById('cAddr').value);
-            fd.append('payType', payType);
-            fd.append('gps', document.getElementById('gpsVal').value || '-');
-            fd.append('file', await toBase64(slip));
-            
-            const selfie = document.getElementById('selfieIn').files[0];
-            if(selfie) fd.append('selfie', await toBase64(selfie));
+        const fd = new URLSearchParams();
+        fd.append('productDetail', curP.name + variantText);
+        fd.append('customerName', document.getElementById('cName').value);
+        fd.append('customerPhone', document.getElementById('cPhone').value);
+        fd.append('customerAddress', document.getElementById('cAddr').value);
+        fd.append('file', await toB64(slip));
 
-            await fetch(APPS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
-            alert("ขอบพระคุณที่สั่งซื้อ! เราจะรีบดำเนินการจัดส่งให้โดยเร็วที่สุด");
-            location.reload();
-        } catch(err) {
-            alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
-            btn.disabled = false; btn.innerText = "สั่งซื้อทันที";
-        }
+        await fetch(APPS_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+        alert("ขอบคุณสำหรับการสั่งซื้อ!"); location.reload();
     };
 
     init();
