@@ -379,31 +379,36 @@
         }
 
         function parseVariants(vStr) {
-            return vStr.split('|').map(v => {
-                const parts = v.split(':');
-                return { name: parts[0], price: parts[1], images: parts[2] ? parts[2].split(',') : [] };
-            });
+    if (!vStr || vStr.trim() === "") return [];
+    
+    return vStr.split(',').map(v => {
+        const item = v.trim();
+        if (!item.includes('=')) return null; 
+        
+        // แยกส่วน "ชื่อ" ออกจาก "ราคาและรูป"
+        const firstSplit = item.split('=');
+        const name = firstSplit[0].trim();
+        const rest = firstSplit[1] ? firstSplit[1].trim() : '';
+        
+        // แยกส่วน "ราคา" ออกจาก "ลิงก์รูป" (ถ้ามีเครื่องหมาย :)
+        let price = rest;
+        let images = [];
+        
+        if (rest.includes(':')) {
+            const secondSplit = rest.split(':');
+            price = secondSplit[0].trim();
+            // ถ้ามีหลายรูปในตัวเลือกนั้น ให้คั่นด้วยคอมมา (แต่ต้องระวังคอมมาหลัก)
+            // แนะนำให้ใส่รูปเดียวต่อ 1 ตัวเลือกจะเสถียรที่สุดครับ
+            images = secondSplit[1] ? secondSplit[1].split('|') : []; 
         }
-
-        // ---------------------------------------------------------
-        // 3. UI RENDERING
-        // ---------------------------------------------------------
-        function renderGrid(data) {
-            const grid = document.getElementById('mainGrid');
-            grid.innerHTML = data.map((p, idx) => `
-                <div class="product-card" onclick="openOrder(${idx})">
-                    <div class="p-media">
-                        ${p.isInstallment ? '<div class="badge-inst">ผ่อนได้</div>' : ''}
-                        <img src="${p.images[0]}" loading="lazy">
-                    </div>
-                    <div class="p-info">
-                        <div class="p-title">${p.name}</div>
-                        <div class="p-price-tag">฿${p.price.toLocaleString()}</div>
-                    </div>
-                    <button class="btn-view">ชมรายละเอียด</button>
-                </div>
-            `).join('');
-        }
+        
+        return { 
+            name: name, 
+            price: price, 
+            images: images 
+        };
+    }).filter(v => v !== null);
+}
 
         function openOrder(idx) {
             currentProduct = products[idx];
