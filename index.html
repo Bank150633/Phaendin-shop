@@ -223,19 +223,60 @@
             }).filter(p => p);
         }
 
-        function parseVariants(vStr) {
-            if (!vStr) return [];
-            return vStr.split(',').map(v => {
-                if (!v.includes('=')) return null;
-                const [name, rest] = v.split('=');
-                let price = rest, imgs = [];
-                if (rest.includes(':')) {
-                    const [p, i] = rest.split(':');
-                    price = p; imgs = i.split('|').map(s => s.trim());
-                }
-                return { name: name.trim(), price: parseFloat(price) || 0, images: imgs };
-            }).filter(v => v);
+        // แก้ไขจุดดึงข้อมูลตัวเลือก
+function parseVariants(vStr) {
+    if (!vStr) return [];
+    return vStr.split(',').map(v => {
+        if (!v.includes('=')) return null;
+        const [name, rest] = v.split('=');
+        let price = rest, imgs = [];
+        
+        // แยกราคาและรูปภาพ (ตัวอย่าง: มะม่วง=36:https://img.jpg)
+        if (rest.includes(':')) {
+            const parts = rest.split(':');
+            price = parts[0];
+            // ดึงส่วนที่เหลือทั้งหมดเป็นลิ้งก์รูป (เผื่อลิ้งก์มีเครื่องหมาย : อื่นๆ)
+            imgs = parts.slice(1).join(':').split('|').map(s => s.trim());
         }
+        return { 
+            name: name.trim(), 
+            price: parseFloat(price) || 0, 
+            images: imgs.filter(u => u.length > 5) 
+        };
+    }).filter(v => v);
+}
+
+// แก้ไขฟังก์ชันเปิด Modal (เพิ่ม Fallback ถ้าหารูปไม่เจอ)
+function openOrder(idx) {
+    currentProduct = products[idx];
+    selectedVariant = null;
+    document.getElementById('modalPTitle').innerText = currentProduct.name;
+    document.getElementById('modalPPrice').innerText = `฿${currentProduct.price.toLocaleString()}`;
+
+    const vGrid = document.getElementById('modalVGrid');
+    if(currentProduct.variants.length > 0) {
+        document.getElementById('variantSection').style.display = 'block';
+        vGrid.innerHTML = currentProduct.variants.map((v, i) => {
+            // ✨ จุดสำคัญ: ถ้าไม่มีรูปตัวเลือก ให้เอารูปแรกของสินค้าหลักมาโชว์แทน ไม่ให้รูปแตก
+            const thumb = (v.images && v.images.length > 0) ? v.images[0] : currentProduct.images[0];
+            return `
+                <div class="v-item" id="vitem-${i}" onclick="selectVariant(${i})">
+                    <img src="${thumb}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                    <div class="v-item-info">
+                        <b>${v.name}</b>
+                        <span>฿${v.price.toLocaleString()}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } else { 
+        document.getElementById('variantSection').style.display = 'none'; 
+    }
+
+    updateSwiper(currentProduct.images);
+    document.getElementById('orderModal').classList.add('active');
+}
+
 
         function renderGrid(data) {
             document.getElementById('mainGrid').innerHTML = data.map((p, i) => `
