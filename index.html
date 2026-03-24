@@ -813,7 +813,7 @@ function updateZoomDots(el, total) {
    setTimeout(() => { 
     // สลายร่างหน้าต่างใสๆ ไม่ให้ขวางนิ้วทันทีที่กดปิด
     m.style.pointerEvents = 'none'; 
-        m.style.display = 'auto';
+        m.style.display = 'none';
         // เช็คชื่อ ID ให้ตรงกับที่ตั้งไว้ (orderModal)
         if(id === 'orderModal') {
             nextStep(1); // รีเซ็ตกลับไปหน้าเลือกสินค้า
@@ -1049,7 +1049,7 @@ function getLocation() {
         btn.innerText = "กำลังหาพิกัด...";
         navigator.geolocation.getCurrentPosition((p) => {
             // แก้ไขลิงก์ Google Maps ให้ถูกต้อง
-            document.getElementById('userLocation').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+            document.getElementById('userLocation').value =`https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
 
 
             btn.innerHTML = '<i class="fa-solid fa-check"></i> ปักหมุดสำเร็จ';
