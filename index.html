@@ -575,7 +575,7 @@ function updateMainDots(pIndex, el, total) {
 }
 
           function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
-    // 1. ล้างค่าตะกร้าและสถานะปุ่มให้สะอาดกริบ
+    document.getElementById('orderModal').style.pointerEvents = 'auto';
     selectedOptions = {}; 
     const btn = document.getElementById('submitBtn');
     btn.disabled = false;
@@ -807,24 +807,21 @@ function updateZoomDots(el, total) {
 
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
-    function closeModal(id) { 
+   function closeModal(id) { 
     const m = document.getElementById(id); 
     m.classList.remove('show'); 
     
-    // บังคับให้มันเลิกขวางหน้าจอทันที
+    // สั่งให้มัน "ล่องหน" และ "ไม่ขวางนิ้ว" ทันทีที่กดปิด
     m.style.pointerEvents = 'none'; 
     
     setTimeout(() => {
         m.style.display = 'none';
-        
-        // ถ้าเป็น Modal สั่งซื้อ ให้รีเซ็ต Step กลับไปที่ 1 เสมอ
         if(id === 'orderModal') {
             nextStep(1);
         }
     }, 300); 
 }
-
-    
+ 
 function handleFile(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
