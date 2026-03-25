@@ -399,20 +399,20 @@
         </div>
     </div>
 
-    <footer>-nav>
-        <div class="f-item active" onclick="location.reload()">
-            <i class="fa-solid fa-house"></i>
-            <span>หน้าแรก</span>
-        </div>
-        <div class="f-item" onclick="app.openContact()">
-            <i class="fa-solid fa-comment-dots"></i>
-            <span>คุยกับแอดมิน</span>
-        </div>
-        <div class="f-item" onclick="app.showTracking()">
-            <i class="fa-solid fa-box-open"></i>
-            <span>ติดตามพัสดุ</span>
-        </div>
-    </footer-nav>
+    <nav class="footer-nav" style="position: fixed; bottom: 0; width: 100%; height: 80px; background: var(--glass); backdrop-filter: blur(15px); border-top: 1.5px solid var(--thai-gold); display: flex; align-items: center; z-index: 2000; padding: 0 10px;">
+    <div class="f-item active" onclick="location.reload()">
+        <i class="fa-solid fa-house"></i>
+        <span>หน้าแรก</span>
+    </div>
+    <div class="f-item" onclick="app.openContact()">
+        <i class="fa-solid fa-comment-dots"></i>
+        <span>คุยกับแอดมิน</span>
+    </div>
+    <div class="f-item" onclick="app.showTracking()">
+        <i class="fa-solid fa-box-open"></i>
+        <span>ติดตามพัสดุ</span>
+    </div>
+</nav>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
