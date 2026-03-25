@@ -542,24 +542,37 @@ loadData: async function() {
     }
 
     grid.innerHTML = list.map((p, idx) => {
-        // ดึงไฟล์แรกจากคอลัมน์ B มาเช็คว่าเป็นวิดีโอหรือไม่
         const firstMedia = p.mainImages[0] || 'https://via.placeholder.com/300';
         const isVideo = firstMedia.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/);
 
+        // --- เริ่มส่วนคำนวณราคาจริง ---
+        let finalPrice = p.basePrice;
+        let oldPriceHTML = '';
+
+        if (p.tag && p.tag.includes('%')) {
+            const discountPercent = parseInt(p.tag.replace(/[^0-9]/g, ''));
+            if (discountPercent > 0) {
+                finalPrice = p.basePrice * ((100 - discountPercent) / 100);
+                oldPriceHTML = `<span class="old-price">฿${p.basePrice.toLocaleString()}</span>`;
+            }
+        }
+        // --- จบส่วนคำนวณราคาจริง ---
+
         return `
             <div class="product-card" onclick="app.openDetail(${this.allProducts.indexOf(p)})">
-                ${p.tag ? `<div class="p-badge">${p.tag}</div>` : ''}
+                ${p.tag ? `<div class="p-badge" data-tag="${p.tag}">${p.tag}</div>` : ''}
                 <div class="p-media">
                     ${isVideo ? 
-                        `<video src="${firstMedia}" autoplay loop muted playsinline 
-                            style="width:100%; height:100%; object-fit:cover; display:block;">
-                         </video>` : 
+                        `<video src="${firstMedia}" autoplay loop muted playsinline style="width:100%; height:100%; object-fit:cover; display:block;"></video>` : 
                         `<img src="${firstMedia}" loading="lazy" alt="${p.name}">`
                     }
                 </div>
                 <div class="p-info">
                     <h4 class="p-title">${p.name}</h4>
-                    <div class="p-price-tag"><span>฿</span>${p.basePrice.toLocaleString()}</div>
+                    <div class="p-price-tag">
+                        ${oldPriceHTML}
+                        <span>฿</span>${finalPrice.toLocaleString()}
+                    </div>
                 </div>
                 <button class="btn-card-view">ดูรายละเอียด</button>
             </div>
@@ -570,7 +583,11 @@ loadData: async function() {
             openDetail: function(idx) {
                 this.currentProduct = this.allProducts[idx];
                 this.selectedVariant = null;
-
+    let displayPrice = this.currentProduct.basePrice;
+    if (this.currentProduct.tag && this.currentProduct.tag.includes('%')) {
+        const pct = parseInt(this.currentProduct.tag.replace(/[^0-9]/g, ''));
+        displayPrice = this.currentProduct.basePrice * ((100 - pct) / 100);
+    }
                 // Set UI
                 document.getElementById('modalPTitle').innerText = this.currentProduct.name;
                 document.getElementById('modalPPrice').innerText = `฿${this.currentProduct.basePrice.toLocaleString()}`;
