@@ -604,7 +604,11 @@ loadData: async function() {
                 document.getElementById('modalPTitle').innerText = this.currentProduct.name;
                 document.getElementById('modalPPrice').innerText = `฿${this.currentProduct.basePrice.toLocaleString()}`;
                 document.getElementById('modalPDesc').innerText = this.currentProduct.desc || "รายละเอียดสินค้าคุณภาพจาก Phaendin Store";
+                // เรียกฟังก์ชันคำนวณผ่อน
+                this.updateInstallmentTable(displayPrice);
 
+                // ส่วน Variants และอื่นๆ ด้านล่างใช้โค้ดเดิมของคุณได้เลย...
+            
                 // Variants Rendering
                 const vGrid = document.getElementById('modalVGrid');
                 if (this.currentProduct.variants.length > 0) {
