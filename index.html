@@ -130,7 +130,25 @@
         .p-media img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
         .product-card:hover .p-media img { transform: scale(1.1); }
 
-        .p-badge { position: absolute; top: 10px; left: 10px; background: var(--thai-accent); color: #fff; font-size: 9px; padding: 3px 8px; border-radius: 4px; font-weight: 700; text-transform: uppercase; z-index: 5; }
+        /* ป้ายพื้นฐาน */
+.p-badge { 
+    position: absolute; 
+    top: 8px; 
+    left: 8px; 
+    color: #fff; 
+    font-size: 9px; 
+    padding: 2px 6px; 
+    border-radius: 4px; 
+    font-weight: 800; 
+    z-index: 10;
+    text-transform: uppercase;
+}
+
+/* แยกสีตามประเภทโปรโมชัน (ถ้ามีคำเหล่านี้ในคอลัมน์ Tag) */
+.badge-free { background: #28a745 !important; } /* ส่งฟรี = สีเขียว */
+.badge-sale { background: #ff4d4d !important; } /* ลด % = สีแดง */
+.badge-new  { background: #007bff !important; } /* สินค้าใหม่ = สีน้ำเงิน */
+.badge-hot  { background: #ff9900 !important; } /* ยอดฮิต = สีส้ม */
 
         .p-info { padding: 8px 6px; text-align: center; }
         .p-title { font-size: 11px; font-weight: 600; color: var(--thai-clay); margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 32px; line-height: 1.4; }
