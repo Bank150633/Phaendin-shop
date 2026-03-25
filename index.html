@@ -20,12 +20,10 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Niramit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--thai-stone); color: var(--thai-indigo); line-height: 1.6; padding-bottom: 100px; }
 
-        /* Header */
         header { position: fixed; top: 0; width: 100%; height: 65px; background: var(--glass); backdrop-filter: blur(15px); z-index: 2000; border-bottom: 2px solid var(--thai-gold); display: flex; justify-content: center; align-items: center; }
         .logo-box { height: 45px; }
         .logo-box img { height: 100%; object-fit: contain; }
 
-        /* Search & Navigation */
         .top-nav { padding: 80px 15px 15px; background: #fff; }
         .search-bar { position: relative; width: 100%; max-width: 600px; margin: 0 auto; }
         .search-bar i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--thai-gold); }
@@ -35,7 +33,6 @@
         .cat-btn { padding: 8px 22px; background: #fff; border-radius: 50px; border: 1.5px solid #eee; font-size: 13px; font-weight: 600; white-space: nowrap; transition: 0.3s; }
         .cat-btn.active { background: var(--thai-indigo); color: var(--thai-gold); border-color: var(--thai-indigo); }
 
-        /* Product Grid */
         .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 12px; margin-top: 10px; }
         .product-card { background: #fff; border-radius: 18px; overflow: hidden; border: 1px solid rgba(197, 160, 89, 0.1); box-shadow: var(--shadow); transition: 0.3s; }
         .p-media { width: 100%; aspect-ratio: 1/1; position: relative; overflow: hidden; }
@@ -45,57 +42,45 @@
         .p-price-tag { font-size: 13px; font-weight: 800; color: var(--thai-indigo); }
         .btn-view { width: 100%; padding: 10px 0; background: var(--thai-indigo); color: var(--thai-gold); font-size: 10px; font-weight: 700; border: none; }
 
-        /* Modal Fullscreen */
         .modal { position: fixed; inset: 0; background: var(--thai-stone); z-index: 3000; display: none; flex-direction: column; overflow-y: auto; }
         .modal.active { display: flex; animation: slideUp 0.4s ease forwards; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         .modal-header { position: sticky; top: 0; background: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; z-index: 100; }
-        .modal-close { font-size: 24px; color: var(--thai-indigo); background: none; }
+        .modal-close { font-size: 24px; color: var(--thai-indigo); background: none; border:none; }
 
-        /* Swiper Top Area */
         .modal-media-section { width: 100%; background: #fff; border-bottom: 2px solid var(--thai-stone); }
         .swiper-container { width: 100%; aspect-ratio: 1/1; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
 
-        /* Order Details & Variants */
         .order-content { padding: 20px; max-width: 500px; margin: 0 auto; }
         .order-title { font-size: 20px; font-weight: 700; color: var(--thai-indigo); margin-bottom: 5px; }
         .order-price { font-size: 24px; font-weight: 800; color: var(--thai-gold); margin-bottom: 20px; }
 
         .variant-box { margin-bottom: 30px; }
         .v-header { font-size: 14px; font-weight: 700; color: var(--thai-clay); margin-bottom: 12px; }
-        
-        /* ✨ Grid Layout for Variants with Thumbnails */
         .v-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .v-item { 
-            display: flex; align-items: center; gap: 10px; padding: 8px;
-            border: 2px solid #eee; border-radius: 12px; background: #fff;
-            transition: 0.3s; cursor: pointer;
-        }
+        .v-item { display: flex; align-items: center; gap: 10px; padding: 8px; border: 2px solid #eee; border-radius: 12px; background: #fff; transition: 0.3s; cursor: pointer; }
         .v-item img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; background: #f9f9f9; }
         .v-item-info { display: flex; flex-direction: column; }
         .v-item-info b { font-size: 12px; color: var(--thai-indigo); }
         .v-item-info span { font-size: 11px; color: var(--thai-gold); font-weight: 600; }
         .v-item.active { border-color: var(--thai-gold); background: rgba(197, 160, 89, 0.05); }
 
-        /* Form Styling */
         .form-section { background: #fff; padding: 20px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 20px; border: 1px solid #eee; }
         .input-wrap { margin-bottom: 15px; }
         .input-wrap label { font-size: 12px; font-weight: 700; color: var(--thai-gold); display: block; margin-bottom: 5px; }
         .input-field { width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid #f0f0f0; background: var(--thai-stone); font-size: 14px; }
-        .input-field:focus { border-color: var(--thai-gold); background: #fff; }
 
         .payment-card { background: var(--thai-indigo); color: var(--thai-gold); padding: 20px; border-radius: 18px; text-align: center; margin-bottom: 20px; }
-        .btn-submit { width: 100%; padding: 16px; border-radius: 50px; background: var(--thai-accent); color: #fff; font-size: 18px; font-weight: 700; border: none; margin-top: 10px; box-shadow: 0 8px 20px rgba(178, 34, 34, 0.2); }
+        .btn-submit { width: 100%; padding: 16px; border-radius: 50px; background: var(--thai-accent); color: #fff; font-size: 18px; font-weight: 700; border: none; margin-top: 10px; }
 
-        /* Loader */
         #loader { position: fixed; inset: 0; background: var(--thai-stone); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column; }
         .spinner { width: 40px; height: 40px; border: 4px solid #ddd; border-top-color: var(--thai-gold); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         footer-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: #fff; border-top: 1.5px solid var(--thai-gold); display: flex; align-items: center; z-index: 1000; }
-        .nav-item { flex: 1; text-align: center; font-size: 10px; color: var(--thai-clay); }
+        .nav-item { flex: 1; text-align: center; font-size: 10px; color: var(--thai-clay); cursor: pointer; }
         .nav-item i { display: block; font-size: 20px; color: var(--thai-gold); margin-bottom: 3px; }
     </style>
 </head>
@@ -130,52 +115,36 @@
             <div style="font-weight:700;">สั่งซื้อสินค้า</div>
             <div style="width:24px;"></div>
         </div>
-
         <div class="modal-media-section">
             <div class="swiper swiper-container">
                 <div class="swiper-wrapper" id="modalSwiperWrapper"></div>
                 <div class="swiper-pagination"></div>
             </div>
         </div>
-
         <div class="order-content">
             <h2 id="modalPTitle" class="order-title"></h2>
             <p id="modalPPrice" class="order-price"></p>
-
             <div id="variantSection" class="variant-box">
                 <div class="v-header">เลือกแบบที่ต้องการ:</div>
                 <div class="v-grid" id="modalVGrid"></div>
             </div>
-
             <form id="orderForm">
                 <div class="form-section">
-                    <div class="input-wrap">
-                        <label>ชื่อผู้รับ</label>
-                        <input type="text" id="custName" required class="input-field" placeholder="ชื่อ-นามสกุล">
-                    </div>
-                    <div class="input-wrap">
-                        <label>เบอร์โทรศัพท์</label>
-                        <input type="tel" id="custPhone" required class="input-field" placeholder="08x-xxx-xxxx">
-                    </div>
-                    <div class="input-wrap">
-                        <label>ที่อยู่จัดส่ง</label>
-                        <textarea id="custAddr" required class="input-field" rows="3" placeholder="บ้านเลขที่, ตำบล, อำเภอ..."></textarea>
-                    </div>
+                    <div class="input-wrap"><label>ชื่อผู้รับ</label><input type="text" id="custName" required class="input-field" placeholder="ชื่อ-นามสกุล"></div>
+                    <div class="input-wrap"><label>เบอร์โทรศัพท์</label><input type="tel" id="custPhone" required class="input-field" placeholder="08x-xxx-xxxx"></div>
+                    <div class="input-wrap"><label>ที่อยู่จัดส่ง</label><textarea id="custAddr" required class="input-field" rows="3" placeholder="บ้านเลขที่, ตำบล, อำเภอ..."></textarea></div>
                 </div>
-
                 <div class="payment-card">
                     <div style="font-size:12px; opacity:0.8;">โอนเข้าบัญชี กสิกรไทย</div>
                     <div style="font-size:18px; font-weight:800; margin:5px 0;">035-8-56762-2</div>
                     <div style="font-size:14px;">คุณวัชระ ชันสิน</div>
                 </div>
-
                 <div class="form-section" onclick="document.getElementById('slipInput').click()" style="text-align:center; cursor:pointer;">
                     <i class="fa-solid fa-camera" style="font-size:24px; color:var(--thai-gold);"></i>
                     <p style="font-weight:700; margin-top:5px;">แนบสลิปชำระเงิน</p>
                     <input type="file" id="slipInput" style="display:none" accept="image/*" onchange="previewSlip(this)">
                     <img id="slipPrev" style="max-width:100%; display:none; margin-top:10px; border-radius:10px;">
                 </div>
-
                 <button type="submit" id="submitBtn" class="btn-submit">ยืนยันการสั่งซื้อ</button>
             </form>
             <div style="height:60px;"></div>
@@ -187,179 +156,166 @@
         <div class="nav-item" onclick="window.open('https://m.me/YourPage')"><i class="fa-solid fa-comment"></i>ติดต่อแอดมิน</div>
     </footer-nav>
 
-      <script>
-    const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoY_2RajmKgO6NHXlyX0cR404kHG7EqElMB4z7I_lmKrOUKezLOVzMPdMjfKZD_5YJyg/exec';
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    let products = [];
-    let currentProduct = null;
-    let selectedVariant = null;
-    let swiper = null;
+    <script>
+        const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyoY_2RajmKgO6NHXlyX0cR404kHG7EqElMB4z7I_lmKrOUKezLOVzMPdMjfKZD_5YJyg/exec';
 
-    async function fetchProducts() {
-        try {
-            const response = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
-            const csvData = await response.text();
-            products = parseCSV(csvData);
-            renderGrid(products);
-            document.getElementById('loader').style.display = 'none';
-        } catch (err) { alert("เชื่อมต่อข้อมูลไม่สำเร็จ"); }
-    }
+        let products = [];
+        let currentProduct = null;
+        let selectedVariant = null;
+        let swiperInstance = null;
 
-    // --- ส่วนดึงข้อมูล (กวาด 4 คอลัมน์ I, J, K, L) ---
-    function parseCSV(csv) {
-        const rows = csv.replace(/\r/g, '').split('\n').slice(1);
-        return rows.map(row => {
-            const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-            if(!cols[0]) return null;
+        async function fetchProducts() {
+            try {
+                const response = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
+                const csvData = await response.text();
+                products = parseCSV(csvData);
+                renderGrid(products);
+                document.getElementById('loader').style.display = 'none';
+            } catch (err) { alert("เชื่อมต่อข้อมูลไม่สำเร็จ"); }
+        }
 
-            // กวาดข้อมูลจากคอลัมน์ I, J, K, L มาต่อกันด้วย ;
-            const rawV = [cols[8], cols[9], cols[10], cols[11]].filter(v => v && v.length > 2).join(';');
+        function parseCSV(csv) {
+            const rows = csv.replace(/\r/g, '').split('\n').slice(1);
+            return rows.map(row => {
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+                if(!cols[0]) return null;
+                // รวมข้อมูล I, J, K, L เข้าด้วยกัน
+                const rawV = [cols[8], cols[9], cols[10], cols[11]].filter(v => v && v.length > 2).join(';');
+                return {
+                    name: cols[0],
+                    images: cols[1] ? cols[1].split(',').map(s => s.trim()) : [],
+                    price: parseFloat(cols[3]) || 0,
+                    category: cols[5] || 'ทั่วไป',
+                    variants: parseVariants(rawV)
+                };
+            }).filter(p => p);
+        }
 
-            return {
-                name: cols[0],
-                images: cols[1] ? cols[1].split(',').map(s => s.trim()) : [],
-                price: parseFloat(cols[3]) || 0,
-                category: cols[5] || 'ทั่วไป',
-                variants: parseVariants(rawV) 
-            };
-        }).filter(p => p);
-    }
+        function parseVariants(vStr) {
+            if (!vStr) return [];
+            return vStr.split(';').map(v => {
+                v = v.trim();
+                if (!v.includes('=')) return null;
+                const [name, rest] = v.split('=');
+                let price = 0, imgs = [];
+                if (rest.includes(':')) {
+                    const parts = rest.split(':');
+                    price = parts[0].trim();
+                    imgs = parts.slice(1).join(':').split('|').map(s => s.trim());
+                } else { price = rest.trim(); }
+                return { 
+                    name: name.trim(), 
+                    price: parseFloat(price) || 0, 
+                    images: imgs.filter(u => u.length > 5) 
+                };
+            }).filter(v => v);
+        }
 
-    // --- ส่วนแยกรายการย่อย (รองรับ ; และ | ) ---
-    function parseVariants(vStr) {
-        if (!vStr) return [];
-        // แยกรายการด้วย ; เท่านั้น
-        return vStr.split(';').map(v => {
-            v = v.trim();
-            if (!v.includes('=')) return null;
-            
-            const [name, rest] = v.split('=');
-            let price = 0, imgs = [];
-
-            if (rest.includes(':')) {
-                const parts = rest.split(':');
-                price = parts[0].trim();
-                const rawImgs = parts.slice(1).join(':'); 
-                imgs = rawImgs.split('|').map(s => s.trim());
-            } else {
-                price = rest.trim();
-            }
-
-            return { 
-                name: name.trim(), 
-                price: parseFloat(price) || 0, 
-                images: imgs.filter(u => u.length > 5) 
-            };
-        }).filter(v => v);
-    }
-
-    function renderGrid(data) {
-        document.getElementById('mainGrid').innerHTML = data.map((p, i) => `
-            <div class="product-card" onclick="openOrder(${i})">
-                <div class="p-media"><img src="${p.images[0] || ''}" loading="lazy" onerror="this.src='https://via.placeholder.com/300?text=No+Image'"></div>
-                <div class="p-info">
-                    <div class="p-title">${p.name}</div>
-                    <div class="p-price-tag">฿${p.price.toLocaleString()}</div>
-                </div>
-                <button class="btn-view">รายละเอียด</button>
-            </div>
-        `).join('');
-    }
-
-    // --- ฟังก์ชันเปิด Modal ---
-    function openOrder(idx) {
-        currentProduct = products[idx];
-        selectedVariant = null;
-        document.getElementById('modalPTitle').innerText = currentProduct.name;
-        document.getElementById('modalPPrice').innerText = `฿${currentProduct.price.toLocaleString()}`;
-
-        const vGrid = document.getElementById('modalVGrid');
-        if(currentProduct.variants.length > 0) {
-            document.getElementById('variantSection').style.display = 'block';
-            vGrid.innerHTML = currentProduct.variants.map((v, i) => {
-                const thumb = (v.images && v.images.length > 0) ? v.images[0] : currentProduct.images[0];
-                return `
-                    <div class="v-item" id="vitem-${i}" onclick="selectVariant(${i})">
-                        <img src="${thumb}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
-                        <div class="v-item-info">
-                            <b>${v.name}</b>
-                            <span>฿${v.price.toLocaleString()}</span>
-                        </div>
+        function renderGrid(data) {
+            document.getElementById('mainGrid').innerHTML = data.map((p, i) => `
+                <div class="product-card" onclick="openOrder(${i})">
+                    <div class="p-media"><img src="${p.images[0] || ''}" onerror="this.src='https://via.placeholder.com/300'"></div>
+                    <div class="p-info">
+                        <div class="p-title">${p.name}</div>
+                        <div class="p-price-tag">฿${p.price.toLocaleString()}</div>
                     </div>
-                `;
-            }).join('');
-        } else { 
-            document.getElementById('variantSection').style.display = 'none'; 
+                    <button class="btn-view">รายละเอียด</button>
+                </div>
+            `).join('');
         }
 
-        updateSwiper(currentProduct.images);
-        document.getElementById('orderModal').classList.add('active');
-    }
+        function openOrder(idx) {
+            currentProduct = products[idx];
+            selectedVariant = null;
+            document.getElementById('modalPTitle').innerText = currentProduct.name;
+            document.getElementById('modalPPrice').innerText = `฿${currentProduct.price.toLocaleString()}`;
 
-    function selectVariant(i) {
-        selectedVariant = currentProduct.variants[i];
-        document.querySelectorAll('.v-item').forEach(el => el.classList.remove('active'));
-        document.getElementById(`vitem-${i}`).classList.add('active');
-        document.getElementById('modalPPrice').innerText = `฿${selectedVariant.price.toLocaleString()}`;
+            const vGrid = document.getElementById('modalVGrid');
+            if(currentProduct.variants.length > 0) {
+                document.getElementById('variantSection').style.display = 'block';
+                vGrid.innerHTML = currentProduct.variants.map((v, i) => {
+                    const thumb = v.images[0] || currentProduct.images[0];
+                    return `
+                        <div class="v-item" id="vitem-${i}" onclick="selectVariant(${i})">
+                            <img src="${thumb}">
+                            <div class="v-item-info"><b>${v.name}</b><span>฿${v.price.toLocaleString()}</span></div>
+                        </div>`;
+                }).join('');
+            } else { document.getElementById('variantSection').style.display = 'none'; }
 
-        let imgs = (selectedVariant.images && selectedVariant.images.length > 0) 
-            ? [...selectedVariant.images, ...currentProduct.images] 
-            : currentProduct.images;
-        updateSwiper(imgs);
-    }
-
-    function updateSwiper(list) {
-        const wrapper = document.getElementById('modalSwiperWrapper');
-        const cleanList = list.filter(u => u && u.length > 5);
-        wrapper.innerHTML = cleanList.map(url => `<div class="swiper-slide"><img src="${url}"></div>`).join('');
-        if(swiper) swiper.destroy();
-        swiper = new Swiper('.swiper-container', {
-            pagination: { el: '.swiper-pagination', clickable: true },
-            loop: cleanList.length > 1
-        });
-    }
-
-    function previewSlip(input) {
-        if (input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = e => {
-                const prev = document.getElementById('slipPrev');
-                prev.src = e.target.result;
-                prev.style.display = 'block';
-            };
-            reader.readAsDataURL(input.files[0]);
+            updateSwiper(currentProduct.images);
+            document.getElementById('orderModal').classList.add('active');
         }
-    }
 
-    function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
+        function selectVariant(i) {
+            selectedVariant = currentProduct.variants[i];
+            document.querySelectorAll('.v-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`vitem-${i}`).classList.add('active');
+            document.getElementById('modalPPrice').innerText = `฿${selectedVariant.price.toLocaleString()}`;
+            const imgs = selectedVariant.images.length > 0 ? [...selectedVariant.images, ...currentProduct.images] : currentProduct.images;
+            updateSwiper(imgs);
+        }
 
-    document.getElementById('orderForm').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const slip = document.getElementById('slipInput').files[0];
-        if(!slip) return alert("กรุณาแนบสลิป");
-        
-        btn.disabled = true; btn.innerText = "กำลังสั่งซื้อ...";
-        const toB64 = f => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.readAsDataURL(f); });
+        function updateSwiper(list) {
+            const wrapper = document.getElementById('modalSwiperWrapper');
+            const cleanList = list.filter(u => u && u.length > 5);
+            wrapper.innerHTML = cleanList.map(url => `<div class="swiper-slide"><img src="${url}"></div>`).join('');
+            if(swiperInstance) swiperInstance.destroy();
+            swiperInstance = new Swiper('.swiper-container', {
+                pagination: { el: '.swiper-pagination', clickable: true },
+                loop: cleanList.length > 1
+            });
+        }
 
-        try {
-            const fd = new URLSearchParams();
-            fd.append('productDetail', currentProduct.name + (selectedVariant ? ` (${selectedVariant.name})` : ''));
-            fd.append('customerName', document.getElementById('custName').value);
-            fd.append('customerPhone', document.getElementById('custPhone').value);
-            fd.append('customerAddress', document.getElementById('custAddr').value);
-            fd.append('file', await toB64(slip));
+        function filterProducts() {
+            const term = document.getElementById('search').value.toLowerCase();
+            renderGrid(products.filter(p => p.name.toLowerCase().includes(term)));
+        }
 
-            await fetch(WEB_APP_URL, { method: 'POST', body: fd, mode: 'no-cors' });
-            alert("สั่งซื้อสำเร็จ! ขอบคุณที่อุดหนุนแผ่นดินทองครับ");
-            location.reload();
-        } catch (err) { alert("เกิดข้อผิดพลาด"); btn.disabled = false; }
-    };
+        function setCategory(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGrid(cat === 'all' ? products : products.filter(p => p.category === cat));
+        }
 
-    window.onload = fetchProducts;
-</script>
-  
-    
+        function previewSlip(input) {
+            if (input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const prev = document.getElementById('slipPrev');
+                    prev.src = e.target.result;
+                    prev.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function closeModal() { document.getElementById('orderModal').classList.remove('active'); }
+
+        document.getElementById('orderForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const slip = document.getElementById('slipInput').files[0];
+            if(!slip) return alert("กรุณาแนบสลิป");
+            btn.disabled = true; btn.innerText = "กำลังสั่งซื้อ...";
+            const toB64 = f => new Promise(res => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.readAsDataURL(f); });
+            try {
+                const fd = new URLSearchParams();
+                fd.append('productDetail', currentProduct.name + (selectedVariant ? ` (${selectedVariant.name})` : ''));
+                fd.append('customerName', document.getElementById('custName').value);
+                fd.append('customerPhone', document.getElementById('custPhone').value);
+                fd.append('customerAddress', document.getElementById('custAddr').value);
+                fd.append('file', await toB64(slip));
+                await fetch(WEB_APP_URL, { method: 'POST', body: fd, mode: 'no-cors' });
+                alert("สั่งซื้อสำเร็จ! ขอบคุณครับ");
+                location.reload();
+            } catch (err) { alert("เกิดข้อผิดพลาด"); btn.disabled = false; }
+        };
+
+        window.onload = fetchProducts;
+    </script>
 </body>
 </html>
