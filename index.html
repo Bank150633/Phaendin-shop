@@ -545,10 +545,9 @@
                     ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>
-            </div>
-            <button class="buy-now" onclick="openOrder('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${p[12]||999}, '${p[1]}', ${p[14]||1}, '${canInstall}')">สั่งซื้อ</button>
+            </div>('${p[0]}','${priceNormal}','${p[8]||0}','${p[9]||''}', ${percentDiscount}, ${p[12]||999}, '${p[1]}', ${p[14]||1}, '${canInstall}')">สั่งซื้อ</button>
         </div>
-        `;
+        <button class="buy-now" onclick="openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${p[8]||0}, ${JSON.stringify(p[9]||'')}, ${percentDiscount}, ${p[12]||999}, ${JSON.stringify(p[1])}, ${p[14]||1}, ${JSON.stringify(canInstall)})">สั่งซื้อ</button>
     }).join('');
 }
 
