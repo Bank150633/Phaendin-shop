@@ -960,7 +960,7 @@ function togglePay(type) {
         nextDate.setDate(nextDate.getDate() + 30);
         const dateThai = nextDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
 
-        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth}`;
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth}/งวด`;
 
         instBox.innerHTML = `
             <div style="text-align:left; padding:5px;">
@@ -1001,16 +1001,12 @@ function getLocation() {
     if (navigator.geolocation) {
         btn.innerText = "กำลังหาพิกัด...";
         navigator.geolocation.getCurrentPosition((p) => {
-            // แก้ไขลิงก์ Google Maps ให้ถูกต้อง
             document.getElementById('userLocation').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
-
-
             btn.innerHTML = '<i class="fa-solid fa-check"></i> ปักหมุดสำเร็จ';
             btn.style.background = "#28a745";
         }, () => alert("โปรดอนุญาตให้เข้าถึงตำแหน่ง (GPS)"));
     }
 }
-
 
 function handleSelfie(input) {
     if(input.files[0]) {
