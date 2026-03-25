@@ -11,98 +11,92 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
-        /* =========================================
-           ROOT VARIABLES & THEME
-           ========================================= */
         :root { 
             --thai-indigo: #0F1D35; 
             --thai-gold: #C5A059; 
-            --thai-gold-light: #E0C08D;
             --thai-stone: #F9F7F2; 
             --thai-clay: #3D2B1F; 
             --thai-accent: #B22222; 
-            --white: #FFFFFF;
             --glass: rgba(255, 255, 255, 0.92);
             --shadow-sm: 0 4px 12px rgba(15, 29, 53, 0.05);
             --shadow-md: 0 10px 30px rgba(15, 29, 53, 0.1);
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            --radius-lg: 20px;
             --radius-md: 12px;
         }
 
-        /* =========================================
-           CORE RESET
-           ========================================= */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Niramit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--thai-stone); color: var(--thai-indigo); line-height: 1.6; overflow-x: hidden; padding-bottom: 90px; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
-        .section-title { font-weight: 700; font-size: 1.2rem; margin: 20px 0 15px; border-left: 4px solid var(--thai-gold); padding-left: 10px; }
-
+        
         /* HEADER */
-        header { position: fixed; top: 0; width: 100%; height: 70px; background: var(--glass); backdrop-filter: blur(15px); z-index: 2500; border-bottom: 2px solid var(--thai-gold); display: flex; justify-content: center; align-items: center; box-shadow: var(--shadow-sm); }
-        .logo-box { height: 50px; transition: var(--transition); }
+        header { position: fixed; top: 0; width: 100%; height: 70px; background: var(--glass); backdrop-filter: blur(15px); z-index: 2500; border-bottom: 2px solid var(--thai-gold); display: flex; justify-content: center; align-items: center; }
+        .logo-box { height: 50px; }
         .logo-box img { height: 100%; object-fit: contain; }
 
         .top-nav { padding: 90px 15px 20px; background: #fff; border-radius: 0 0 30px 30px; box-shadow: var(--shadow-sm); }
         .search-box { position: relative; width: 100%; max-width: 700px; margin: 0 auto; }
-        .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--thai-gold); font-size: 1.1rem; }
-        #search { width: 100%; padding: 15px 25px 15px 55px; border-radius: 50px; border: 2px solid rgba(197, 160, 89, 0.2); background: var(--thai-stone); font-size: 15px; outline: none; transition: var(--transition); }
+        .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--thai-gold); }
+        #search { width: 100%; padding: 12px 20px 12px 50px; border-radius: 50px; border: 2px solid rgba(197, 160, 89, 0.2); outline: none; }
 
-        .cat-scroll { display: flex; overflow-x: auto; padding: 20px 0 5px; gap: 12px; scrollbar-width: none; }
-        .cat-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn { padding: 10px 25px; background: #fff; border-radius: 50px; border: 1.5px solid #eee; font-size: 14px; font-weight: 600; white-space: nowrap; transition: var(--transition); cursor: pointer; color: var(--thai-clay); }
-        .cat-btn.active { background: var(--thai-indigo); color: var(--thai-gold); border-color: var(--thai-indigo); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(15, 29, 53, 0.2); }
+        .cat-scroll { display: flex; overflow-x: auto; padding: 15px 0 5px; gap: 10px; scrollbar-width: none; }
+        .cat-btn { padding: 8px 20px; background: #fff; border-radius: 50px; border: 1.5px solid #eee; white-space: nowrap; cursor: pointer; font-size: 14px; font-weight: 600; }
+        .cat-btn.active { background: var(--thai-indigo); color: var(--thai-gold); border-color: var(--thai-indigo); }
 
         /* PRODUCT GRID */
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 15px; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; }
         @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
         @media (min-width: 1200px) { .product-grid { grid-template-columns: repeat(6, 1fr); } }
 
-        .product-card { background: #fff; border-radius: var(--radius-md); overflow: hidden; border: 1px solid rgba(197, 160, 89, 0.1); box-shadow: var(--shadow-sm); transition: var(--transition); cursor: pointer; position: relative; }
-        .p-media { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #fdfdfd; }
-        .p-media img, .p-media video { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
-        .p-badge { position: absolute; top: 8px; left: 8px; color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 800; z-index: 10; background: var(--thai-accent); }
-        .p-info { padding: 8px 6px; text-align: center; }
-        .p-title { font-size: 11px; font-weight: 600; color: var(--thai-clay); margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 32px; }
+        .product-card { background: #fff; border-radius: var(--radius-md); overflow: hidden; border: 1px solid rgba(197, 160, 89, 0.1); position: relative; transition: 0.3s; }
+        .p-media { width: 100%; aspect-ratio: 1/1; overflow: hidden; }
+        .p-media img, .p-media video { width: 100%; height: 100%; object-fit: cover; }
         
-        /* สไตล์ราคาขีดฆ่า */
-        .old-price { font-size: 0.8rem; color: #999; text-decoration: line-through; margin-right: 5px; font-weight: 400; }
-        .p-price-tag { display: flex; align-items: center; justify-content: center; color: var(--thai-accent); font-weight: 800; font-size: 14px; }
-        
-        .btn-card-view { width: 100%; padding: 6px 0; background: var(--thai-indigo); color: var(--thai-gold); font-size: 10px; font-weight: 700; border: none; }
+        /* BADGE COLORS */
+        .p-badge { position: absolute; top: 8px; left: 8px; color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 800; z-index: 10; }
+        .badge-free { background: #28a745 !important; }
+        .badge-sale { background: #ff4d4d !important; }
+        .badge-hot { background: #ff9900 !important; }
+
+        .p-info { padding: 10px 8px; text-align: center; }
+        .p-title { font-size: 11px; font-weight: 600; height: 32px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 5px; }
+        .old-price { font-size: 10px; color: #999; text-decoration: line-through; margin-right: 5px; }
+        .p-price-tag { font-weight: 800; color: var(--thai-indigo); font-size: 15px; }
 
         /* MODAL */
         .modal { position: fixed; inset: 0; background: var(--thai-stone); z-index: 5000; display: none; flex-direction: column; overflow-y: auto; }
-        .modal.active { display: flex; }
-        .modal-header { position: sticky; top: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid var(--thai-gold); z-index: 100; }
-        .modal-body { max-width: 1000px; margin: 0 auto; width: 100%; padding-bottom: 100px; }
+        .modal.active { display: flex; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        /* INSTALLMENT TABLE */
-        .installment-table { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 13px; background: #fff; border-radius: 8px; overflow: hidden; }
-        .installment-table td { padding: 10px; border-bottom: 1px solid #eee; }
+        .modal-header { position: sticky; top: 0; background: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1.5px solid var(--thai-gold); z-index: 100; }
+        .modal-body { max-width: 800px; margin: 0 auto; width: 100%; padding-bottom: 100px; }
+
+        .swiper-container { width: 100%; aspect-ratio: 1/1; background: #fff; }
+        .swiper-slide img, .swiper-slide video { width: 100%; height: 100%; object-fit: contain; }
 
         .v-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
-        .v-item { background: #fff; border: 2px solid #eee; border-radius: 12px; padding: 8px; cursor: pointer; text-align: center; }
-        .v-item.active { border-color: var(--thai-gold); background: rgba(197, 160, 89, 0.08); }
-        .v-item img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; }
+        .v-item { background: #fff; border: 2px solid #eee; border-radius: 10px; padding: 5px; text-align: center; cursor: pointer; }
+        .v-item.active { border-color: var(--thai-gold); background: rgba(197, 160, 89, 0.05); }
+        .v-item img { width: 100%; aspect-ratio: 1/1; border-radius: 6px; object-fit: cover; }
 
-        .order-form-container { background: #fff; margin: 20px 15px; border-radius: 25px; padding: 25px; box-shadow: var(--shadow-md); }
+        .installment-table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #fff; border-radius: 10px; overflow: hidden; font-size: 13px; }
+        .installment-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+
+        .order-form-container { background: #fff; margin: 20px 15px; border-radius: 20px; padding: 25px; box-shadow: var(--shadow-md); }
         .input-group { margin-bottom: 15px; }
         .input-group label { display: block; font-size: 13px; font-weight: 700; color: var(--thai-gold); margin-bottom: 5px; }
-        .input-group input, .input-group textarea { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; outline: none; }
+        .input-group input, .input-group textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1.5px solid #eee; outline: none; background: #fafafa; }
         
-        .bank-card { background: var(--thai-indigo); color: var(--thai-gold); padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 20px; }
-        .submit-btn { width: 100%; padding: 15px; border-radius: 50px; background: var(--thai-accent); color: #fff; font-size: 1.1rem; font-weight: 700; border: none; cursor: pointer; }
+        .bank-card { background: var(--thai-indigo); color: var(--thai-gold); padding: 20px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
+        .submit-btn { width: 100%; padding: 16px; border-radius: 50px; background: var(--thai-accent); color: #fff; font-size: 18px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 5px 15px rgba(178, 34, 34, 0.3); }
+
+        .footer-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: var(--glass); backdrop-filter: blur(10px); border-top: 1.5px solid var(--thai-gold); display: flex; z-index: 2000; }
+        .f-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--thai-clay); font-size: 11px; }
+        .f-item i { font-size: 22px; color: var(--thai-gold); margin-bottom: 3px; }
 
         #mainLoader { position: fixed; inset: 0; background: var(--thai-stone); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .loader-ring { width: 40px; height: 40px; border: 4px solid #ddd; border-top-color: var(--thai-gold); border-radius: 50%; animation: spin 1s linear infinite; }
+        .loader-ring { width: 45px; height: 45px; border: 4px solid #ddd; border-top-color: var(--thai-gold); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        .footer-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--glass); backdrop-filter: blur(15px); border-top: 1.5px solid var(--thai-gold); display: flex; z-index: 2000; }
-        .f-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--thai-clay); font-size: 11px; }
-        .f-item i { font-size: 20px; color: var(--thai-gold); margin-bottom: 2px; }
-
-        .success-overlay { position: fixed; inset: 0; background: rgba(15, 29, 53, 0.95); z-index: 6000; display: none; align-items: center; justify-content: center; text-align: center; color: var(--thai-gold); }
+        
+        .success-overlay { position: fixed; inset: 0; background: rgba(15, 29, 53, 0.98); z-index: 6000; display: none; align-items: center; justify-content: center; text-align: center; color: var(--thai-gold); padding: 20px; }
         .success-overlay.active { display: flex; }
     </style>
 </head>
@@ -110,15 +104,15 @@
 
     <div id="mainLoader">
         <div class="loader-ring"></div>
-        <p style="margin-top:15px; font-weight:700; color:var(--thai-gold);">PHAENDIN STORE</p>
+        <p style="margin-top:15px; font-weight:700; color:var(--thai-gold); letter-spacing: 1px;">PHAENDIN STORE</p>
     </div>
 
     <div id="successOverlay" class="success-overlay">
         <div>
-            <i class="fa-solid fa-circle-check" style="font-size:60px; color:#4BB543;"></i>
+            <i class="fa-solid fa-circle-check" style="font-size:70px; color:#4BB543;"></i>
             <h2 style="margin-top:20px;">สั่งซื้อสำเร็จ!</h2>
-            <p style="margin:10px 0 20px; color:#fff;">เราได้รับข้อมูลของท่านเรียบร้อยแล้ว</p>
-            <button onclick="location.reload()" class="cat-btn active">กลับหน้าหลัก</button>
+            <p style="margin:15px 0 30px; color:#fff;">ขอบคุณที่ไว้วางใจ แผ่นดินทอง<br>เจ้าหน้าที่กำลังตรวจสอบและจัดเตรียมสินค้าครับ</p>
+            <button onclick="location.reload()" class="cat-btn active" style="padding: 12px 30px;">กลับหน้าหลัก</button>
         </div>
     </div>
 
@@ -129,7 +123,7 @@
     <div class="top-nav">
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="search" placeholder="ค้นหาสินค้า..." oninput="app.filterProducts()">
+            <input type="text" id="search" placeholder="ค้นหาชื่อสินค้า..." oninput="app.filterProducts()">
         </div>
         <div class="cat-scroll" id="categoryContainer">
             <button class="cat-btn active" onclick="app.setCategory('all', this)">ทั้งหมด</button>
@@ -139,13 +133,13 @@
     </div>
 
     <div class="container">
-        <h3 class="section-title">สินค้าแนะนำ</h3>
+        <h3 style="margin: 20px 0 10px; border-left: 4px solid var(--thai-gold); padding-left: 10px;">สินค้าแนะนำ</h3>
         <main class="product-grid" id="mainGrid"></main>
     </div>
 
     <div id="orderModal" class="modal">
         <div class="modal-header">
-            <button onclick="app.closeModal()" class="modal-close-btn" style="background:none; border:none; font-size:24px;"><i class="fa-solid fa-xmark"></i></button>
+            <button onclick="app.closeModal()" style="background:none; border:none; font-size:26px;"><i class="fa-solid fa-xmark"></i></button>
             <div style="text-align:center;"><b>ใบสรุปคำสั่งซื้อ</b></div>
             <div style="width:30px;"></div>
         </div>
@@ -156,57 +150,58 @@
                 <div class="swiper-pagination"></div>
             </div>
             
-            <div style="padding: 20px;">
-                <h2 id="modalPTitle"></h2>
-                <p id="modalPPrice" class="modal-price" style="font-size:28px; color:var(--thai-gold); font-weight:800; margin:10px 0;"></p>
+            <div style="padding: 25px;">
+                <h2 id="modalPTitle" style="font-size: 22px; color: var(--thai-indigo);"></h2>
+                <p id="modalPPrice" style="font-size: 30px; color: var(--thai-gold); font-weight: 800; margin: 10px 0;"></p>
                 
                 <div id="installmentBox" style="margin-bottom: 20px; display: none;">
-                    <button type="button" onclick="app.toggleInstallment()" style="background: none; border: 1.5px solid var(--thai-gold); color: var(--thai-gold); padding: 8px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                    <button type="button" onclick="app.toggleInstallment()" style="background: none; border: 1.5px solid var(--thai-gold); color: var(--thai-gold); padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 700; cursor: pointer;">
                         <i class="fa-solid fa-calculator"></i> ดูตารางผ่อนชำระต่อเดือน
                     </button>
-                    <div id="installmentTable" style="display: none; margin-top: 15px; border: 1px solid #eee; border-radius: 12px; overflow: hidden; background: #fff;">
+                    <div id="installmentTable" style="display: none; margin-top: 15px; border: 1px solid #eee; border-radius: 12px; overflow: hidden;">
                         <table class="installment-table">
                             <tbody id="installmentBody"></tbody>
                         </table>
                     </div>
                 </div>
 
-                <div id="modalPDesc" style="font-size:14px; color:#666; white-space:pre-line; margin-bottom:20px;"></div>
+                <div id="modalPDesc" style="font-size:14px; color:#555; white-space:pre-line; margin-bottom:25px; border-bottom: 1px dashed #ddd; padding-bottom: 15px;"></div>
 
                 <div id="variantSection">
-                    <div class="v-label"><b>เลือกแบบสินค้า:</b></div>
+                    <div style="font-weight: 700; margin-bottom: 10px;"><i class="fa-solid fa-layer-group"></i> เลือกแบบที่ท่านต้องการ:</div>
                     <div class="v-grid" id="modalVGrid"></div>
                 </div>
             </div>
 
             <div class="order-form-container">
+                <h3 style="margin-bottom: 20px;"><i class="fa-solid fa-address-card"></i> ข้อมูลการจัดส่ง</h3>
                 <form id="orderForm" onsubmit="app.handleOrderSubmit(event)">
                     <div class="input-group">
-                        <label>ชื่อ-นามสกุล</label>
-                        <input type="text" id="custName" required>
+                        <label>ชื่อ-นามสกุล ผู้รับ</label>
+                        <input type="text" id="custName" required placeholder="ระบุชื่อจริง">
                     </div>
                     <div class="input-group">
                         <label>เบอร์โทรศัพท์</label>
-                        <input type="tel" id="custPhone" required>
+                        <input type="tel" id="custPhone" required placeholder="08X-XXX-XXXX">
                     </div>
                     <div class="input-group">
-                        <label>ที่อยู่จัดส่ง</label>
-                        <textarea id="custAddr" required rows="3"></textarea>
+                        <label>ที่อยู่จัดส่ง (โดยละเอียด)</label>
+                        <textarea id="custAddr" required rows="3" placeholder="บ้านเลขที่, แขวง, เขต, จังหวัด..."></textarea>
                     </div>
 
                     <div class="bank-card">
-                        <p style="font-size:12px;">กสิกรไทย (K-Bank)</p>
-                        <p style="font-size:20px; font-weight:800; margin:5px 0;">035-8-56762-2</p>
-                        <p>คุณวัชระ ชันสิน</p>
+                        <p style="font-size:13px; opacity: 0.8;">ธนาคารกสิกรไทย (K-Bank)</p>
+                        <p style="font-size:24px; font-weight:800; margin:5px 0;">035-8-56762-2</p>
+                        <p style="font-weight: 600;">คุณวัชระ ชันสิน</p>
                     </div>
 
                     <div class="input-group">
-                        <label>แนบสลิปโอนเงิน</label>
-                        <input type="file" id="slipInput" accept="image/*" onchange="app.handleFilePreview(this)">
-                        <img id="slipPreview" style="width:100%; margin-top:10px; display:none; border-radius:10px;">
+                        <label>แนบสลิปโอนเงินเพื่อยืนยัน</label>
+                        <input type="file" id="slipInput" accept="image/*" onchange="app.handleFilePreview(this)" style="padding: 8px;">
+                        <img id="slipPreview" style="width:100%; margin-top:15px; display:none; border-radius:12px; border: 1px solid #eee;">
                     </div>
 
-                    <button type="submit" id="submitBtn" class="submit-btn">ยืนยันคำสั่งซื้อ</button>
+                    <button type="submit" id="submitBtn" class="submit-btn">ยืนยันและสั่งซื้อสินค้า</button>
                 </form>
             </div>
         </div>
@@ -236,12 +231,20 @@
                 await this.loadData();
             },
 
+            shuffle: function(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            },
+
             loadData: async function() {
                 try {
                     const res = await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/export?format=csv&gid=0`);
                     const data = await res.text();
                     const rows = data.split('\n').slice(1);
-                    this.allProducts = rows.map(row => {
+                    const parsed = rows.map(row => {
                         const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                         if(!cols[0]) return null;
                         return {
@@ -254,6 +257,8 @@
                             variants: this.parseVariants([cols[8], cols[9], cols[10], cols[11]].join(';'))
                         };
                     }).filter(p => p);
+                    
+                    this.allProducts = this.shuffle(parsed);
                     this.renderProducts(this.allProducts);
                     document.getElementById('mainLoader').style.display = 'none';
                 } catch (e) { console.error(e); }
@@ -264,26 +269,31 @@
                 return str.split(';').filter(v => v.includes('=')).map(v => {
                     const [name, data] = v.split('=');
                     const [price, imgs] = data.split(':');
-                    return { name, price: parseFloat(price), images: imgs ? imgs.split('|') : [] };
+                    return { name: name.trim(), price: parseFloat(price), images: imgs ? imgs.split('|').filter(i => i.length > 5) : [] };
                 });
             },
 
             renderProducts: function(list) {
                 const grid = document.getElementById('mainGrid');
-                grid.innerHTML = list.map((p, idx) => {
+                grid.innerHTML = list.map((p) => {
                     let finalPrice = p.basePrice;
                     let oldPrice = '';
-                    if (p.tag && p.tag.includes('%')) {
+                    let badgeClass = 'badge-sale';
+                    
+                    if (p.tag?.includes('%')) {
                         const pct = parseInt(p.tag.replace(/[^0-9]/g, ''));
                         finalPrice = p.basePrice * ((100 - pct) / 100);
                         oldPrice = `<span class="old-price">฿${p.basePrice.toLocaleString()}</span>`;
                     }
+                    if (p.tag?.includes('ฟรี')) badgeClass = 'badge-free';
+                    if (p.tag?.includes('ฮิต')) badgeClass = 'badge-hot';
+
                     const isVideo = p.mainImages[0]?.toLowerCase().match(/\.(mp4|webm|mov)$/);
                     return `
                         <div class="product-card" onclick="app.openDetail(${this.allProducts.indexOf(p)})">
-                            ${p.tag ? `<div class="p-badge">${p.tag}</div>` : ''}
+                            ${p.tag ? `<div class="p-badge ${badgeClass}">${p.tag}</div>` : ''}
                             <div class="p-media">
-                                ${isVideo ? `<video src="${p.mainImages[0]}" autoplay loop muted playsinline></video>` : `<img src="${p.mainImages[0]}">`}
+                                ${isVideo ? `<video src="${p.mainImages[0]}" autoplay loop muted playsinline></video>` : `<img src="${p.mainImages[0]}" loading="lazy">`}
                             </div>
                             <div class="p-info">
                                 <div class="p-title">${p.name}</div>
@@ -298,7 +308,7 @@
                 this.currentProduct = this.allProducts[idx];
                 this.selectedVariant = null;
                 let price = this.currentProduct.basePrice;
-                if (this.currentProduct.tag && this.currentProduct.tag.includes('%')) {
+                if (this.currentProduct.tag?.includes('%')) {
                     const pct = parseInt(this.currentProduct.tag.replace(/[^0-9]/g, ''));
                     price = this.currentProduct.basePrice * ((100 - pct) / 100);
                 }
@@ -315,15 +325,16 @@
                     document.getElementById('variantSection').style.display = 'block';
                     vGrid.innerHTML = this.currentProduct.variants.map((v, i) => `
                         <div class="v-item" id="vitem-${i}" onclick="app.selectVariant(${i})">
-                            <img src="${v.images[0] || this.currentProduct.mainImages[0]}">
-                            <div style="font-size:10px; margin-top:5px;">${v.name}</div>
+                            <img src="${v.images[0] || this.currentProduct.mainImages[0]}" onerror="this.src='https://via.placeholder.com/150'">
+                            <div style="font-size:10px; margin-top:5px; font-weight:700;">${v.name}</div>
+                            <div style="font-size:10px; color:var(--thai-gold);">฿${v.price.toLocaleString()}</div>
                         </div>
                     `).join('');
                 } else {
                     document.getElementById('variantSection').style.display = 'none';
                 }
 
-                document.getElementById('orderModal').style.display = 'flex';
+                document.getElementById('orderModal').classList.add('active');
                 document.body.style.overflow = 'hidden';
             },
 
@@ -339,10 +350,10 @@
             updateInstallmentTable: function(price) {
                 const box = document.getElementById('installmentBox');
                 const body = document.getElementById('installmentBody');
-                if (price >= 2000) {
+                if (price >= 1500) {
                     box.style.display = 'block';
-                    const months = [3, 6, 10];
-                    body.innerHTML = months.map(m => `<tr><td>ผ่อน ${m} เดือน</td><td align="right">฿${Math.round(price/m).toLocaleString()} / ด.</td></tr>`).join('');
+                    const months = [3, 6, 10, 12];
+                    body.innerHTML = months.map(m => `<tr><td>ผ่อนชำระ ${m} เดือน</td><td align="right" style="font-weight:700; color:var(--thai-indigo);">฿${Math.round(price/m).toLocaleString()} / เดือน</td></tr>`).join('');
                 } else { box.style.display = 'none'; }
                 document.getElementById('installmentTable').style.display = 'none';
             },
@@ -354,9 +365,12 @@
 
             updateSwiper: function(urls) {
                 const wrap = document.getElementById('modalSwiperWrapper');
-                wrap.innerHTML = urls.map(u => `<div class="swiper-slide"><img src="${u}" style="width:100%; aspect-ratio:1/1; object-fit:contain;"></div>`).join('');
+                wrap.innerHTML = urls.map(u => {
+                    const isVideo = u.toLowerCase().match(/\.(mp4|webm|mov)$/);
+                    return `<div class="swiper-slide">${isVideo ? `<video src="${u}" autoplay loop muted playsinline></video>` : `<img src="${u}">`}</div>`;
+                }).join('');
                 if(this.swiper) this.swiper.destroy();
-                this.swiper = new Swiper('.swiper-container', { pagination: { el: '.swiper-pagination' } });
+                this.swiper = new Swiper('.swiper-container', { pagination: { el: '.swiper-pagination', clickable: true }, loop: urls.length > 1 });
             },
 
             handleFilePreview: function(input) {
@@ -374,22 +388,21 @@
             handleOrderSubmit: async function(e) {
                 e.preventDefault();
                 const btn = document.getElementById('submitBtn');
+                if(!document.getElementById('slipInput').files[0]) return alert("กรุณาแนบสลิปโอนเงินครับ");
+                
                 btn.disabled = true;
-                btn.innerText = "กำลังส่งข้อมูล...";
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังส่งข้อมูล...`;
                 
                 try {
                     const slipFile = document.getElementById('slipInput').files[0];
-                    let base64 = "";
-                    if(slipFile) {
-                        base64 = await new Promise((res) => {
-                            const r = new FileReader();
-                            r.onload = () => res(r.result.split(',')[1]);
-                            r.readAsDataURL(slipFile);
-                        });
-                    }
+                    const base64 = await new Promise((res) => {
+                        const r = new FileReader();
+                        r.onload = () => res(r.result.split(',')[1]);
+                        r.readAsDataURL(slipFile);
+                    });
 
                     const formData = new URLSearchParams();
-                    formData.append('productDetail', this.currentProduct.name + (this.selectedVariant ? ` (${this.selectedVariant.name})` : ''));
+                    formData.append('productDetail', this.currentProduct.name + (this.selectedVariant ? ` [แบบ: ${this.selectedVariant.name}]` : ''));
                     formData.append('customerName', document.getElementById('custName').value);
                     formData.append('customerPhone', document.getElementById('custPhone').value);
                     formData.append('customerAddress', document.getElementById('custAddr').value);
@@ -398,9 +411,9 @@
                     await fetch(CONFIG.WEB_APP_URL, { method: 'POST', body: formData, mode: 'no-cors' });
                     document.getElementById('successOverlay').classList.add('active');
                 } catch (err) {
-                    alert("เกิดข้อผิดพลาด ลองใหม่อีกครั้ง");
+                    alert("ขออภัย ระบบขัดข้อง กรุณาลองอีกครั้ง");
                     btn.disabled = false;
-                    btn.innerText = "ยืนยันคำสั่งซื้อ";
+                    btn.innerText = "ยืนยันและสั่งซื้อสินค้า";
                 }
             },
 
@@ -416,9 +429,12 @@
                 this.renderProducts(cat === 'all' ? this.allProducts : this.allProducts.filter(p => p.category === cat));
             },
 
-            closeModal: function() { document.getElementById('orderModal').style.display = 'none'; document.body.style.overflow = 'auto'; },
+            closeModal: function() { 
+                document.getElementById('orderModal').classList.remove('active'); 
+                document.body.style.overflow = 'auto'; 
+            },
             openContact: function() { window.open(CONFIG.CONTACT_URL, '_blank'); },
-            showTracking: function() { alert("ระบบกำลังอัปเดตข้อมูลพัสดุ..."); }
+            showTracking: function() { alert("เจ้าหน้าที่จะแจ้งเลขพัสดุให้ทราบผ่าน SMS หรือแชทครับ"); }
         };
 
         window.onload = () => app.init();
