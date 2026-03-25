@@ -3,199 +3,508 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN | THE ROYAL SELECTION</title>
+    <title>PHAENDIN | THAI MODERN LUXURY</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { 
-            --navy: #0F1D35;      /* น้ำเงินเข้มธงชาติ */
-            --red: #C8102E;       /* แดงธงชาติ */
-            --white: #FFFFFF;
-            --gold: #D4AF37;      /* ทองแชมเปญ */
-            --gold-grad: linear-gradient(135deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
-            --red-grad: linear-gradient(135deg, #FF4B2B 0%, #C8102E 100%);
-            --blue-grad: linear-gradient(135deg, #1B365D 0%, #0F1D35 100%);
-            --bg: #050A14; 
-            --card: #111D2F; 
-            --text-dim: #A8B2D1; 
-            --input-bg: #1A2840; 
+            --gold: #D4AF37; 
+            --gold-light: #F5D76E;
+            --gold-dark: #B8860B;
+            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
+            --thai-red: #8B0000;
+            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #8b0000 100%);
+            --bg: #0A0A0A; 
+            --card: #141414; 
+            --text: #FFFFFF; 
+            --text-dim: #BBBBBB; 
+            --input-bg: #1A1A1A; 
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; padding-top: 60px; padding-bottom: 70px; overflow-x: hidden; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Kanit', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+            -webkit-font-smoothing: antialiased;
+        }
 
-        /* HEADER หรูหรา */
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            padding-top: 60px; 
+            padding-bottom: 70px; 
+            transition: 0.3s; 
+            overflow-x: hidden; 
+        }
+
+        /* ลายไทยประยุกต์ Background (Optional) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            opacity: 0.3;
+            z-index: -1;
+        }
+
         header { 
-            position: fixed; top: 0; width: 100%; height: 60px;
-            background: rgba(15, 29, 53, 0.95); backdrop-filter: blur(10px); 
-            z-index: 1000; border-bottom: 2px solid var(--gold);
-            display: flex; justify-content: center; align-items: center;
+            position: fixed; top: 0; width: 100%; 
+            background: rgba(10,10,10,0.95); 
+            backdrop-filter: blur(15px); 
+            z-index: 1000; padding: 10px; 
+            border-bottom: 2px solid var(--gold); 
+            display: flex; justify-content: center; align-items: center; height: 60px;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.2);
         }
-        .logo-img { height: 45px; filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4)); }
+        
+        .logo-img { height: 45px; width: auto; filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.5)); }
 
-        /* SEARCH BAR พรีเมียม */
-        .search-wrap { position: relative; width: 92%; margin: 15px auto; }
+        .search-wrap { position: relative; width: 92%; max-width: 500px; margin: 15px auto; display: flex; align-items: center; gap: 8px; }
         #search { 
-            width: 100%; padding: 12px 15px 12px 45px; border-radius: 50px; 
-            border: 1px solid rgba(212, 175, 55, 0.3); background: var(--input-bg); 
-            color: #fff; font-size: 13px; outline: none; transition: 0.3s;
+            flex-grow: 1; padding: 12px 15px 12px 40px; 
+            border-radius: 50px; border: 1px solid var(--gold); 
+            background: var(--input-bg); color: var(--text); 
+            font-size: 13px; outline: none; transition: 0.3s;
         }
-        #search:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
-        .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--gold); }
+        #search:focus { box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); border-color: var(--gold-light); }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 14px; }
 
-        /* BANNER */
-        .banner-box { padding: 12px; }
+        .banner-box { padding: 10px; } 
         .bn-card { 
             border: 2px solid var(--gold); border-radius: 20px; overflow: hidden; 
-            height: 230px; background: #000; position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: block; height: 230px; background: #000; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; 
         }
-        .bn-img img { width: 100%; height: 100%; object-fit: cover; }
-        .bn-txt { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); z-index: 5; }
-        .bn-title { font-size: 18px; font-weight: 600; color: var(--gold); }
-
-        /* PRODUCT GRID (3 COLUMNS) */
-        .sec-title { padding: 15px; font-size: 14px; font-weight: 500; color: var(--white); border-left: 4px solid var(--red); margin: 0 10px 10px; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px; }
+        .bn-img { width: 100%; height: 100%; cursor: pointer; }
+        .bn-img::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+            z-index: 2;
+        }
+        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; }
         
+        .bn-txt { 
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; 
+            display: flex; justify-content: space-between; align-items: flex-end; z-index: 5;
+        }
+        .bn-title { font-size: 18px; font-weight: 600; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,1); }
+        
+        .bn-timer-wrap { background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); padding: 5px 12px; border-radius: 12px; border: 1px solid var(--gold); }
+        .timer-unit { color: #ff4b2b; font-weight: 700; font-size: 14px; }
+
+        .sec-title { padding: 15px; font-size: 14px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        .sec-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold), transparent); }
+
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px; }
         .card { 
             background: var(--card); border: 1px solid rgba(212,175,55,0.1); 
             border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
         }
-        .media-wrap { aspect-ratio: 1/1; position: relative; background: #000; }
+        .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; position: relative; overflow: hidden; }
         .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: cover; }
+
+        .p-timer-badge { position: absolute; bottom: 0; width: 100%; background: var(--red-grad); color: #fff; font-size: 9px; text-align: center; padding: 3px 0; font-weight: bold; z-index: 6; }
+        .badge-container { position: absolute; top: 6px; left: 6px; display: flex; flex-direction: column; gap: 4px; z-index: 5; }
+        .badge { font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: 700; color: #fff; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.2); }
+        .bg-gold { background: var(--gold-grad); color: #000; border-color: var(--gold-dark); }
+        .bg-red { background: var(--red-grad); }
         
-        .info { padding: 8px; text-align: center; flex-grow: 1; }
-        .p-name { font-size: 10px; color: var(--white); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .p-price { font-size: 12px; font-weight: 700; color: var(--gold); }
-        
-        /* ปุ่มสั่งซื้อ แสงวิ่งสีแดง */
+        .province-badge {
+            position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.7);
+            color: var(--gold); font-size: 8px; padding: 2px 6px; border-radius: 4px;
+            font-weight: 600; border: 0.5px solid var(--gold);
+        }
+
+        .info { padding: 8px; flex-grow: 1; text-align: center; }
+        .p-name { font-size: 11px; font-weight: 500; color: var(--gold-light); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .p-desc { font-size: 9px; color: var(--text-dim); line-height: 1.2; height: 22px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .p-price { font-size: 13px; font-weight: 700; color: #fff; margin-top: 5px; }
+        .new-price { color: #ff4b2b; }
+
         .buy-now { 
-            background: var(--red-grad); color: #fff; border: none; padding: 8px 0; 
-            font-size: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase;
-            position: relative; overflow: hidden;
+            width: 100%; background: var(--gold-grad); color: #000; border: none; 
+            padding: 8px 0; font-weight: 700; font-size: 11px; cursor: pointer; 
+            border-radius: 0 0 12px 12px; text-transform: uppercase; 
         }
-        .buy-now::after { 
-            content: ''; position: absolute; top: -50%; left: -100%; width: 50%; height: 200%; 
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); 
-            transform: rotate(30deg); animation: shine 3s infinite;
+
+        /* Modal ไทยประยุกต์ */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; align-items: center; justify-content: center; padding: 15px; opacity: 0; transition: 0.3s; }
+        .modal.show { display: flex; opacity: 1; }
+        .modal-card { 
+            background: #111; border: 1px solid var(--gold); border-radius: 20px; 
+            width: 100%; max-width: 380px; padding: 15px; max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
         }
-        @keyframes shine { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
-
-        /* MODAL พรีเมียม */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 10px; }
-        .modal-card { background: var(--navy); border: 1px solid var(--gold); border-radius: 20px; width: 100%; max-width: 350px; padding: 15px; max-height: 90vh; overflow-y: auto; }
         
-        .input-slim { width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 10px; background: var(--input-bg); color: #fff; border: 1px solid rgba(212,175,55,0.2); font-size: 12px; outline: none; }
-        
-        /* ตารางผ่อนสไตล์หรู */
-        .installment-box { background: rgba(200, 16, 46, 0.1); border: 1px solid var(--red); padding: 15px; border-radius: 15px; margin-bottom: 15px; text-align: center; }
-        .ins-grid { display: flex; justify-content: space-around; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+        .input-slim { 
+            width: 100%; padding: 12px; margin-bottom: 8px; border-radius: 10px; 
+            background: #1a1a1a; color: #fff; border: 1px solid #333; font-size: 13px; outline: none; 
+        }
+        .input-slim:focus { border-color: var(--gold); }
 
-        /* NAVIGATION BAR */
         nav { 
-            position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--navy); 
-            display: flex; border-top: 2px solid var(--gold); z-index: 1000;
+            position: fixed; bottom: 0; width: 100%; height: 65px; 
+            background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); 
+            display: flex; border-top: 1px solid var(--gold); z-index: 1000;
         }
-        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 9px; }
+        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 10px; }
         .nav-tab.active { color: var(--gold); }
-        .nav-tab i { font-size: 20px; margin-bottom: 3px; }
+        .nav-tab i { font-size: 20px; margin-bottom: 4px; }
 
-        /* Badge จังหวัด/แบล็คลิสต์ */
-        .province-badge { position: absolute; top: 5px; right: 5px; background: var(--gold-grad); color: #000; font-size: 8px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        #bl-warn { display:none; background: var(--red); color: #fff; padding: 10px; border-radius: 10px; text-align: center; font-size: 12px; margin-bottom: 10px; }
+        #optionBox { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 0; }
+        .variant-item { background: #1a1a1a; padding: 8px; border-radius: 12px; border: 1px solid #333; text-align: center; }
+        .v-img { width: 100%; aspect-ratio: 1/1; border-radius: 8px; object-fit: cover; margin-bottom: 5px; }
+        .v-price { color: var(--gold); font-weight: bold; font-size: 11px; }
+
+        .btn-gold { background: var(--gold-grad); color: #000; border: none; border-radius: 10px; padding: 12px; font-weight: 700; width: 100%; margin-top: 10px; cursor: pointer; }
+        
+        /* สไตล์ปุ่มจ่ายเงิน */
+        .pay-option { 
+            flex:1; border:1px solid #333; padding:12px; border-radius:12px; 
+            text-align:center; cursor:pointer; transition: 0.2s;
+        }
+        .pay-option.active { border: 2px solid var(--gold); background: rgba(212,175,55,0.15); }
+
+        /* Animation & Special Effects */
+        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); } 70% { box-shadow: 0 0 0 10px rgba(212,175,55,0); } 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); } }
+        .btn-pulse { animation: pulse-gold 2s infinite; }
+
     </style>
 </head>
 <body>
 
 <header>
-    <img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" alt="Phaendin Logo" class="logo-img">
+    <img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" alt="PHAENDIN" class="logo-img">
 </header>
 
-<div class="banner-box" id="banner">
-    </div>
+<div class="banner-box" id="banner"></div>
 
 <div class="search-wrap">
-    <i class="fa-solid fa-search search-icon"></i>
-    <input type="text" id="search" placeholder="ค้นหาผลิตภัณฑ์คัดสรรพิเศษ...">
+    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+    <input type="text" id="search" placeholder="ค้นหาสินค้าที่ท่านปรารถนา..." oninput="render()">
 </div>
 
-<div class="sec-title"><i class="fa-solid fa-crown"></i> สินค้าแนะนำประจำวัน</div>
+<div class="sec-title"><i class="fa-solid fa-gem"></i> คัดสรรมาเพื่อคุณ</div>
 <main class="grid" id="productGrid"></main>
+
+<nav>
+    <div class="nav-tab active" onclick="haptic(); location.reload()"><i class="fa-solid fa-house-chimney"></i> หน้าแรก</div>
+    <div class="nav-tab" onclick="haptic(); checkShip()"><i class="fa-solid fa-box-open"></i> ติดตามพัสดุ</div>
+    <div class="nav-tab" onclick="haptic(); openModal('contactModal')"><i class="fa-solid fa-paper-plane"></i> ติดต่อเรา</div>
+</nav>
+
+<div id="contactModal" class="modal">
+    <div class="modal-card" style="text-align:center;">
+        <h3 style="color:var(--gold); margin-bottom:20px;">ติดต่อฝ่ายบริการ</h3>
+        <a href="tel:0944159031" class="input-slim" style="display:block; background:#28a745; text-decoration:none;"><i class="fa-solid fa-phone"></i> โทรสายด่วน</a>
+        <a href="https://m.me/PhaendinLifestyle" class="input-slim" style="display:block; background:#0084ff; text-decoration:none;"><i class="fa-brands fa-facebook-messenger"></i> Facebook</a>
+        <button onclick="closeModal('contactModal')" style="background:none; border:none; color:var(--text-dim); margin-top:15px;">[ ปิดหน้าต่าง ]</button>
+    </div>
+</div>
 
 <div id="orderModal" class="modal">
     <div class="modal-card">
-        <h4 style="color:var(--gold); text-align:center; margin-bottom:15px;">ยืนยันการสั่งซื้อระดับพรีเมียม</h4>
-        
-        <div id="bl-warn">❌ ขออภัย! บัญชีของท่านถูกระงับการสั่งซื้อ</div>
+        <h4 style="color:var(--gold); text-align:center; margin-bottom:15px;"><i class="fa-solid fa-file-invoice-dollar"></i> รายละเอียดการสั่งซื้อ</h4>
         
         <div id="orderDetail"></div>
         
         <form id="orderForm">
             <div id="optionBox"></div>
 
-            <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-                <div id="pay-full" onclick="togglePay('จ่ายเต็ม')" style="flex:1; border:2px solid var(--gold); background:rgba(212,175,55,0.2); padding:10px; border-radius:12px; text-align:center; cursor:pointer;">
-                    <span style="font-size:11px; color:#fff;">ชำระสด</span>
+            <div style="display: flex; gap: 10px; margin: 15px 0;">
+                <div id="pay-full" class="pay-option active" onclick="haptic(); togglePay('จ่ายเต็ม')">
+                    <div style="font-size:13px; font-weight:600; color:#fff;">ชำระเงินสด</div>
                     <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display:none">
                 </div>
-                <div id="pay-install" onclick="togglePay('ผ่อนไปใช้ไป')" style="flex:1; border:1px solid rgba(255,255,255,0.1); padding:10px; border-radius:12px; text-align:center; cursor:pointer;">
-                    <span style="font-size:11px; color:#fff;">ผ่อนชำระ</span>
+                <div id="pay-install" class="pay-option" onclick="haptic(); togglePay('ผ่อนไปใช้ไป')">
+                    <div style="font-size:13px; font-weight:600; color:#fff;">ผ่อนไปใช้ไป</div>
                     <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display:none">
                 </div>
             </div>
 
-            <div id="installmentInfo" style="display:none;" class="installment-box">
-                <p style="font-size:11px; color:var(--gold);">💰 ยอดผ่อนรวม (บวกค่าบริการ 20%)</p>
-                <div style="font-size:20px; font-weight:800; color:#fff;" id="instTotal">฿0</div>
-                <div class="ins-grid">
-                    <div><p style="font-size:9px; color:#aaa;">ผ่อน 3 งวด</p><p style="font-size:12px; color:var(--gold);" id="instMonth">฿0</p></div>
-                    <div><p style="font-size:9px; color:#aaa;">งวดหน้า</p><p style="font-size:12px; color:#38ef7d;" id="instNextDate">-</p></div>
+            <div id="installmentInfo" style="display:none; margin-bottom:15px; padding:15px; background:rgba(212,175,55,0.1); border:1px solid var(--gold); border-radius:15px; text-align:center;">
+                <p style="font-size:11px; color:var(--gold);">💰 ยอดรวมระบบผ่อน (+20%)</p>
+                <div style="font-size:24px; font-weight:800; color:#fff; margin:5px 0;" id="instTotal">฿0</div>
+                <div style="display:flex; justify-content:space-around; border-top:1px solid rgba(255,255,255,0.1); padding-top:10px;">
+                    <div><p style="font-size:9px; color:#aaa;">ผ่อน 3 งวดๆ ละ</p><p style="color:var(--gold); font-weight:bold;" id="instMonth">฿0</p></div>
+                    <div><p style="font-size:9px; color:#aaa;">งวดที่ 2 เริ่ม</p><p style="color:#38ef7d; font-weight:bold;" id="instNextDate">-</p></div>
                 </div>
             </div>
 
-            <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px dashed var(--gold);">
-                <button type="button" onclick="getLocation()" id="btnLocation" style="width:100%; padding:10px; background:var(--navy); color:var(--gold); border:1px solid var(--gold); border-radius:8px; font-size:11px; margin-bottom:10px;">
-                    <i class="fa-solid fa-location-dot"></i> ปักหมุดที่อยู่จัดส่ง
+            <div id="securitySection" style="display:none; margin-bottom:15px; padding:15px; background:#1a1a1a; border-radius:15px; border:1px dashed var(--gold);">
+                <button type="button" id="btnLocation" onclick="haptic(); getLocation()" class="btn-gold" style="margin:0 0 10px 0; background:#4285F4; color:#fff;">
+                    <i class="fa-solid fa-location-crosshairs"></i> ปักหมุดที่อยู่จัดส่ง (GPS)
                 </button>
                 <input type="hidden" id="userLocation">
-                <div onclick="document.getElementById('selfieIn').click()" style="text-align:center; padding:10px; border:1px solid #333; border-radius:10px;">
-                    <span id="selfieTxt" style="font-size:11px; color:var(--text-dim);">ถ่ายรูปเซลฟี่คู่กับบัตร</span>
+                <div onclick="haptic(); document.getElementById('selfieIn').click()" style="border:1px solid #444; padding:10px; border-radius:10px; text-align:center; background:#000;">
+                    <span id="selfieTxt" style="font-size:11px; color:#888;"><i class="fa-solid fa-camera"></i> ถ่ายรูปเซลฟี่คู่กับบัตร</span>
                     <input type="file" id="selfieIn" style="display:none" onchange="handleSelfie(this)" accept="image/*" capture="user">
-                    <img id="selfiePreview" style="display:none; width:60px; margin:auto; border-radius:5px;">
+                    <img id="selfiePreview" style="display:none; width:100px; margin:5px auto; border-radius:8px;">
                 </div>
             </div>
 
-            <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim">
-            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist(this.value)">
-            <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:50px;"></textarea>
+            <input type="text" id="cName" placeholder="ชื่อ-นามสกุล ผู้รับ" required class="input-slim">
+            <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์ติดต่อ" required class="input-slim">
+            <textarea id="cAddr" placeholder="ที่อยู่จัดส่งโดยละเอียด" required class="input-slim" style="height:60px;"></textarea>
             
-            <div style="background:var(--blue-grad); border:1px solid var(--gold); padding:12px; border-radius:15px; text-align:center; margin-bottom:15px;">
-                <p style="font-size:11px; color:var(--gold);">🏦 ธนาคารกสิกรไทย</p>
-                <p style="font-size:15px; font-weight:bold; color:#fff;">035-8-56762-2</p>
-                <p style="font-size:10px; color:var(--text-dim);">คุณวัชระ ชันสิน</p>
-                <button type="button" onclick="copyToClipboard('0358567622')" style="background:var(--gold); border:none; padding:3px 10px; border-radius:20px; font-size:9px; margin-top:5px; cursor:pointer;">คัดลอกเลขบัญชี</button>
+            <div style="background:#000; border:1px solid var(--gold); border-radius:15px; padding:15px; text-align:center; margin-bottom:15px;">
+                <p style="color:var(--gold); font-size:12px;">🏦 บัญชีธนาคารกสิกรไทย</p>
+                <p style="font-size:18px; color:#fff; font-weight:bold; letter-spacing:1px; margin:5px 0;">035-8-56762-2</p>
+                <p style="font-size:12px; color:var(--text-dim);">วัชระ ชันสิน</p>
+                <button type="button" onclick="haptic(); copyToClipboard('0358567622')" style="background:var(--gold); border:none; padding:4px 12px; border-radius:20px; font-size:10px; font-weight:bold; margin-top:5px;">คัดลอกเลขบัญชี</button>
             </div>
-
-            <div style="border:1px dashed var(--gold); padding:15px; border-radius:10px; text-align:center; cursor:pointer; margin-bottom:12px;" onclick="document.getElementById('fileIn').click()">
-                <span id="upTxt" style="font-size:11px; color:var(--gold);"><i class="fa-solid fa-image"></i> แนบสลิปโอนเงิน</span>
+            
+            <div onclick="haptic(); document.getElementById('fileIn').click()" style="border:2px dashed var(--gold); padding:20px; border-radius:15px; text-align:center; cursor:pointer;">
+                <span id="upTxt" style="color:var(--gold); font-weight:bold;"><i class="fa-solid fa-cloud-arrow-up"></i> แนบหลักฐานการโอน</span>
                 <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
-                <img id="preview" style="display:none; width:80px; margin:auto; border-radius:5px;">
+                <img id="preview" style="display:none; width:120px; margin:10px auto; border-radius:10px;">
             </div>
-
-            <button type="submit" id="submitBtn" class="buy-now" style="width:100%; border-radius:50px; padding:15px; font-size:13px;">ยืนยันคำสั่งซื้อ</button>
-            <p onclick="closeModal('orderModal')" style="text-align:center; color:var(--text-dim); cursor:pointer; margin-top:15px; font-size:11px;">[ ยกเลิก ]</p>
+            
+            <button type="submit" id="submitBtn" class="btn-gold btn-pulse" style="font-size:16px; margin-top:20px;">สั่งซื้อและแจ้งโอน</button>
+            <p onclick="closeModal('orderModal')" style="text-align:center; color:#555; margin-top:20px; cursor:pointer; font-size:12px;">ยกเลิกรายการ</p>
         </form>
     </div>
 </div>
 
-<nav>
-    <div class="nav-tab active" onclick="location.reload()"><i class="fa-solid fa-house"></i><span>หน้าแรก</span></div>
-    <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-truck"></i><span>พัสดุ</span></div>
-    <div class="nav-tab" onclick="openModal('contactModal')"><i class="fa-solid fa-headset"></i><span>ช่วยเหลือ</span></div>
-</nav>
+<div id="zoomOverlay" onclick="closeZoom()" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center;">
+    <div id="zoomContent"></div>
+</div>
 
+<script>
+    const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+    const APPS_URL = 'https://script.google.com/macros/s/AKfycbyoY_2RajmKgO6NHXlyX0cR404kHG7EqElMB4z7I_lmKrOUKezLOVzMPdMjfKZD_5YJyg/exec';
+    
+    let db = [], activeP = {}, bannerEnd = null, selectedOptions = {};
+
+    // ระบบสั่น Haptic Feedback
+    function haptic() { if (window.navigator.vibrate) window.navigator.vibrate(15); }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => alert("คัดลอกเลขบัญชีแล้ว ท่านสามารถนำไปวางในแอปธนาคารได้เลยครับ"));
+    }
+
+    async function init() {
+        try {
+            const resB = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
+            const bRaw = await resB.text();
+            const b = bRaw.split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            
+            if(b) {
+                bannerEnd = new Date(b[2]).getTime();
+                document.getElementById('banner').innerHTML = `
+                    <div class="bn-card">
+                        <div class="bn-img" onclick="zoom('${b[0]}')">${renderMedia(b[0], true)}</div>
+                        <div class="bn-txt">
+                            <div class="bn-title">👑 ${b[1]}</div>
+                            <div class="bn-timer-wrap">
+                                <div class="bn-timer">
+                                    <span class="timer-unit" id="th">00</span><span style="color:#fff">:</span>
+                                    <span class="timer-unit" id="tm">00</span><span style="color:#fff">:</span>
+                                    <span class="timer-unit" id="ts">00</span>
+                                </div>
+                            </div>
+                            <button class="buy-now" style="width:100px; border-radius:50px; height:35px;" onclick="haptic(); openOrder('${b[1]}','${b[6]||0}','${b[7]||0}','${b[8]||''}', ${b[9]||0}, ${b[10]||99}, '${b[0]}', ${b[12]||1}, '${b[15]||'NO'}')">สั่งด่วน</button>
+                        </div>
+                    </div>`;
+                setInterval(tick, 1000);
+            }
+
+            const resP = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
+            const pRaw = await resP.text();
+            db = pRaw.split('\n').slice(1).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())).filter(x => x[0]);
+            render();
+        } catch(e) { console.error(e); }
+    }
+
+    function render() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+        document.getElementById('productGrid').innerHTML = filtered.map(p => {
+            let pNormal = parseFloat(p[3]||0);
+            let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO';
+            return `
+            <div class="card">
+                <div class="media-wrap" onclick="zoom('${p[1]}')">
+                    <div class="badge-container">${[p[4],p[5]].filter(t => t && t!=='-').map(t => `<span class="badge bg-gold">${t}</span>`).join('')}</div>
+                    ${renderMedia(p[1], true)}
+                </div>
+                <div class="info">
+                    <div class="p-name">${p[0]}</div>
+                    <div class="p-price">฿${pNormal.toLocaleString()}</div>
+                </div>
+                <button class="buy-now" onclick="haptic(); openOrder('${p[0]}','${pNormal}','${p[8]||0}','${p[9]||''}', 0, ${p[12]||99}, '${p[1]}', ${p[14]||1}, '${canInstall}')">สั่งซื้อ</button>
+            </div>`;
+        }).join('');
+    }
+
+    function openOrder(n, p, s, optStr, disc, max, img, min, canInstall) {
+        activeP = { name: n, pNormal: parseFloat(p), ship: parseFloat(s), max: parseInt(max), min: parseInt(min), img: img, canInstall: canInstall };
+        
+        document.getElementById('pay-install').style.display = (canInstall === 'YES') ? 'block' : 'none';
+        togglePay('จ่ายเต็ม');
+
+        const box = document.getElementById('optionBox');
+        box.innerHTML = ''; selectedOptions = {};
+
+        if(optStr && optStr !== '-') {
+            optStr.split(',').forEach(opt => {
+                const parts = opt.split(':');
+                const label = parts[0].trim();
+                const price = parts[1] ? parseFloat(parts[1]) : activeP.pNormal;
+                selectedOptions[label] = { qty: 0, price: price };
+                box.innerHTML += `
+                <div class="variant-item">
+                    <div class="v-name" style="font-size:10px; color:#fff; margin-bottom:5px;">${label}</div>
+                    <div class="v-price">฿${price.toLocaleString()}</div>
+                    <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin-top:5px;">
+                        <button type="button" onclick="haptic(); changeVQty('${label}',-1)" style="width:20px; border-radius:50%; border:none; background:var(--gold);">-</button>
+                        <span id="qty-${label}" style="font-size:12px;">0</span>
+                        <button type="button" onclick="haptic(); changeVQty('${label}',1)" style="width:20px; border-radius:50%; border:none; background:var(--gold);">+</button>
+                    </div>
+                </div>`;
+            });
+        } else {
+            selectedOptions[n] = { qty: 1, price: activeP.pNormal };
+        }
+        openModal('orderModal'); updatePrice();
+    }
+
+    function changeVQty(label, delta) {
+        let current = selectedOptions[label].qty;
+        if(delta > 0 && Object.values(selectedOptions).reduce((a,b)=>a+b.qty,0) >= activeP.max) return;
+        if(current + delta >= 0) {
+            selectedOptions[label].qty += delta;
+            document.getElementById(`qty-${label}`).innerText = selectedOptions[label].qty;
+            updatePrice();
+        }
+    }
+
+    function updatePrice() {
+        let subtotal = 0, summary = [], totalQty = 0;
+        for(let k in selectedOptions) {
+            if(selectedOptions[k].qty > 0) {
+                subtotal += (selectedOptions[k].qty * selectedOptions[k].price);
+                summary.push(`${k} x${selectedOptions[k].qty}`);
+                totalQty += selectedOptions[k].qty;
+            }
+        }
+        activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
+        activeP.summary = summary.join(', ');
+        
+        document.getElementById('orderDetail').innerHTML = `
+            <div style="text-align:center; padding:10px; background:rgba(212,175,55,0.05); border-radius:15px; border:1px solid rgba(212,175,55,0.2);">
+                <img src="${activeP.img.split(',')[0]}" style="width:80px; height:80px; border-radius:10px; object-fit:cover;">
+                <h3 style="color:var(--gold); margin-top:5px;">${activeP.name}</h3>
+                <p style="font-size:11px; color:#888;">${activeP.summary || 'โปรเลือกรายการที่ท่านต้องการ'}</p>
+                <p style="font-size:22px; color:#fff; font-weight:bold; margin-top:10px;">฿${activeP.finalTotal.toLocaleString()}</p>
+            </div>
+        `;
+        
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = (totalQty < activeP.min);
+        btn.style.opacity = btn.disabled ? "0.5" : "1";
+        
+        if(document.querySelector('input[name="payType"]:checked').value === 'ผ่อนไปใช้ไป') togglePay('ผ่อนไปใช้ไป');
+    }
+
+    function togglePay(type) {
+        const isInstall = (type === 'ผ่อนไปใช้ไป');
+        document.getElementById('securitySection').style.display = isInstall ? 'block' : 'none';
+        document.getElementById('installmentInfo').style.display = isInstall ? 'block' : 'none';
+        
+        document.getElementById('pay-full').classList.toggle('active', !isInstall);
+        document.getElementById('pay-install').classList.toggle('active', isInstall);
+        document.getElementsByName('payType')[isInstall?1:0].checked = true;
+
+        if(isInstall) {
+            const totalWithFee = activeP.finalTotal * 1.2;
+            const nextDate = new Date(); nextDate.setDate(nextDate.getDate() + 30);
+            document.getElementById('instTotal').innerText = `฿${totalWithFee.toLocaleString()}`;
+            document.getElementById('instMonth').innerText = `฿${(totalWithFee/3).toLocaleString(undefined,{minimumFractionDigits:2})}`;
+            document.getElementById('instNextDate').innerText = nextDate.toLocaleDateString('th-TH',{day:'numeric',month:'short'});
+        }
+    }
+
+    function getLocation() {
+        const btn = document.getElementById('btnLocation');
+        if (navigator.geolocation) {
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังค้นหาตำแหน่ง...';
+            navigator.geolocation.getCurrentPosition(p => {
+                document.getElementById('userLocation').value = `https://www.google.com/maps?q=${p.coords.latitude},${p.coords.longitude}`;
+                btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> ปักหมุดพิกัดเรียบร้อย';
+                btn.style.background = "#28a745";
+            }, () => alert("กรุณาเปิด GPS และอนุญาตให้เข้าถึงตำแหน่ง"), {enableHighAccuracy: true});
+        }
+    }
+
+    function handleFile(input) {
+        if(input.files[0]) {
+            const r = new FileReader();
+            r.onload = e => {
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview').style.display = 'block';
+                document.getElementById('upTxt').style.display = 'none';
+            };
+            r.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function handleSelfie(input) {
+        if(input.files[0]) {
+            const r = new FileReader();
+            r.onload = e => {
+                document.getElementById('selfiePreview').src = e.target.result;
+                document.getElementById('selfiePreview').style.display = 'block';
+                document.getElementById('selfieTxt').style.display = 'none';
+            };
+            r.readAsDataURL(input.files[0]);
+        }
+    }
+
+    document.getElementById('orderForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        const slip = document.getElementById('fileIn').files[0];
+        
+        if(!slip) return alert("กรุณาแนบสลิปโอนเงินเพื่อยืนยันการสั่งซื้อ");
+        if(payType === 'ผ่อนไปใช้ไป' && (!document.getElementById('userLocation').value || !document.getElementById('selfieIn').files[0])) {
+            return alert("ระบบผ่อนจำเป็นต้องปักหมุด GPS และถ่ายรูปคู่บัตรครับ");
+        }
+
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "กำลังนำส่งข้อมูล..."; btn.disabled = true;
+
+        const toBase64 = f => new Promise(res => { const r = new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.readAsDataURL(f); });
+
+        try {
+            const data = {
+                productDetail: `${activeP.name} [${activeP.summary}]`,
+                customerName: document.getElementById('cName').value,
+                customerPhone: document.getElementById('cPhone').value,
+                customerAddress: document.getElementById('cAddr').value,
+                payType: payType,
+                gps: document.getElementById('userLocation').value || "-",
+                file: await toBase64(slip),
+                selfie: document.getElementById('selfieIn').files[0] ? await toBase64(document.getElementById('selfieIn').files[0]) : ""
+            };
+            await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
+            alert("บันทึกข้อมูลการสั่งซื้อสำเร็จ! เราจะรีบดำเนินการจัดส่งให้โดยเร็วที่สุด");
+            location.reload();
+        } catch(err) { alert("เกิดข้อผิดพลาด โปรดตรวจสอบอินเทอร์เน็ตของท่าน"); btn.disabled = false; }
+    };
+
+    function renderMedia(url, isMuted) { return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
+    function zoom(url) { document.getElementById('zoomContent').innerHTML = renderMedia(url, false); document.getElementById('zoomOverlay').style.display = 'flex'; }
+    function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; }
+    function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
+    function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
+    function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
+
+    init();
+</script>
 </body>
 </html>
