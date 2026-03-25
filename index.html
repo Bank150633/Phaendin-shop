@@ -3,555 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN SUPER-APP | THE ROYAL EMERALD</title>
+    <title>PHAENDIN | ALL-IN-ONE STORE</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
     <style>
-        /* [SECTION 1: CSS ROOT & THEME] */
-        :root {
-            --royal-blue: #00247D;
-            --thai-red: #ED1C24;
-            --pure-white: #FFFFFF;
-            --gold-leaf: #D4AF37;
-            --gold-deep: #B8860B;
-            --emerald-green: #006B3C; /* สีเขียวหัวเป็ดประยุกต์ */
-            --dark-navy: #050A14;
-            --glass-bg: rgba(255, 255, 255, 0.92);
-            --shadow-premium: 0 10px 30px rgba(0,0,0,0.3);
-            --thai-pattern: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+        :root { 
+            --royal-blue: #00247D; --thai-red: #ED1C24; --gold: #D4AF37; 
+            --dark-bg: #050A14; --glass: rgba(255, 255, 255, 0.98);
         }
 
-        /* [SECTION 2: RESET & BASE] */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
-        body { background: var(--dark-navy); color: var(--pure-white); min-height: 100vh; overflow-x: hidden; }
-        body::before { content: ""; position: fixed; inset: 0; background: var(--thai-pattern); opacity: 0.05; pointer-events: none; z-index: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
+        body { background: var(--dark-bg); color: #fff; padding-bottom: 100px; }
 
-        /* [SECTION 3: ANIMATIONS] */
-        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes goldPulse { 0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(212, 175, 55, 0); } 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); } }
-        @keyframes shine { 0% { left: -100%; } 100% { left: 100%; } }
-
-        /* [SECTION 4: HEADER & NAV] */
+        /* [1] Header & Branding */
         header { 
-            position: fixed; top: 0; width: 100%; height: 70px; background: var(--royal-blue); 
-            z-index: 1000; display: flex; align-items: center; justify-content: space-between; 
-            padding: 0 20px; border-bottom: 4px solid var(--gold-leaf);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            background: var(--royal-blue); padding: 15px; border-bottom: 3px solid var(--gold);
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
         }
-        .logo-container { display: flex; align-items: center; gap: 10px; }
-        .logo-img { height: 45px; filter: drop-shadow(0 0 5px gold); }
-        .header-tools { display: flex; gap: 15px; align-items: center; }
-        .cart-trigger { position: relative; font-size: 24px; color: var(--gold-leaf); cursor: pointer; }
-        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--thai-red); color: white; font-size: 10px; min-width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--royal-blue); }
+        .logo-box img { height: 40px; filter: drop-shadow(0 0 5px gold); }
 
-        /* [SECTION 5: BANNER SYSTEM] */
-        .hero-section { margin-top: 70px; padding: 15px; }
-        .main-banner { 
-            width: 100%; height: 220px; border-radius: 20px; overflow: hidden; 
-            position: relative; border: 2px solid var(--gold-leaf);
-            box-shadow: var(--shadow-premium);
+        /* [2] Promotions Banner */
+        .promo-slider { margin: 15px; border-radius: 20px; overflow: hidden; border: 2px solid var(--gold); position: relative; height: 180px; }
+        .promo-slider img { width: 100%; height: 100%; object-fit: cover; }
+        .promo-tag { position: absolute; top: 10px; left: 10px; background: var(--thai-red); padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; animation: pulse 2s infinite; }
+
+        /* [3] Order Status Quick View (Section ใหม่) */
+        .status-card { background: var(--glass); margin: 0 15px 15px; padding: 15px; border-radius: 15px; color: #333; display: flex; align-items: center; gap: 15px; }
+        .status-icon { width: 45px; height: 45px; background: #eef2ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--royal-blue); font-size: 20px; }
+
+        /* [4] Categories & Product Grid */
+        .cat-bar { display: flex; gap: 10px; overflow-x: auto; padding: 10px 15px; scrollbar-width: none; }
+        .cat-pill { background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 50px; white-space: nowrap; font-size: 13px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
+        .cat-pill.active { background: var(--gold); color: #000; font-weight: 700; }
+
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
+        .item-card { background: #fff; border-radius: 18px; overflow: hidden; color: #333; position: relative; }
+        .item-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+        .item-info { padding: 10px; }
+        .item-name { font-size: 13px; font-weight: 600; height: 38px; overflow: hidden; }
+        .item-price { color: var(--thai-red); font-size: 16px; font-weight: 800; margin-top: 5px; }
+        .add-cart-btn { background: var(--royal-blue); color: white; border: none; width: 100%; padding: 8px; border-radius: 10px; margin-top: 8px; font-size: 12px; cursor: pointer; }
+
+        /* [5] Fast Checkout Bar (แถบสรุปยอดด้านล่าง) */
+        .bottom-checkout { 
+            position: fixed; bottom: 85px; left: 15px; right: 15px; background: var(--thai-red); 
+            border-radius: 50px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 10px 25px rgba(237, 28, 36, 0.4); z-index: 500;
+            display: none; /* จะแสดงเมื่อมีของในตะกร้า */
         }
-        .banner-video { width: 100%; height: 100%; object-fit: cover; }
-        .banner-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; }
-        .promo-tag { background: var(--thai-red); color: white; padding: 4px 12px; border-radius: 50px; font-size: 12px; font-weight: 600; width: fit-content; margin-bottom: 8px; }
 
-        /* [SECTION 6: SEARCH & CATEGORY] */
-        .search-area { padding: 0 15px 15px; }
-        .search-wrapper { 
-            background: var(--pure-white); border-radius: 15px; display: flex; align-items: center; 
-            padding: 5px 15px; border: 2px solid var(--gold-leaf); box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .search-wrapper input { flex: 1; border: none; padding: 10px; outline: none; font-size: 16px; color: #333; }
-        .search-wrapper i { color: var(--royal-blue); font-size: 18px; }
+        /* Nav Bar */
+        nav { position: fixed; bottom: 0; width: 100%; background: #fff; display: flex; padding: 10px 0; border-top: 3px solid var(--gold); }
+        .nav-item { flex: 1; text-align: center; color: #888; font-size: 10px; text-decoration: none; }
+        .nav-item.active { color: var(--royal-blue); font-weight: 700; }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 2px; }
 
-        .cat-scroll { display: flex; gap: 10px; overflow-x: auto; padding: 10px 15px; scrollbar-width: none; }
-        .cat-item { background: rgba(255,255,255,0.1); padding: 8px 18px; border-radius: 50px; white-space: nowrap; font-size: 13px; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; }
-        .cat-item.active { background: var(--gold-leaf); color: var(--dark-navy); font-weight: 700; border-color: var(--gold-leaf); }
-
-        /* [SECTION 7: PRODUCT GRID] */
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
-        .p-card { 
-            background: var(--pure-white); border-radius: 20px; overflow: hidden; 
-            display: flex; flex-direction: column; position: relative;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-        .p-card:active { transform: scale(0.95); }
-        .p-image { width: 100%; aspect-ratio: 1/1; position: relative; overflow: hidden; background: #f0f0f0; }
-        .p-image img, .p-image video { width: 100%; height: 100%; object-fit: cover; }
-        .p-content { padding: 12px; flex: 1; display: flex; flex-direction: column; color: #333; }
-        .p-title { font-size: 14px; font-weight: 600; height: 40px; overflow: hidden; margin-bottom: 8px; line-height: 1.4; }
-        .p-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
-        .p-price { font-size: 18px; font-weight: 800; color: var(--thai-red); }
-        .btn-add { background: var(--royal-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 12px; cursor: pointer; font-size: 18px; transition: 0.2s; }
-        .btn-add:hover { background: var(--emerald-green); }
-
-        /* [SECTION 8: CART DRAWER] */
-        #cartDrawer { 
-            position: fixed; inset: 0; z-index: 5000; display: none; 
-            justify-content: flex-end; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-        }
-        .drawer-content { 
-            width: 100%; max-width: 450px; background: var(--pure-white); 
-            height: 100%; display: flex; flex-direction: column; color: #333;
-            animation: slideUp 0.4s ease;
-        }
-        .drawer-header { padding: 20px; background: var(--royal-blue); color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--gold-leaf); }
-        .cart-body { flex: 1; overflow-y: auto; padding: 20px; }
-        .cart-footer { padding: 25px; border-top: 2px solid #eee; background: #fdfdfd; }
-
-        /* [SECTION 9: FORM & STEPS] */
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 8px; }
-        .form-input { width: 100%; padding: 14px; border: 2px solid #eee; border-radius: 12px; font-size: 15px; transition: 0.3s; outline: none; background: #f9f9f9; }
-        .form-input:focus { border-color: var(--royal-blue); background: white; box-shadow: 0 0 10px rgba(0,36,125,0.1); }
-
-        /* [SECTION 10: PAYMENT & INSTALLMENT] */
-        .pay-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0; }
-        .pay-box { border: 2.5px solid #eee; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .pay-box.active { border-color: var(--thai-red); background: #fff5f5; color: var(--thai-red); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(237, 28, 36, 0.1); }
-        .pay-box i { font-size: 24px; margin-bottom: 8px; display: block; }
-
-        /* [SECTION 11: SECURITY & GPS] */
-        .security-panel { background: #eef2ff; border: 1.5px dashed var(--royal-blue); border-radius: 18px; padding: 20px; margin-bottom: 20px; display: none; animation: fadeIn 0.5s; }
-        .gps-status { font-size: 11px; margin-top: 5px; color: var(--emerald-green); font-weight: 600; }
-
-        /* [SECTION 12: BUTTONS & UI] */
-        .btn-premium { 
-            width: 100%; padding: 18px; border-radius: 15px; border: none; 
-            background: linear-gradient(45deg, var(--thai-red), #b22222);
-            color: white; font-size: 18px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 8px 20px rgba(237, 28, 36, 0.3); transition: 0.3s;
-            position: relative; overflow: hidden;
-        }
-        .btn-premium::after { content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shine 3s infinite; }
-        .btn-premium:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
-
-        /* [SECTION 13: NAVIGATION BAR] */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 80px; background: var(--pure-white); display: flex; border-top: 3px solid var(--gold-leaf); z-index: 1000; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; text-decoration: none; font-size: 11px; }
-        .nav-tab.active { color: var(--royal-blue); font-weight: 700; }
-        .nav-tab i { font-size: 24px; margin-bottom: 4px; }
-
-        /* [SECTION 14: CUSTOM CHECKBOX/RADIO] */
-        .check-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 13px; }
-        
-        /* [SECTION 15: RESPONSIVE] */
-        @media (min-width: 768px) {
-            .product-grid { grid-template-columns: repeat(4, 1fr); }
-            .hero-section { max-width: 1200px; margin: 80px auto 0; }
-        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" class="logo-img" alt="Phaendin Logo">
-        <div style="line-height:1.1">
-            <div style="font-size:16px; font-weight:800; letter-spacing:1px; color:var(--gold-leaf)">PHAENDIN</div>
-            <div style="font-size:9px; font-weight:300; opacity:0.8; letter-spacing:2px">THE ROYAL SELECTION</div>
-        </div>
+    <div class="logo-box">
+        <img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" alt="Phaendin">
     </div>
-    <div class="header-tools">
-        <i class="fa-solid fa-bell" style="font-size:20px; color:var(--gold-leaf)"></i>
-        <div class="cart-trigger" onclick="App.UI.toggleCart(true)">
-            <i class="fa-solid fa-basket-shopping"></i>
-            <span class="cart-badge" id="cartBadge">0</span>
-        </div>
+    <div style="text-align: right;">
+        <i class="fa-solid fa-circle-user" style="font-size: 24px; color: var(--gold);"></i>
     </div>
 </header>
 
-<div class="hero-section" id="homeView">
-    <div id="bannerContent"></div>
-    
-    <div class="cat-scroll">
-        <div class="cat-item active" onclick="App.Filter.byCategory('all', this)">ทั้งหมด</div>
-        <div class="cat-item" onclick="App.Filter.byCategory('พรรณไม้', this)">พรรณไม้</div>
-        <div class="cat-item" onclick="App.Filter.byCategory('ปุ๋ย/ดิน', this)">ปุ๋ย/ดิน</div>
-        <div class="cat-item" onclick="App.Filter.byCategory('อุปกรณ์', this)">อุปกรณ์</div>
-        <div class="cat-item" onclick="App.Filter.byCategory('เครื่องประดับ', this)">เครื่องประดับ</div>
-    </div>
-
-    <div class="search-area">
-        <div class="search-wrapper">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="ค้นหาสิ่งที่ท่านปรารถนา..." oninput="App.Filter.bySearch()">
-        </div>
-    </div>
-
-    <div class="product-grid" id="mainGrid">
-        </div>
+<div class="promo-slider">
+    <span class="promo-tag">โปรเด็ดวันนี้!</span>
+    <img src="https://via.placeholder.com/600x200/00247D/ffffff?text=Phaendin+Store+Promotion" alt="Banner">
 </div>
 
-<div id="cartDrawer" onclick="if(event.target==this) App.UI.toggleCart(false)">
-    <div class="drawer-content">
-        <div class="drawer-header">
-            <h3><i class="fa-solid fa-bag-shopping"></i> รายการของฉัน</h3>
-            <i class="fa-solid fa-xmark" onclick="App.UI.toggleCart(false)" style="font-size:24px; cursor:pointer"></i>
+<div class="status-card" onclick="alert('กำลังพัฒนาระบบติดตามพัสดุ')">
+    <div class="status-icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+    <div style="flex: 1;">
+        <div style="font-size: 11px; color: #888;">ออเดอร์ล่าสุดของคุณ</div>
+        <div style="font-size: 13px; font-weight: 600;">กำลังเตรียมจัดส่ง (2 รายการ)</div>
+    </div>
+    <i class="fa-solid fa-chevron-right" style="font-size: 12px; color: #ccc;"></i>
+</div>
+
+<div class="cat-bar">
+    <div class="cat-pill active">ทั้งหมด</div>
+    <div class="cat-pill">น้ำพริก/ของดอง</div>
+    <div class="cat-pill">ต้นไม้/พรรณไม้</div>
+    <div class="cat-pill">ปุ๋ย/อุปกรณ์</div>
+</div>
+
+<div class="product-grid" id="productGrid">
+    <div class="item-card">
+        <img src="https://via.placeholder.com/300" class="item-img">
+        <div class="item-info">
+            <div class="item-name">น้ำพริกเห็ดหอม คุณเพ็ญศรี (500g)</div>
+            <div class="item-price">฿150</div>
+            <button class="add-cart-btn" onclick="updateCart(150)">เพิ่มลงตะกร้า</button>
         </div>
-        
-        <div class="cart-body" id="cartItems">
-            </div>
-
-        <div class="cart-footer">
-            <div id="checkoutForm" style="display:none">
-                <div class="form-group">
-                    <label class="form-label">ข้อมูลผู้รับ</label>
-                    <input type="text" id="custName" class="form-input" placeholder="ชื่อ-นามสกุล">
-                    <input type="tel" id="custPhone" class="form-input" placeholder="เบอร์โทรศัพท์" style="margin-top:10px">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">ที่อยู่จัดส่ง</label>
-                    <textarea id="custAddr" class="form-input" placeholder="ระบุบ้านเลขที่ ซอย ถนน แขวง/ตำบล..." style="height:80px;"></textarea>
-                </div>
-
-                <div class="pay-selector">
-                    <div class="pay-box active" id="payCash" onclick="App.Order.setPayMode('CASH')">
-                        <i class="fa-solid fa-vault"></i> โอนเต็มจำนวน
-                    </div>
-                    <div class="pay-box" id="payInst" onclick="App.Order.setPayMode('INST')">
-                        <i class="fa-solid fa-hand-holding-dollar"></i> ผ่อนไปใช้ไป
-                    </div>
-                </div>
-
-                <div class="security-panel" id="securityPanel">
-                    <p style="font-size:12px; font-weight:700; color:var(--royal-blue); margin-bottom:12px;"><i class="fa-solid fa-shield-check"></i> ระบบยืนยันตัวตนระดับสูง</p>
-                    <button type="button" onclick="App.GPS.get()" id="gpsBtn" class="form-input" style="background:var(--pure-white); border-color:var(--royal-blue); color:var(--royal-blue); font-weight:600;"><i class="fa-solid fa-location-dot"></i> กดเพื่อส่งพิกัด GPS</button>
-                    <div id="gpsStatus" class="gps-status"></div>
-                    
-                    <div onclick="document.getElementById('selfieInput').click()" style="margin-top:15px; border:2px dashed #999; border-radius:15px; padding:15px; text-align:center; cursor:pointer; background:white;">
-                        <span id="selfieText" style="font-size:13px; color:#666;"><i class="fa-solid fa-camera-retro"></i> เซลฟี่คู่บัตรประชาชน</span>
-                        <input type="file" id="selfieInput" style="display:none" accept="image/*" capture="user" onchange="App.UI.preview(this, 'selfiePreview', 'selfieText')">
-                        <img id="selfiePreview" style="width:100%; border-radius:10px; margin-top:10px; display:none">
-                    </div>
-                </div>
-
-                <div style="background:var(--royal-blue); color:white; padding:15px; border-radius:15px; text-align:center; margin-bottom:15px; border:2px solid var(--gold-leaf);">
-                    <p style="font-size:11px; opacity:0.8;">บัญชีทางการ (กสิกรไทย)</p>
-                    <p style="font-size:20px; font-weight:800; letter-spacing:1px;">035-8-56762-2</p>
-                    <p style="font-size:13px;">วัชระ ชันสิน</p>
-                </div>
-
-                <div onclick="document.getElementById('slipInput').click()" style="border:3px dashed var(--thai-red); border-radius:15px; padding:20px; text-align:center; cursor:pointer; background:#fff5f5; margin-bottom:15px;">
-                    <span id="slipText" style="color:var(--thai-red); font-weight:700;"><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดสลิปหลักฐาน</span>
-                    <input type="file" id="slipInput" style="display:none" accept="image/*" onchange="App.UI.preview(this, 'slipPreview', 'slipText')">
-                    <img id="slipPreview" style="width:100%; border-radius:10px; margin-top:10px; display:none">
-                </div>
-            </div>
-
-            <div class="total-row" style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:15px;">
-                <div style="font-size:13px; color:#666;">ยอดที่ต้องชำระ:</div>
-                <div style="font-size:28px; font-weight:900; color:var(--thai-red);" id="grandTotal">฿0</div>
-            </div>
-            
-            <button id="mainActionBtn" class="btn-premium" onclick="App.Order.process()">ยืนยันรายการ</button>
+    </div>
+    <div class="item-card">
+        <img src="https://via.placeholder.com/300" class="item-img">
+        <div class="item-info">
+            <div class="item-name">ผลไม้ดองรวมรส (ถุงใหญ่)</div>
+            <div class="item-price">฿120</div>
+            <button class="add-cart-btn" onclick="updateCart(120)">เพิ่มลงตะกร้า</button>
         </div>
     </div>
 </div>
 
-<nav class="bottom-nav">
-    <a href="javascript:void(0)" class="nav-tab active" onclick="location.reload()">
-        <i class="fa-solid fa-house-chimney"></i>หน้าแรก
-    </a>
-    <a href="https://th.kerryexpress.com/th/track/" target="_blank" class="nav-tab">
-        <i class="fa-solid fa-truck-fast"></i>สถานะ
-    </a>
-    <a href="javascript:void(0)" class="nav-tab" onclick="App.UI.toggleCart(true)">
-        <i class="fa-solid fa-cart-flatbed-suitcases"></i>ตะกร้า
-    </a>
-    <a href="javascript:void(0)" class="nav-tab" onclick="Swal.fire('ฝ่ายบริการลูกค้า','โทร: 094-415-9031','info')">
-        <i class="fa-solid fa-headset"></i>ช่วยลูกค้า
-    </a>
+<div class="bottom-checkout" id="quickCart" onclick="location.href='#cart'">
+    <div style="color: white;">
+        <span id="cartQty">0</span> รายการ | <b id="cartTotal">฿0</b>
+    </div>
+    <div style="font-weight: 700; color: #fff; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px;">
+        ชำระเงิน <i class="fa-solid fa-arrow-right"></i>
+    </div>
+</div>
+
+<nav>
+    <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i>หน้าแรก</a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-list-check"></i>สถานะ</a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-cart-shopping"></i>ตะกร้า</a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-headset"></i>ช่วยลูกค้า</a>
 </nav>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-/** * [APP CORE LOGIC - PHAENDIN OS]
- * โครงสร้างแบบ Module Pattern เพื่อรองรับข้อมูลขนาดใหญ่
- */
-const App = (() => {
-    // [STATE]
-    const state = {
-        products: [],
-        cart: JSON.parse(localStorage.getItem('pd_cart')) || [],
-        config: {
-            sheetId: '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y',
-            scriptUrl: 'https://script.google.com/macros/s/AKfycbyoY_2RajmKgO6NHXlyX0cR404kHG7EqElMB4z7I_lmKrOUKezLOVzMPdMjfKZD_5YJyg/exec',
-            payMode: 'CASH',
-            gps: null
-        }
-    };
+    let total = 0;
+    let qty = 0;
 
-    // [INTERNAL METHODS]
-    const _save = () => localStorage.setItem('pd_cart', JSON.stringify(state.cart));
-
-    return {
-        // [INITIALIZATION]
-        init: async () => {
-            console.log("Phaendin App System Starting...");
-            try {
-                // Fetch Products
-                const res = await fetch(`https://docs.google.com/spreadsheets/d/${state.config.sheetId}/export?format=csv&gid=0`);
-                const text = await res.text();
-                state.products = text.split('\n').slice(1).map(line => {
-                    const c = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                    return { id: c[0], name: c[0], img: c[1], price: parseFloat(c[3]||0), stock: parseInt(c[4]||0), ship: parseFloat(c[8]||0), cat: c[12]||'ทั่วไป' };
-                }).filter(p => p.name);
-
-                // Fetch Banner
-                const bRes = await fetch(`https://docs.google.com/spreadsheets/d/${state.config.sheetId}/gviz/tq?tqx=out:csv&sheet=Banner`);
-                const bText = await bRes.text();
-                const b = bText.split('\n').slice(1)[0]?.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
-                if(b) App.UI.renderBanner(b);
-
-                App.UI.renderProducts(state.products);
-                App.UI.updateCartBadge();
-            } catch(e) {
-                console.error("Critical Load Error", e);
-            }
-        },
-
-        // [USER INTERFACE]
-        UI: {
-            renderBanner: (b) => {
-                document.getElementById('bannerContent').innerHTML = `
-                    <div class="main-banner">
-                        <div class="banner-video">${b[0].includes('mp4') ? `<video src="${b[0]}" autoplay loop muted playsinline></video>` : `<img src="${b[0]}" style="width:100%;height:100%;object-fit:cover">`}</div>
-                        <div class="banner-overlay">
-                            <span class="promo-tag">FLASH SALE</span>
-                            <h2 style="font-size:24px; color:white;">${b[1]}</h2>
-                            <p style="font-size:12px; color:var(--gold-leaf);">โปรโมชั่นสิ้นสุดใน: <span id="timerDisplay">--:--:--</span></p>
-                        </div>
-                    </div>`;
-                App.UI.startTimer(b[2]);
-            },
-
-            renderProducts: (list) => {
-                const grid = document.getElementById('mainGrid');
-                grid.innerHTML = list.map((p, i) => `
-                    <div class="p-card">
-                        <div class="p-image">
-                            ${p.img.includes('mp4') ? `<video src="${p.img}" autoplay loop muted playsinline></video>` : `<img src="${p.img}">`}
-                        </div>
-                        <div class="p-content">
-                            <div class="p-title">${p.name}</div>
-                            <div class="p-footer">
-                                <span class="p-price">฿${p.price.toLocaleString()}</span>
-                                <button class="btn-add" onclick="App.Cart.add('${p.id}')">
-                                    <i class="fa-solid fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            },
-
-            startTimer: (endStr) => {
-                const end = new Date(endStr).getTime();
-                setInterval(() => {
-                    const now = Date.now();
-                    const d = end - now;
-                    if(d > 0) {
-                        const h = Math.floor(d/3600000).toString().padStart(2,'0');
-                        const m = Math.floor((d%3600000)/60000).toString().padStart(2,'0');
-                        const s = Math.floor((d%60000)/1000).toString().padStart(2,'0');
-                        document.getElementById('timerDisplay').innerText = `${h}:${m}:${s}`;
-                    }
-                }, 1000);
-            },
-
-            toggleCart: (show) => {
-                const d = document.getElementById('cartDrawer');
-                d.style.display = show ? 'flex' : 'none';
-                if(show) App.UI.renderCartItems();
-            },
-
-            renderCartItems: () => {
-                const box = document.getElementById('cartItems');
-                const form = document.getElementById('checkoutForm');
-                const btn = document.getElementById('mainActionBtn');
-
-                if(state.cart.length === 0) {
-                    box.innerHTML = `<div style="text-align:center; padding:50px 0;"><i class="fa-solid fa-box-open" style="font-size:50px; color:#ddd"></i><p style="margin-top:10px; color:#999">ตะกร้าว่างเปล่า</p></div>`;
-                    form.style.display = 'none';
-                    btn.innerText = "ไปเลือกสินค้า";
-                    btn.onclick = () => App.UI.toggleCart(false);
-                } else {
-                    box.innerHTML = state.cart.map((item, idx) => `
-                        <div style="display:flex; gap:12px; margin-bottom:15px; background:#f9f9f9; padding:12px; border-radius:15px; border-left:4px solid var(--royal-blue);">
-                            <img src="${item.img}" style="width:60px; height:60px; border-radius:10px; object-fit:cover;">
-                            <div style="flex:1;">
-                                <div style="font-size:13px; font-weight:600;">${item.name}</div>
-                                <div style="color:var(--thai-red); font-weight:700;">฿${item.price.toLocaleString()}</div>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <i class="fa-solid fa-circle-minus" onclick="App.Cart.update(${idx}, -1)" style="color:#ccc; font-size:22px;"></i>
-                                <span style="font-weight:700; width:20px; text-align:center;">${item.qty}</span>
-                                <i class="fa-solid fa-circle-plus" onclick="App.Cart.update(${idx}, 1)" style="color:var(--royal-blue); font-size:22px;"></i>
-                            </div>
-                        </div>
-                    `).join('');
-                    form.style.display = 'block';
-                    btn.innerText = "ยืนยันการสั่งซื้อ";
-                    btn.onclick = () => App.Order.process();
-                }
-                App.UI.calculateTotal();
-            },
-
-            calculateTotal: () => {
-                let subtotal = state.cart.reduce((s, i) => s + (i.price * i.qty), 0);
-                let shipping = state.cart.length > 0 ? Math.max(...state.cart.map(i => i.ship)) : 0;
-                let final = subtotal + shipping;
-                
-                if(state.config.payMode === 'INST') final = final * 1.2;
-                
-                document.getElementById('grandTotal').innerText = `฿${final.toLocaleString()}`;
-                return final;
-            },
-
-            preview: (input, imgId, txtId) => {
-                if(input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = e => {
-                        const img = document.getElementById(imgId);
-                        img.src = e.target.result;
-                        img.style.display = 'block';
-                        document.getElementById(txtId).style.display = 'none';
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            },
-
-            updateCartBadge: () => {
-                const total = state.cart.reduce((s, i) => s + i.qty, 0);
-                document.getElementById('cartBadge').innerText = total;
-            }
-        },
-
-        // [FILTER SYSTEM]
-        Filter: {
-            byCategory: (cat, el) => {
-                document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
-                el.classList.add('active');
-                const filtered = cat === 'all' ? state.products : state.products.filter(p => p.cat === cat);
-                App.UI.renderProducts(filtered);
-            },
-            bySearch: () => {
-                const val = document.getElementById('searchInput').value.toLowerCase();
-                const filtered = state.products.filter(p => p.name.toLowerCase().includes(val));
-                App.UI.renderProducts(filtered);
-            }
-        },
-
-        // [CART SYSTEM]
-        Cart: {
-            add: (id) => {
-                if(window.navigator.vibrate) window.navigator.vibrate(20);
-                const p = state.products.find(x => x.id === id);
-                const exist = state.cart.find(x => x.id === id);
-                if(exist) exist.qty++;
-                else state.cart.push({...p, qty: 1});
-                _save();
-                App.UI.updateCartBadge();
-                Swal.fire({
-                    toast: true, position: 'top-end', icon: 'success', 
-                    title: 'เพิ่มสินค้าลงตะกร้าแล้ว', showConfirmButton: false, timer: 1500
-                });
-            },
-            update: (idx, delta) => {
-                state.cart[idx].qty += delta;
-                if(state.cart[idx].qty <= 0) state.cart.splice(idx, 1);
-                _save();
-                App.UI.renderCartItems();
-                App.UI.updateCartBadge();
-            }
-        },
-
-        // [GPS MODULE]
-        GPS: {
-            get: () => {
-                const btn = document.getElementById('gpsBtn');
-                if (navigator.geolocation) {
-                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> กำลังค้นหา...';
-                    navigator.geolocation.getCurrentPosition(pos => {
-                        state.config.gps = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                        btn.innerHTML = '✓ บันทึกพิกัดสำเร็จ';
-                        btn.style.background = '#e8f5e9';
-                        document.getElementById('gpsStatus').innerText = `พิกัด: ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
-                        
-                        // Reverse Geocode
-                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`)
-                        .then(r => r.json())
-                        .then(d => { if(d.display_name) document.getElementById('custAddr').value = d.display_name; });
-                    }, () => Swal.fire('Error','โปรดเปิด GPS เพื่อใช้งานระบบ','error'));
-                }
-            }
-        },
-
-        // [ORDER & SUBMISSION]
-        Order: {
-            setPayMode: (mode) => {
-                state.config.payMode = mode;
-                document.getElementById('payCash').className = `pay-box ${mode==='CASH'?'active':''}`;
-                document.getElementById('payInst').className = `pay-box ${mode==='INST'?'active':''}`;
-                document.getElementById('securityPanel').style.display = mode === 'INST' ? 'block' : 'none';
-                App.UI.calculateTotal();
-            },
-
-            process: async () => {
-                const name = document.getElementById('custName').value;
-                const phone = document.getElementById('custPhone').value;
-                const addr = document.getElementById('custAddr').value;
-                const slip = document.getElementById('slipInput').files[0];
-
-                if(!name || !phone || !addr) return Swal.fire('ข้อมูลไม่ครบ','กรุณาระบุที่อยู่และเบอร์โทร','warning');
-                if(!slip) return Swal.fire('แนบสลิป','กรุณาแนบหลักฐานการโอนเงิน','warning');
-                if(state.config.payMode === 'INST' && (!state.config.gps || !document.getElementById('selfieInput').files[0])) {
-                    return Swal.fire('ระบบผ่อน','ต้องการ GPS และรูปเซลฟี่เพื่อยืนยันตัวตน','warning');
-                }
-
-                Swal.fire({
-                    title: 'กำลังส่งออเดอร์',
-                    text: 'กรุณารอสักครู่ ระบบกำลังประมวลผลความปลอดภัย...',
-                    allowOutsideClick: false,
-                    didOpen: () => Swal.showLoading()
-                });
-
-                const toB64 = f => new Promise(res => { const r = new FileReader(); r.onload=()=>res(r.result.split(',')[1]); r.readAsDataURL(f); });
-
-                try {
-                    const payload = {
-                        orderList: state.cart.map(i => `${i.name} (x${i.qty})`).join(', '),
-                        customerName: name,
-                        customerPhone: phone,
-                        customerAddress: addr,
-                        totalAmount: App.UI.calculateTotal(),
-                        payType: state.config.payMode === 'INST' ? 'ผ่อนไปใช้ไป' : 'โอนเต็ม',
-                        gps: state.config.gps || 'ไม่มีข้อมูล',
-                        slip: await toB64(slip),
-                        selfie: document.getElementById('selfieInput').files[0] ? await toB64(document.getElementById('selfieInput').files[0]) : ''
-                    };
-
-                    await fetch(state.config.scriptUrl, { method: 'POST', body: new URLSearchParams(payload), mode: 'no-cors' });
-                    
-                    state.cart = [];
-                    _save();
-                    Swal.fire('สำเร็จ!','เราได้รับคำสั่งซื้อของท่านเรียบร้อยแล้ว','success').then(() => location.reload());
-                } catch(e) {
-                    Swal.fire('Error','เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์','error');
-                }
-            }
-        }
-    };
-})();
-
-// [BOOTSTRAP]
-window.onload = () => App.init();
+    function updateCart(price) {
+        total += price;
+        qty += 1;
+        
+        document.getElementById('quickCart').style.display = 'flex';
+        document.getElementById('cartQty').innerText = qty;
+        document.getElementById('cartTotal').innerText = '฿' + total.toLocaleString();
+        
+        // เอฟเฟกต์สั่นเบาๆ เมื่อกด
+        if(window.navigator.vibrate) window.navigator.vibrate(30);
+    }
 </script>
 
 </body>
