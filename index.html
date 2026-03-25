@@ -553,7 +553,8 @@ loadData: async function() {
                 // Set UI
                 document.getElementById('modalPTitle').innerText = this.currentProduct.name;
                 document.getElementById('modalPPrice').innerText = `฿${this.currentProduct.basePrice.toLocaleString()}`;
-                
+                document.getElementById('modalPDesc').innerText = this.currentProduct.desc || "รายละเอียดสินค้าคุณภาพจาก Phaendin Store";
+
                 // Variants Rendering
                 const vGrid = document.getElementById('modalVGrid');
                 if (this.currentProduct.variants.length > 0) {
