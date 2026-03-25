@@ -513,26 +513,37 @@ loadData: async function() {
             },
 
             renderProducts: function(list) {
-                const grid = document.getElementById('mainGrid');
-                if (list.length === 0) {
-                    grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:50px;">ไม่พบสินค้าที่ท่านค้นหา</div>`;
-                    return;
-                }
+    const grid = document.getElementById('mainGrid');
+    if (list.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:50px;">ไม่พบสินค้าที่ท่านค้นหา</div>`;
+        return;
+    }
 
-                grid.innerHTML = list.map((p, idx) => `
-                    <div class="product-card" onclick="app.openDetail(${this.allProducts.indexOf(p)})">
-                        ${p.tag ? `<div class="p-badge">${p.tag}</div>` : ''}
-                        <div class="p-media">
-                            <img src="${p.mainImages[0] || 'https://via.placeholder.com/300'}" loading="lazy" alt="${p.name}">
-                        </div>
-                        <div class="p-info">
-                            <h4 class="p-title">${p.name}</h4>
-                            <div class="p-price-tag"><span>฿</span>${p.basePrice.toLocaleString()}</div>
-                        </div>
-                        <button class="btn-card-view">ดูรายละเอียด</button>
-                    </div>
-                `).join('');
-            },
+    grid.innerHTML = list.map((p, idx) => {
+        // ดึงไฟล์แรกจากคอลัมน์ B มาเช็คว่าเป็นวิดีโอหรือไม่
+        const firstMedia = p.mainImages[0] || 'https://via.placeholder.com/300';
+        const isVideo = firstMedia.toLowerCase().match(/\.(mp4|webm|mov|ogg)$/);
+
+        return `
+            <div class="product-card" onclick="app.openDetail(${this.allProducts.indexOf(p)})">
+                ${p.tag ? `<div class="p-badge">${p.tag}</div>` : ''}
+                <div class="p-media">
+                    ${isVideo ? 
+                        `<video src="${firstMedia}" autoplay loop muted playsinline 
+                            style="width:100%; height:100%; object-fit:cover; display:block;">
+                         </video>` : 
+                        `<img src="${firstMedia}" loading="lazy" alt="${p.name}">`
+                    }
+                </div>
+                <div class="p-info">
+                    <h4 class="p-title">${p.name}</h4>
+                    <div class="p-price-tag"><span>฿</span>${p.basePrice.toLocaleString()}</div>
+                </div>
+                <button class="btn-card-view">ดูรายละเอียด</button>
+            </div>
+        `;
+    }).join('');
+},
 
             openDetail: function(idx) {
                 this.currentProduct = this.allProducts[idx];
