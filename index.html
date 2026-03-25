@@ -359,7 +359,19 @@
                 
                 <div class="product-detail-info">
                     <h2 id="modalPTitle" class="modal-title"></h2>
-                    <p id="modalPPrice" class="modal-price"></p>
+                    <p id="modalPPrice" class="modal-price"></p>                    <div id="installmentBox" style="margin-bottom: 20px; display: none;">
+                        <button type="button" onclick="app.toggleInstallment()" style="background: none; border: 1.5px solid var(--thai-gold); color: var(--thai-gold); padding: 6px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; cursor: pointer;">
+                            <i class="fa-solid fa-calculator"></i> ดูตารางผ่อนชำระต่อเดือน
+                        </button>
+                        <div id="installmentTable" style="display: none; margin-top: 15px; border: 1px solid #eee; border-radius: 12px; overflow: hidden; background: #fff;">
+                            <table class="installment-table">
+                                <tbody id="installmentBody"></tbody>
+                            </table>
+                            <p style="font-size: 10px; color: #888; padding: 10px; text-align: center;">* เงื่อนไขเป็นไปตามที่ร้านกำหนด</p>
+                        </div>
+                    </div>
+
+                    
 
 <div id="modalPDesc" style="font-size: 14px; color: #555; margin: 10px 0 20px; line-height: 1.6; white-space: pre-line; border-bottom: 1px dashed var(--thai-gold); padding-bottom: 15px;">
 </div>
