@@ -485,7 +485,7 @@
         } catch(e) { console.error(e); }
     }
 
-        function render() {
+            function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
@@ -507,7 +507,7 @@
                 percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
             }
 
-            // ตรงนี้คือจุดที่ต้องระวัง: เปิด backtick (`) แค่ครั้งเดียว และปิดครั้งเดียวที่ท้ายสุด
+            // แก้ไขส่วน return ให้เรียกใช้ตัวแปรอย่างถูกต้อง
             return `
             <div class="card">
                 <div class="media-wrap" style="position: relative;">
@@ -542,7 +542,7 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>                    
                 </div>
-                <button class="buy-now" onclick="openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${p[8]||0}, ${JSON.stringify(p[9]||'')}, ${percentDiscount}, ${p[12]||999}, ${JSON.stringify(p[1])}, ${p[14]||1}, ${JSON.stringify(canInstall)})">สั่งซื้อ</button>
+                <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${p[8]||0}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${p[12]||999}, ${JSON.stringify(p[1])}, ${p[14]||1}, ${JSON.stringify(canInstall)})'>สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
