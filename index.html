@@ -483,7 +483,6 @@
     </div>
 </div>
 
-
 <div id="zoomOverlay" onclick="closeZoom()"><div id="zoomContent"></div></div>
 
 <script>
@@ -676,8 +675,8 @@ box.innerHTML += `
     }
 
       function updatePrice() {
-    let subtotalNormal = 0; // ราคารวมแบบปกติ (ก่อนลด)
-    let subtotalDiscounted = 0; // ราคารวมแบบหัก % แล้ว
+    let subtotalNormal = 0; 
+    let subtotalDiscounted = 0; 
     let summaryText = [];
     let totalItems = 0;
     
@@ -687,29 +686,45 @@ box.innerHTML += `
         if(selectedOptions[key].qty > 0) {
             let qty = selectedOptions[key].qty;
             let unitPrice = selectedOptions[key].price;
-            
-            // คำนวณยอดรวมปกติ
             subtotalNormal += (unitPrice * qty);
-            
-            // คำนวณยอดรวมแบบลด %
             let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
-            
             summaryText.push(`${key} x${qty}`); 
             totalItems += qty; 
         } 
     }
     
-    // ปัดเศษให้เรียบร้อย
     subtotalNormal = Math.round(subtotalNormal);
     subtotalDiscounted = Math.round(subtotalDiscounted);
-
-    // ยอดสุทธิ = (ราคาที่ลดแล้ว) + ค่าส่ง
     activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
-    // ยอดก่อนลดสะสม = (ราคาปกติ) + ค่าส่ง (เอาไว้โชว์ตัวขีดฆ่า)
-    let totalBeforeDisc = subtotalNormal + activeP.ship;
-    
     activeP.summary = summaryText.join(', ');
+
+    // --- ส่วนแสดงผลในหน้าจอปกติ (อันเดิมของคุณ) ---
+    const finalTotalDisplay = document.getElementById('finalTotalDisplay');
+    if (finalTotalDisplay) {
+        finalTotalDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+    }
+
+    // --- ส่วนใหม่: ส่งยอดเงินไปที่ Footer (ที่ล็อคอยู่กับที่) ---
+    const footerPrice = document.getElementById('footer-total-price');
+    if (footerPrice) {
+        footerPrice.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+    }
+
+    // อัปเดตสถานะปุ่มสั่งซื้อ
+    const btn = document.getElementById('submitBtn');
+    if (totalItems === 0) { 
+        btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
+    } else if (totalItems < activeP.min) { 
+        btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
+    } else { 
+        btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
+    }
+
+    const currentPayType = document.querySelector('input[name="payType"]:checked').value;
+    togglePay(currentPayType);
+}
+
 
     let images = activeP.img.split(',').map(img => img.trim());
     let imgCount = images.length; 
