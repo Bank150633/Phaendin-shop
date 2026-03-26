@@ -108,8 +108,47 @@
 
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; align-items: center; justify-content: center; padding: 5px; opacity: 0; transition: 0.3s; }
         .modal.show { display: flex; opacity: 1; }
-        .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
-        
+        /* จัดการโครงสร้าง Modal ให้เป็นระเบียบ */
+.modal-card {
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important; 
+    max-height: 90vh !important; /* จำกัดความสูงไม่ให้เลยจอ */
+    overflow: hidden !important; 
+}
+
+/* ส่วนหัว Modal */
+.modal-header {
+    padding: 10px;
+    background: var(--bg);
+    border-bottom: 1px solid rgba(212,175,55,0.1);
+    z-index: 101;
+}
+
+/* ส่วนเนื้อหาที่เลื่อนขึ้นลงได้ */
+.modal-body-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ส่วนสรุปยอดและปุ่มที่ "ล็อคไว้ด้านล่าง" */
+.modal-footer-fixed {
+    padding: 15px;
+    background: #111; /* สีเข้มกว่าพื้นหลังนิดนึงให้ดูแยกส่วน */
+    border-top: 2px solid var(--gold); /* เส้นสีทองคั่นให้ชัดเจน */
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.6);
+    z-index: 100;
+}
+
+/* ปรับแต่งส่วนโชว์ยอดเงินให้ดูพรีเมียมใน Footer */
+.footer-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}     
         .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
         nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
