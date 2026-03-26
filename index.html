@@ -315,20 +315,15 @@
   /* ease-in-out คือทำให้จังหวะเด้งดูสมูทเหมือนลูกบอลยาง */
 }
 /* จัดการโครงสร้าง Modal ให้เป็นระเบียบ */
+/* ค้นหา .modal-card เดิมแล้ววางชุดนี้ทับไปเลยครับ */
 .modal-card {
     display: flex;
     flex-direction: column;
-    padding: 0 !important; /* เคลียร์ padding ออกเพื่อให้ส่วนหัวและท้ายติดขอบ */
-    overflow: hidden !important; /* ห้ามตัวแม่ Scroll */
+    padding: 0 !important; 
+    max-height: 90vh !important; 
+    overflow: hidden !important; 
 }
 
-/* ส่วนหัว Modal */
-.modal-header {
-    padding: 10px;
-    border-bottom: 1px solid rgba(212,175,55,0.1);
-}
-
-/* ส่วนเนื้อหาที่เลื่อนขึ้นลงได้ */
 .modal-body-scroll {
     flex: 1;
     overflow-y: auto;
@@ -336,14 +331,14 @@
     -webkit-overflow-scrolling: touch;
 }
 
-/* ส่วนปุ่มที่ล็อคไว้ด้านล่าง (Footer) */
 .modal-footer-fixed {
     padding: 15px;
-    background: var(--bg);
-    border-top: 1px solid rgba(212,175,55,0.3);
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
+    background: #111; 
+    border-top: 2px solid var(--gold); 
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.6);
     z-index: 100;
 }
+
 /* ซ่อน Scrollbar สำหรับ Chrome, Safari และ Opera */
 #productGrid [id^="p-slider-"]::-webkit-scrollbar {
     display: none;
@@ -401,6 +396,42 @@
     <div class="modal-card">
         <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center;">
             <h4 style="color:var(--gold); font-size:14px; margin-left: 10px;">ยืนยันการสั่งซื้อ</h4>
+            <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:22px; padding:10px;"></i>
+        </div>
+
+        <form id="orderForm" style="display: contents;">
+            <div class="modal-body-scroll">
+                <div id="step-1">
+                    <p onclick="closeModal('orderModal')" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
+                        <i class="fa-solid fa-chevron-left"></i> กลับไปเลือกสินค้าหน้าหลัก
+                    </p>
+                    <div id="orderDetail"></div>
+                    <div id="optionBox"></div>
+                </div>
+
+                <div id="step-2" style="display:none;">
+                    </div>
+            </div>
+
+            <div class="modal-footer-fixed">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="color:var(--gold); font-size:11px;">ยอดชำระสุทธิ:</div>
+                    <div id="footer-total-price" style="color:#fff; font-size:24px; font-weight:800;">฿0</div>
+                </div>
+
+                <div id="step-1-footer">
+                    <div id="pay-selection">...โค้ดเลือกการชำระเงินเดิมของคุณ...</div>
+                    <button type="button" class="buy-now" onclick="nextStep(2)" style="border-radius:10px; padding: 12px 0;">ถัดไป (กรอกที่อยู่)</button>
+                </div>
+
+                <div id="step-2-footer" style="display:none;">
+                    <button type="submit" id="submitBtn" class="buy-now" style="border-radius:10px; padding: 12px 0;">ยืนยันสั่งซื้อ</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
             <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:22px; padding:10px;"></i>
         </div>
 
