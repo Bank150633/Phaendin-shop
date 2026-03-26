@@ -73,8 +73,7 @@
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 6px; }
         .card { background: var(--card); border: 1px solid rgba(212,175,55,0.15); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
         .media-wrap { width: 100%; aspect-ratio: 1/1; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
-        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; user-select: none; 
-    -webkit-user-drag: none; }
+        .media-wrap img, .media-wrap video { width: 100%; height: 100%; object-fit: contain; }
         .p-timer-badge { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(255, 65, 108, 0.9); color: #fff; font-size: 8.5px; text-align: center; padding: 2px 0; font-weight: bold; z-index: 6;pointer-events: none; }
         .badge-container { position: absolute; top: 4px; left: 4px; display: flex; flex-direction: column; gap: 3px; z-index: 5; }
         .badge { font-size: 7px; padding: 2px 5px; border-radius: 3px; font-weight: 800; color: #fff; text-transform: uppercase; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 0.5px solid rgba(255,255,255,0.2); }
@@ -486,60 +485,69 @@
         } catch(e) { console.error(e); }
     }
     function render() {
-    const query = document.getElementById('search').value.toLowerCase();
-    const now = new Date().getTime();
-    const filtered = db.filter(p => p[0].toLowerCase().includes(query));
-    
-    document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
-        // 1. เตรียมข้อมูลพื้นฐาน
-        let pName = (p[0] || '').replace(/'/g, "\\'"); 
-        let priceNormal = parseFloat(p[3] || 0);    
-        let pricePromo = parseFloat(p[10] || 0);   
-        let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-        let provinceName = p[13] || '';
-        let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
+        const query = document.getElementById('search').value.toLowerCase();
+        const now = new Date().getTime();
+        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
-        // 2. ดึงรูปแรกรูปเดียวมาโชว์ที่หน้าหลัก (เพื่อความนิ่งและลื่น)
-        let images = (p[1] || '').split(',').map(img => img.trim());
-        let firstImg = images[0]; 
+        document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
+            // เตรียมข้อมูลให้ปลอดภัย (Clean Data)
+            let pName = (p[0] || '').replace(/'/g, "\\'"); // กันเครื่องหมาย ' ในชื่อสินค้า
+            let priceNormal = parseFloat(p[3] || 0);    
+            let pricePromo = parseFloat(p[10] || 0);   
+            let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
+            let provinceName = p[13] || '';
+            let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
 
-        // 3. คำนวณราคาและส่วนลด
-        let currentPrice = priceNormal;
-        let percentDiscount = 0;
-        if (pricePromo > 0 && expiryDate > now) {
-            currentPrice = pricePromo;
-            percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-        }
+            let images = (p[1] || '').split(',').map(img => img.trim());
+            let imgCount = images.length;
 
-        return `
-        <div class="card">
-            <div class="media-wrap" style="position: relative; touch-action: none;">
-                <div class="badge-container">
-                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
-                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+            let currentPrice = priceNormal;
+            let percentDiscount = 0;
+            if (pricePromo > 0 && expiryDate > now) {
+                currentPrice = pricePromo;
+                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
+            }
+
+            // ใช้ `...` (Backtick) ในการห่อหุ้มฟังก์ชัน onclick เพื่อความชัวร์
+            return `
+            <div class="card">
+                <div class="media-wrap" style="position: relative;">
+                    <div class="badge-container">
+                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                        ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
+                        ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+                    </div>
+                    ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                    
+                    <div id="p-slider-${pIndex}" onscroll="updateMainDots(${pIndex}, this, ${imgCount})" 
+                         style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+                        ${images.map(img => `
+                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;" onclick="zoom('${p[1]}')">
+                                ${renderMedia(img, true)}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    ${imgCount > 1 ? `
+                    <div class="dot-container" style="bottom: 5px; gap: 3px;">
+                        ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${pIndex}-${i}" style="width:4px; height:4px;"></div>`).join('')}
+                    </div>` : ''}
+
+                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
                 </div>
-                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                
-                <div style="width: 100%; height: 100%;" onclick="zoom('${p[1]}')">
-                    ${renderMedia(firstImg, true)}
+                <div class="info">
+                    <div class="p-name">${p[0]}</div>
+                    <div class="p-desc">${p[2] || ''}</div>
+                    <div class="p-price">
+                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                    </div>                    
                 </div>
-
-                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
-            </div>
-            <div class="info">
-                <div class="p-name">${p[0]}</div>
-                <div class="p-desc">${p[2] || ''}</div>
-                <div class="p-price">
-                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
-                </div>                    
-            </div>
-            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ</button>
-        </div>`;
-    }).join('');
-}
-
+                <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ</button>
+            </div>`;
+        }).join('');
+    }
+            
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
