@@ -305,6 +305,21 @@
     box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
     z-index: 100;
 }
+/* ซ่อน Scrollbar สำหรับ Chrome, Safari และ Opera */
+#productGrid [id^="p-slider-"]::-webkit-scrollbar {
+    display: none;
+}
+
+/* ซ่อน Scrollbar สำหรับ IE, Edge และ Firefox */
+#productGrid [id^="p-slider-"] {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    cursor: grab;
+}
+
+#productGrid [id^="p-slider-"]:active {
+    cursor: grabbing;
+}
 
     </style>
 </head>
@@ -522,9 +537,9 @@
                     <div id="p-slider-${pIndex}" onscroll="updateMainDots(${pIndex}, this, ${imgCount})" 
                          style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
                         ${images.map(img => `
-                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start;" onclick="zoom('${p[1]}')">
-                                ${renderMedia(img, true)}
-                            </div>
+                            <div style="min-width: 100%; height: 100%; scroll-snap-align: start; pointer-events: none;">
+    ${renderMedia(img, true)}
+</div>
                         `).join('')}
                     </div>
 
