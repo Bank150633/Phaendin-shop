@@ -568,6 +568,11 @@ function updateMainDots(pIndex, el, total) {
     }
 }
 function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
+    // ป้องกันกรณีไม่มีรูปภาพ
+    const rawImg = imgUrl || "";
+    const allImages = rawImg.split(',').map(i => i.trim()).filter(i => i !== "");
+    const firstImg = allImages[0] || "";
+
     activeP = { 
         name: n, 
         pNormal: parseFloat(pNormal), 
@@ -575,11 +580,11 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         disc: discPercent, 
         max: parseInt(maxLimit) || 999, 
         min: parseInt(minLimit) || 1, 
-        img: imgUrl, 
+        img: rawImg, 
         canInstall: isAllowed 
     };
 
-    // 1. จัดการปุ่มผ่อนชำระ
+    // จัดการปุ่มผ่อน
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
         payInstallBtn.style.display = 'block';
@@ -588,69 +593,58 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         togglePay('จ่ายเต็ม');
     }
 
-    // 2. ปรับปรุงส่วนแสดงรูปภาพให้ใหญ่ยักษ์และสไลด์ได้ (Full-Width Slider)
+    // วาดส่วนหัวและรูปภาพ (แก้ไขโครงสร้างใหม่ให้เสถียรขึ้น)
     const orderDetail = document.getElementById('orderDetail');
-    const allImages = activeP.img.split(',').map(i => i.trim()).filter(i => i !== "");
-    
     orderDetail.innerHTML = `
-        <div style="margin: -15px -15px 15px -15px; position: relative; background: #000; overflow: hidden;">
-            <div id="modal-slider" onscroll="updateModalDots(this, ${allImages.length})" 
-                 style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; height: 250px;">
-                ${allImages.map(img => `
-                    <div style="min-width: 100%; height: 250px; scroll-snap-align: start;" onclick="zoom('${activeP.img}')">
+        <div style="background:#000; margin:-8px -8px 15px -8px; position:relative; border-bottom:1px solid var(--gold);">
+            <div id="m-slider" onscroll="updateM(this, ${allImages.length})" 
+                 style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; height:280px;">
+                ${allImages.length > 0 ? allImages.map(img => `
+                    <div style="min-width:100%; height:280px; scroll-snap-align:start;" onclick="zoom('${rawImg}')">
                         ${renderMedia(img, true)}
                     </div>
-                `).join('')}
+                `).join('') : `<div style="min-width:100%; height:280px; display:flex; align-items:center; justify-content:center; color:#555;">ไม่มีรูปภาพ</div>`}
             </div>
-
-            <div id="modal-img-num" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 10px; border-radius: 20px; font-size: 11px; border: 1px solid rgba(212,175,55,0.5);">
-                1 / ${allImages.length}
-            </div>
-
-            <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px;">
-                ${allImages.map((_, i) => `<div id="mdot-${i}" class="dot ${i===0?'active':''}" style="width:6px; height:6px; background:rgba(255,255,255,0.5); border-radius:50%;"></div>`).join('')}
+            
+            <div id="m-count" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.7); color:#fff; padding:2px 10px; border-radius:20px; font-size:11px;">
+                1 / ${allImages.length || 1}
             </div>
         </div>
 
-        <div style="padding: 0 5px 15px 5px; text-align: center;">
-            <div style="color: var(--gold); font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">${n}</div>
-            <div style="color: #aaa; font-size: 11px; margin-top: 4px;"><i class="fa-solid fa-hand-pointer"></i> แตะที่รูปเพื่อขยายใหญ่ / ปัดเพื่อดูรูปเพิ่มเติม</div>
+        <div style="text-align:center; padding:0 10px 15px 10px;">
+            <div style="color:var(--gold); font-size:16px; font-weight:600;">${n}</div>
+            <p style="font-size:10px; color:#666; margin-top:4px;">ปัดซ้าย-ขวาเพื่อดูรูปเพิ่มเติม</p>
         </div>
     `;
 
-    // 3. วาดรายการตัวเลือก (Variant) - เหมือนเดิมแต่ปรับแต่งเล็กน้อย
+    // วาด Option
     const box = document.getElementById('optionBox');
     box.innerHTML = '';
     selectedOptions = {};
 
     if (optStr && optStr !== '-') {
         const opts = optStr.split(',');
-        opts.forEach((opt, index) => {
+        opts.forEach((opt, idx) => {
             if (!opt.trim()) return;
             const parts = opt.split(':');
-            const label = parts[0] ? parts[0].trim() : 'สินค้า';
-            const price = parts[1] ? parseFloat(parts[1]) : pNormal;
-            let vImg = (parts.length > 2) ? parts.slice(2).join(':').trim() : (allImages[index] || allImages[0]);
+            const label = parts[0].trim();
+            const price = parseFloat(parts[1]) || pNormal;
+            let vImg = (parts.length > 2) ? parts.slice(2).join(':').trim() : (allImages[idx] || firstImg);
 
             selectedOptions[label] = { qty: 0, price: price };
             const dP = parseFloat(discPercent) || 0; 
-            const discountedPrice = Math.round(price * (1 - (dP / 100)));
+            const dPrice = Math.round(price * (1 - (dP / 100)));
 
             box.innerHTML += `
             <div class="variant-item">
                 <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
                 <div class="v-name">${label}</div>
                 <div class="v-price">
-                    ${dP > 0 ? `
-                        <span style="text-decoration: line-through; color: #888; font-size: 9px;">฿${price.toLocaleString()}</span>
-                        <span style="color: #ff4b2b; font-size: 11px;">฿${discountedPrice.toLocaleString()}</span>
-                    ` : `
-                        <span style="color: var(--gold); font-size: 11px;">฿${price.toLocaleString()}</span>
-                    `}
+                    ${dP > 0 ? `<span style="text-decoration:line-through; color:#888; font-size:9px;">฿${price.toLocaleString()}</span><span style="color:#ff4b2b;">฿${dPrice.toLocaleString()}</span>` : `<span>฿${price.toLocaleString()}</span>`}
                 </div>
                 <div class="v-ctrl">
                     <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
-                    <span id="v-qty-${label}" style="color:#fff; font-size:10px;">0</span>
+                    <span id="v-qty-${label}">0</span>
                     <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
                 </div>
             </div>`;
@@ -662,6 +656,13 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
     openModal('orderModal');
     updatePrice();
     nextStep(1); 
+}
+
+// ฟังก์ชันนับเลขรูปภาพ (ต้องมีเพื่อไม่ให้ error)
+function updateM(el, total) {
+    const idx = Math.round(el.scrollLeft / el.offsetWidth);
+    const countEl = document.getElementById('m-count');
+    if(countEl) countEl.innerText = (idx + 1) + " / " + total;
 }
 
 // ฟังก์ชันเสริมสำหรับอัปเดตจุดไข่ปลาและตัวเลขใน Modal
