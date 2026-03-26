@@ -124,16 +124,37 @@
         .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
 
         nav { 
-    background: #000 !important; 
-    border-top: 1px solid #333; 
+    position: fixed; /* บังคับให้ลอยติดขอบล่างตลอดเวลา */
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    height: 55px;
+    background: #000000 !important; /* พื้นหลังสีดำเข้มตามรูป */
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center; 
+    border-top: 1px solid rgba(212, 175, 55, 0.3); /* เส้นขอบบนสีทองจางๆ */
+    z-index: 1000; 
 }
+
+.nav-tab { 
+    flex: 1; 
+    text-align: center; 
+    color: #888; /* สีไอคอนตอนไม่ได้เลือก */
+    font-size: 10px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    gap: 2px;
+}
+
 .nav-tab.active { 
-    color: var(--gold) !important; /* ไอคอนหน้าแรกเป็นสีทอง */
+    color: var(--gold) !important; /* ไอคอนหน้าแรกเป็นสีทองตามรูป */
 }
 
-        .nav-tab.active { color: var(--gold); }
-        .nav-tab i { font-size: 15px; margin-bottom: 2px; }
-
+.nav-tab i { 
+    font-size: 18px; 
+}
         #zoomOverlay { display: none; position: fixed; inset: 0; background: #000; z-index: 9999; align-items: center; justify-content: center; }
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
