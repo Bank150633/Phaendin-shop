@@ -1017,19 +1017,19 @@ function handleSelfie(input) {
 function updateDots(el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
     
-    // อัปเดตตัวเลข 1/3
     const numEl = document.getElementById('imgNum');
     if (numEl) numEl.innerText = `${index + 1} / ${total}`;
     
-    // อัปเดตจุดไข่ปลา
     for (let i = 0; i < total; i++) {
-        const dot = document.getElementById(`dot-${i}`);
+        // เติม modal- นำหน้า dot
+        const dot = document.getElementById(`modal-dot-${i}`); 
         if (dot) {
             if (i === index) dot.classList.add('active');
             else dot.classList.remove('active');
         }
     }
 }
+
 // ฟังก์ชันสั่งให้ป้ายนับถอยหลังในรายการสินค้า (Grid) ทำงาน
 setInterval(() => {
     const timerBadges = document.querySelectorAll('.p-timer-badge');
