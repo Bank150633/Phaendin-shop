@@ -784,7 +784,18 @@ function updateZoomDots(el, total) {
 
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
-    function closeModal(id) { const m = document.getElementById(id); m.classList.remove('show'); setTimeout(()=>m.style.display='none', 300); }
+    function closeModal(id) {
+    const m = document.getElementById(id);
+    m.classList.remove('show');
+    setTimeout(() => {
+        m.style.display = 'none';
+        // ล้างขยะใน Modal ออกให้หมด
+        if(id === 'orderModal') {
+            document.getElementById('orderDetail').innerHTML = '';
+            document.getElementById('optionBox').innerHTML = '';
+        }
+    }, 300);
+}
     
 function handleFile(input) {
     if (input.files && input.files[0]) {
