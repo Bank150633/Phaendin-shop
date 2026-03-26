@@ -647,113 +647,63 @@ box.innerHTML += `
     }
 
       function updatePrice() {
-    let subtotalNormal = 0; // ราคารวมแบบปกติ (ก่อนลด)
-    let subtotalDiscounted = 0; // ราคารวมแบบหัก % แล้ว
+    let subtotalNormal = 0;
+    let subtotalDiscounted = 0;
     let summaryText = [];
     let totalItems = 0;
-    
     let discP = parseFloat(activeP.disc) || 0; 
 
+    // 1. คำนวณยอดจากสินค้าที่เลือก
     for (let key in selectedOptions) { 
         if(selectedOptions[key].qty > 0) {
             let qty = selectedOptions[key].qty;
             let unitPrice = selectedOptions[key].price;
-            
-            // คำนวณยอดรวมปกติ
             subtotalNormal += (unitPrice * qty);
-            
-            // คำนวณยอดรวมแบบลด %
             let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
-            
             summaryText.push(`${key} x${qty}`); 
             totalItems += qty; 
         } 
     }
     
-    // ปัดเศษให้เรียบร้อย
     subtotalNormal = Math.round(subtotalNormal);
     subtotalDiscounted = Math.round(subtotalDiscounted);
-
-    // ยอดสุทธิ = (ราคาที่ลดแล้ว) + ค่าส่ง
     activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
-    // ยอดก่อนลดสะสม = (ราคาปกติ) + ค่าส่ง (เอาไว้โชว์ตัวขีดฆ่า)
-    let totalBeforeDisc = subtotalNormal + activeP.ship;
-    
     activeP.summary = summaryText.join(', ');
 
-    let images = activeP.img.split(',').map(img => img.trim());
-    let imgCount = images.length; 
-
-       // --- จุดที่ 1: แก้ไขการสร้างป้ายแท็กให้รองรับ Class และ Style ---
-    let badgesHtml = `<div class="promo-pill-container" style="display: flex; justify-content: center; gap: 5px; margin-top: 5px;">`;
+    // 2. อัปเดตตัวเลขในกล่องสีทอง (หน้า 2) - ** จุดที่ทำให้หาย ฿0 **
+    const priceStep2 = document.getElementById('final-price-step2');
+    const textStep2 = document.getElementById('summary-text-step2');
     
-    // ป้ายลดเปอร์เซ็นต์
-    if (activeP.disc > 0) {
-        badgesHtml += `<span class="pill pill-red" style="background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:4px; font-size:10px;">ลด ${activeP.disc}%</span>`;
+    if(priceStep2) {
+        priceStep2.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
     }
-    
-    // ป้ายส่งฟรี / ค่าส่ง
-    if (activeP.ship === 0) {
-        badgesHtml += `<span class="pill pill-free-ship" style="border:1px solid #38ef7d; color:#38ef7d; background:rgba(56,239,125,0.1); padding:2px 8px; border-radius:4px; font-size:10px;">ส่งฟรี</span>`;
-    } else {
-        badgesHtml += `<span class="pill pill-gold" style="background:var(--gold-grad); color:#000; padding:2px 8px; border-radius:4px; font-size:10px;">ค่าส่ง ฿${activeP.ship}</span>`;
+    if(textStep2) {
+        textStep2.innerText = activeP.summary || 'กรุณาเลือกรายการสินค้า';
     }
-    badgesHtml += `</div>`;
- 
-    document.getElementById('orderDetail').innerHTML = `
-    <div class="order-summary-box" style="padding: 0; overflow: hidden; position: relative; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; margin-bottom: 8px;">
-        
-        ${imgCount > 1 ? `<div class="img-counter" id="imgNum">1 / ${imgCount}</div>` : ''}
 
-        <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;">
-            <div id="m-slider" onscroll="updateDots(this, ${imgCount})" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
-                ${images.map(img => `<div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">${renderMedia(img, true)}</div>`).join('')}
-            </div>
+    // 3. ส่วนแสดงผลหน้า 1 (สั่งซื้อ/ดูรูปเพิ่ม)
+    const totalBeforeDisc = subtotalNormal + activeP.ship;
+    const finalTotalDisplay = document.getElementById('finalTotalDisplay');
+    if(finalTotalDisplay) {
+        finalTotalDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+    }
 
-            // ค้นหาบรรทัดนี้ใน updatePrice แล้วแก้เป็นแบบนี้ครับ
-${imgCount > 1 ? `
-<div class="dot-container">
-    ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="modal-dot-${i}"></div>`).join('')}
-</div>` : ''}
-        </div>
-        
-        <div style="padding: 8px;">
-            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
-            ${badgesHtml}
-            <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 4px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
-            <div style="border-top: 1px dashed rgba(212,175,55,0.2); padding-top:8px; text-align:center;">
-                <span style="font-size:10px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                
-                <div style="display:flex; justify-content:center; align-items:baseline; gap:8px;">
-                    ${(activeP.disc > 0 && totalItems > 0) ? `
-                        <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: 400;">
-                            ฿${totalBeforeDisc.toLocaleString()}
-                        </span>
-                    ` : ''}
-                    
-                    <div id="finalTotalDisplay" style="font-size:28px; font-weight:800; color:#fff;">
-                        ฿${activeP.finalTotal.toLocaleString()}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>`;
-
-    // อัปเดตสถานะปุ่มสั่งซื้อ
+    // 4. อัปเดตสถานะปุ่มสั่งซื้อ
     const btn = document.getElementById('submitBtn');
     if (totalItems === 0) { 
-        btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
+        btn.disabled = true; btn.innerText = "เลือกสินค้าก่อน"; btn.style.opacity = "0.5"; 
     } else if (totalItems < activeP.min) { 
         btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
     } else { 
         btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
     }
 
-    // คำนวณยอดผ่อนใหม่ตามราคาที่อัปเดต
-    const currentPayType = document.querySelector('input[name="payType"]:checked').value;
+    // 5. เช็คยอดผ่อน (ถ้ามี)
+    const currentPayType = document.querySelector('input[name="payType"]:checked')?.value || 'จ่ายเต็ม';
     togglePay(currentPayType);
-} 
+}
+
      
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
