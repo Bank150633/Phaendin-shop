@@ -379,7 +379,17 @@
                     <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
                         <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
                     </p>
-                    
+                    <div id="step-2-price-summary" style="background: linear-gradient(145deg, rgba(212,175,55,0.2) 0%, rgba(0,0,0,0.5) 100%); border: 2px solid #D4AF37; border-radius: 15px; padding: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);">
+    <div style="font-size: 11px; color: #D4AF37; font-weight: 300; text-transform: uppercase; letter-spacing: 1px;">รายการสั่งซื้อของคุณ</div>
+    <div id="summary-text-step2" style="font-size: 12px; color: #fff; margin-top: 5px; opacity: 0.8;">-</div>
+    
+    <div style="height: 1px; background: rgba(212,175,55,0.3); margin: 12px auto; width: 80%;"></div>
+    
+    <div style="font-size: 13px; color: #D4AF37;">ยอดเงินที่ต้องโอนชำระ</div>
+    <div id="final-price-step2" style="font-size: 36px; font-weight: 800; color: #38ef7d; text-shadow: 0 0 15px rgba(56, 239, 125, 0.4); margin: 5px 0;">฿0</div>
+    <div style="font-size: 10px; color: #aaa;">(กรุณาโอนยอดให้ตรงตามที่ระบุ)</div>
+</div>
+               
                     <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
                         <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
                             <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS
