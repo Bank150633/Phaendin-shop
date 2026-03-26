@@ -1154,6 +1154,34 @@ setInterval(() => {
         statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง กรุณาลองใหม่</span>";
     }
 }
+// ฟังก์ชันช่วยให้ใช้เมาส์คลิกลากสไลด์ได้ในคอม
+function enableMouseDrag(el) {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    el.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - el.offsetLeft;
+        scrollLeft = el.scrollLeft;
+        el.style.scrollSnapType = 'none'; // ปิด snap ชั่วคราวตอนลาก
+    });
+    el.addEventListener('mouseleave', () => { isDown = false; el.style.scrollSnapType = 'x mandatory'; });
+    el.addEventListener('mouseup', () => { isDown = false; el.style.scrollSnapType = 'x mandatory'; });
+    el.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - el.offsetLeft;
+        const walk = (x - startX) * 2;
+        el.scrollLeft = scrollLeft - walk;
+    });
+}
+
+// เรียกใช้งานกับทุก slider ในหน้าแรกหลัง render
+const observer = new MutationObserver(() => {
+    document.querySelectorAll('[id^="p-slider-"]').forEach(el => enableMouseDrag(el));
+});
+observer.observe(document.getElementById('productGrid'), { childList: true });
 
 </script>
 </body>
