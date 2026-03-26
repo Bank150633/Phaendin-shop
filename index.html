@@ -499,64 +499,53 @@
             render();
         } catch(e) { console.error(e); }
     }
-    function render() {
-        const query = document.getElementById('search').value.toLowerCase();
-        const now = new Date().getTime();
-        const filtered = db.filter(p => p[0].toLowerCase().includes(query));
-        
-        document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
-            // เตรียมข้อมูลให้ปลอดภัย (Clean Data)
-            let pName = (p[0] || '').replace(/'/g, "\\'"); // กันเครื่องหมาย ' ในชื่อสินค้า
-            let priceNormal = parseFloat(p[3] || 0);    
-            let pricePromo = parseFloat(p[10] || 0);   
-            let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-            let provinceName = p[13] || '';
-            let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
+    
+   function render() {
+    const query = document.getElementById('search').value.toLowerCase();
+    const now = new Date().getTime();
+    const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+    
+    document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
+        let pName = (p[0] || '').replace(/'/g, "\\'");
+        let priceNormal = parseFloat(p[3] || 0);    
+        let pricePromo = parseFloat(p[10] || 0);   
+        let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
+        let provinceName = p[13] || '';
+        let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
 
-            let images = (p[1] || '').split(',').map(img => img.trim());
-            let imgCount = images.length;
+        let images = (p[1] || '').split(',').map(img => img.trim());
+        let currentPrice = pricePromo > 0 && expiryDate > now ? pricePromo : priceNormal;
+        let percentDiscount = pricePromo > 0 && expiryDate > now ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
 
-            let currentPrice = priceNormal;
-            let percentDiscount = 0;
-            if (pricePromo > 0 && expiryDate > now) {
-                currentPrice = pricePromo;
-                percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
-            }
-
-            // ใช้ `...` (Backtick) ในการห่อหุ้มฟังก์ชัน onclick เพื่อความชัวร์
-            return `
-            <div class="card">
-                <div class="media-wrap" style="position: relative;">
-                    <div class="badge-container">
-                        ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                        ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
-                        ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                    </div>
-                       ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                       ${imgCount > 1 ? `
-                       <div style="width: 100%; height: 100%;">
-    ${renderMedia(images[0], true)}
-</div>
-
-                    <div class="dot-container" style="bottom: 5px; gap: 3px;">
-                        ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="dot-${pIndex}-${i}" style="width:4px; height:4px;"></div>`).join('')}
-                    </div>` : ''}
-
-                    ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+        return `
+        <div class="card">
+            <div class="media-wrap" style="position: relative;">
+                <div class="badge-container">
+                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
+                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                 </div>
-                <div class="info">
-                    <div class="p-name">${p[0]}</div>
-                    <div class="p-desc">${p[2] || ''}</div>
-                    <div class="p-price">
-                        ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                        <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
-                    </div>                    
+                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                
+                <div style="width: 100%; height: 100%; overflow: hidden;">
+                    ${renderMedia(images[0], true)}
                 </div>
-                <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ</button>
-            </div>`;
-        }).join('');
-    }
-            
+
+                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+            </div>
+            <div class="info">
+                <div class="p-name">${p[0]}</div>
+                <div class="p-desc">${p[2] || ''}</div>
+                <div class="p-price">
+                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                </div>                    
+            </div>
+            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
+        </div>`;
+    }).join('');
+}
+ 
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
@@ -955,8 +944,10 @@ function togglePay(type) {
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
-    
     const topPriceDisplay = document.getElementById('finalTotalDisplay');
+
+    // แก้ไขจุดนี้: บังคับให้เป็นตัวเลขเสมอเพื่อกัน NaN
+    const total = Number(activeP.finalTotal) || 0; 
 
     if(type === 'จ่ายเต็ม') {
         sec.style.display = 'none';
@@ -964,36 +955,33 @@ function togglePay(type) {
         fBox.style.border = '2px solid var(--gold)'; fBox.style.background = 'rgba(212,175,55,0.2)';
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
-        
-        if(topPriceDisplay) topPriceDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
-        
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${total.toLocaleString()}`;
     } else {
-        const total = activeP.finalTotal;
         const totalWithFee = total * 1.2; 
-        const perMonth = (totalWithFee / 3).toFixed(2);
+        const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0;
         
         const nextDate = new Date();
         nextDate.setDate(nextDate.getDate() + 30);
         const dateThai = nextDate.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
 
-        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth}/งวด`;
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth.toLocaleString()}/งวด`;
 
         instBox.innerHTML = `
             <div style="text-align:left; padding:5px;">
                 <p style="color:#38ef7d; font-weight:bold; font-size:13px; margin-bottom:8px; text-align:center;">
-                   🚀 จ่ายแค่ ฿${perMonth} รับของไปก่อนเลย!
+                   🚀 จ่ายแค่ ฿${perMonth.toLocaleString()} รับของไปก่อนเลย!
                 </p>
                 <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
                     <span>🟢 งวดที่ 1 (จ่ายตอนนี้):</span>
-                    <span style="color:#38ef7d; font-weight:bold;">฿${perMonth}</span>
+                    <span style="color:#38ef7d; font-weight:bold;">฿${perMonth.toLocaleString()}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; color:#aaa;">
                     <span>⚪ งวดที่ 2 (${dateThai}):</span>
-                    <span>฿${perMonth}</span>
+                    <span>฿${perMonth.toLocaleString()}</span>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px; color:#aaa;">
                     <span>⚪ งวดที่ 3 (อีก 30 วันถัดไป):</span>
-                    <span>฿${perMonth}</span>
+                    <span>฿${perMonth.toLocaleString()}</span>
                 </div>
                 <p style="font-size:10px; color:var(--gold); border-top:1px dashed rgba(212,175,55,0.3); padding-top:5px; text-align:right;">
                     ยอดรวมผ่อน (+20%): ฿${totalWithFee.toLocaleString()}
@@ -1007,8 +995,6 @@ function togglePay(type) {
         fBox.style.border = '1px solid rgba(255,255,255,0.1)'; fBox.style.background = 'transparent';
         radios[1].checked = true;
     }
-
-    // --- นี่คือคำสั่งที่เพิ่มเข้าไปครับ ---
     checkBlacklist(); 
 }
 
