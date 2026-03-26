@@ -567,8 +567,7 @@ function updateMainDots(pIndex, el, total) {
         }
     }
 }
-
-          function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
+function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
     activeP = { 
         name: n, 
         pNormal: parseFloat(pNormal), 
@@ -576,10 +575,11 @@ function updateMainDots(pIndex, el, total) {
         disc: discPercent, 
         max: parseInt(maxLimit) || 999, 
         min: parseInt(minLimit) || 1, 
-        img: imgUrl,
+        img: imgUrl, // นี่คือข้อมูลรูปจากคอลัมน์ B
         canInstall: isAllowed 
     };
 
+    // 1. จัดการปุ่มผ่อนชำระ
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
         payInstallBtn.style.display = 'block';
@@ -588,6 +588,23 @@ function updateMainDots(pIndex, el, total) {
         togglePay('จ่ายเต็ม');
     }
 
+    // 2. แสดงรูปภาพหลักและชื่อสินค้าที่หัว Modal (จุดที่แก้ให้รูปขึ้น)
+    const orderDetail = document.getElementById('orderDetail');
+    const firstImg = activeP.img.split(',')[0].trim(); // ดึงรูปแรกมาโชว์
+    
+    orderDetail.innerHTML = `
+        <div style="display:flex; gap:10px; align-items:center; background:rgba(255,255,255,0.05); padding:10px; border-radius:12px; margin-bottom:10px; border:1px solid rgba(212,175,55,0.2);">
+            <div style="width:60px; height:60px; border-radius:8px; overflow:hidden; border:1px solid var(--gold);">
+                ${renderMedia(firstImg, true)}
+            </div>
+            <div style="flex:1;">
+                <div style="color:var(--gold); font-size:13px; font-weight:600;">${n}</div>
+                <div style="color:#aaa; font-size:10px;">กรุณาเลือกรายการด้านล่าง</div>
+            </div>
+        </div>
+    `;
+
+    // 3. วาดรายการตัวเลือก (Variant)
     const box = document.getElementById('optionBox');
     box.innerHTML = '';
     selectedOptions = {};
@@ -599,46 +616,43 @@ function updateMainDots(pIndex, el, total) {
             const parts = opt.split(':');
             const label = parts[0] ? parts[0].trim() : 'สินค้า';
             const price = parts[1] ? parseFloat(parts[1]) : pNormal;
-            let vImg = activeP.img.split(',')[0].trim();
-            if (parts.length > 2) { vImg = parts.slice(2).join(':').trim(); }
+            
+            // ถ้าระบุรูปแยกใน Option ให้ใช้รูปนั้น ถ้าไม่มีให้ใช้รูปหลักจากคอลัมน์ B
+            let vImg = (parts.length > 2) ? parts.slice(2).join(':').trim() : firstImg;
+
             selectedOptions[label] = { qty: 0, price: price };
-            // ดึงค่า % ส่วนลดที่มาจาก Google Sheets (เช่น 17, 20 หรือ 30)
-const dP = parseFloat(discPercent) || 0; 
+            const dP = parseFloat(discPercent) || 0; 
+            const discountedPrice = Math.round(price * (1 - (dP / 100)));
 
-// คำนวณราคาที่ลดแล้วตาม % ของสินค้านั้นๆ
-const discountedPrice = Math.round(price * (1 - (dP / 100)));
-
-box.innerHTML += `
-<div class="variant-item">
-    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
-    <div class="v-name">${label}</div>
-    <div class="v-price" style="display:flex; flex-direction:column; align-items:center; gap:2px;">
-        ${dP > 0 ? `
-            <span style="text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400;">฿${price.toLocaleString()}</span>
-            <span style="color: #ff4b2b; font-size: 11px;">฿${discountedPrice.toLocaleString()}</span>
-        ` : `
-            <span style="color: var(--gold); font-size: 11px;">฿${price.toLocaleString()}</span>
-        `}
-    </div>
-    <div class="v-ctrl">
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
-        <span id="v-qty-${label}" style="color:#fff; font-size:10px;">0</span>
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
-    </div>
-</div>`;
-
+            box.innerHTML += `
+            <div class="variant-item">
+                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
+                <div class="v-name">${label}</div>
+                <div class="v-price">
+                    ${dP > 0 ? `
+                        <span style="text-decoration: line-through; color: #888; font-size: 9px;">฿${price.toLocaleString()}</span>
+                        <span style="color: #ff4b2b; font-size: 11px;">฿${discountedPrice.toLocaleString()}</span>
+                    ` : `
+                        <span style="color: var(--gold); font-size: 11px;">฿${price.toLocaleString()}</span>
+                    `}
+                </div>
+                <div class="v-ctrl">
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
+                    <span id="v-qty-${label}" style="color:#fff; font-size:10px;">0</span>
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
+                </div>
+            </div>`;
         });
     } else {
+        // กรณีไม่มีตัวเลือกย่อย ให้เลือกรายการหลักไว้ 1 ชิ้นอัตโนมัติ
         selectedOptions[n] = { qty: 1, price: pNormal };
     }
     
     openModal('orderModal');
     updatePrice();
-
-    // จุดสำคัญ: สั่งให้เปิดมาเจอหน้า 1 ทุกครั้ง
     nextStep(1); 
 }
- 
+          
     function changeVQty(label, price, delta) {
         let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
         if (delta > 0 && totalNow >= activeP.max) { alert(`สั่งซื้อรวมกันได้ไม่เกิน ${activeP.max} ชิ้นครับ`); return; }
