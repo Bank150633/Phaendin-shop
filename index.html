@@ -376,21 +376,18 @@
                 </div>
 
                 <div id="step-2" style="display:none;">
-                    <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
-                        <i class="fa-solid fa-chevron-left"></i> ย้อนกลับ
-                    </p>
-                    
-                    <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
-                        <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
-                            <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS
-                        </button>
-                        <input type="hidden" id="userLocation">
-                        <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('selfieIn').click()">
-                            <span id="selfieTxt" style="font-size:10px; color:var(--gold);">ถ่ายรูปเซลฟี่คู่กับบัตร</span>
-                            <input type="file" id="selfieIn" style="display:none" onchange="handleSelfie(this)" accept="image/*" capture="user">
-                            <img id="selfiePreview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
-                        </div>
-                    </div>
+    <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
+        <i class="fa-solid fa-chevron-left"></i> กลับไปแก้ไขรายการสินค้า
+    </p>
+
+    <div style="background: rgba(212,175,55,0.1); border: 1px solid var(--gold); border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+        <div style="font-size: 11px; color: var(--gold); margin-bottom: 5px; text-align: center;">สรุปรายการสั่งซื้อ</div>
+        <div id="summary-text-step2" style="font-size: 14px; color: #fff; font-weight: bold; text-align: center; margin-bottom: 10px;">-</div>
+        <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 12px; color: #ccc;">ยอดเงินสุทธิที่ต้องโอน:</span>
+            <span id="final-price-step2" style="font-size: 22px; font-weight: 800; color: #fff;">฿0</span>
+        </div>
+    </div>
 
                     <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
 <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()" onkeyup="checkBlacklist()" onchange="checkBlacklist()">
@@ -743,6 +740,10 @@ ${imgCount > 1 ? `
     // คำนวณยอดผ่อนใหม่ตามราคาที่อัปเดต
     const currentPayType = document.querySelector('input[name="payType"]:checked').value;
     togglePay(currentPayType);
+             // ส่งข้อมูลสรุปไปแสดงที่หน้ากรอกที่อยู่ (Step 2)
+    document.getElementById('final-price-step2').innerText = `฿${activeP.finalTotal.toLocaleString()}`;
+    document.getElementById('summary-text-step2').innerText = activeP.summary;
+ 
 } 
      
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
@@ -828,6 +829,7 @@ function nextStep(step) {
         }
         s1.style.display = 'none'; f1.style.display = 'none';
         s2.style.display = 'block'; f2.style.display = 'block';
+        document.querySelector('.modal-body-scroll').scrollTop = 0;
     } else {
         s1.style.display = 'block'; f1.style.display = 'block';
         s2.style.display = 'none'; f2.style.display = 'none';
