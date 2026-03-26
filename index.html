@@ -10,19 +10,35 @@
     <style>
         /* บังคับใช้ธีมมืดเป็นค่าพื้นฐาน */
         :root { 
-            --gold: #D4AF37; 
-            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
-            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ff416c 100%);
-            --green-grad: linear-gradient(145deg, #11998e 0%, #38ef7d 100%);
-            --blue-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
-            --fb-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
-            --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --text-dim: #BBBBBB; --input-bg: #1A1A1A; 
-        }
+    /* สีน้ำเงินกรมท่า (Thai Royal Blue) */
+    --thai-blue: #1A237E; 
+    /* สีแดงชาด (Thai Vermilion) */
+    --thai-red: #D32F2F;   
+    
+    /* ปรับ Gradient ให้เป็นโทนน้ำเงิน-แดง */
+    --gold: #D4AF37; 
+    --gold-grad: linear-gradient(145deg, #1A237E 0%, #0D47A1 100%); /* เปลี่ยนทองเป็นน้ำเงิน */
+    --red-grad: linear-gradient(145deg, #D32F2F 0%, #8B0000 100%);  /* แดงเข้มสะใจ */
+    
+    --bg: #0A0A0A; 
+    --card: #141414; 
+    --text: #FFFFFF; 
+    --text-dim: #BBBBBB; 
+    --input-bg: #1A1A1A; 
+}
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
 
-        header { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 1000; padding: 5px 10px; border-bottom: 1px solid var(--gold); display: flex; justify-content: center; align-items: center; height: 50px; }
+        header { 
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    background: var(--thai-blue) !important; /* เปลี่ยนเป็นน้ำเงิน */
+    border-bottom: 2px solid var(--thai-red); /* ตัดขอบล่างด้วยแดง */
+    z-index: 1000; 
+    height: 50px; 
+}
         
         .logo-img { height: 45px; width: auto; display: block; }
 
@@ -270,11 +286,14 @@
 }
 
 /* 2. สั่งให้เต้นเร็วขึ้นและนุ่มนวลขึ้น */
-.buy-now {
-  animation: pulse 1.2s infinite ease-in-out !important; 
-  /* 1.2s คือทำให้ครบรอบเร็วขึ้น จากเดิม 2s */
-  /* ease-in-out คือทำให้จังหวะเด้งดูสมูทเหมือนลูกบอลยาง */
+.buy-now { 
+    width: 100%; 
+    background: var(--red-grad) !important; /* เปลี่ยนจากทองเป็นแดง */
+    color: #fff !important; 
+    font-weight: 700; 
+    /* ...โค้ดส่วนอื่นปล่อยไว้เหมือนเดิม... */
 }
+
 /* จัดการโครงสร้าง Modal ให้เป็นระเบียบ */
 .modal-card {
     display: flex;
