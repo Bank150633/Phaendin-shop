@@ -821,14 +821,70 @@ function nextStep(step) {
     const f2 = document.getElementById('step-2-footer');
     
     if (step === 2) {
+        // 1. เช็คก่อนว่าเลือกของหรือยัง
         let totalItems = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
         if (totalItems < activeP.min) {
             alert(`กรุณาเลือกสินค้าอย่างน้อย ${activeP.min} ชิ้นก่อนครับ`);
             return;
         }
+
+        // 2. เตรียมข้อมูลสรุปยอดเงินและรายการสินค้า
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        let htmlSummary = "";
+
+        if(payType === 'ผ่อนไปใช้ไป') {
+            // คำนวณยอดผ่อน (บวก 20% แล้วหาร 3)
+            const totalWithFee = activeP.finalTotal * 1.2;
+            const firstPay = Math.round(totalWithFee / 3);
+            
+            htmlSummary = `
+                <div style="background:#fff; padding:15px; border:2px solid #242A56; border-radius:12px; text-align:center; margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <b style="color:#242A56; font-size:14px; display:block; margin-bottom:5px;">📝 สรุปรายการ (แบบผ่อนชำระ)</b>
+                    <p style="font-size:11px; color:#666; margin-bottom:10px;">สั่งซื้อ: ${activeP.summary}</p>
+                    <div style="background:rgba(36,42,86,0.05); padding:12px; border-radius:10px;">
+                        <span style="font-size:12px; color:#333; font-weight:bold;">ยอดที่ต้องโอนตอนนี้ (งวดที่ 1)</span>
+                        <div style="font-size:30px; font-weight:900; color:#ED1C24; margin:5px 0;">฿${firstPay.toLocaleString()}</div>
+                        <span style="font-size:10px; color:#888;">ยอดรวมทั้งหมด (3 งวด): ฿${Math.round(totalWithFee).toLocaleString()}</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            // ยอดชำระสดปกติ
+            htmlSummary = `
+                <div style="background:#fff; padding:15px; border:2px solid #ED1C24; border-radius:12px; text-align:center; margin-bottom:15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                    <b style="color:#ED1C24; font-size:14px; display:block; margin-bottom:5px;">📝 สรุปรายการ (ชำระสด)</b>
+                    <p style="font-size:11px; color:#666; margin-bottom:10px;">สั่งซื้อ: ${activeP.summary}</p>
+                    <div style="background:rgba(237,28,36,0.05); padding:12px; border-radius:10px;">
+                        <span style="font-size:12px; color:#333; font-weight:bold;">ยอดที่ต้องโอนสุทธิ</span>
+                        <div style="font-size:30px; font-weight:900; color:#ED1C24; margin:5px 0;">฿${activeP.finalTotal.toLocaleString()}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 3. เอาข้อมูลไปใส่ในหน้ากรอกที่อยู่
+        const step2Content = document.getElementById('step-2');
+        
+        // ล้างของเก่าที่อาจจะค้างอยู่ (ถ้ามีใบเสร็จเก่าให้ลบออกก่อน)
+        const oldReceipt = document.getElementById('receiptBox');
+        if(oldReceipt) oldReceipt.remove();
+
+        // สร้างกล่องใบเสร็จใหม่
+        const receiptBox = document.createElement('div');
+        receiptBox.id = 'receiptBox';
+        receiptBox.innerHTML = htmlSummary;
+        
+        // แทรกใบเสร็จไว้ด้านบนสุดของหน้ากรอกที่อยู่
+        step2Content.prepend(receiptBox);
+
+        // 4. สลับหน้าจอ
         s1.style.display = 'none'; f1.style.display = 'none';
         s2.style.display = 'block'; f2.style.display = 'block';
+        
+        // เลื่อนหน้าจอขึ้นไปบนสุด
+        document.querySelector('.modal-body-scroll').scrollTop = 0;
     } else {
+        // ย้อนกลับไปหน้าเลือกของ
         s1.style.display = 'block'; f1.style.display = 'block';
         s2.style.display = 'none'; f2.style.display = 'none';
     }
