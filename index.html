@@ -484,20 +484,21 @@
             render();
         } catch(e) { console.error(e); }
     }
-
-            function render() {
+    function render() {
         const query = document.getElementById('search').value.toLowerCase();
         const now = new Date().getTime();
         const filtered = db.filter(p => p[0].toLowerCase().includes(query));
         
         document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
+            // เตรียมข้อมูลให้ปลอดภัย (Clean Data)
+            let pName = (p[0] || '').replace(/'/g, "\\'"); // กันเครื่องหมาย ' ในชื่อสินค้า
             let priceNormal = parseFloat(p[3] || 0);    
             let pricePromo = parseFloat(p[10] || 0);   
             let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
             let provinceName = p[13] || '';
-            let canInstall = p[15] ? p[15].trim().toUpperCase() : 'NO'; 
+            let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
 
-            let images = p[1].split(',').map(img => img.trim());
+            let images = (p[1] || '').split(',').map(img => img.trim());
             let imgCount = images.length;
 
             let currentPrice = priceNormal;
@@ -507,7 +508,7 @@
                 percentDiscount = Math.round(((priceNormal - pricePromo) / priceNormal) * 100);
             }
 
-            // แก้ไขส่วน return ให้เรียกใช้ตัวแปรอย่างถูกต้อง
+            // ใช้ `...` (Backtick) ในการห่อหุ้มฟังก์ชัน onclick เพื่อความชัวร์
             return `
             <div class="card">
                 <div class="media-wrap" style="position: relative;">
@@ -542,11 +543,11 @@
                         <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                     </div>                    
                 </div>
-                <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${p[8]||0}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${p[12]||999}, ${JSON.stringify(p[1])}, ${p[14]||1}, ${JSON.stringify(canInstall)})'>สั่งซื้อ</button>
+                <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ</button>
             </div>`;
         }).join('');
     }
-
+            
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
