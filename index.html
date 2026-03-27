@@ -546,6 +546,7 @@
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>                    
             </div>
+            JSON.stringify(p[2])
             <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
@@ -572,7 +573,8 @@ function updateMainDots(pIndex, el, total) {
         max: parseInt(maxLimit) || 999, 
         min: parseInt(minLimit) || 1, 
         img: imgUrl,
-        canInstall: isAllowed 
+        canInstall: isAllowed,
+        pDesc: pDesc
     };
 
     const payInstallBtn = document.getElementById('pay-install');
@@ -714,7 +716,9 @@ ${imgCount > 1 ? `
         </div>
         
         <div style="padding: 8px;">
-            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}<div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+<div style="font-size:11px; color:#aaa; text-align:center; margin-bottom: 8px; padding: 0 15px;">${activeP.pDesc || ''}</div>
+            </div>
             ${badgesHtml}
             <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 4px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
             <div style="border-top: 1px dashed rgba(212,175,55,0.2); padding-top:8px; text-align:center;">
