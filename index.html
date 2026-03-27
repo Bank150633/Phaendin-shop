@@ -1068,37 +1068,65 @@ setInterval(() => {
     });
 }, 1000);
   async function checkBlacklist() {
-    const confirmBtn = document.getElementById('submitBtn');
+    const confirmBtn = document.getElementById('submitBtn'); // ปุ่มยืนยันสั่งซื้อ
     const statusDiv = document.getElementById('statusMsg');
     
-    // 1. ดึงค่าชื่อและเบอร์ + ล้างช่องว่างทิ้งให้หมด
+    // --- เพิ่มส่วนที่ต้องการ "ล็อค" ---
+    const btnLocation = document.getElementById('btnLocation'); // ปุ่มปักหมุด
+    const selfieInput = document.getElementById('selfieInput'); // ช่องแนบรูปเซลฟี่ (ถ้ามี ID นี้)
+    const addrTextarea = document.getElementById('cAddr');      // ช่องกรอกที่อยู่
+    // ----------------------------
+
+    // ฟังก์ชันช่วยล็อค/ปลดล็อค (เพื่อความสะอาดของโค้ด)
+    const setLocked = (isLocked) => {
+        const opacity = isLocked ? "0.5" : "1";
+        const cursor = isLocked ? "not-allowed" : "pointer";
+        
+        // ล็อคปุ่มยืนยัน
+        confirmBtn.disabled = isLocked;
+        confirmBtn.style.opacity = opacity;
+        
+        // ล็อคปุ่มปักหมุด
+        if(btnLocation) {
+            btnLocation.disabled = isLocked;
+            btnLocation.style.opacity = opacity;
+            btnLocation.style.cursor = cursor;
+        }
+        // ล็อคช่องเซลฟี่
+        if(selfieInput) {
+            selfieInput.disabled = isLocked;
+            selfieInput.style.opacity = opacity;
+        }
+        // ล็อคช่องที่อยู่
+        if(addrTextarea) {
+            addrTextarea.disabled = isLocked;
+            addrTextarea.style.opacity = opacity;
+            addrTextarea.style.cursor = isLocked ? "not-allowed" : "text";
+        }
+    };
+
     const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim().toLowerCase();
     const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
-    
-    // 2. เช็คว่าเค้าเลือก "ผ่อน" หรือเปล่า?
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
-    // ถ้าจ่ายสด ไม่ต้องเช็ค ปล่อยผ่านเลย
+    // 1. ถ้าจ่ายสด ปลดล็อคทุกอย่างทันที
     if (payType !== 'ผ่อนไปใช้ไป') {
-        confirmBtn.disabled = false;
-        confirmBtn.style.opacity = "1";
+        setLocked(false);
         statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
         return; 
     }
 
-    // 3. ถ้าเลือกผ่อน แต่ยังกรอกไม่ครบ ล็อคปุ่มไว้ก่อน
+    // 2. ถ้าเลือกผ่อน แต่กรอกชื่อ/เบอร์ไม่ครบ ให้ล็อคไว้ก่อน
     if (nameInput.length < 3 || phoneInput.length < 9) {
-        confirmBtn.disabled = true;
-        confirmBtn.style.opacity = "0.5";
+        setLocked(true);
         statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์จริง เพื่อเช็คสิทธิ์ผ่อน</span>";
         return;
     }
 
     statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังเช็คแบล็คลิสต์ (ห้ามปิดหน้าจอ)...</span>";
 
-    // 4. ลิงก์ดึงข้อมูล (ตรวจสอบ ID และ GID ให้ชัวร์นะครับ)
-    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; // ID ของไฟล์ Google Sheets
-    const GID = '1416026715'; // เลข GID ของหน้า "Blacklist"
+    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
+    const GID = '1416026715'; 
     const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}&refresh=${Date.now()}`;
     
     try {
@@ -1109,12 +1137,8 @@ setInterval(() => {
         let foundBad = false;
         let reason = "";
 
-        // วนลูปเช็คทีละแถว (เริ่มแถวที่ 2)
         for (let i = 1; i < rows.length; i++) {
-            // ล้างฟันหนูและช่องว่างในแถวนั้นให้เกลี้ยง
             let cleanRow = rows[i].toLowerCase().replace(/["']/g, '').replace(/\s+/g, '');
-
-            // ถ้าเจอ "ชื่อ" หรือ "เบอร์" ในแถวที่มีคำว่า ติดผ่อน/blacklist/ค้าง/ไม่ผ่าน
             const matchName = nameInput !== "" && cleanRow.includes(nameInput);
             const matchPhone = phoneInput !== "" && cleanRow.includes(phoneInput);
 
@@ -1129,21 +1153,20 @@ setInterval(() => {
             }
         }
 
+        // 3. สรุปผลการตรวจสอบ
         if (foundBad) {
-            confirmBtn.disabled = true;
-            confirmBtn.style.opacity = "0.5";
+            setLocked(true); // ตรวจไม่ผ่าน ล็อคต่อ
             statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่สามารถผ่อนได้: ${reason}</b>`;
         } else {
-            confirmBtn.disabled = false;
-            confirmBtn.style.opacity = "1";
+            setLocked(false); // ตรวจผ่าน ปลดล็อคให้กดได้ทุกอย่าง!
             statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! ท่านสามารถผ่อนได้</span>";
         }
     } catch (e) {
-        // ถ้าดึงข้อมูลไม่ได้ (เช่น เน็ตหลุด) ให้ล็อคปุ่มผ่อนไว้ก่อนเพื่อความปลอดภัย
-        confirmBtn.disabled = true;
+        setLocked(true);
         statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง กรุณาลองใหม่</span>";
     }
 }
+
 // ฟังก์ชันช่วยให้ใช้เมาส์คลิกลากสไลด์ได้ในคอม
 function enableMouseDrag(el) {
     let isDown = false;
