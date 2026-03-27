@@ -567,8 +567,7 @@ function updateMainDots(pIndex, el, total) {
         }
     }
 }
-function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
-    // ป้องกันกรณีไม่มีรูปภาพ
+    function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed) {
     const rawImg = imgUrl || "";
     const allImages = rawImg.split(',').map(i => i.trim()).filter(i => i !== "");
     const firstImg = allImages[0] || "";
@@ -584,7 +583,6 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         canInstall: isAllowed 
     };
 
-    // จัดการปุ่มผ่อน
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
         payInstallBtn.style.display = 'block';
@@ -593,31 +591,38 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         togglePay('จ่ายเต็ม');
     }
 
-    // วาดส่วนหัวและรูปภาพ (แก้ไขโครงสร้างใหม่ให้เสถียรขึ้น)
     const orderDetail = document.getElementById('orderDetail');
     orderDetail.innerHTML = `
-        <div style="background:#000; margin:-8px -8px 15px -8px; position:relative; border-bottom:1px solid var(--gold);">
+        <div style="background:#000; margin:-15px -15px 15px -15px; position:relative; overflow:hidden; border-radius:15px 15px 0 0;">
             <div id="m-slider" onscroll="updateM(this, ${allImages.length})" 
-                 style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; height:280px;">
+                 style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; height:260px;">
                 ${allImages.length > 0 ? allImages.map(img => `
-                    <div style="min-width:100%; height:280px; scroll-snap-align:start;" onclick="zoom('${rawImg}')">
-                        ${renderMedia(img, true)}
+                    <div style="min-width:100%; height:260px; scroll-snap-align:center; display:flex; align-items:center; justify-content:center;" onclick="zoom('${rawImg}')">
+                        <img src="${img}" style="width:100%; height:100%; object-fit:cover;">
                     </div>
-                `).join('') : `<div style="min-width:100%; height:280px; display:flex; align-items:center; justify-content:center; color:#555;">ไม่มีรูปภาพ</div>`}
+                `).join('') : `<div style="min-width:100%; height:260px; display:flex; align-items:center; justify-content:center; color:#555;">ไม่มีรูปภาพ</div>`}
             </div>
             
-            <div id="m-count" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.7); color:#fff; padding:2px 10px; border-radius:20px; font-size:11px;">
+            <div id="m-count" style="position:absolute; top:15px; right:15px; background:rgba(0,0,0,0.6); color:#fff; padding:3px 12px; border-radius:20px; font-size:10px; font-weight:bold; border:1px solid rgba(255,255,255,0.2); pointer-events:none;">
                 1 / ${allImages.length || 1}
+            </div>
+
+            <div style="position:absolute; bottom:12px; left:0; right:0; display:flex; justify-content:center; gap:6px; pointer-events:none;">
+                ${allImages.map((_, i) => `
+                    <div id="mdot-${i}" style="width:${i===0?'18px':'6px'}; height:6px; background:${i===0?'var(--gold)':'rgba(255,255,255,0.5)'}; border-radius:10px; transition:all 0.3s ease;"></div>
+                `).join('')}
             </div>
         </div>
 
-        <div style="text-align:center; padding:0 10px 15px 10px;">
-            <div style="color:var(--gold); font-size:16px; font-weight:600;">${n}</div>
-            <p style="font-size:10px; color:#666; margin-top:4px;">ปัดซ้าย-ขวาเพื่อดูรูปเพิ่มเติม</p>
+        <div style="text-align:center; padding:0 15px 15px 15px;">
+            <div style="color:var(--gold); font-size:18px; font-weight:700; letter-spacing:0.5px; margin-bottom:4px;">${n}</div>
+            <div style="display:flex; align-items:center; justify-content:center; gap:5px; color:#888; font-size:10px;">
+                <i class="fa-solid fa-arrows-left-right"></i> ปัดเพื่อดูรูปเพิ่มเติม
+            </div>
         </div>
     `;
 
-    // วาด Option
+    // ส่วนของ OptionBox เหมือนเดิม
     const box = document.getElementById('optionBox');
     box.innerHTML = '';
     selectedOptions = {};
@@ -657,6 +662,28 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
     updatePrice();
     nextStep(1); 
 }
+
+// ฟังก์ชันอัปเดตเลขหน้าและจุดไข่ปลาขณะสไลด์
+function updateM(el, total) {
+    const idx = Math.round(el.scrollLeft / el.offsetWidth);
+    const countEl = document.getElementById('m-count');
+    if(countEl) countEl.innerText = (idx + 1) + " / " + total;
+
+    // อัปเดตจุดไข่ปลา
+    for (let i = 0; i < total; i++) {
+        const dot = document.getElementById('mdot-' + i);
+        if (dot) {
+            if (i === idx) {
+                dot.style.width = '18px';
+                dot.style.background = 'var(--gold)';
+            } else {
+                dot.style.width = '6px';
+                dot.style.background = 'rgba(255,255,255,0.5)';
+            }
+        }
+    }
+}
+
 
 // ฟังก์ชันนับเลขรูปภาพ (ต้องมีเพื่อไม่ให้ error)
 function updateM(el, total) {
