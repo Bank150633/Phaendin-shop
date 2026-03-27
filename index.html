@@ -1071,43 +1071,49 @@ setInterval(() => {
     const confirmBtn = document.getElementById('submitBtn'); 
     const statusDiv = document.getElementById('statusMsg');
     
-    // 1. ดึง Element (เช็ก ID ให้ตรงกับใน HTML นะครับ)
-    const btnLocation = document.getElementById('btnLocation'); 
-    const selfieInput = document.getElementById('selfieInput'); 
-    const addrTextarea = document.getElementById('cAddr');      // <-- แก้จาก cName เป็น cAddr
-    const slipInput = document.getElementById('slipInput');     
-    const slipPreview = document.getElementById('slipPreview'); 
+    // 1. ดึง Element ที่ต้องล็อค (เช็ก ID ใน HTML ให้ตรงกันนะครับ)
+    const btnLocation = document.getElementById('btnLocation'); // ปุ่มปักหมุด
+    const selfieInput = document.getElementById('selfieInput'); // ช่องเซลฟี่
+    const addrTextarea = document.getElementById('cAddr');      // ช่องที่อยู่
+    const slipInput = document.getElementById('slipInput');     // ช่องแนบสลิป (Input File)
+    const slipPreview = document.getElementById('slipPreview'); // รูปพรีวิวสลิป
+    // ----------------------------------
 
-    // ฟังก์ชันสั่ง ล็อค/ปลดล็อค
+    // ฟังก์ชันช่วยล็อค/ปลดล็อค
     const setLocked = (isLocked) => {
         const opacity = isLocked ? "0.5" : "1";
         const cursor = isLocked ? "not-allowed" : "pointer";
         const pointerEvents = isLocked ? "none" : "auto";
 
+        // ล็อคปุ่มยืนยัน
         confirmBtn.disabled = isLocked;
         confirmBtn.style.opacity = opacity;
 
+        // ล็อคปุ่มปักหมุด
         if(btnLocation) {
             btnLocation.disabled = isLocked;
             btnLocation.style.opacity = opacity;
             btnLocation.style.cursor = cursor;
         }
 
+        // ล็อคช่องที่อยู่
         if(addrTextarea) {
             addrTextarea.disabled = isLocked;
             addrTextarea.style.opacity = opacity;
         }
 
+        // 🟢 ล็อคส่วนแนบสลิป (ป้องกันการกดโอนเงิน/ส่งสลิปก่อนผ่านสิทธิ์)
         if(slipInput) {
             slipInput.disabled = isLocked;
             slipInput.style.opacity = opacity;
-            slipInput.style.pointerEvents = pointerEvents;
+            slipInput.style.pointerEvents = pointerEvents; // บังคับคลิกไม่ได้
             if(isLocked) {
-                slipInput.value = ""; // ล้างไฟล์ทิ้ง
-                if(slipPreview) slipPreview.style.display = "none"; // ซ่อนรูปพรีวิวสลิป
+                slipInput.value = ""; // ล้างไฟล์ที่เลือกค้างไว้
+                if(slipPreview) slipPreview.style.display = "none"; // ซ่อนรูปพรีวิว
             }
         }
         
+        // ล็อคส่วนเซลฟี่
         if(selfieInput) {
             selfieInput.disabled = isLocked;
             selfieInput.style.opacity = opacity;
@@ -1115,20 +1121,21 @@ setInterval(() => {
         }
     };
 
-    // 2. รับค่า (เช็กเบอร์ 10 หลัก)
     const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim().toLowerCase();
     const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
+    // 1. ถ้าจ่ายสด ปลดล็อคทุกอย่าง
     if (payType !== 'ผ่อนไปใช้ไป') {
         setLocked(false);
-        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (สั่งซื้อได้ปกติ)</span>";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (ทำรายการได้ปกติ)</span>";
         return; 
     }
 
-    if (nameInput.length < 3 || phoneInput.length < 10) { // <-- เปลี่ยนเป็น 10 หลัก
+    // 2. ถ้าเลือกผ่อน แต่ข้อมูลไม่ครบ ล็อคไว้ก่อน
+    if (nameInput.length < 3 || phoneInput.length < 10) {
         setLocked(true);
-        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบ 10 หลัก</span>";
+        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบ เพื่อเช็คสิทธิ์</span>";
         return;
     }
 
@@ -1160,15 +1167,15 @@ setInterval(() => {
         }
 
         if (foundBad) {
-            setLocked(true); 
+            setLocked(true); // ❌ ตรวจไม่ผ่าน ล็อคปุ่มแนบสลิปและปุ่มสั่งซื้อ
             statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่สามารถรับสิทธิ์ได้: ${reason}</b>`;
         } else {
-            setLocked(false); 
+            setLocked(false); // ✅ ตรวจผ่าน เปิดให้แนบสลิปได้!
             statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! กรุณาแนบสลิปเพื่อยืนยัน</span>";
         }
     } catch (e) {
         setLocked(true);
-        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบขัดข้อง กรุณาลองใหม่</span>";
+        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง กรุณาลองใหม่</span>";
     }
 }
 
