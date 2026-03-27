@@ -390,6 +390,7 @@
     </div>
 <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()">
     <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()">
+  <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>  
     <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
         <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
             <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS (สำหรับผ่อน)
@@ -401,9 +402,6 @@
             <img id="selfiePreview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
         </div>
     </div>
-
-    
-    <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>
     
     <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง (บ้านเลขที่ ตำบล อำเภอ จังหวัด)" required class="input-slim" style="height:60px;"></textarea>
     
