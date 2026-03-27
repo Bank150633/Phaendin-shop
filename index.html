@@ -342,6 +342,7 @@
 <nav>
     <div class="nav-tab active" onclick="location.reload()"><i class="fa-solid fa-house"></i> หน้าแรก</div>
     <div class="nav-tab" onclick="checkShip()"><i class="fa-solid fa-truck"></i> พัสดุ</div>
+    <div class="nav-tab" onclick="checkBalance()"><i class="fa-solid fa-wallet"></i> เช็คยอดผ่อน</div>
     <div class="nav-tab" onclick="openModal('contactModal')"><i class="fa-solid fa-comment-dots"></i> ติดต่อ</div>
 </nav>
 
@@ -1203,11 +1204,48 @@ function enableMouseDrag(el) {
 }
 
 // เรียกใช้งานกับทุก slider ในหน้าแรกหลัง render
-const observer = new MutationObserver(() => {
+ const observer = new MutationObserver(() => {
     document.querySelectorAll('[id^="p-slider-"]').forEach(el => enableMouseDrag(el));
 });
 observer.observe(document.getElementById('productGrid'), { childList: true });
-
+// --- ฟังก์ชันเช็คยอดผ่อน ---
+async function checkBalance() {
+    const phone = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้ลงทะเบียนผ่อน:"); 
+    if(!phone) return;
+    
+    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
+    // อย่าลืม! เปลี่ยนเลข GID ด้านล่างให้ตรงกับหน้า Sheet "Payments" ของคุณนะครับ
+    const GID_PAYMENT = '0'; // ปกติหน้าแรกจะเป็น 0 หรือดูจากท้าย URL ในเบราว์เซอร์
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_PAYMENT}&refresh=${Date.now()}`;
+    
+    try {
+        const res = await fetch(url);
+        const csv = await res.text(); // แก้จาก response เป็น res
+        const rows = csv.split('\n').map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/"/g,'').trim()));
+        
+        // ค้นหาข้อมูลจากเบอร์โทร (คอลัมน์ A คือ index 0)
+        const data = rows.find(r => r[0] === phone);
+        
+        if(data) {
+            const message = `📊 ข้อมูลการผ่อนของคุณ: ${data[1]}\n` +
+                            `------------------------\n` +
+                            `💰 ยอดรวมทั้งหมด: ฿${parseFloat(data[2] || 0).toLocaleString()}\n` +
+                            `✅ จ่ายแล้ว: ฿${parseFloat(data[3] || 0).toLocaleString()}\n` +
+                            `🚨 ยอดค้างชำระ: ฿${parseFloat(data[4] || 0).toLocaleString()}\n` +
+                            `📅 ครบกำหนดถัดไป: ${data[5] || '-'}\n` +
+                            `📌 สถานะ: ${data[6] || '-'}\n` +
+                            `------------------------\n` +
+                            `*โปรดชำระเงินตามกำหนดเพื่อรักษาเครดิต*`;
+            alert(message);
+        } else {
+            alert("❌ ไม่พบข้อมูลการผ่อนสำหรับเบอร์: " + phone + "\nหากเพิ่งสั่งซื้อ โปรดรอระบบอัปเดต 1-2 วันครับ");
+        }
+    } catch(e) {
+        console.error(e);
+        alert("ขออภัย! ระบบขัดข้อง ไม่สามารถเช็คยอดได้ในขณะนี้");
+    }
+                        }
+                
 </script>
 </body>
 </html>
