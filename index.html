@@ -517,53 +517,48 @@
             render();
         } catch(e) { console.error(e); }
     }
-    
-   function render() {
+    function render() {
     const query = document.getElementById('search').value.toLowerCase();
     const now = new Date().getTime();
-    const filtered = db.filter(p => p[0].toLowerCase().includes(query));
     
-    document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
+    // กรองสินค้าตามคำค้นหา
+    const filtered = db.filter(p => (p[0] || '').toLowerCase().includes(query));
+    
+    const grid = document.getElementById('productGrid');
+    if (!grid) return;
+
+    grid.innerHTML = filtered.map((p, pIndex) => {
         let pName = (p[0] || '').replace(/'/g, "\\'");
         let priceNormal = parseFloat(p[3] || 0);    
         let pricePromo = parseFloat(p[10] || 0);   
         let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-        let provinceName = p[13] || '';
-        let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
-
         let images = (p[1] || '').split(',').map(img => img.trim());
-        let currentPrice = pricePromo > 0 && expiryDate > now ? pricePromo : priceNormal;
-        let percentDiscount = pricePromo > 0 && expiryDate > now ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
+        
+        // เช็คว่าอยู่ในช่วงโปรโมชั่นไหม
+        let isPromo = pricePromo > 0 && expiryDate > now;
+        let currentPrice = isPromo ? pricePromo : priceNormal;
 
         return `
         <div class="card">
-            <div class="media-wrap" style="position: relative;">
-                <div class="badge-container">
-                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
-                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                </div>
-                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                
+            <div class="media-wrap">
                 <div style="width: 100%; height: 100%; overflow: hidden;">
                     ${renderMedia(images[0], true)}
                 </div>
-
-                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+                ${isPromo ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
             </div>
             <div class="info">
                 <div class="p-name">${p[0]}</div>
                 <div class="p-desc">${p[2] || ''}</div>
                 <div class="p-price">
-                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                    ${isPromo ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                    <span class="${isPromo ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>                    
             </div>
-            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
+            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${isPromo ? Math.round(((priceNormal-pricePromo)/priceNormal)*100) : 0}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(p[15]||"NO")}, ${JSON.stringify(p[2]||"")})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
 }
- 
+
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
