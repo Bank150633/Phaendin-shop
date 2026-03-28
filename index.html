@@ -1078,16 +1078,21 @@ setInterval(() => {
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
     // ฟังก์ชันช่วยล็อคปุ่มแบบมีเงื่อนไข Checkbox
-    const updateButtonStatus = (isBlacklisted = false) => {
-        if (isBlacklisted) {
+        const updateButtonStatus = (isBlacklisted = false) => {
+        const payType = document.querySelector('input[name="payType"]:checked')?.value;
+        const isInstall = payType === 'ผ่อนไปใช้ไป';
+
+        if (isBlacklisted && isInstall) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
             confirmBtn.innerText = "ไม่ผ่านเกณฑ์การผ่อน";
-        } else if (!lineAccept.checked) {
+        } else if (isInstall && !lineAccept.checked) {
+            // ถ้าเลือกผ่อน แต่ยังไม่ติ๊ก -> ล็อคปุ่ม
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
             confirmBtn.innerText = "กรุณาติ๊กยอมรับก่อน";
         } else {
+            // ถ้าจ่ายสด หรือ (เลือกผ่อน + ติ๊กแล้ว) -> เปิดปุ่ม
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
             confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
