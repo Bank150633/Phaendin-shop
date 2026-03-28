@@ -709,43 +709,46 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
     updateSubmitButtonStatus(totalItems);
 }
 
-// ฟังก์ชันช่วยวาด Grid 3x3 และดึงสินค้าอื่นมาเติมถ้าไม่ครบ 9
 function render3x3Grid() {
     let html = '';
     let discP = parseFloat(activeP.disc) || 0;
-    
-    // 1. ดึงตัวเลือกสินค้า (Variants) จากข้อมูลที่เรามี
     let items = [];
+
+    // 1. ดึงตัวเลือกสินค้าปัจจุบัน (เสื้อ ไซส์ สี ฯลฯ)
     for (let key in selectedOptions) {
-        items.push({ name: key, price: selectedOptions[key].price, qty: selectedOptions[key].qty });
+        items.push({ name: key, price: selectedOptions[key].price, qty: selectedOptions[key].qty, isMain: true });
     }
 
-    // 2. ถ้าไม่ครบ 9 ให้เอาสินค้าจากหน้าหลัก (db) มาแสดงโชว์ (จำลองเป็นตัวเลือกเสริม)
+    // 2. สุ่มสินค้าอื่นมาเติมให้ครบ 9 ช่อง
     if (items.length < 9) {
-        let otherProducts = db.filter(p => p[0] !== activeP.name).slice(0, 9 - items.length);
-        otherProducts.forEach(p => {
-            let pName = p[0];
-            let pPrice = parseFloat(p[3]);
-            if (!selectedOptions[pName]) {
-                selectedOptions[pName] = { qty: 0, price: pPrice };
-            }
-            items.push({ name: pName, price: pPrice, qty: selectedOptions[pName].qty, img: p[1].split(',')[0] });
+        let others = db.filter(p => p[0] !== activeP.name)
+                       .sort(() => 0.5 - Math.random())
+                       .slice(0, 9 - items.length);
+        others.forEach(p => {
+            items.push({ name: p[0], price: parseFloat(p[3]), qty: 0, img: p[1].split(',')[0], isMain: false });
         });
     }
 
-    // 3. สร้าง HTML Grid
+    // 3. สร้างหน้าตา Grid
     items.forEach(item => {
         let displayPrice = Math.round(item.price * (1 - (discP / 100)));
         let itemImg = item.img || activeP.img.split(',')[0];
+        
+        // ถ้าไม่ใช่ตัวหลัก ให้ใช้คำสั่ง switchOrder (วาร์ปไปหาสินค้านั้น)
+        const action = item.isMain ? `zoom('${itemImg}')` : `switchOrder('${item.name}')`;
+        const badge = !item.isMain ? `<span style="position:absolute; top:2px; right:2px; background:var(--gold); color:#000; font-size:7px; padding:1px 4px; border-radius:3px; font-weight:bold; z-index:5;">คลิกดู</span>` : '';
 
         html += `
-        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.1); border-radius: 10px; padding: 6px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-            <img src="${itemImg}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; margin-bottom: 4px;">
+        <div style="background: ${item.isMain ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.05)'}; 
+                    border: 1px solid ${item.isMain ? 'var(--gold)' : 'rgba(212,175,55,0.1)'}; 
+                    border-radius: 10px; padding: 6px; text-align: center; display: flex; flex-direction: column; position: relative;">
+            ${badge}
+            <img src="${itemImg}" onclick="${action}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
             <div style="font-size: 9px; color: #fff; height: 22px; overflow: hidden; line-height: 1.1;">${item.name}</div>
             <div style="font-size: 11px; color: var(--gold); font-weight: 700; margin: 2px 0;">฿${displayPrice.toLocaleString()}</div>
             <div style="display: flex; justify-content: center; align-items: center; gap: 4px;">
                 <button type="button" onclick="changeVQty('${item.name}', ${item.price}, -1)" style="width:22px; height:22px; border-radius:50%; border:none; background:#333; color:#fff; font-size:12px;">-</button>
-                <span style="font-size:12px; font-weight:bold; min-width:15px;">${item.qty}</span>
+                <span id="v-qty-${item.name}" style="font-size:12px; font-weight:bold; min-width:15px;">${item.qty}</span>
                 <button type="button" onclick="changeVQty('${item.name}', ${item.price}, 1)" style="width:22px; height:22px; border-radius:50%; border:none; background:var(--gold-grad); color:#000; font-size:12px;">+</button>
             </div>
         </div>`;
@@ -1261,9 +1264,24 @@ async function checkBalance() {
     } catch(e) {
         console.error(e);
         alert("ขออภัย! ระบบขัดข้อง ไม่สามารถเช็คยอดได้ในขณะนี้");
+    }               
     }
-                        }
-                
+     // ฟังก์ชัน "วาร์ป" ไปหาหน้าสินค้าที่กด
+function switchOrder(targetName) {
+    const p = db.find(item => item[0] === targetName);
+    if (p) {
+        closeModal('orderModal'); // ปิดหน้าเดิมก่อน
+        setTimeout(() => {
+            // เปิดหน้าใหม่ทันทีด้วยข้อมูลสินค้าตัวที่กด
+            openOrder(
+                p[0], parseFloat(p[3]||0), parseFloat(p[8]||0), p[9]||"-", 
+                activeP.disc, parseInt(p[12]||999), p[1], parseInt(p[14]||1), 
+                p[15]||"NO", p[2]
+            );
+        }, 200);
+    }
+}
+           
 </script>
 </body>
 </html>
