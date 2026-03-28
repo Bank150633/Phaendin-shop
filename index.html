@@ -122,13 +122,15 @@
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
         .copy-badge:active { background: var(--gold); color: #000; }
-    /* ปรับให้รายการสินค้าโชว์ครบ ไม่ต้องสไลด์ */
+    /* --- ส่วนแสดงผลสินค้า Grid 3 คอลัมน์ (เนี๊ยบที่สุด) --- */
 #optionBox { 
     display: grid !important; 
     grid-template-columns: repeat(3, 1fr) !important; 
     gap: 8px; 
     padding: 10px;
     width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .variant-item { 
@@ -139,6 +141,9 @@
     display: flex;
     flex-direction: column; 
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0; /* กันกรอบแตก */
 }
 
 .v-img { 
@@ -315,37 +320,6 @@
 #productGrid [id^="p-slider-"]:active {
     cursor: grabbing;
 }
-    /* --- วางเพิ่มตรงนี้ --- */
-    /* ล็อกโครงสร้าง Modal ให้พอดีหน้าจอ */
-    #orderModal .modal-card {
-        height: 95vh; /* ปรับลดนิดนึงเพื่อให้เห็นขอบบนล่างสวยๆ */
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        padding: 0 !important;
-        max-width: 360px; /* บังคับความกว้างให้พอดีมือถือ */
-    }
-
-    /* ส่วนกลางที่เป็น Grid 3x3 */
-    #dynamicVariantGrid {
-        display: grid !important; 
-        grid-template-columns: repeat(3, 1fr) !important; 
-        gap: 6px !important; 
-        padding: 10px;
-        flex: 1; 
-        overflow-y: auto; 
-        background: rgba(0,0,0,0.2);
-    }
-
-    /* ปรับแต่งปุ่มท้ายให้ดูเป็นระเบียบ */
-    .order-footer-3btns {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1.5fr; 
-        gap: 8px;
-        padding: 15px 12px;
-        background: #111;
-        border-top: 1px solid rgba(212,175,55,0.3);
-    }
 
     </style>
 </head>
@@ -447,7 +421,26 @@
     </div>
 </div>
             <div class="modal-footer-fixed">
-                
+                <div id="step-1-footer">
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <div id="pay-full" onclick="togglePay('จ่ายเต็ม')" style="flex:1; border:2px solid var(--gold); background:rgba(212,175,55,0.2); padding:10px; border-radius:12px; text-align:center; cursor:pointer;">
+                            <div style="font-size:12px; font-weight:bold; color:#fff;">ชำระสด</div>
+                            <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display:none">
+                        </div>
+                        <div id="pay-install" onclick="togglePay('ผ่อนไปใช้ไป')" style="flex:1; border:1px solid rgba(255,255,255,0.1); padding:10px; border-radius:12px; text-align:center; cursor:pointer;">
+                            <div style="font-size:12px; font-weight:bold; color:#fff;">ผ่อนชำระ</div>
+                            <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display:none">
+                        </div>
+                    </div>
+                    
+                    <div id="installmentInfo" style="display:none; margin-bottom:12px; padding:8px; background:rgba(212,175,55,0.1); border-radius:10px; border:1px solid var(--gold); text-align:center;">
+                        <p style="font-size:10px; color:var(--gold);">ยอดรวมผ่อน (+20%): <span id="instTotal" style="color:#fff; font-weight:bold;">฿0</span></p>
+                        <p style="font-size:10px; color:#aaa;">งวดละ: <span id="instMonth" style="color:var(--gold); font-weight:bold;">฿0</span></p>
+                        <p style="font-size:9px; color:#38ef7d;">งวดที่ 2: <span id="instNextDate">-</span></p>
+                    </div>
+
+                    <button type="button" class="buy-now" onclick="nextStep(2)" style="border-radius:10px; padding: 12px 0;">ถัดไป (กรอกที่อยู่)</button>
+                </div>
 
                                 <div id="step-2-footer" style="display:none;">
                     <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
@@ -566,7 +559,7 @@
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>                    
             </div>
-            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)}, ${JSON.stringify(p[2])})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
+            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
 }
@@ -651,135 +644,117 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
     }
 
-     function updatePrice() {
-    let totalNormal = 0; 
-    let totalDiscounted = 0; 
+      function updatePrice() {
+    let subtotalNormal = 0; // ราคารวมแบบปกติ (ก่อนลด)
+    let subtotalDiscounted = 0; // ราคารวมแบบหัก % แล้ว
     let summaryText = [];
     let totalItems = 0;
+    
     let discP = parseFloat(activeP.disc) || 0; 
-    let shipF = parseFloat(activeP.ship) || 0;
 
     for (let key in selectedOptions) { 
         if(selectedOptions[key].qty > 0) {
             let qty = selectedOptions[key].qty;
-            let price = selectedOptions[key].price;
-            totalNormal += (price * qty);
-            totalDiscounted += (price * (1 - (discP / 100)) * qty);
+            let unitPrice = selectedOptions[key].price;
+            
+            // คำนวณยอดรวมปกติ
+            subtotalNormal += (unitPrice * qty);
+            
+            // คำนวณยอดรวมแบบลด %
+            let discountedUnitPrice = unitPrice * (1 - (discP / 100));
+            subtotalDiscounted += (discountedUnitPrice * qty);
+            
             summaryText.push(`${key} x${qty}`); 
             totalItems += qty; 
         } 
     }
     
-    let grandTotal = totalItems > 0 ? Math.round(totalDiscounted + shipF) : 0;
-    activeP.finalTotal = grandTotal;
+    // ปัดเศษให้เรียบร้อย
+    subtotalNormal = Math.round(subtotalNormal);
+    subtotalDiscounted = Math.round(subtotalDiscounted);
+
+    // ยอดสุทธิ = (ราคาที่ลดแล้ว) + ค่าส่ง
+    activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
+    // ยอดก่อนลดสะสม = (ราคาปกติ) + ค่าส่ง (เอาไว้โชว์ตัวขีดฆ่า)
+    let totalBeforeDisc = subtotalNormal + activeP.ship;
+    
     activeP.summary = summaryText.join(', ');
 
-    // วาดเนื้อหาใหม่เข้าไปใน orderDetail
-    document.getElementById('orderDetail').innerHTML = `
-        <div style="padding: 12px; border-bottom: 1px solid #222; display: flex; gap: 10px; align-items: center; background: rgba(212,175,55,0.05);">
-            <img src="${activeP.img.split(',')[0]}" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover; border: 1px solid var(--gold);">
-            <div style="flex:1">
-                <div style="font-size: 14px; color: var(--gold); font-weight: bold; line-height:1.2;">${activeP.name}</div>
-                <div style="font-size: 10px; color: #888; margin-top:2px;">${activeP.pDesc || 'Phaendin Curated'}</div>
-            </div>
-        </div>
+    let images = activeP.img.split(',').map(img => img.trim());
+    let imgCount = images.length; 
 
-        <div id="dynamicVariantGrid">
-            ${render3x3Grid()}
-        </div>
-
-        <div class="order-footer-3btns">
-            <div style="grid-column: span 3; display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 11px;">
-                <span style="color: #888;">ค่าส่ง ฿${shipF} | ลด ${discP}%</span>
-                <span style="color: #fff; font-weight: bold;">รวมสุทธิ: <span id="finalTotalDisplay" style="color:var(--gold); font-size:16px;">฿${grandTotal.toLocaleString()}</span></span>
-            </div>
-            
-            <button type="button" onclick="togglePay('จ่ายเต็ม'); nextStep(2);" 
-                style="background: #28a745; color: #fff; border: none; border-radius: 8px; font-size: 11px; height: 42px; font-weight: bold;">
-                ชำระสด
-            </button>
-            
-            <button type="button" id="pay-install-btn" onclick="togglePay('ผ่อนไปใช้ไป'); nextStep(2);" 
-                style="background: #007bff; color: #fff; border: none; border-radius: 8px; font-size: 11px; height: 42px; font-weight: bold; ${(activeP.canInstall !== 'YES') ? 'display:none' : ''}">
-                ผ่อนชำระ
-            </button>
-
-            <button type="button" id="submitBtnMain" onclick="nextStep(2)" class="buy-now" 
-                style="border-radius: 8px; height: 42px; font-size: 13px; margin: 0; animation: none !important; 
-                ${totalItems < activeP.min ? 'opacity: 0.5; pointer-events: none;' : ''}">
-                ${totalItems < activeP.min ? `ขั้นต่ำ ${activeP.min}` : 'ถัดไป'}
-            </button>
-        </div>
-    `;
-}
-         
-function render3x3Grid() {
-    let html = '';
-    let discP = parseFloat(activeP.disc) || 0;
-    let items = [];
-
-    // 1. ดึงตัวเลือกสินค้าปัจจุบัน (เสื้อ ไซส์ สี ฯลฯ)
-    for (let key in selectedOptions) {
-        items.push({ name: key, price: selectedOptions[key].price, qty: selectedOptions[key].qty, isMain: true });
+       // --- จุดที่ 1: แก้ไขการสร้างป้ายแท็กให้รองรับ Class และ Style ---
+    let badgesHtml = `<div class="promo-pill-container" style="display: flex; justify-content: center; gap: 5px; margin-top: 5px;">`;
+    
+    // ป้ายลดเปอร์เซ็นต์
+    if (activeP.disc > 0) {
+        badgesHtml += `<span class="pill pill-red" style="background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:4px; font-size:10px;">ลด ${activeP.disc}%</span>`;
     }
-
-    // 2. สุ่มสินค้าอื่นมาเติมให้ครบ 9 ช่อง
-    if (items.length < 9) {
-        let others = db.filter(p => p[0] !== activeP.name)
-                       .sort(() => 0.5 - Math.random())
-                       .slice(0, 9 - items.length);
-        others.forEach(p => {
-            items.push({ name: p[0], price: parseFloat(p[3]), qty: 0, img: p[1].split(',')[0], isMain: false });
-        });
-    }
-
-    // 3. สร้างหน้าตา Grid
-    items.forEach(item => {
-        let displayPrice = Math.round(item.price * (1 - (discP / 100)));
-        let itemImg = item.img || activeP.img.split(',')[0];
-        
-        // ถ้าไม่ใช่ตัวหลัก ให้ใช้คำสั่ง switchOrder (วาร์ปไปหาสินค้านั้น)
-        const action = item.isMain ? `zoom('${itemImg}')` : `switchOrder('${item.name}')`;
-        const badge = !item.isMain ? `<span style="position:absolute; top:2px; right:2px; background:var(--gold); color:#000; font-size:7px; padding:1px 4px; border-radius:3px; font-weight:bold; z-index:5;">คลิกดู</span>` : '';
-
-        html += `
-        <div style="background: ${item.isMain ? 'rgba(212,175,55,0.1)' : 'rgba(255,255,255,0.05)'}; 
-                    border: 1px solid ${item.isMain ? 'var(--gold)' : 'rgba(212,175,55,0.1)'}; 
-                    border-radius: 10px; padding: 6px; text-align: center; display: flex; flex-direction: column; position: relative;">
-            ${badge}
-            <img src="${itemImg}" onclick="${action}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
-            <div style="font-size: 9px; color: #fff; height: 22px; overflow: hidden; line-height: 1.1;">${item.name}</div>
-            <div style="font-size: 11px; color: var(--gold); font-weight: 700; margin: 2px 0;">฿${displayPrice.toLocaleString()}</div>
-            <div style="display: flex; justify-content: center; align-items: center; gap: 4px;">
-                <button type="button" onclick="changeVQty('${item.name}', ${item.price}, -1)" style="width:22px; height:22px; border-radius:50%; border:none; background:#333; color:#fff; font-size:12px;">-</button>
-                <span id="v-qty-${item.name}" style="font-size:12px; font-weight:bold; min-width:15px;">${item.qty}</span>
-                <button type="button" onclick="changeVQty('${item.name}', ${item.price}, 1)" style="width:22px; height:22px; border-radius:50%; border:none; background:var(--gold-grad); color:#000; font-size:12px;">+</button>
-            </div>
-        </div>`;
-    });
-    return html;
-}
-
-// ฟังก์ชันล้างค่าสินค้าที่เลือก
-function resetSelections() {
-    for (let key in selectedOptions) { selectedOptions[key].qty = 0; }
-    updatePrice();
-}
-
-// ฟังก์ชันเช็คสถานะปุ่มกด
-function updateSubmitButtonStatus(total) {
-    const btn = document.getElementById('submitBtn');
-    if (total < activeP.min) {
-        btn.disabled = true;
-        btn.style.opacity = "0.5";
-        btn.innerText = `ขั้นต่ำ ${activeP.min}`;
+    
+    // ป้ายส่งฟรี / ค่าส่ง
+    if (activeP.ship === 0) {
+        badgesHtml += `<span class="pill pill-free-ship" style="border:1px solid #38ef7d; color:#38ef7d; background:rgba(56,239,125,0.1); padding:2px 8px; border-radius:4px; font-size:10px;">ส่งฟรี</span>`;
     } else {
-        btn.disabled = false;
-        btn.style.opacity = "1";
-        btn.innerText = "ถัดไป";
+        badgesHtml += `<span class="pill pill-gold" style="background:var(--gold-grad); color:#000; padding:2px 8px; border-radius:4px; font-size:10px;">ค่าส่ง ฿${activeP.ship}</span>`;
     }
-}
+    badgesHtml += `</div>`;
  
+    document.getElementById('orderDetail').innerHTML = `
+    <div class="order-summary-box" style="padding: 0; overflow: hidden; position: relative; border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; margin-bottom: 8px;">
+        
+        ${imgCount > 1 ? `<div class="img-counter" id="imgNum">1 / ${imgCount}</div>` : ''}
+
+        <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;">
+            <div id="m-slider" onscroll="updateDots(this, ${imgCount})" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+                ${images.map(img => `<div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">${renderMedia(img, true)}</div>`).join('')}
+            </div>
+
+            // ค้นหาบรรทัดนี้ใน updatePrice แล้วแก้เป็นแบบนี้ครับ
+${imgCount > 1 ? `
+<div class="dot-container">
+    ${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="modal-dot-${i}"></div>`).join('')}
+</div>` : ''}
+        </div>
+        
+        <div style="padding: 8px;">
+            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
+<div style="font-size:11px; color:#aaa; text-align:center; margin-bottom: 8px; padding: 0 15px;">${activeP.pDesc || ''}</div>
+            </div>
+            ${badgesHtml}
+            <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 4px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
+            <div style="border-top: 1px dashed rgba(212,175,55,0.2); padding-top:8px; text-align:center;">
+                <span style="font-size:10px; color:var(--gold);">ยอดชำระสุทธิ</span>
+                
+                <div style="display:flex; justify-content:center; align-items:baseline; gap:8px;">
+                    ${(activeP.disc > 0 && totalItems > 0) ? `
+                        <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: 400;">
+                            ฿${totalBeforeDisc.toLocaleString()}
+                        </span>
+                    ` : ''}
+                    
+                    <div id="finalTotalDisplay" style="font-size:28px; font-weight:800; color:#fff;">
+                        ฿${activeP.finalTotal.toLocaleString()}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    // อัปเดตสถานะปุ่มสั่งซื้อ
+    const btn = document.getElementById('submitBtn');
+    if (totalItems === 0) { 
+        btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
+    } else if (totalItems < activeP.min) { 
+        btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
+    } else { 
+        btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
+    }
+
+    // คำนวณยอดผ่อนใหม่ตามราคาที่อัปเดต
+    const currentPayType = document.querySelector('input[name="payType"]:checked').value;
+    togglePay(currentPayType);
+} 
+     
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
     // 1. แยกรูปภาพออกมา (รองรับทั้งแบบรูปเดียว หรือหลายรูปคั่นด้วยคอมม่า)
@@ -823,13 +798,14 @@ function updateZoomDots(el, total) {
     m.classList.remove('show');
     setTimeout(() => {
         m.style.display = 'none';
+        // ล้างขยะใน Modal ออกให้หมด
         if(id === 'orderModal') {
-            // เคลียร์ค่าทิ้งเพื่อให้เปิดตัวใหม่ได้ถูกต้อง
             document.getElementById('orderDetail').innerHTML = '';
+            document.getElementById('optionBox').innerHTML = '';
         }
     }, 300);
 }
-
+    
 function handleFile(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -1267,24 +1243,9 @@ async function checkBalance() {
     } catch(e) {
         console.error(e);
         alert("ขออภัย! ระบบขัดข้อง ไม่สามารถเช็คยอดได้ในขณะนี้");
-    }               
     }
-     // ฟังก์ชัน "วาร์ป" ไปหาหน้าสินค้าที่กด
-function switchOrder(targetName) {
-    const p = db.find(item => item[0] === targetName);
-    if (p) {
-        closeModal('orderModal'); // ปิดหน้าเดิมก่อน
-        setTimeout(() => {
-            // เปิดหน้าใหม่ทันทีด้วยข้อมูลสินค้าตัวที่กด
-            openOrder(
-                p[0], parseFloat(p[3]||0), parseFloat(p[8]||0), p[9]||"-", 
-                activeP.disc, parseInt(p[12]||999), p[1], parseInt(p[14]||1), 
-                p[15]||"NO", p[2]
-            );
-        }, 200);
-    }
-}
-           
+                        }
+                
 </script>
 </body>
 </html>
