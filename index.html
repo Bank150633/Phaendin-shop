@@ -929,13 +929,21 @@ function nextStep(step) {
                         `--------------------------\n` +
                         `*(ลูกค้ากด 'ส่ง' เพื่อรับใบเสร็จ)*`;
 
-            const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
+                        const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
 
-            // 3. แจ้งสำเร็จและไป Line
-            alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จใน Line OA");
-            window.location.href = lineUrl; 
+            // 3. แจ้งสำเร็จ
+            if (isInstall) {
+                // ถ้า "ผ่อน" ให้ไปที่ Line
+                alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จการผ่อนใน Line OA");
+                window.location.href = lineUrl; 
+            } else {
+                // ถ้า "ซื้อสด" ให้แจ้งสำเร็จแล้วอยู่หน้าเดิม (หรือรีโหลด)
+                alert("✅ สั่งซื้อสำเร็จ! ขอบคุณที่ไว้วางใจ Phaendin Store ครับ");
+                location.reload(); 
+            }
 
         } catch(err) {
+
             console.error(err);
             alert("❌ เกิดข้อผิดพลาด กรุณาลดขนาดรูปภาพแล้วลองใหม่อีกครั้ง");
             btn.disabled = false;
