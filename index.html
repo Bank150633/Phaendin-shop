@@ -819,14 +819,13 @@ function updateZoomDots(el, total) {
     m.classList.remove('show');
     setTimeout(() => {
         m.style.display = 'none';
-        // ล้างขยะใน Modal ออกให้หมด
         if(id === 'orderModal') {
+            // เคลียร์ค่าทิ้งเพื่อให้เปิดตัวใหม่ได้ถูกต้อง
             document.getElementById('orderDetail').innerHTML = '';
-            document.getElementById('optionBox').innerHTML = '';
         }
     }, 300);
 }
-    
+
 function handleFile(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
