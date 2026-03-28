@@ -442,9 +442,21 @@
                     <button type="button" class="buy-now" onclick="nextStep(2)" style="border-radius:10px; padding: 12px 0;">ถัดไป (กรอกที่อยู่)</button>
                 </div>
 
-                <div id="step-2-footer" style="display:none;">
-                    <button type="submit" id="submitBtn" class="buy-now" style="border-radius:10px; padding: 12px 0;">ยืนยันสั่งซื้อ</button>
+                                <div id="step-2-footer" style="display:none;">
+                    <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
+                        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="lineAccept" onchange="checkBlacklist()" style="width: 22px; height: 22px; accent-color: #06c755;">
+                            <span style="font-size: 11px; color: #fff; line-height: 1.4;">
+                                <b>[บังคับ]</b> ฉันยอมรับการรับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน Line OA ของร้าน (กรุณาติ๊กเพื่อยืนยันสั่งซื้อ)
+                            </span>
+                        </label>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="buy-now" disabled style="border-radius:10px; padding: 12px 0; opacity: 0.5;">
+                        กรุณาติ๊กยอมรับก่อน
+                    </button>
                 </div>
+
             </div>
         </form>
     </div>
@@ -845,73 +857,91 @@ function nextStep(step) {
     }
 }
 
-    document.getElementById('orderForm').onsubmit = async (e) => {
-    e.preventDefault();
-    
-    // ดึงค่าใหม่ๆ ที่เพิ่มเข้ามา
-    const payType = document.querySelector('input[name="payType"]:checked').value;
-    const gps = document.getElementById('userLocation').value;
-    const selfieFile = document.getElementById('selfieIn').files[0];
-    const slipFile = document.getElementById('fileIn').files[0];
-
-    // เช็คเงื่อนไขกรณี "ผ่อน"
-    if (payType === 'ผ่อนไปใช้ไป') {
-        if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
-        if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
-    }
-    
-    // เช็คสลิป (ต้องมีทั้งสดและผ่อน)
-    if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
-
-    const btn = document.getElementById('submitBtn');
-    btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
-
-    // ฟังก์ชันแปลงรูปภาพเป็น Base64
-    const toBase64 = file => new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-    });
-
-    try {
-        const slipBase64 = await toBase64(slipFile);
-        let selfieBase64 = "";
+        document.getElementById('orderForm').onsubmit = async (e) => {
+        e.preventDefault();
         
-        // ถ้ามีรูปเซลฟี่ (กรณีผ่อน) ให้แปลงไฟล์ด้วย
-        if (selfieFile) {
-            selfieBase64 = await toBase64(selfieFile);
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        const gps = document.getElementById('userLocation').value;
+        const selfieFile = document.getElementById('selfieIn').files[0];
+        const slipFile = document.getElementById('fileIn').files[0];
+
+        if (payType === 'ผ่อนไปใช้ไป') {
+            if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
+            if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
         }
+        if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
 
-            // --- เริ่มต้นส่วนที่แก้ใหม่ ---
-    const isInstall = payType === 'ผ่อนไปใช้ไป';
-    const finalPrice = isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal;
-    
-    // ดึงวันที่นัดงวด 2 จากหน้าจอ (ถ้ามี)
-    let nextPayDate = "-";
-    const dateEl = document.getElementById('instNextDate');
-    if(dateEl) nextPayDate = dateEl.innerText;
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
 
-    const data = { 
-        productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${finalPrice.toLocaleString()}${isInstall ? ' (ผ่อน 3 งวด)' : ''}`, 
-        customerName: document.getElementById('cName').value, 
-        customerPhone: document.getElementById('cPhone').value, 
-        customerAddress: document.getElementById('cAddr').value,
-        payType: isInstall ? `ผ่อน (งวด2: ${nextPayDate})` : payType, 
-        gps: gps || "-",       
-        file: slipBase64,      
-        selfie: selfieBase64   
+        const toBase64 = file => new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+        });
+
+        try {
+            const slipBase64 = await toBase64(slipFile);
+            let selfieBase64 = selfieFile ? await toBase64(selfieFile) : "";
+
+            // --- คำนวณยอดสำหรับส่ง Data และ Line ---
+            const isInstall = payType === 'ผ่อนไปใช้ไป';
+            const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
+            const perMonth = Math.round(totalFull / 3);
+
+            const getNextMonth = (m) => {
+                const d = new Date();
+                d.setMonth(d.getMonth() + m);
+                return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+            };
+
+            // สร้าง Object ข้อมูลสำหรับส่งไป Google Sheets
+            const sendData = { 
+                productDetail: `${activeP.name} (${activeP.summary})`, 
+                customerName: document.getElementById('cName').value, 
+                customerPhone: document.getElementById('cPhone').value, 
+                customerAddress: document.getElementById('cAddr').value,
+                payType: isInstall ? `ผ่อน (งวดละ ฿${perMonth.toLocaleString()})` : `จ่ายเต็ม (฿${totalFull.toLocaleString()})`, 
+                gps: gps || "-",       
+                file: slipBase64,      
+                selfie: selfieBase64   
+            };
+
+            // 1. ส่งข้อมูลเข้า Google Sheets (แบบไม่รอผลเพื่อความเร็ว)
+            fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(sendData), mode: 'no-cors' });
+
+            // 2. เตรียมข้อความ Line
+            let paymentDetail = `💰 ยอดชำระสุทธิ: ฿${totalFull.toLocaleString()}`;
+            if (isInstall) {
+                paymentDetail = `📌 รายละเอียดการผ่อน (3 งวด):\n` +
+                                `✅ งวดที่ 1 (วันนี้): ฿${perMonth.toLocaleString()}\n` +
+                                `🗓️ งวดที่ 2 (${getNextMonth(1)}): ฿${perMonth.toLocaleString()}\n` +
+                                `🗓️ งวดที่ 3 (${getNextMonth(2)}): ฿${perMonth.toLocaleString()}\n` +
+                                `--------------------------\n` +
+                                `ยอดรวมผ่อน (+20%): ฿${totalFull.toLocaleString()}`;
+            }
+
+            const msg = `🧾 บิลสั่งซื้อ Phaendin Store\n` +
+                        `--------------------------\n` +
+                        `คุณ: ${sendData.customerName}\n` +
+                        `สินค้า: ${activeP.name}\n` +
+                        `${paymentDetail}\n` +
+                        `--------------------------\n` +
+                        `*(ลูกค้ากด 'ส่ง' เพื่อรับใบเสร็จ)*`;
+
+            const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
+
+            // 3. แจ้งสำเร็จและไป Line
+            alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จใน Line OA");
+            window.location.href = lineUrl; 
+
+        } catch(err) {
+            console.error(err);
+            alert("❌ เกิดข้อผิดพลาด กรุณาลดขนาดรูปภาพแล้วลองใหม่อีกครั้ง");
+            btn.disabled = false;
+            btn.innerText = "ยืนยันการสั่งซื้อ";
+        }
     };
-    // --- จบส่วนที่แก้ใหม่ ---
-
-    // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
-    await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); 
-    alert("สั่งซื้อสำเร็จเรียบร้อยครับ!"); 
-    location.reload(); 
-} catch(err) { 
-    alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
-    btn.disabled = false; 
-}
-};
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
@@ -1071,82 +1101,52 @@ setInterval(() => {
   async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn'); 
     const statusDiv = document.getElementById('statusMsg');
+    const lineAccept = document.getElementById('lineAccept'); // ช่องติ๊กยอมรับ
     
-    // 1. ดึง Element ที่ต้องล็อค (เช็ก ID ใน HTML ให้ตรงกันนะครับ)
-    const btnLocation = document.getElementById('btnLocation'); // ปุ่มปักหมุด
-    const selfieInput = document.getElementById('selfieIn'); // ช่องเซลฟี่
-    const addrTextarea = document.getElementById('cAddr');      // ช่องที่อยู่
-    const slipInput = document.getElementById('fileIn');     // ช่องแนบสลิป (Input File)
-    const slipPreview = document.getElementById('preview'); // รูปพรีวิวสลิป
-    // ----------------------------------
-
-    // ฟังก์ชันช่วยล็อค/ปลดล็อค
-    const setLocked = (isLocked) => {
-        const opacity = isLocked ? "0.5" : "1";
-        const cursor = isLocked ? "not-allowed" : "pointer";
-        const pointerEvents = isLocked ? "none" : "auto";
-
-        // ล็อคปุ่มยืนยัน
-        confirmBtn.disabled = isLocked;
-        confirmBtn.style.opacity = opacity;
-
-        // ล็อคปุ่มปักหมุด
-        if(btnLocation) {
-            btnLocation.disabled = isLocked;
-            btnLocation.style.opacity = opacity;
-            btnLocation.style.cursor = cursor;
-        }
-
-        // ล็อคช่องที่อยู่
-        if(addrTextarea) {
-            addrTextarea.disabled = isLocked;
-            addrTextarea.style.opacity = opacity;
-        }
-
-        // 🟢 ล็อคส่วนแนบสลิป (ป้องกันการกดโอนเงิน/ส่งสลิปก่อนผ่านสิทธิ์)
-        if(slipInput) {
-            slipInput.disabled = isLocked;
-            slipInput.style.opacity = opacity;
-            slipInput.style.pointerEvents = pointerEvents; // บังคับคลิกไม่ได้
-            if(isLocked) {
-                slipInput.value = ""; // ล้างไฟล์ที่เลือกค้างไว้
-                if(slipPreview) slipPreview.style.display = "none"; // ซ่อนรูปพรีวิว
-            }
-        }
-        
-        // ล็อคส่วนเซลฟี่
-        if(selfieInput) {
-            selfieInput.disabled = isLocked;
-            selfieInput.style.opacity = opacity;
-            selfieInput.style.pointerEvents = pointerEvents;
-        }
-    };
-
+    // ดึงค่า input
     const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim().toLowerCase();
     const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
-    // 1. ถ้าจ่ายสด ปลดล็อคทุกอย่าง
+    // ฟังก์ชันช่วยล็อคปุ่มแบบมีเงื่อนไข Checkbox
+    const updateButtonStatus = (isBlacklisted = false) => {
+        if (isBlacklisted) {
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = "0.5";
+            confirmBtn.innerText = "ไม่ผ่านเกณฑ์การผ่อน";
+        } else if (!lineAccept.checked) {
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = "0.5";
+            confirmBtn.innerText = "กรุณาติ๊กยอมรับก่อน";
+        } else {
+            confirmBtn.disabled = false;
+            confirmBtn.style.opacity = "1";
+            confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
+        }
+    };
+
+    // 1. ถ้าจ่ายสด ไม่เช็คแบล็คลิสต์ แต่ต้องติ๊ก Checkbox
     if (payType !== 'ผ่อนไปใช้ไป') {
-        setLocked(false);
-        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด (ทำรายการได้ปกติ)</span>";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด</span>";
+        updateButtonStatus(false); 
         return; 
     }
 
-    // 2. ถ้าเลือกผ่อน แต่ข้อมูลไม่ครบ ล็อคไว้ก่อน
+    // 2. ถ้าเลือกผ่อน แต่กรอกข้อมูลไม่ครบ
     if (nameInput.length < 3 || phoneInput.length < 10) {
-        setLocked(true);
-        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบ เพื่อเช็คสิทธิ์</span>";
+        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบ</span>";
+        updateButtonStatus(false); // ยังกดไม่ได้เพราะข้อมูลไม่ครบ + ยังไม่ได้เช็ค
         return;
     }
 
+    // 3. เริ่มเช็คแบล็คลิสต์
     statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบสิทธิ์...</span>";
-
-    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
-    const GID = '1416026715'; 
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}&refresh=${Date.now()}`;
     
     try {
+        const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
+        const GID = '1416026715'; 
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}&refresh=${Date.now()}`;
+        
         const response = await fetch(url);
         const csvData = await response.text();
         const rows = csvData.split('\n');
@@ -1160,26 +1160,26 @@ setInterval(() => {
                 const keywords = ["ติดผ่อน", "ประวัติเสีย", "blacklist", "ไม่ผ่าน", "ระงับ", "ค้าง", "โกง"];
                 if (keywords.some(k => cleanRow.includes(k))) {
                     foundBad = true;
-                    let cols = rows[i].split(',');
-                    reason = cols[3] ? cols[3].replace(/"/g, '').trim() : "ไม่ผ่านเกณฑ์การผ่อน";
+                    reason = rows[i].split(',')[3]?.replace(/"/g, '').trim() || "ไม่ผ่านเกณฑ์";
                     break;
                 }
             }
         }
 
         if (foundBad) {
-            setLocked(true); // ❌ ตรวจไม่ผ่าน ล็อคปุ่มแนบสลิปและปุ่มสั่งซื้อ
-            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่สามารถรับสิทธิ์ได้: ${reason}</b>`;
+            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่ผ่านสิทธิ์: ${reason}</b>`;
+            updateButtonStatus(true); // ล็อคตายตัวเพราะติดแบล็คลิสต์
         } else {
-            setLocked(false); // ✅ ตรวจผ่าน เปิดให้แนบสลิปได้!
-            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! กรุณาแนบสลิปเพื่อยืนยัน</span>";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! กรุณาติ๊กยอมรับและแนบสลิป</span>";
+            updateButtonStatus(false); // เช็คผ่านแล้ว แต่จะเปิดปุ่มได้ก็ต่อเมื่อ "ติ๊ก Checkbox"
         }
     } catch (e) {
-        setLocked(true);
-        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง กรุณาลองใหม่</span>";
+        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบขัดข้อง</span>";
+        updateButtonStatus(true);
     }
 }
 
+        
 // ฟังก์ชันช่วยให้ใช้เมาส์คลิกลากสไลด์ได้ในคอม
 function enableMouseDrag(el) {
     let isDown = false;
