@@ -443,15 +443,20 @@
                 </div>
 
                 <div id="step-2-footer" style="display:none;">
-                    <div style="margin: 10px 0; padding: 10px; background: rgba(6, 199, 85, 0.1); border-radius: 10px; border: 1px solid #06c755;">
-    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-        <input type="checkbox" id="lineAccept" checked style="width: 18px; height: 18px;">
-        <span style="font-size: 11px; color: #fff;">รับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน Line</span>
-    </label>
+    <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
+        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+            <input type="checkbox" id="lineAccept" onchange="const b = document.getElementById('submitBtn'); b.disabled = !this.checked; b.style.opacity = this.checked ? '1' : '0.5'; b.innerText = this.checked ? 'ยืนยันสั่งซื้อ' : 'กรุณาติ๊กยอมรับก่อน';" style="width: 22px; height: 22px; accent-color: #06c755;">
+            <span style="font-size: 11px; color: #fff; line-height: 1.4;">
+                <b>[บังคับ]</b> ฉันยอมรับการรับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน Line OA ของร้าน (กรุณาติ๊กเพื่อยืนยันสั่งซื้อ)
+            </span>
+        </label>
+    </div>
+
+    <button type="submit" id="submitBtn" class="buy-now" disabled style="border-radius:10px; padding: 12px 0; opacity: 0.5;">
+        กรุณาติ๊กยอมรับก่อน
+    </button>
 </div>
 
-                    <button type="submit" id="submitBtn" class="buy-now" style="border-radius:10px; padding: 12px 0;">ยืนยันสั่งซื้อ</button>
-                </div>
             </div>
         </form>
     </div>
@@ -880,66 +885,61 @@ function nextStep(step) {
         reader.onload = () => resolve(reader.result.split(',')[1]);
     });
 
-    try {
+        try {
         const slipBase64 = await toBase64(slipFile);
         let selfieBase64 = "";
         
-        // ถ้ามีรูปเซลฟี่ (กรณีผ่อน) ให้แปลงไฟล์ด้วย
+        // ถ้ามีรูปเซลฟี่ (กรณีผ่อน) ให้แปลงไฟล์
         if (selfieFile) {
             selfieBase64 = await toBase64(selfieFile);
         }
 
-            // --- เริ่มต้นส่วนที่แก้ใหม่ ---
-    const isInstall = payType === 'ผ่อนไปใช้ไป';
-    const finalPrice = isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal;
-    
-    // ดึงวันที่นัดงวด 2 จากหน้าจอ (ถ้ามี)
-    let nextPayDate = "-";
-    const dateEl = document.getElementById('instNextDate');
-    if(dateEl) nextPayDate = dateEl.innerText;
+        const isInstall = payType === 'ผ่อนไปใช้ไป';
+        // คำนวณยอดเงินสุดท้าย: ถ้าผ่อน +20% ถ้าสดราคาปกติ
+        const finalPrice = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
+        
+        // ดึงวันที่นัดงวด 2
+        let nextPayDate = "-";
+        const dateEl = document.getElementById('instNextDate');
+        if(dateEl) nextPayDate = dateEl.innerText;
 
-    const data = { 
-        productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${finalPrice.toLocaleString()}${isInstall ? ' (ผ่อน 3 งวด)' : ''}`, 
-        customerName: document.getElementById('cName').value, 
-        customerPhone: document.getElementById('cPhone').value, 
-        customerAddress: document.getElementById('cAddr').value,
-        payType: isInstall ? `ผ่อน (งวด2: ${nextPayDate})` : payType, 
-        gps: gps || "-",       
-        file: slipBase64,      
-        selfie: selfieBase64   
-    };
-    // --- จบส่วนที่แก้ใหม่ ---
+        const data = { 
+            productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${finalPrice.toLocaleString()}${isInstall ? ' (ผ่อน 3 งวด)' : ''}`, 
+            customerName: document.getElementById('cName').value, 
+            customerPhone: document.getElementById('cPhone').value, 
+            customerAddress: document.getElementById('cAddr').value,
+            payType: isInstall ? `ผ่อน (งวด2: ${nextPayDate})` : payType, 
+            gps: gps || "-",       
+            file: slipBase64,      
+            selfie: selfieBase64   
+        };
 
-    // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
-    await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
-    const isLine = document.getElementById('lineAccept').checked;
+        // 1. ส่งข้อมูลเข้า Google Sheets ตามปกติ (ห้ามลบ ไม่งั้นข้อมูลไม่ลงชีท)
+        await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
 
-    if (isLine) {
-        // เตรียมข้อความสรุปบิล (เปลี่ยน @197uadhw เป็น ID Line OA ของคุณ)
+        // 2. เตรียมลิงก์เด้งเข้า Line OA (ไอดี @197uadhw)
         const msg = `🧾 บิลสั่งซื้อ Phaendin Store\n` +
                     `--------------------------\n` +
                     `คุณ: ${data.customerName}\n` +
                     `สินค้า: ${activeP.name}\n` +
                     `ยอดชำระ: ฿${finalPrice.toLocaleString()}\n` +
+                    `ประเภท: ${data.payType}\n` +
                     `--------------------------\n` +
-                    `*(ลูกค้ากด 'ส่ง' ข้อความนี้เพื่อรับการแจ้งเตือนพัสดุ)*`;
+                    `*(ลูกค้ากด 'ส่ง' เพื่อรับใบเสร็จและแจ้งเตือนพัสดุ)*`;
 
-        // สร้างลิงก์เปิด Line
         const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
         
-        alert("สั่งซื้อสำเร็จ! กำลังพาคุณไปรับใบเสร็จใน Line ครับ");
+        // 3. แจ้งเตือนลูกค้าและเปลี่ยนหน้าไป Line ทันที
+        alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จใน Line OA");
         window.location.href = lineUrl; 
-    } else {
-        alert("สั่งซื้อสำเร็จเรียบร้อยครับ!");
-        location.reload();
-    }
 
-} catch(err) {
-    alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
-    btn.disabled = false;
-}    
-    
-};
+    } catch(err) {
+        console.error(err);
+        alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
+        btn.disabled = false;
+        btn.innerText = "ยืนยันการสั่งซื้อ";
+    }
+}; // ปิดฟังก์ชัน onsubmit
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
