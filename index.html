@@ -969,22 +969,25 @@ function nextStep(step) {
 function togglePay(type) {
     const sec = document.getElementById('securitySection');
     const instBox = document.getElementById('installmentInfo');
+    const lineBox = document.getElementById('lineBoxContainer'); // ตัวครอบช่องติ๊ก
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
     const topPriceDisplay = document.getElementById('finalTotalDisplay');
 
-    // แก้ไขจุดนี้: บังคับให้เป็นตัวเลขเสมอเพื่อกัน NaN
     const total = Number(activeP.finalTotal) || 0; 
 
     if(type === 'จ่ายเต็ม') {
         sec.style.display = 'none';
         instBox.style.display = 'none';
+        if(lineBox) lineBox.style.display = 'none'; // ซ่อนช่องติ๊กทันทีเมื่อจ่ายสด
+        
         fBox.style.border = '2px solid var(--gold)'; fBox.style.background = 'rgba(212,175,55,0.2)';
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
         if(topPriceDisplay) topPriceDisplay.innerText = `฿${total.toLocaleString()}`;
     } else {
+        // ส่วนของผ่อนชำระ
         const totalWithFee = total * 1.2; 
         const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0;
         
@@ -994,36 +997,15 @@ function togglePay(type) {
 
         if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth.toLocaleString()}/งวด`;
 
-        instBox.innerHTML = `
-            <div style="text-align:left; padding:5px;">
-                <p style="color:#38ef7d; font-weight:bold; font-size:13px; margin-bottom:8px; text-align:center;">
-                   🚀 จ่ายแค่ ฿${perMonth.toLocaleString()} รับของไปก่อนเลย!
-                </p>
-                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px;">
-                    <span>🟢 งวดที่ 1 (จ่ายตอนนี้):</span>
-                    <span style="color:#38ef7d; font-weight:bold;">฿${perMonth.toLocaleString()}</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:4px; color:#aaa;">
-                    <span>⚪ งวดที่ 2 (${dateThai}):</span>
-                    <span>฿${perMonth.toLocaleString()}</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:8px; color:#aaa;">
-                    <span>⚪ งวดที่ 3 (อีก 30 วันถัดไป):</span>
-                    <span>฿${perMonth.toLocaleString()}</span>
-                </div>
-                <p style="font-size:10px; color:var(--gold); border-top:1px dashed rgba(212,175,55,0.3); padding-top:5px; text-align:right;">
-                    ยอดรวมผ่อน (+20%): ฿${totalWithFee.toLocaleString()}
-                </p>
-            </div>
-        `;
-
         sec.style.display = 'block';
         instBox.style.display = 'block';
+        if(lineBox) lineBox.style.display = 'block'; // แสดงช่องติ๊กเมื่อเลือกผ่อน
+        
         iBox.style.border = '2px solid var(--gold)'; iBox.style.background = 'rgba(212,175,55,0.2)';
         fBox.style.border = '1px solid rgba(255,255,255,0.1)'; fBox.style.background = 'transparent';
         radios[1].checked = true;
     }
-    checkBlacklist(); 
+    checkBlacklist(); // เรียกเช็คสถานะปุ่มใหม่
 }
 
 function getLocation() {
