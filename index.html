@@ -894,41 +894,44 @@ function nextStep(step) {
             selfieBase64 = await toBase64(selfieFile);
         }
 
+                // 1. คำนวณยอดและวันที่แบบ "รายเดือน"
         const isInstall = payType === 'ผ่อนไปใช้ไป';
-        // คำนวณยอดเงินสุดท้าย: ถ้าผ่อน +20% ถ้าสดราคาปกติ
-        const finalPrice = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
-        
-        // ดึงวันที่นัดงวด 2
-        let nextPayDate = "-";
-        const dateEl = document.getElementById('instNextDate');
-        if(dateEl) nextPayDate = dateEl.innerText;
+        const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
+        const perMonth = Math.round(totalFull / 3);
 
-        const data = { 
-            productDetail: `${activeP.name} [${activeP.summary}] | ยอด: ฿${finalPrice.toLocaleString()}${isInstall ? ' (ผ่อน 3 งวด)' : ''}`, 
-            customerName: document.getElementById('cName').value, 
-            customerPhone: document.getElementById('cPhone').value, 
-            customerAddress: document.getElementById('cAddr').value,
-            payType: isInstall ? `ผ่อน (งวด2: ${nextPayDate})` : payType, 
-            gps: gps || "-",       
-            file: slipBase64,      
-            selfie: selfieBase64   
+        // ฟังก์ชันบวกเดือน (คงวันที่เดิมไว้)
+        const getNextMonth = (monthsToAdd) => {
+            const d = new Date();
+            d.setMonth(d.getMonth() + monthsToAdd);
+            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
         };
 
-        // 1. ส่งข้อมูลเข้า Google Sheets ตามปกติ (ห้ามลบ ไม่งั้นข้อมูลไม่ลงชีท)
-        await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
+        const date2 = getNextMonth(1); // เดือนหน้า
+        const date3 = getNextMonth(2); // อีก 2 เดือน
 
-        // 2. เตรียมลิงก์เด้งเข้า Line OA (ไอดี @197uadhw)
+        // 2. สร้างรายละเอียดงวดชำระ (แบบรายเดือน)
+        let paymentDetail = `💰 ยอดชำระสุทธิ: ฿${totalFull.toLocaleString()}`;
+        
+        if (isInstall) {
+            paymentDetail = `📌 รายละเอียดการผ่อน (3 งวด):\n` +
+                            `✅ งวดที่ 1 (วันนี้): ฿${perMonth.toLocaleString()}\n` +
+                            `🗓️ งวดที่ 2 (${date2}): ฿${perMonth.toLocaleString()}\n` +
+                            `🗓️ งวดที่ 3 (${date3}): ฿${perMonth.toLocaleString()}\n` +
+                            `--------------------------\n` +
+                            `ยอดรวมผ่อน (+20%): ฿${totalFull.toLocaleString()}`;
+        }
+
+        // 3. ประกอบร่างข้อความ (Message)
         const msg = `🧾 บิลสั่งซื้อ Phaendin Store\n` +
                     `--------------------------\n` +
                     `คุณ: ${data.customerName}\n` +
                     `สินค้า: ${activeP.name}\n` +
-                    `ยอดชำระ: ฿${finalPrice.toLocaleString()}\n` +
-                    `ประเภท: ${data.payType}\n` +
+                    `${paymentDetail}\n` +
                     `--------------------------\n` +
                     `*(ลูกค้ากด 'ส่ง' เพื่อรับใบเสร็จและแจ้งเตือนพัสดุ)*`;
 
         const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
-        
+
         // 3. แจ้งเตือนลูกค้าและเปลี่ยนหน้าไป Line ทันที
         alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จใน Line OA");
         window.location.href = lineUrl; 
