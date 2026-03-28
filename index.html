@@ -442,20 +442,20 @@
                     <button type="button" class="buy-now" onclick="nextStep(2)" style="border-radius:10px; padding: 12px 0;">ถัดไป (กรอกที่อยู่)</button>
                 </div>
 
-                <div id="step-2-footer" style="display:none;">
-    <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
-        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-            <input type="checkbox" id="lineAccept" onchange="const b = document.getElementById('submitBtn'); b.disabled = !this.checked; b.style.opacity = this.checked ? '1' : '0.5'; b.innerText = this.checked ? 'ยืนยันสั่งซื้อ' : 'กรุณาติ๊กยอมรับก่อน';" style="width: 22px; height: 22px; accent-color: #06c755;">
-            <span style="font-size: 11px; color: #fff; line-height: 1.4;">
-                <b>[บังคับ]</b> ฉันยอมรับการรับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน Line OA ของร้าน (กรุณาติ๊กเพื่อยืนยันสั่งซื้อ)
-            </span>
-        </label>
-    </div>
+                                <div id="step-2-footer" style="display:none;">
+                    <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
+                        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="lineAccept" onchange="const b = document.getElementById('submitBtn'); b.disabled = !this.checked; b.style.opacity = this.checked ? '1' : '0.5'; b.innerText = this.checked ? 'ยืนยันสั่งซื้อ' : 'กรุณาติ๊กยอมรับก่อน';" style="width: 22px; height: 22px; accent-color: #06c755;">
+                            <span style="font-size: 11px; color: #fff; line-height: 1.4;">
+                                <b>[บังคับ]</b> ฉันยอมรับการรับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน Line OA ของร้าน (กรุณาติ๊กเพื่อยืนยันสั่งซื้อ)
+                            </span>
+                        </label>
+                    </div>
 
-    <button type="submit" id="submitBtn" class="buy-now" disabled style="border-radius:10px; padding: 12px 0; opacity: 0.5;">
-        กรุณาติ๊กยอมรับก่อน
-    </button>
-</div>
+                    <button type="submit" id="submitBtn" class="buy-now" disabled style="border-radius:10px; padding: 12px 0; opacity: 0.5;">
+                        กรุณาติ๊กยอมรับก่อน
+                    </button>
+                </div>
 
             </div>
         </form>
