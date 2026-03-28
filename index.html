@@ -650,7 +650,8 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         let nextQty = selectedOptions[label].qty + delta;
         if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
     }
-function updatePrice() {
+
+     function updatePrice() {
     let totalNormal = 0; 
     let totalDiscounted = 0; 
     let summaryText = [];
@@ -690,7 +691,7 @@ function updatePrice() {
         <div class="order-footer-3btns">
             <div style="grid-column: span 3; display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 11px;">
                 <span style="color: #888;">ค่าส่ง ฿${shipF} | ลด ${discP}%</span>
-                <span style="color: #fff; font-weight: bold;">รวมสุทธิ: <span style="color:var(--gold); font-size:16px;">฿${grandTotal.toLocaleString()}</span></span>
+                <span style="color: #fff; font-weight: bold;">รวมสุทธิ: <span id="finalTotalDisplay" style="color:var(--gold); font-size:16px;">฿${grandTotal.toLocaleString()}</span></span>
             </div>
             
             <button type="button" onclick="togglePay('จ่ายเต็ม'); nextStep(2);" 
@@ -698,7 +699,7 @@ function updatePrice() {
                 ชำระสด
             </button>
             
-            <button type="button" onclick="togglePay('ผ่อนไปใช้ไป'); nextStep(2);" 
+            <button type="button" id="pay-install-btn" onclick="togglePay('ผ่อนไปใช้ไป'); nextStep(2);" 
                 style="background: #007bff; color: #fff; border: none; border-radius: 8px; font-size: 11px; height: 42px; font-weight: bold; ${(activeP.canInstall !== 'YES') ? 'display:none' : ''}">
                 ผ่อนชำระ
             </button>
@@ -710,13 +711,8 @@ function updatePrice() {
             </button>
         </div>
     `;
-
-    // สั่งซ่อน Footer และ Box เก่าของระบบเดิม
-    const oldOpt = document.getElementById('optionBox'); if(oldOpt) oldOpt.style.display = 'none';
-    const oldFoot = document.getElementById('step-1-footer'); if(oldFoot) oldFoot.style.display = 'none';
 }
-
-
+         
 function render3x3Grid() {
     let html = '';
     let discP = parseFloat(activeP.disc) || 0;
