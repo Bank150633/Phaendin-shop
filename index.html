@@ -911,13 +911,34 @@ function nextStep(step) {
     // --- จบส่วนที่แก้ใหม่ ---
 
     // ส่งข้อมูลไปที่ Google Sheets (APPS_URL)
-    await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' }); 
-    alert("สั่งซื้อสำเร็จเรียบร้อยครับ!"); 
-    location.reload(); 
-} catch(err) { 
-    alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"); 
-    btn.disabled = false; 
-}
+    await fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(data), mode: 'no-cors' });
+    const isLine = document.getElementById('lineAccept').checked;
+
+    if (isLine) {
+        // เตรียมข้อความสรุปบิล (เปลี่ยน @197uadhw เป็น ID Line OA ของคุณ)
+        const msg = `🧾 บิลสั่งซื้อ Phaendin Store\n` +
+                    `--------------------------\n` +
+                    `คุณ: ${data.customerName}\n` +
+                    `สินค้า: ${activeP.name}\n` +
+                    `ยอดชำระ: ฿${finalPrice.toLocaleString()}\n` +
+                    `--------------------------\n` +
+                    `*(ลูกค้ากด 'ส่ง' ข้อความนี้เพื่อรับการแจ้งเตือนพัสดุ)*`;
+
+        // สร้างลิงก์เปิด Line
+        const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
+        
+        alert("สั่งซื้อสำเร็จ! กำลังพาคุณไปรับใบเสร็จใน Line ครับ");
+        window.location.href = lineUrl; 
+    } else {
+        alert("สั่งซื้อสำเร็จเรียบร้อยครับ!");
+        location.reload();
+    }
+
+} catch(err) {
+    alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+    btn.disabled = false;
+}    
+    
 };
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
