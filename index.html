@@ -857,92 +857,91 @@ function nextStep(step) {
     }
 }
 
-    document.getElementById('orderForm').onsubmit = async (e) => {
-    e.preventDefault();
-    
-    // ดึงค่าใหม่ๆ ที่เพิ่มเข้ามา
-    const payType = document.querySelector('input[name="payType"]:checked').value;
-    const gps = document.getElementById('userLocation').value;
-    const selfieFile = document.getElementById('selfieIn').files[0];
-    const slipFile = document.getElementById('fileIn').files[0];
+        document.getElementById('orderForm').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const payType = document.querySelector('input[name="payType"]:checked').value;
+        const gps = document.getElementById('userLocation').value;
+        const selfieFile = document.getElementById('selfieIn').files[0];
+        const slipFile = document.getElementById('fileIn').files[0];
 
-    // เช็คเงื่อนไขกรณี "ผ่อน"
-    if (payType === 'ผ่อนไปใช้ไป') {
-        if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
-        if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
-    }
-    
-    // เช็คสลิป (ต้องมีทั้งสดและผ่อน)
-    if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
+        if (payType === 'ผ่อนไปใช้ไป') {
+            if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
+            if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
+        }
+        if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
 
-    const btn = document.getElementById('submitBtn');
-    btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
 
-    // ฟังก์ชันแปลงรูปภาพเป็น Base64
-    const toBase64 = file => new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-    });
+        const toBase64 = file => new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]);
+        });
 
         try {
-        const slipBase64 = await toBase64(slipFile);
-        let selfieBase64 = "";
-        
-        // ถ้ามีรูปเซลฟี่ (กรณีผ่อน) ให้แปลงไฟล์
-        if (selfieFile) {
-            selfieBase64 = await toBase64(selfieFile);
+            const slipBase64 = await toBase64(slipFile);
+            let selfieBase64 = selfieFile ? await toBase64(selfieFile) : "";
+
+            // --- คำนวณยอดสำหรับส่ง Data และ Line ---
+            const isInstall = payType === 'ผ่อนไปใช้ไป';
+            const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
+            const perMonth = Math.round(totalFull / 3);
+
+            const getNextMonth = (m) => {
+                const d = new Date();
+                d.setMonth(d.getMonth() + m);
+                return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+            };
+
+            // สร้าง Object ข้อมูลสำหรับส่งไป Google Sheets
+            const sendData = { 
+                productDetail: `${activeP.name} (${activeP.summary})`, 
+                customerName: document.getElementById('cName').value, 
+                customerPhone: document.getElementById('cPhone').value, 
+                customerAddress: document.getElementById('cAddr').value,
+                payType: isInstall ? `ผ่อน (งวดละ ฿${perMonth.toLocaleString()})` : `จ่ายเต็ม (฿${totalFull.toLocaleString()})`, 
+                gps: gps || "-",       
+                file: slipBase64,      
+                selfie: selfieBase64   
+            };
+
+            // 1. ส่งข้อมูลเข้า Google Sheets (แบบไม่รอผลเพื่อความเร็ว)
+            fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(sendData), mode: 'no-cors' });
+
+            // 2. เตรียมข้อความ Line
+            let paymentDetail = `💰 ยอดชำระสุทธิ: ฿${totalFull.toLocaleString()}`;
+            if (isInstall) {
+                paymentDetail = `📌 รายละเอียดการผ่อน (3 งวด):\n` +
+                                `✅ งวดที่ 1 (วันนี้): ฿${perMonth.toLocaleString()}\n` +
+                                `🗓️ งวดที่ 2 (${getNextMonth(1)}): ฿${perMonth.toLocaleString()}\n` +
+                                `🗓️ งวดที่ 3 (${getNextMonth(2)}): ฿${perMonth.toLocaleString()}\n` +
+                                `--------------------------\n` +
+                                `ยอดรวมผ่อน (+20%): ฿${totalFull.toLocaleString()}`;
+            }
+
+            const msg = `🧾 บิลสั่งซื้อ Phaendin Store\n` +
+                        `--------------------------\n` +
+                        `คุณ: ${sendData.customerName}\n` +
+                        `สินค้า: ${activeP.name}\n` +
+                        `${paymentDetail}\n` +
+                        `--------------------------\n` +
+                        `*(ลูกค้ากด 'ส่ง' เพื่อรับใบเสร็จ)*`;
+
+            const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
+
+            // 3. แจ้งสำเร็จและไป Line
+            alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จใน Line OA");
+            window.location.href = lineUrl; 
+
+        } catch(err) {
+            console.error(err);
+            alert("❌ เกิดข้อผิดพลาด กรุณาลดขนาดรูปภาพแล้วลองใหม่อีกครั้ง");
+            btn.disabled = false;
+            btn.innerText = "ยืนยันการสั่งซื้อ";
         }
-
-                // 1. คำนวณยอดและวันที่แบบ "รายเดือน"
-        const isInstall = payType === 'ผ่อนไปใช้ไป';
-        const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
-        const perMonth = Math.round(totalFull / 3);
-
-        // ฟังก์ชันบวกเดือน (คงวันที่เดิมไว้)
-        const getNextMonth = (monthsToAdd) => {
-            const d = new Date();
-            d.setMonth(d.getMonth() + monthsToAdd);
-            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
-        };
-
-        const date2 = getNextMonth(1); // เดือนหน้า
-        const date3 = getNextMonth(2); // อีก 2 เดือน
-
-        // 2. สร้างรายละเอียดงวดชำระ (แบบรายเดือน)
-        let paymentDetail = `💰 ยอดชำระสุทธิ: ฿${totalFull.toLocaleString()}`;
-        
-        if (isInstall) {
-            paymentDetail = `📌 รายละเอียดการผ่อน (3 งวด):\n` +
-                            `✅ งวดที่ 1 (วันนี้): ฿${perMonth.toLocaleString()}\n` +
-                            `🗓️ งวดที่ 2 (${date2}): ฿${perMonth.toLocaleString()}\n` +
-                            `🗓️ งวดที่ 3 (${date3}): ฿${perMonth.toLocaleString()}\n` +
-                            `--------------------------\n` +
-                            `ยอดรวมผ่อน (+20%): ฿${totalFull.toLocaleString()}`;
-        }
-
-        // 3. ประกอบร่างข้อความ (Message)
-        const msg = `🧾 บิลสั่งซื้อ Phaendin Store\n` +
-                    `--------------------------\n` +
-                    `คุณ: ${data.customerName}\n` +
-                    `สินค้า: ${activeP.name}\n` +
-                    `${paymentDetail}\n` +
-                    `--------------------------\n` +
-                    `*(ลูกค้ากด 'ส่ง' เพื่อรับใบเสร็จและแจ้งเตือนพัสดุ)*`;
-
-        const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
-
-        // 3. แจ้งเตือนลูกค้าและเปลี่ยนหน้าไป Line ทันที
-        alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จใน Line OA");
-        window.location.href = lineUrl; 
-
-    } catch(err) {
-        console.error(err);
-        alert("❌ เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
-        btn.disabled = false;
-        btn.innerText = "ยืนยันการสั่งซื้อ";
-    }
-}; // ปิดฟังก์ชัน onsubmit
+    };
 
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
