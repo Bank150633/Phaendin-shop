@@ -535,32 +535,30 @@
         let currentPrice = pricePromo > 0 && expiryDate > now ? pricePromo : priceNormal;
         let percentDiscount = pricePromo > 0 && expiryDate > now ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
 
-        return `
-        <div class="card">
-            <div class="media-wrap" style="position: relative;">
-                <div class="badge-container">
-                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
-                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                </div>
-                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                
-                <div style="width: 100%; height: 100%; overflow: hidden;">
-                    ${renderMedia(images[0], true)}
-                </div>
+    return `
+    <div class="card">
+        <div class="media-wrap" style="position: relative;">
+            <div style="width: 100%; height: 100%; overflow: hidden;">
+                ${renderMedia(images[0], true)}
+            </div>
+            ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+        </div>
+        <div class="info">
+            <div class="p-name">${p[0]}</div>
+            
+            <div class="p-desc" style="font-size: 8px; color: #aaa; text-align: center; height: auto; max-height: 24px; overflow: hidden;">
+                ${p[2] || ''}
+            </div>
 
-                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
-            </div>
-            <div class="info">
-                <div class="p-name">${p[0]}</div>
-                <div class="p-desc">${p[2] || ''}</div>
-                <div class="p-price">
-                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
-                </div>                    
-            </div>
-            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
-        </div>`;
+            <div class="p-price">
+                ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+            </div>                    
+        </div>
+        <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${activeP.disc}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)}, ${JSON.stringify(p[2]||"")})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
+    </div>`;
+}
+
     }).join('');
 }
  
