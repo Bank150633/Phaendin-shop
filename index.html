@@ -979,20 +979,24 @@ function nextStep(step) {
 
     init();
     
-function togglePay(type) {
+  function togglePay(type) {
     const sec = document.getElementById('securitySection');
     const instBox = document.getElementById('installmentInfo');
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
     const topPriceDisplay = document.getElementById('finalTotalDisplay');
+    
+    // ส่วนที่เพิ่มใหม่: ตัวควบคุมช่องติ๊ก Line
+    const lineContainer = document.getElementById('lineAccept')?.parentElement?.parentElement;
 
-    // แก้ไขจุดนี้: บังคับให้เป็นตัวเลขเสมอเพื่อกัน NaN
     const total = Number(activeP.finalTotal) || 0; 
 
     if(type === 'จ่ายเต็ม') {
         sec.style.display = 'none';
         instBox.style.display = 'none';
+        if(lineContainer) lineContainer.style.display = 'none'; // ซ่อนช่องติ๊กสำหรับคนซื้อสด
+        
         fBox.style.border = '2px solid var(--gold)'; fBox.style.background = 'rgba(212,175,55,0.2)';
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; iBox.style.background = 'transparent';
         radios[0].checked = true;
@@ -1032,13 +1036,15 @@ function togglePay(type) {
 
         sec.style.display = 'block';
         instBox.style.display = 'block';
+        if(lineContainer) lineContainer.style.display = 'block'; // แสดงช่องติ๊กสำหรับคนจะผ่อน
+        
         iBox.style.border = '2px solid var(--gold)'; iBox.style.background = 'rgba(212,175,55,0.2)';
         fBox.style.border = '1px solid rgba(255,255,255,0.1)'; fBox.style.background = 'transparent';
         radios[1].checked = true;
     }
     checkBlacklist(); 
 }
-
+      
 function getLocation() {
     const btn = document.getElementById('btnLocation');
     if (navigator.geolocation) {
@@ -1098,48 +1104,52 @@ setInterval(() => {
         }
     });
 }, 1000);
-  async function checkBlacklist() {
+    
+   async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn'); 
     const statusDiv = document.getElementById('statusMsg');
-    const lineAccept = document.getElementById('lineAccept'); // ช่องติ๊กยอมรับ
+    const lineAccept = document.getElementById('lineAccept');
     
-    // ดึงค่า input
     const nameInput = document.getElementById('cName').value.replace(/\s+/g, '').trim().toLowerCase();
     const phoneInput = document.getElementById('cPhone').value.replace(/[^0-9]/g, '').trim();
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
 
-    // ฟังก์ชันช่วยล็อคปุ่มแบบมีเงื่อนไข Checkbox
     const updateButtonStatus = (isBlacklisted = false) => {
+        const isInstall = payType === 'ผ่อนไปใช้ไป';
+        
         if (isBlacklisted) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
             confirmBtn.innerText = "ไม่ผ่านเกณฑ์การผ่อน";
-        } else if (!lineAccept.checked) {
+        } 
+        // ถ้าเป็นผ่อน และ ยังไม่ได้ติ๊กยอมรับ ให้ล็อคปุ่ม
+        else if (isInstall && !lineAccept.checked) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
             confirmBtn.innerText = "กรุณาติ๊กยอมรับก่อน";
-        } else {
+        } 
+        // ถ้าซื้อสด หรือ ติ๊กยอมรับแล้ว ให้เปิดปุ่ม
+        else {
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
             confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
         }
     };
 
-    // 1. ถ้าจ่ายสด ไม่เช็คแบล็คลิสต์ แต่ต้องติ๊ก Checkbox
+    // 1. ถ้าซื้อสด ไม่ต้องเช็คแบล็คลิสต์ และไม่ต้องรอติ๊ก
     if (payType !== 'ผ่อนไปใช้ไป') {
         statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด</span>";
         updateButtonStatus(false); 
         return; 
     }
 
-    // 2. ถ้าเลือกผ่อน แต่กรอกข้อมูลไม่ครบ
+    // 2. ถ้าเลือกผ่อน แต่กรอกข้อมูลยังไม่ครบ
     if (nameInput.length < 3 || phoneInput.length < 10) {
         statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบ</span>";
-        updateButtonStatus(false); // ยังกดไม่ได้เพราะข้อมูลไม่ครบ + ยังไม่ได้เช็ค
+        updateButtonStatus(false);
         return;
     }
 
-    // 3. เริ่มเช็คแบล็คลิสต์
     statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบสิทธิ์...</span>";
     
     try {
@@ -1168,18 +1178,17 @@ setInterval(() => {
 
         if (foundBad) {
             statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่ผ่านสิทธิ์: ${reason}</b>`;
-            updateButtonStatus(true); // ล็อคตายตัวเพราะติดแบล็คลิสต์
+            updateButtonStatus(true);
         } else {
             statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! กรุณาติ๊กยอมรับและแนบสลิป</span>";
-            updateButtonStatus(false); // เช็คผ่านแล้ว แต่จะเปิดปุ่มได้ก็ต่อเมื่อ "ติ๊ก Checkbox"
+            updateButtonStatus(false);
         }
     } catch (e) {
         statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบขัดข้อง</span>";
         updateButtonStatus(true);
     }
 }
-
-        
+       
 // ฟังก์ชันช่วยให้ใช้เมาส์คลิกลากสไลด์ได้ในคอม
 function enableMouseDrag(el) {
     let isDown = false;
