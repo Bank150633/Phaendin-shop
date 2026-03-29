@@ -716,26 +716,36 @@ ${imgCount > 1 ? `
 </div>` : ''}
         </div>
         
-        <div style="padding: 8px;">
-            <div style="font-size:14px; font-weight:600; color:var(--gold); text-align:center;">${activeP.name}</div>
-<div style="font-size:11px; color:#aaa; text-align:center; margin-bottom: 8px; padding: 0 15px;">${activeP.pDesc || ''}</div>
+                <div style="padding: 8px;">
+            <div style="font-size:16px; font-weight:700; color:var(--gold); text-align:center;">
+                ${activeP.name}
             </div>
+            
+            <div style="font-size:12px; color:#bbb; text-align:center; margin: 4px 0 10px 0; line-height: 1.4;">
+                ${activeP.pDesc || ''}
+            </div>
+
             ${badgesHtml}
-            <div style="font-size:10px; color:var(--text-dim); text-align:center; margin: 4px 0;">${activeP.summary || 'กรุณาเลือกรายการสินค้า'}</div>
-            <div style="border-top: 1px dashed rgba(212,175,55,0.2); padding-top:8px; text-align:center;">
-                <span style="font-size:10px; color:var(--gold);">ยอดชำระสุทธิ</span>
-                
-                <div style="display:flex; justify-content:center; align-items:baseline; gap:8px;">
+            
+            <div style="font-size:11px; color:var(--text-dim); text-align:center; margin: 6px 0;">
+                ${activeP.summary || 'กรุณาเลือกรายการสินค้า'}
+            </div>
+
+            <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:10px; text-align:center; margin-top:5px;">
+                <span style="font-size:12px; color:var(--gold); font-weight:500;">ยอดชำระสุทธิ</span>
+                <div style="display:flex; justify-content:center; align-items:baseline; gap:10px; margin-top:2px;">
                     ${(activeP.disc > 0 && totalItems > 0) ? `
-                        <span style="text-decoration: line-through; color: #888; font-size: 14px; font-weight: 400;">
+                        <span style="text-decoration: line-through; color: #777; font-size: 16px;">
                             ฿${totalBeforeDisc.toLocaleString()}
                         </span>
                     ` : ''}
-                    
-                    <div id="finalTotalDisplay" style="font-size:28px; font-weight:800; color:#fff;">
+                    <div id="finalTotalDisplay" style="font-size:32px; font-weight:800; color:#fff; letter-spacing:-1px;">
                         ฿${activeP.finalTotal.toLocaleString()}
                     </div>
                 </div>
+            </div>
+        </div>
+
             </div>
         </div>
     </div>`;
