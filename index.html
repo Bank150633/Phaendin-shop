@@ -958,7 +958,6 @@ function nextStep(step) {
         alert("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล");
     }
 }
-
     init();
   function togglePay(type) {
     const sec = document.getElementById('securitySection');
@@ -969,6 +968,7 @@ function nextStep(step) {
     const topPriceDisplay = document.getElementById('finalTotalDisplay');
     const lineContainer = document.getElementById('lineAccept')?.parentElement?.parentElement;
 
+    // ยอดเงินต้น (ราคาสินค้า + ค่าส่ง)
     const total = Number(activeP.finalTotal) || 0; 
 
     if(type === 'จ่ายเต็ม') {
@@ -976,7 +976,6 @@ function nextStep(step) {
         instBox.style.display = 'none';
         if(lineContainer) lineContainer.style.display = 'none';
         
-        // อัปเดตสีปุ่ม
         fBox.style.border = '2px solid var(--gold)'; 
         fBox.style.background = 'rgba(212,175,55,0.2)';
         iBox.style.border = '1px solid rgba(255,255,255,0.1)'; 
@@ -985,17 +984,44 @@ function nextStep(step) {
         radios[0].checked = true;
         if(topPriceDisplay) topPriceDisplay.innerText = `฿${total.toLocaleString()}`;
     } else {
-        // ส่วนคำนวณยอดผ่อนคงเดิม
-        const totalWithFee = total * 1.2; 
-        const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0;
+        // --- ส่วนคำนวณการผ่อน ---
+        const feePercent = 1.2; // บวกเพิ่ม 20%
+        const totalWithFee = Math.round(total * feePercent); 
+        const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0; // หาร 3 งวด
         
-        // ... (ส่วนจัดการวันที่คงเดิม) ...
+        // ฟังก์ชันช่วยหาวันที่ในอนาคต
+        const getFutureDate = (m) => {
+            const d = new Date();
+            d.setMonth(d.getMonth() + m);
+            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+        };
+
+        // แสดงรายละเอียดลงในกล่องล่างสุด
+        instBox.innerHTML = `
+            <div style="font-weight: bold; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.3); margin-bottom: 8px; padding-bottom: 5px; font-size: 12px;">
+                📋 รายละเอียดการผ่อน (3 งวด)
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>งวดที่ 1 (ชำระวันนี้):</span>
+                <span style="color: var(--gold); font-weight: bold;">฿${perMonth.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>งวดที่ 2 (${getFutureDate(1)}):</span>
+                <span>฿${perMonth.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span>งวดที่ 3 (${getFutureDate(2)}):</span>
+                <span>฿${perMonth.toLocaleString()}</span>
+            </div>
+            <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; font-size: 10px; color: #aaa; text-align: center;">
+                * ยอดรวมผ่อนทั้งหมด ฿${totalWithFee.toLocaleString()} (รวมค่าบริการแล้ว)
+            </div>
+        `;
 
         instBox.style.display = 'block';
         sec.style.display = 'block';
         if(lineContainer) lineContainer.style.display = 'block';
         
-        // อัปเดตสีปุ่ม
         iBox.style.border = '2px solid var(--gold)'; 
         iBox.style.background = 'rgba(212,175,55,0.2)';
         fBox.style.border = '1px solid rgba(255,255,255,0.1)'; 
@@ -1005,7 +1031,8 @@ function nextStep(step) {
         if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth.toLocaleString()}/งวด`;
     }
     checkBlacklist(); 
-}  
+}
+
   
 function getLocation() {
     const btn = document.getElementById('btnLocation');
