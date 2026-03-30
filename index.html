@@ -314,26 +314,46 @@
     background: rgba(212,175,55,0.2);
 }
 
-/* กล่องข้อมูลผ่อนแบบ "ลอย" */
+/* กล่องข้อมูลผ่อนแบบ "ลอย" เหนือกลุ่มปุ่ม */
 #installmentInfo {
     position: absolute;
-    bottom: 85px;  /* ลอยอยู่เหนือปุ่ม */
-    right: 0;
-    width: 180px;
+    bottom: 80px;  /* ระยะห่างจากด้านล่าง (ลอยพ้นปุ่ม) */
+    left: 10px;
+    right: 10px;
     background: rgba(20, 20, 20, 0.98);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--gold);
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    z-index: 1000;
-    animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    backdrop-filter: blur(15px);
+    border: 1.5px solid var(--gold);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2);
+    z-index: 2000;
+    animation: popUp 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: none; /* ปิดไว้ก่อนจนกว่าจะกดปุ่มผ่อน */
 }
 
 @keyframes popUp {
-    from { opacity: 0; transform: translateY(15px) scale(0.9); }
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* ปรับ Footer ให้เป็นฐานสำหรับตัวลอย */
+.modal-footer-fixed {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background: #111;
+    padding: 10px 15px 25px 15px !important;
+    border-top: 1px solid rgba(212,175,55,0.3);
+    z-index: 1000;
+}
+
+.footer-btn-group {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    position: relative; /* สำคัญ: เพื่อให้กล่อง #installmentInfo อ้างอิงตำแหน่งจากตรงนี้ */
+}
+
 
     </style>
 </head>
@@ -434,9 +454,7 @@
 <div class="modal-footer-fixed">
     <div id="step-1-footer">
         <div class="footer-btn-group">
-            <div id="installmentInfo" style="display: none;"></div>
-            
-            <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
+            <div id="installmentInfo"></div> <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
                 <div style="font-size: 11px; font-weight: bold; color: #fff;">ชำระสด</div>
                 <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
             </div>
@@ -451,6 +469,7 @@
                 ถัดไป (ที่อยู่)
             </button>
         </div>
+    </div>
     </div>
 
     <div id="step-2-footer" style="display:none;">
