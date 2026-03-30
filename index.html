@@ -307,29 +307,65 @@
     padding: 15px;
     -webkit-overflow-scrolling: touch;
 }
-
-/* ส่วนปุ่มที่ล็อคไว้ด้านล่าง (Footer) */
+/* ล็อค Footer ติดขอบล่าง */
 .modal-footer-fixed {
-    padding: 15px;
-    background: var(--bg);
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background: #111;
+    padding: 10px 15px 25px 15px !important;
     border-top: 1px solid rgba(212,175,55,0.3);
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.5);
-    z-index: 100;
-}
-/* ซ่อน Scrollbar สำหรับ Chrome, Safari และ Opera */
-#productGrid [id^="p-slider-"]::-webkit-scrollbar {
-    display: none;
+    z-index: 999;
 }
 
-/* ซ่อน Scrollbar สำหรับ IE, Edge และ Firefox */
-#productGrid [id^="p-slider-"] {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-    cursor: grab;
+/* กลุ่มปุ่ม 3 ปุ่ม */
+.footer-btn-group {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    position: relative; /* สำคัญ: เพื่อให้กล่องข้อมูลผ่อนอ้างอิงตำแหน่งจากตรงนี้ */
 }
 
-#productGrid [id^="p-slider-"]:active {
-    cursor: grabbing;
+/* ปุ่มตัวเลือกการชำระ */
+.btn-pay-option {
+    flex: 1;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    padding: 8px 4px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.btn-pay-option.active {
+    border: 2px solid var(--gold);
+    background: rgba(212,175,55,0.2);
+}
+
+/* กล่องข้อมูลผ่อนแบบ "ลอย" */
+#installmentInfo {
+    position: absolute;
+    bottom: 85px;  /* ลอยอยู่เหนือปุ่ม */
+    right: 0;
+    width: 180px;
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    z-index: 1000;
+    animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popUp {
+    from { opacity: 0; transform: translateY(15px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
     </style>
