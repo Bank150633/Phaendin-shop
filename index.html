@@ -308,51 +308,29 @@
     -webkit-overflow-scrolling: touch;
 }
 
-/* วางทับ .modal-footer-fixed เดิมได้เลย */
+/* ล็อคส่วนท้ายให้ติดขอบจอ */
 .modal-footer-fixed {
-    position: relative; /* สำคัญ: เพื่อให้กล่องผ่อนอ้างอิงตำแหน่งได้ */
-    padding: 12px 15px 25px 15px !important; 
-    background: #111;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    background: #111; 
+    padding: 10px 15px 25px 15px !important;
     border-top: 1px solid rgba(212,175,55,0.3);
+    z-index: 999;
 }
 
-/* เพิ่มกลุ่มปุ่ม 3 ปุ่ม */
+/* จัดเรียงปุ่ม 3 ปุ่มให้สวยงาม */
 .footer-btn-group {
     display: flex;
     gap: 8px;
     align-items: stretch;
 }
 
-.btn-pay-option {
-    flex: 1;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.05);
-    padding: 10px 5px;
-    border-radius: 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.btn-pay-option.active {
-    border: 2px solid var(--gold);
-    background: rgba(212,175,55,0.15);
-}
-
-.btn-pay-option span {
-    font-size: 11px;
-    font-weight: bold;
-    color: #fff;
-}
-
-/* โค้ดกล่องเด้ง (Popover) */
+/* กล่องข้อมูลผ่อน - บังคับให้ "ลอย" (Absolute) ไม่ไปเบียดคนอื่น */
 #installmentInfo {
     position: absolute;
-    bottom: 90px; 
-    right: 15px;
+    bottom: 85px;  /* ลอยอยู่เหนือปุ่ม */
+    right: 15px;   /* ชิดขวา */
     width: 160px;
     background: rgba(20, 20, 20, 0.95);
     backdrop-filter: blur(10px);
@@ -360,15 +338,14 @@
     border-radius: 12px;
     padding: 10px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    z-index: 100;
-    animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+    animation: popUp 0.3s ease-out;
 }
 
 @keyframes popUp {
-    from { transform: scale(0.5) translateY(20px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
 
     </style>
 </head>
@@ -467,28 +444,28 @@
     </div>
 </div>
 <div class="modal-footer-fixed">
-    <div id="step-1-footer" style="position: relative;">
+    <div id="step-1-footer">
     <div id="installmentInfo" style="display: none;"></div>
 
     <div class="footer-btn-group">
         <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
-            <span>ชำระสด</span>
+            <span style="font-size: 11px; color: #fff;">ชำระสด</span>
             <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
         </div>
 
         <div id="pay-install" class="btn-pay-option" onclick="togglePay('ผ่อนไปใช้ไป')">
-            <span>ผ่อนชำระ</span>
+            <span style="font-size: 11px; color: #fff;">ผ่อนชำระ</span>
             <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none">
         </div>
 
         <button type="button" class="buy-now" onclick="nextStep(2)" 
-                style="flex: 1.5; margin: 0; height: 50px; border-radius: 10px; font-size: 12px; display: flex; align-items: center; justify-content: center;">
+                style="flex: 1.5; margin: 0; height: 45px; border-radius: 10px; font-size: 13px;">
             ถัดไป (ที่อยู่)
         </button>
     </div>
 </div>
 
-                         <div id="step-2-footer" style="display:none;">
+          <div id="step-2-footer" style="display:none;">
                     <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
                         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
                             <input type="checkbox" id="lineAccept" onchange="checkBlacklist()" style="width: 22px; height: 22px; accent-color: #06c755;">
@@ -1027,44 +1004,31 @@ function nextStep(step) {
 }
     init();
   function togglePay(type) {
-    const sec = document.getElementById('securitySection');
     const instBox = document.getElementById('installmentInfo');
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
-    const radios = document.getElementsByName('payType');
-    const topPriceDisplay = document.getElementById('finalTotalDisplay');
-
-    const total = Number(activeP.finalTotal) || 0; 
+    
+    // คำนวณยอด
+    const total = Number(activeP.finalTotal) || 0;
+    const perMonth = Math.round((total * 1.2) / 3); // ตัวอย่างคำนวณ 3 งวด
 
     if(type === 'จ่ายเต็ม') {
-        sec.style.display = 'none';
-        instBox.style.display = 'none'; // ปิดกล่องเด้ง
+        instBox.style.display = 'none'; // ปิดกล่องลอย
         fBox.classList.add('active');
         iBox.classList.remove('active');
-        radios[0].checked = true;
-        if(topPriceDisplay) topPriceDisplay.innerText = `฿${total.toLocaleString()}`;
     } else {
-        const totalWithFee = Math.round(total * 1.2); 
-        const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0;
-        
-        // ใส่ข้อมูลรายละเอียดผ่อน
+        // ใส่เนื้อหาในกล่องลอย
         instBox.innerHTML = `
-            <div style="font-size: 10px; color: var(--gold); font-weight: bold; margin-bottom: 5px; border-bottom: 1px solid rgba(212,175,55,0.2);">ข้อมูลการผ่อน</div>
-            <div style="font-size: 11px; color: #fff; line-height: 1.5;">
-                งวด 1: <b>฿${perMonth.toLocaleString()}</b><br>
-                งวด 2: ฿${perMonth.toLocaleString()}<br>
-                งวด 3: ฿${perMonth.toLocaleString()}
+            <div style="font-size: 10px; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.2); margin-bottom: 4px;">ข้อมูลผ่อน</div>
+            <div style="font-size: 11px; color: #fff;">
+                งวดละ: <b>฿${perMonth.toLocaleString()}</b><br>
+                <small style="color: #aaa;">(แบ่งจ่าย 3 งวด)</small>
             </div>
         `;
-
-        instBox.style.display = 'block'; // เปิดกล่องเด้ง
-        sec.style.display = 'block';
+        instBox.style.display = 'block'; // เปิดกล่องลอย
         iBox.classList.add('active');
         fBox.classList.remove('active');
-        radios[1].checked = true;
-        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth.toLocaleString()}/งวด`;
     }
-    checkBlacklist(); 
 }
 
 function getLocation() {
