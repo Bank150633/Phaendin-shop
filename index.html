@@ -124,36 +124,47 @@
         .copy-badge:active { background: var(--gold); color: #000; }
     /* --- ส่วนแสดงผลสินค้า Grid 3 คอลัมน์ (เนี๊ยบที่สุด) --- */
 #optionBox { 
-    display: grid !important; 
-    grid-template-columns: repeat(3, 1fr) !important; 
-    gap: 8px; 
-    padding: 10px;
+    display: flex !important; 
+    overflow-x: auto !important; /* เปิดการสไลด์แนวนอน */
+    gap: 12px; 
+    padding: 10px 15px;
     width: 100%;
     box-sizing: border-box;
-    overflow-x: hidden;
+    scroll-snap-type: x mandatory; /* ให้สไลด์แล้วหยุดกึกตรงกลาง */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* ซ่อนแถบสไลด์ (Firefox) */
 }
 
+/* ซ่อนแถบสไลด์ (Chrome/Safari) */
+#optionBox::-webkit-scrollbar {
+    display: none;
+}
 .variant-item { 
+    flex: 0 0 120px; /* บังคับความกว้าง 120px ทุกใบ ไม่ให้หด */
     background: rgba(255,255,255,0.05); 
-    padding: 6px; 
-    border-radius: 10px; 
-    border: 1px solid rgba(212,175,55,0.1); 
+    padding: 8px; 
+    border-radius: 12px; 
+    border: 1px solid rgba(212,175,55,0.15); 
     display: flex;
     flex-direction: column; 
     align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-    min-width: 0; /* กันกรอบแตก */
+    scroll-snap-align: start;
+    transition: 0.3s;
+}
+
+/* เพิ่ม Effect เมื่อมีการเลือกจำนวน > 0 */
+.variant-item.active-item {
+    border-color: var(--gold);
+    background: rgba(212,175,55,0.1);
 }
 
 .v-img { 
     width: 100% !important; 
     aspect-ratio: 1/1 !important; 
-    border-radius: 6px; 
+    border-radius: 8px; 
     object-fit: cover; 
     background: #000; 
-    margin-bottom: 6px;
-    display: block;
+    margin-bottom: 8px;
 }
 
 .v-name { 
