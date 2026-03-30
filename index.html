@@ -121,103 +121,70 @@
         #zoomContent img, #zoomContent video { max-width: 95vw; max-height: 80vh; object-fit: contain; border-radius: 6px; }
 
         .copy-badge { cursor: pointer; background: rgba(212,175,55,0.2); padding: 2px 6px; border-radius: 4px; color: var(--gold); font-size: 10px; transition: 0.2s; }
-        .copy-badge:active { background: var(--gold); color: #000; }
-    /* --- ส่วนแสดงผลสินค้า Grid 3 คอลัมน์ (เนี๊ยบที่สุด) --- */
+        .copy-badge:active { background: var(--gold); color: #000; }    
+/* --- ส่วนรายการตัวเลือกแบบจิ๋ว (Compact Version) --- */
 #optionBox { 
     display: flex !important; 
-    overflow-x: auto !important; /* เปิดการสไลด์แนวนอน */
-    gap: 12px; 
-    padding: 10px 15px;
+    overflow-x: auto !important; 
+    gap: 8px; /* ลดช่องว่างระหว่างกล่อง */
+    padding: 10px 5px;
     width: 100%;
-    box-sizing: border-box;
-    scroll-snap-type: x mandatory; /* ให้สไลด์แล้วหยุดกึกตรงกลาง */
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* ซ่อนแถบสไลด์ (Firefox) */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
 }
 
-/* ซ่อนแถบสไลด์ (Chrome/Safari) */
-#optionBox::-webkit-scrollbar {
-    display: none;
-}
 .variant-item { 
-    flex: 0 0 120px; /* บังคับความกว้าง 120px ทุกใบ ไม่ให้หด */
-    background: rgba(255,255,255,0.05); 
-    padding: 8px; 
-    border-radius: 12px; 
-    border: 1px solid rgba(212,175,55,0.15); 
+    flex: 0 0 95px; /* ลดความกว้างลงจาก 120px เหลือ 95px */
+    background: rgba(255,255,255,0.03); 
+    padding: 6px; /* ลด padding รอบๆ */
+    border-radius: 10px; 
+    border: 1px solid rgba(212,175,55,0.1); 
     display: flex;
     flex-direction: column; 
     align-items: center;
     scroll-snap-align: start;
-    transition: 0.3s;
-}
-
-/* เพิ่ม Effect เมื่อมีการเลือกจำนวน > 0 */
-.variant-item.active-item {
-    border-color: var(--gold);
-    background: rgba(212,175,55,0.1);
 }
 
 .v-img { 
     width: 100% !important; 
     aspect-ratio: 1/1 !important; 
-    border-radius: 8px; 
+    border-radius: 6px; 
     object-fit: cover; 
-    background: #000; 
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .v-name { 
-    font-size: 9px !important; 
-    height: 22px !important; 
-    line-height: 1.1 !important;
-    text-align: center;
-    width: 100%;
-    color: #fff;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    font-size: 8.5px !important; /* ตัวหนังสือเล็กลง */
+    height: 20px !important; 
+    line-height: 1 !important;
+    margin-bottom: 2px;
 }
 
 .v-price { 
-    font-size: 10px !important; 
-    color: var(--gold); 
-    font-weight: bold; 
-    margin-bottom: 4px; 
-    width: 100%;           /* บังคับให้ขยายเต็มความกว้างกล่อง */
-    display: flex;         /* ใช้ flex เพื่อจัดของข้างใน */
-    justify-content: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
-    align-items: center;   /* จัดให้อยู่กึ่งกลางแนวตั้ง */
-    text-align: center;    /* สำคัญ: สั่งให้ตัวหนังสืออยู่ตรงกลาง */
+    font-size: 9px !important; 
+    margin-bottom: 5px; 
 }
 
+/* ปรับปุ่มเพิ่ม/ลดให้เล็กลงมาก */
 .v-ctrl { 
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
-    gap: 2px;
+    background: rgba(0,0,0,0.4) !important;
+    padding: 2px 4px !important;
+    border-radius: 6px !important;
 }
 
 .v-btn { 
-    width: 20px !important; 
-    height: 20px !important; 
-    font-size: 10px !important; 
-    border-radius: 50% !important;
-    background: var(--gold-grad) !important;
-    color: #000 !important;
-    border: none !important;
-    padding: 0 !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 18px !important; /* เล็กลง */
+    height: 18px !important; 
+    font-size: 9px !important; 
+    border-radius: 4px !important;
 }
 
 #v-qty { 
-    font-size: 10px !important; 
-    color: #fff;
-    font-weight: bold;
+    font-size: 9px !important; 
 }
 
 
