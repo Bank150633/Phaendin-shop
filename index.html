@@ -466,29 +466,41 @@
 </div>
 <div class="modal-footer-fixed">
     <div id="step-1-footer">
-        <div style="display: flex; gap: 6px; align-items: stretch; margin-bottom: 0;">
+        <div class="footer-btn-group">
+            <div id="installmentInfo" style="display: none;"></div>
             
-            <div id="pay-full" onclick="togglePay('จ่ายเต็ม')" 
-                 style="flex: 1; border: 2px solid var(--gold); background: rgba(212,175,55,0.2); padding: 8px 4px; border-radius: 10px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                <div style="font-size: 10px; font-weight: bold; color: #fff; line-height: 1.2;">ชำระสด</div>
+            <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
+                <div style="font-size: 11px; font-weight: bold; color: #fff;">ชำระสด</div>
                 <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
             </div>
 
-            <div id="pay-install" onclick="togglePay('ผ่อนไปใช้ไป')" 
-                 style="flex: 1; border: 1px solid rgba(255,255,255,0.1); padding: 8px 4px; border-radius: 10px; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                <div style="font-size: 10px; font-weight: bold; color: #fff; line-height: 1.2;">ผ่อนชำระ</div>
+            <div id="pay-install" class="btn-pay-option" onclick="togglePay('ผ่อนไปใช้ไป')">
+                <div style="font-size: 11px; font-weight: bold; color: #fff;">ผ่อนชำระ</div>
                 <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none">
             </div>
 
             <button type="button" class="buy-now" onclick="nextStep(2)" 
-                    style="flex: 1.5; border-radius: 10px; padding: 0; height: auto; margin: 0; font-size: 11px;">
+                    style="flex: 1.5; border-radius: 10px; padding: 0; height: 48px; margin: 0; font-size: 13px; font-weight: bold;">
                 ถัดไป (ที่อยู่)
             </button>
         </div>
-
-        <div id="installmentInfo" style="display: none; margin-top: 8px; padding: 8px; background: rgba(212,175,55,0.1); border-radius: 10px; border: 1px solid var(--gold);">
-            </div>
     </div>
+
+    <div id="step-2-footer" style="display:none;">
+        <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="lineAccept" onchange="checkBlacklist()" style="width: 22px; height: 22px; accent-color: #06c755;">
+                <span style="font-size: 11px; color: #fff; line-height: 1.4;">
+                    <b>[บังคับ]</b> ฉันยอมรับการรับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน Line OA
+                </span>
+            </label>
+        </div>
+        <button type="submit" id="submitBtn" class="buy-now" disabled style="border-radius:10px; padding: 12px 0; opacity: 0.5;">
+            ยืนยันการสั่งซื้อ
+        </button>
+    </div>
+</div>
+
                          <div id="step-2-footer" style="display:none;">
                     <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
                         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
