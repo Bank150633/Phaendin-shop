@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* บังคับใช้ธีมมืดเป็นค่าพื้นฐาน */
-              :root { 
+ :root { 
             /* ชุดสีใหม่: แดง ขาว น้ำเงิน */
             --thai-blue: #00247D; /* น้ำเงินเข้ม ดูมั่นคง */
             --thai-red: #ED1C24;  /* แดงสด กระตุ้นการซื้อ */
@@ -26,7 +26,7 @@
             --gold: var(--thai-blue); /* หลอกตัวแปรเดิมให้ใช้สีน้ำเงิน */
             --gold-grad: var(--blue-grad); /* หลอกตัวแปรเดิมให้ใช้ Gradient น้ำเงิน */
         }
-
+      
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
@@ -40,7 +40,7 @@
         .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 13px; }
 
         .banner-box { padding: 8px; margin-top: 5px; } 
-        .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; display: block; height: auto; background: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); position: relative; }
+        .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; display: block; height: 220px; background: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); position: relative; }
         .bn-img { width: 100%; height: 100%; position: relative; background: #000; cursor: pointer; }
         .bn-img::after {
             content: '';
@@ -49,7 +49,7 @@
             background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, transparent 100%);
             z-index: 2;
         }
-        .bn-img img, .bn-img video { width: 100%; height: auto; object-fit: contain; display: block; }
+        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; display: block; }
         .bn-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 5px; z-index: 10; }
         
         .bn-txt { 
@@ -207,10 +207,10 @@
         .pill-gold { background: var(--gold-grad); color: #000; }
         .pill-free-ship { border: 1px solid #38ef7d; color: #38ef7d; background: rgba(56, 239, 125, 0.1); }
         .order-summary-box {
-    padding: 6px 10px !important;
-    margin: 8px 0 !important;
-    border-radius: 10px !important;
-}
+            background: linear-gradient(180deg, rgba(212,175,55,0.1) 0%, rgba(0,0,0,0) 100%);
+            border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 12px; padding: 12px; margin-bottom: 12px;
+        }
         /* ตัวบอกจำนวนรูป 1/3 */
 .img-counter {
     position: absolute;
@@ -304,8 +304,18 @@
 
 /* ปุ่มตัวเลือกการชำระ */
 .btn-pay-option {
-    padding: 6px 4px !important;
-    height: 40px !important;
+    flex: 1;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    padding: 8px 4px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
 }
 
 .btn-pay-option.active {
