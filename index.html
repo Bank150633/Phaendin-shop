@@ -9,15 +9,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* บังคับใช้ธีมมืดเป็นค่าพื้นฐาน */
-        :root { 
-            --gold: #D4AF37; 
-            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
-            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ff416c 100%);
-            --green-grad: linear-gradient(145deg, #11998e 0%, #38ef7d 100%);
-            --blue-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
-            --fb-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
-            --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --text-dim: #BBBBBB; --input-bg: #1A1A1A; 
+              :root { 
+            /* ชุดสีใหม่: แดง ขาว น้ำเงิน */
+            --thai-blue: #00247D; /* น้ำเงินเข้ม ดูมั่นคง */
+            --thai-red: #ED1C24;  /* แดงสด กระตุ้นการซื้อ */
+            --thai-white: #FFFFFF;
+            
+            /* Gradient สำหรับปุ่มและส่วนต่างๆ */
+            --blue-grad: linear-gradient(145deg, #0033a0 0%, #00247d 100%);
+            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ed1c24 100%);
+            --bg: #F5F7FA;    /* พื้นหลังเปลี่ยนเป็นสีสว่างเทาอ่อน */
+            --card: #FFFFFF;  /* การ์ดสินค้าเป็นสีขาว */
+            --text: #333333;  /* ตัวหนังสือหลักเป็นสีเข้ม */
+            --text-dim: #666666; 
+            --input-bg: #FFFFFF;
+            --gold: var(--thai-blue); /* หลอกตัวแปรเดิมให้ใช้สีน้ำเงิน */
+            --gold-grad: var(--blue-grad); /* หลอกตัวแปรเดิมให้ใช้ Gradient น้ำเงิน */
         }
+
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
