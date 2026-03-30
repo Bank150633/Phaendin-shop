@@ -31,7 +31,7 @@
         .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--gold); font-size: 13px; }
 
         .banner-box { padding: 8px; margin-top: 5px; } 
-        .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; display: block; height: 220px; background: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); position: relative; }
+        .bn-card { border: 2.5px solid var(--gold); border-radius: 18px; overflow: hidden; display: block; height: auto; background: #000; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); position: relative; }
         .bn-img { width: 100%; height: 100%; position: relative; background: #000; cursor: pointer; }
         .bn-img::after {
             content: '';
@@ -40,7 +40,7 @@
             background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, transparent 100%);
             z-index: 2;
         }
-        .bn-img img, .bn-img video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .bn-img img, .bn-img video { width: 100%; height: auto; object-fit: contain; display: block; }
         .bn-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 5px; z-index: 10; }
         
         .bn-txt { 
