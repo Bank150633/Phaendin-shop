@@ -126,8 +126,11 @@ header {
         .modal-card { background: var(--bg); border: 1px solid var(--gold); border-radius: 12px; width: 100%; max-width: 320px; padding: 8px; max-height: 95vh; overflow-y: auto; }
         
         .input-slim { width: 100%; padding: 6px; margin-bottom: 4px; border-radius: 6px; background: var(--input-bg); color: #fff; border: 1px solid #333; font-size: 11px; outline: none; }
-
-        nav { position: fixed; bottom: 0; width: 100%; height: 50px; background: #000; display: flex; border-top: 1px solid rgba(212,175,55,0.3); z-index: 1000; }
+        /* แถบเมนูด้านล่าง: พื้นขาว เส้นน้ำเงิน */
+       nav { 
+    background: var(--thai-white) !important; 
+    border-top: 2px solid var(--thai-blue) !important; 
+}
         .nav-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-dim); font-size: 8px; cursor: pointer; }
         .nav-tab.active { color: var(--gold); }
         .nav-tab i { font-size: 15px; margin-bottom: 2px; }
