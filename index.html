@@ -647,13 +647,34 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
     updatePrice();
     nextStep(1); 
 }
-          
-    function changeVQty(label, price, delta) {
-        let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
-        if (delta > 0 && totalNow >= activeP.max) { alert(`สั่งซื้อรวมกันได้ไม่เกิน ${activeP.max} ชิ้นครับ`); return; }
-        let nextQty = selectedOptions[label].qty + delta;
-        if (nextQty >= 0) { selectedOptions[label].qty = nextQty; document.getElementById(`v-qty-${label}`).innerText = nextQty; updatePrice(); }
+    
+function changeVQty(label, price, delta) {
+    let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
+    
+    // เช็คจำนวนสูงสุด
+    if (delta > 0 && totalNow >= activeP.max) { 
+        alert(`สั่งซื้อรวมกันได้ไม่เกิน ${activeP.max} ชิ้นครับ`); 
+        return; 
     }
+    
+    let nextQty = selectedOptions[label].qty + delta;
+    
+    if (nextQty >= 0) { 
+        selectedOptions[label].qty = nextQty; 
+        document.getElementById(`v-qty-${label}`).innerText = nextQty; 
+        
+        // เพิ่มลูกเล่น: ถ้ามีจำนวน > 0 ให้ขอบเป็นสีทอง
+        const card = document.getElementById(`v-qty-${label}`).closest('.variant-item');
+        if(nextQty > 0) {
+            card.classList.add('active-item');
+        } else {
+            card.classList.remove('active-item');
+        }
+        
+        updatePrice(); 
+    }
+}          
+   
 function updatePrice() {
     let subtotalNormal = 0; 
     let subtotalDiscounted = 0; 
