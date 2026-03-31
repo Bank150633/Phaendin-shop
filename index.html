@@ -638,14 +638,6 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         pDesc: pDesc
     };
 
-    const payInstallBtn = document.getElementById('pay-install');
-    if (activeP.canInstall === 'YES') {
-        payInstallBtn.style.display = 'block';
-    } else {
-        payInstallBtn.style.display = 'none';
-        togglePay('จ่ายเต็ม');
-    }
-
     const box = document.getElementById('optionBox');
     box.innerHTML = '';
     selectedOptions = {};
