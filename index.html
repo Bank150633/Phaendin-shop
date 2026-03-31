@@ -894,20 +894,26 @@ summaryListHtml += `
         </div>
         
         <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; font-size: 11px; border: 1px dashed rgba(212,175,55,0.2);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
-                <span>ราคาปกติ:</span>
-                <span style="color: #fff;">฿${subtotalNormal.toLocaleString()}</span> 
-            </div>
-            
-            <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: #ff4b2b;">
-                <span>ส่วนลด (${discP}%):</span>
-                <span>- ฿${totalDiscountAmount.toLocaleString()}</span>
-            </div>
+            /* --- ค้นหาช่วงบรรทัดที่ 623 เป็นต้นไป --- */
 
-            <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
-                <span>ค่าจัดส่ง:</span>
-                <span style="color: ${activeP.ship === 0 ? '#38ef7d' : '#fff'};">${activeP.ship === 0 ? 'ส่งฟรี' : `฿${activeP.ship.toLocaleString()}`}</span>
-            </div>
+<div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
+    <span>ราคาปกติ:</span>
+    <span style="color: #fff;">฿${subtotalNormal.toLocaleString()}</span> 
+</div>
+
+// *** แก้ไขตรงนี้: ครอบด้วยเงื่อนไข discP > 0 ***
+${discP > 0 ? `
+<div style="display:flex; justify-content:space-between; margin-bottom:3px; color: #ff4b2b;">
+    <span>ส่วนลด (${discP}%):</span>
+    <span>- ฿${totalDiscountAmount.toLocaleString()}</span>
+</div>
+` : ''}
+
+<div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
+    <span>ค่าจัดส่ง:</span>
+    <span style="color: ${activeP.ship === 0 ? '#38ef7d' : '#fff'};">${activeP.ship === 0 ? 'ส่งฟรี' : `฿${activeP.ship.toLocaleString()}`}</span>
+</div>
+
             <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top:8px; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-weight:bold; color:var(--gold); font-size:12px;">ยอดชำระสุทธิ:</span>
                 <span style="font-size:22px; font-weight:800; color:#38ef7d;">฿${activeP.finalTotal.toLocaleString()}</span>
