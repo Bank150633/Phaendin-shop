@@ -604,7 +604,7 @@
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>                    
             </div>
-            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)}, ${JSON.stringify(p[2])})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
+            <button class="buy-now" onclick='prepareOrder(${pIndex})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
 }
