@@ -725,31 +725,38 @@ function openOrder(data) {
     box.innerHTML = '';
     selectedOptions = {};
 
-    if (data.optStr && data.optStr !== '-') {
+        if (data.optStr && data.optStr !== '-') {
         const opts = data.optStr.split(',');
         opts.forEach((opt) => {
             const parts = opt.split(':');
             const label = parts[0].trim();
-            const price = parts[1] ? parseFloat(parts[1]) : data.pNormal;
+            const priceNormalV = parts[1] ? parseFloat(parts[1]) : data.pNormal;
             let vImg = activeP.img.split(',')[0].trim();
             if (parts.length > 2) vImg = parts.slice(2).join(':').trim();
             
-            selectedOptions[label] = { qty: 0, price: price };
-            const discountedPrice = Math.round(price * (1 - (activeP.disc / 100)));
+            selectedOptions[label] = { qty: 0, price: priceNormalV };
+            
+            // คำนวณราคาโปรโมชั่น (ถ้ามีส่วนลดจากหน้าหลัก)
+            const discountedPriceV = Math.round(priceNormalV * (1 - (activeP.disc / 100)));
 
             box.innerHTML += `
             <div class="variant-item">
                 <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
                 <div class="v-name">${label}</div>
-                <div class="v-price">฿${discountedPrice.toLocaleString()}</div>
+                <div class="v-price">
+                    ${activeP.disc > 0 ? `<span class="old-price-v">฿${priceNormalV.toLocaleString()}</span>` : ''}
+                    <span style="color: ${activeP.disc > 0 ? '#ff4b2b' : 'var(--gold)'};">฿${discountedPriceV.toLocaleString()}</span>
+                </div>
                 <div class="v-ctrl">
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, -1)">-</button>
                     <span id="v-qty-${label}">0</span>
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, 1)">+</button>
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, 1)">+</button>
                 </div>
             </div>`;
         });
-    } else {
+    }
+
+        else {
         selectedOptions[data.n] = { qty: 1, price: data.pNormal };
     }
     
