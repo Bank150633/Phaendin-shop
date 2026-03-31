@@ -739,20 +739,26 @@ function changeVQty(label, price, delta) {
 }          
 
 function updatePrice() {
-    let subtotalNormal = 0; 
-    let subtotalDiscounted = 0; 
+    let subtotalNormal = 0; // ราคาเต็มก่อนหักส่วนลด
+    let subtotalDiscounted = 0; // ราคาสุทธิหลังหักส่วนลด
     let summaryListHtml = "";
     let totalItems = 0;
+    
     let discP = parseFloat(activeP.disc) || 0; 
 
+    // 1. คำนวณรายการสินค้า
     for (let key in selectedOptions) { 
         if(selectedOptions[key].qty > 0) {
             let qty = selectedOptions[key].qty;
             let unitPrice = selectedOptions[key].price;
+            
             subtotalNormal += (unitPrice * qty);
+            
             let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
+            
             totalItems += qty; 
+
             summaryListHtml += `
             <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; color: #fff;">
                 <span>• ${key} x${qty}</span>
@@ -761,63 +767,58 @@ function updatePrice() {
         } 
     }
     
+    // 2. คำนวณยอดรวมสุทธิ
     subtotalNormal = Math.round(subtotalNormal);
     subtotalDiscounted = Math.round(subtotalDiscounted);
+    let totalDiscountAmount = subtotalNormal - subtotalDiscounted;
     activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
     activeP.summary = Object.entries(selectedOptions).filter(([_, v]) => v.qty > 0).map(([k, v]) => `${k} x${v.qty}`).join(', ');
 
-    // --- แก้ไข: รองรับทั้งรูปภาพและวิดีโอในสไลด์ ---
-    const mediaFiles = activeP.img.split(',').filter(m => m.trim() !== "").map(m => m.trim());
-    const mediaCount = mediaFiles.length;
-
+    // 3. แสดงผล "บิลจิ๋ว" ใน Modal
     document.getElementById('orderDetail').innerHTML = `
-    <div style="border: 1px solid var(--gold); border-radius: 12px; overflow: hidden; margin-bottom: 12px; background: #000; position: relative; max-width: 90%; margin-left: auto; margin-right: auto;">
+    <div style="border: 1px solid var(--gold); border-radius: 15px; overflow: hidden; margin-bottom: 12px; background: rgba(0,0,0,0.3);">
+        <div style="position: relative; width: 100%; aspect-ratio: 16/9;">
+            ${renderMedia(activeP.img.split(',')[0], true)}
+            ${activeP.disc > 0 ? `<div style="position:absolute; top:10px; left:10px; background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:5px; font-size:10px; font-weight:bold;">SALE ${activeP.disc}%</div>` : ''}
+        </div>
         
-        ${mediaCount > 1 ? `<div id="imgNum" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.7); color:#fff; padding:2px 8px; border-radius:20px; font-size:10px; z-index:10; border:0.5px solid rgba(212,175,55,0.5);">1 / ${mediaCount}</div>` : ''}
+        <div style="padding: 12px;">
+            <div style="font-size:14px; font-weight:700; color:var(--gold); margin-bottom:8px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom:5px;">
+                ${activeP.name}
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                ${summaryListHtml || '<div style="text-align:center; color:#666; font-size:11px; padding:10px;">กรุณาเลือกรายการสินค้า</div>'}
+            </div>
 
-        <div onscroll="updateDots(this, ${mediaCount})" 
-             style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 180px; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
-            ${mediaFiles.map(url => `
-                <div style="min-width: 100%; height: 100%; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center;">
-                    ${url.match(/\.(mp4|webm|mov)$/i) 
-                        ? `<video src="${url}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: contain;"></video>` 
-                        : `<img src="${url}" style="max-width: 100%; max-height: 100%; object-fit: contain;" onclick="zoom('${activeP.img}')">`
-                    }
+            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; font-size: 11px; border: 1px dashed rgba(212,175,55,0.2);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
+    <span>ราคาปกติ:</span>
+    <span style="color: #fff;">฿${subtotalNormal.toLocaleString()}</span> 
+</div>
+                
+                ${totalDiscountAmount > 0 ? `
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: #ff4b2b;">
+                    <span>ส่วนลดโปรโมชั่น:</span>
+                    <span>- ฿${totalDiscountAmount.toLocaleString()}</span>
+                </div>` : ''}
+
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
+                    <span>ค่าจัดส่ง:</span>
+                    <span style="color: ${activeP.ship === 0 ? '#38ef7d' : '#fff'};">
+                        ${activeP.ship === 0 ? 'ส่งฟรี' : `฿${activeP.ship.toLocaleString()}`}
+                    </span>
                 </div>
-            `).join('')}
-        </div>
 
-        ${mediaCount > 1 ? `
-        <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 10;">
-            ${mediaFiles.map((_, i) => `<div id="modal-dot-${i}" class="dot ${i === 0 ? 'active' : ''}"></div>`).join('')}
-        </div>` : ''}
-    </div>
-
-    <div style="padding: 0 5px 12px 5px;">
-        <div style="font-size:16px; font-weight:700; color:var(--gold); margin-bottom:2px; text-align:center;">${activeP.name}</div>
-        
-        <div style="font-size:11px; color:var(--text-dim); text-align:center; margin-bottom:12px; line-height:1.4; padding: 0 10px;">
-            ${activeP.pDesc ? activeP.pDesc : ''}
-        </div>
-
-        <div style="margin-bottom: 10px;">${summaryListHtml || '<div style="text-align:center; color:#666; font-size:11px; padding:10px;">กรุณาเลือกรายการสินค้า</div>'}</div>
-        
-        <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 12px; font-size: 11px; border: 1px dashed rgba(212,175,55,0.2);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px; color: var(--text-dim);">
-                <span>ราคาปกติ:</span>
-                <span>฿${subtotalNormal.toLocaleString()}</span> 
-            </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:4px; color: var(--text-dim);">
-                <span>ค่าจัดส่ง:</span>
-                <span style="color: ${activeP.ship === 0 ? '#38ef7d' : '#fff'};">${activeP.ship === 0 ? 'ส่งฟรี' : `฿${activeP.ship.toLocaleString()}`}</span>
-            </div>
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top:8px; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-weight:bold; color:var(--gold); font-size:13px;">ยอดชำระสุทธิ:</span>
-                <span style="font-size:24px; font-weight:800; color:#38ef7d;">฿${activeP.finalTotal.toLocaleString()}</span>
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top:8px; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; color:var(--gold); font-size:12px;">ยอดชำระสุทธิ:</span>
+                    <span style="font-size:22px; font-weight:800; color:#38ef7d;">฿${activeP.finalTotal.toLocaleString()}</span>
+                </div>
             </div>
         </div>
     </div>`;
 
+    // 4. อัปเดตสถานะปุ่มกด
     const btn = document.getElementById('submitBtn');
     if (totalItems === 0) { 
         btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
@@ -826,32 +827,47 @@ function updatePrice() {
     } else { 
         btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
     }
-}  
-        
+
+    // อัปเดตราคาในโหมดจ่ายเงิน
+    const currentPayType = document.querySelector('input[name="payType"]:checked').value;
+    togglePay(currentPayType);
+}
+
+    
+    function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
+    function zoom(url) {
+    // 1. แยกรูปภาพออกมา (รองรับทั้งแบบรูปเดียว หรือหลายรูปคั่นด้วยคอมม่า)
+    const images = url.split(',').filter(img => img.trim() !== "").map(img => img.trim());
+    const imgCount = images.length;
+
+    // 2. ปรับโครงสร้างหน้า Zoom ให้พอดีจอและสไลด์ได้
+    document.getElementById('zoomContent').innerHTML = `
+        <div style="position: relative; width: 100vw; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            
+            ${imgCount > 1 ? `<div id="zoomNum" style="color: white; margin-bottom: 10px; font-size: 16px; background: rgba(0,0,0,0.5); padding: 2px 10px; border-radius: 10px;">1 / ${imgCount}</div>` : ''}
+            
+            <div onscroll="updateZoomDots(this, ${imgCount})" 
+                 style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; max-height: 70vh; scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+                ${images.map(img => `
+                    <div style="min-width: 100%; display: flex; align-items: center; justify-content: center; scroll-snap-align: start;">
+                        <img src="${img}" style="max-width: 95%; max-height: 70vh; object-fit: contain; border-radius: 8px;">
+                    </div>
+                `).join('')}
+            </div>
+
+            <div onclick="document.getElementById('zoomOverlay').style.display='none'" 
+                 style="position: absolute; top: -40px; right: 20px; color: white; font-size: 30px; cursor: pointer;">&times;</div>
+        </div>
+    `;
+    
+    document.getElementById('zoomOverlay').style.display = 'flex';
+}
+
 // ฟังก์ชันอัปเดตตัวเลข 1/2, 1/3 เวลาเราปัดรูป
 function updateZoomDots(el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
     const numEl = document.getElementById('zoomNum');
     if (numEl) numEl.innerText = `${index + 1} / ${total}`;
-}
-// ฟังก์ชันจัดการการแสดงผลรูปภาพหรือวิดีโอ
-function renderMedia(url, isThumb = false) {
-    if (!url) return '';
-    const cleanUrl = url.trim();
-    if (cleanUrl.match(/\.(mp4|webm|mov)$/i)) {
-        return `<video src="${cleanUrl}" ${isThumb ? 'muted loop autoplay playsinline' : 'controls'} style="width:100%; height:100%; object-fit:cover;"></video>`;
-    }
-    return `<img src="${cleanUrl}" style="width:100%; height:100%; object-fit:${isThumb ? 'cover' : 'contain'};">`;
-}
-
-// ฟังก์ชันซูมรูปภาพ
-function zoom(url) {
-    const overlay = document.getElementById('zoomOverlay');
-    const content = document.getElementById('zoomContent');
-    const urls = url.split(',');
-    
-    content.innerHTML = urls.map(u => renderMedia(u.trim())).join('');
-    overlay.style.display = 'flex';
 }
 
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
