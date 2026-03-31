@@ -353,100 +353,7 @@
     align-items: stretch;
     position: relative; /* สำคัญ: เพื่อให้กล่อง #installmentInfo อ้างอิงตำแหน่งจากตรงนี้ */
 }
-/* สไตล์ใบเสร็จแบบ Digital Receipt */
-.receipt-box {
-    background: #fff; /* พื้นหลังสีขาวเหมือนกระดาษ */
-    color: #333; /* ตัวหนังสือสีเข้มอ่านง่าย */
-    padding: 20px;
-    border-radius: 4px;
-    margin: 15px 0;
-    position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    font-family: 'Courier New', Courier, monospace; /* ฟอนต์แนวเครื่องพิมพ์ใบเสร็จ */
-}
 
-/* รอยปรุด้านล่างใบเสร็จ */
-.receipt-box::after {
-    content: "";
-    position: absolute;
-    bottom: -10px;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    background: linear-gradient(-45deg, transparent 5px, #fff 0), linear-gradient(45deg, transparent 5px, #fff 0);
-    background-size: 10px 10px;
-}
-
-.receipt-header {
-    text-align: center;
-    border-bottom: 1px dashed #ccc;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-}
-
-.receipt-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    margin-bottom: 5px;
-}
-
-.receipt-divider {
-    border-top: 1px dashed #ccc;
-    margin: 10px 0;
-}
-
-.receipt-total {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    font-size: 16px;
-    color: #000;
-}
-
-.receipt-footer {
-    text-align: center;
-    font-size: 11px;
-    color: #888;
-    margin-top: 10px;
-}
-/* ส่วนขยายตารางผ่อนภายในบิล */
-.receipt-installment-plan {
-    margin-top: 15px;
-    padding-top: 10px;
-    border-top: 2px dotted #eee; /* เส้นปรุแยกส่วนสินค้ากับส่วนผ่อน */
-    animation: fadeInDown 0.4s ease-out;
-}
-
-.plan-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 11px;
-    margin-bottom: 4px;
-    color: #555;
-}
-
-.plan-row.highlight {
-    font-weight: bold;
-    color: #000;
-    background: #f9f9f9;
-    padding: 4px 0;
-}
-
-.receipt-badge-install {
-    display: inline-block;
-    background: #000;
-    color: #fff;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 10px;
-    margin-bottom: 8px;
-}
-
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
 
     </style>
 </head>
@@ -545,21 +452,23 @@
     </div>
 </div>
 <div class="modal-footer-fixed">
-    <div id="step-2-footer" style="display:none;">
-    <div id="lineAcceptBox" style="display:none; margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.08); border-radius: 12px; border: 1.5px dashed #06c755;">
-        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-            <input type="checkbox" id="lineAccept" onchange="checkBlacklist()" style="width: 22px; height: 22px; accent-color: #06c755;">
-            <span style="font-size: 11px; color: #fff; line-height: 1.4;">
-                <b>[บังคับ]</b> ฉันยอมรับการรับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน <b>Line OA</b> ของร้าน (กรุณาติ๊กเพื่อยืนยัน)
-            </span>
-        </label>
-    </div>
+    <div id="step-1-footer">
+        <div class="footer-btn-group">
+            <div id="installmentInfo"></div> <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
+                <div style="font-size: 11px; font-weight: bold; color: #fff;">ชำระสด</div>
+                <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
+            </div>
 
-    <button type="submit" id="submitBtn" class="buy-now" disabled style="border-radius:10px; padding: 12px 0; opacity: 0.5;">
-        กรุณากรอกข้อมูลให้ครบ
-    </button>
-</div>
+            <div id="pay-install" class="btn-pay-option" onclick="togglePay('ผ่อนไปใช้ไป')">
+                <div style="font-size: 11px; font-weight: bold; color: #fff;">ผ่อนชำระ</div>
+                <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none">
+            </div>
 
+            <button type="button" class="buy-now" onclick="nextStep(2)" 
+                    style="flex: 1.5; border-radius: 10px; padding: 0; height: 48px; margin: 0; font-size: 13px; font-weight: bold;">
+                ถัดไป (ที่อยู่)
+            </button>
+        </div>
     </div>
     </div>
 
@@ -660,55 +569,46 @@
     const filtered = db.filter(p => p[0].toLowerCase().includes(query));
     
     document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
-        let pName = p[0] || '';
+        let pName = (p[0] || '').replace(/'/g, "\\'");
         let priceNormal = parseFloat(p[3] || 0);    
         let pricePromo = parseFloat(p[10] || 0);   
         let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-        let currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
+        let provinceName = p[13] || '';
+        let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
 
-        // สร้าง Object ข้อมูลสินค้าเพื่อส่งเข้าฟังก์ชัน
-        const productData = {
-            n: p[0],
-            pNormal: priceNormal,
-            s: parseFloat(p[8] || 0),
-            optStr: p[9] || "",
-            discPercent: (pricePromo > 0 && expiryDate > now) ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0,
-            maxLimit: parseInt(p[12] || 999),
-            imgUrl: p[1] || "",
-            minLimit: parseInt(p[14] || 1),
-            isAllowed: (p[15] || 'NO').trim().toUpperCase(),
-            pDesc: p[2] || ""
-        };
+        let images = (p[1] || '').split(',').map(img => img.trim());
+        let currentPrice = pricePromo > 0 && expiryDate > now ? pricePromo : priceNormal;
+        let percentDiscount = pricePromo > 0 && expiryDate > now ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
 
         return `
         <div class="card">
-            <div class="media-wrap">
-                ${renderMedia((p[1] || '').split(',')[0], true)}
+            <div class="media-wrap" style="position: relative;">
+                <div class="badge-container">
+                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
+                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
+                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
+                </div>
+                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
+                
+                <div style="width: 100%; height: 100%; overflow: hidden;">
+                    ${renderMedia(images[0], true)}
+                </div>
+
+                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
             </div>
             <div class="info">
-                <div class="p-name">${pName}</div>
-                <div class="p-price">฿${currentPrice.toLocaleString()}</div>
+                <div class="p-name">${p[0]}</div>
+                <div class="p-desc">${p[2] || ''}</div>
+                <div class="p-price">
+                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
+                </div>                    
             </div>
-            <button class="buy-now" onclick='prepareOrder(${JSON.stringify(productData)})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
+            <button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)}, ${JSON.stringify(p[2])})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
 }
-function prepareOrder(data) {
-    // เรียกใช้ openOrder เดิมโดยส่งค่ากระจายออกมา
-    openOrder(
-        data.n, 
-        data.pNormal, 
-        data.s, 
-        data.optStr, 
-        data.discPercent, 
-        data.maxLimit, 
-        data.imgUrl, 
-        data.minLimit, 
-        data.isAllowed, 
-        data.pDesc
-    );
-}
-
+ 
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
@@ -810,113 +710,91 @@ function changeVQty(label, price, delta) {
 }          
    
 function updatePrice() {
-    let subtotalDiscounted = 0;
-    let summaryItems = [];
+    let subtotalNormal = 0; 
+    let subtotalDiscounted = 0; 
+    let summaryText = [];
     let totalItems = 0;
+    
     let discP = parseFloat(activeP.disc) || 0; 
-    let now = new Date().toLocaleString('th-TH');
 
     for (let key in selectedOptions) { 
         if(selectedOptions[key].qty > 0) {
             let qty = selectedOptions[key].qty;
             let unitPrice = selectedOptions[key].price;
-            let discountedUnitPrice = Math.round(unitPrice * (1 - (discP / 100)));
+            subtotalNormal += (unitPrice * qty);
+            let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
-            
-            summaryItems.push(`
-                <div class="receipt-item">
-                    <span>${key} x${qty}</span>
-                    <span>฿${(discountedUnitPrice * qty).toLocaleString()}</span>
-                </div>
-            `);
+            summaryText.push(`${key} x${qty}`); 
             totalItems += qty; 
         } 
     }
     
+    subtotalNormal = Math.round(subtotalNormal);
+    subtotalDiscounted = Math.round(subtotalDiscounted);
     activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
-    const currentPayType = document.querySelector('input[name="payType"]:checked')?.value || 'จ่ายเต็ม';
+    let totalBeforeDisc = subtotalNormal + activeP.ship;
+    activeP.summary = summaryText.join(', ');
 
-    // --- ส่วนคำนวณการผ่อน (ถ้าเลือกผ่อน) ---
-    let installmentHtml = '';
-    if (currentPayType === 'ผ่อนไปใช้ไป' && activeP.finalTotal > 0) {
-        const totalWithInterest = Math.round(activeP.finalTotal * 1.2);
-        const perMonth = Math.round(totalWithInterest / 3);
-        
-        const getNextDate = (m) => {
-            const d = new Date();
-            d.setMonth(d.getMonth() + m);
-            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
-        };
+    let images = activeP.img.split(',').map(img => img.trim());
+    let imgCount = images.length; 
 
-        installmentHtml = `
-            <div class="receipt-installment-plan">
-                <div class="receipt-badge-install">แผนชำระผ่อน (3 งวด)</div>
-                <div class="plan-row highlight">
-                    <span>งวดที่ 1 (วันนี้)</span>
-                    <span>฿${perMonth.toLocaleString()}</span>
-                </div>
-                <div class="plan-row">
-                    <span>งวดที่ 2 (${getNextDate(1)})</span>
-                    <span>฿${perMonth.toLocaleString()}</span>
-                </div>
-                <div class="plan-row">
-                    <span>งวดที่ 3 (${getNextDate(2)})</span>
-                    <span>฿${perMonth.toLocaleString()}</span>
-                </div>
-                <div style="font-size:9px; color:#999; margin-top:5px; text-align:right;">
-                    * รวมยอดผ่อนทั้งสิ้น ฿${totalWithInterest.toLocaleString()}
-                </div>
+    // --- 1. ส่วนบน: แสดงแค่รูปและชื่อสินค้า (ลดขนาดลงเพื่อให้เห็นปุ่มด้านล่างง่ายขึ้น) ---
+    document.getElementById('orderDetail').innerHTML = `
+    <div style="padding: 0; overflow: hidden; position: relative; border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; margin-bottom: 8px;">
+        ${imgCount > 1 ? `<div class="img-counter" id="imgNum">1 / ${imgCount}</div>` : ''}
+        <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;">
+            <div id="m-slider" onscroll="updateDots(this, ${imgCount})" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;">
+                ${images.map(img => `<div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">${renderMedia(img, true)}</div>`).join('')}
             </div>
-        `;
-    }
-
-    // --- โครงสร้างบิลใหม่ ---
-    const summaryHtml = `
-    <div id="dynamicSummary" class="receipt-box">
-        <div class="receipt-header">
-            <div style="font-weight:bold; font-size:15px; letter-spacing:1px;">PHAENDIN STORE</div>
-            <div style="font-size:9px; color:#888;">วันที่: ${now}</div>
+            ${imgCount > 1 ? `<div class="dot-container">${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="modal-dot-${i}"></div>`).join('')}</div>` : ''}
         </div>
-
-        ${summaryItems.length > 0 ? summaryItems.join('') : '<div style="text-align:center; padding:10px;">- ยังไม่ได้เลือกสินค้า -</div>'}
-        
-        <div class="receipt-divider"></div>
-
-        <div class="receipt-item">
-            <span>ค่าจัดส่ง</span>
-            <span>${activeP.ship === 0 ? 'FREE' : '฿'+activeP.ship.toLocaleString()}</span>
-        </div>
-
-        ${discP > 0 ? `<div class="receipt-item" style="color:#e63946;"><span>ส่วนลด (${discP}%)</span><span>-฿${Math.round(subtotalDiscounted * discP/100).toLocaleString()}</span></div>` : ''}
-
-        <div class="receipt-divider"></div>
-
-        <div class="receipt-total">
-            <span>ยอดชำระสุทธิ</span>
-            <span>฿${activeP.finalTotal.toLocaleString()}</span>
-        </div>
-
-        ${installmentHtml} <div class="receipt-footer">
-            <div style="margin-top:10px; border-top:1px solid #eee; padding-top:5px;">*** ขอบคุณที่ใช้บริการ ***</div>
+        <div style="padding: 8px; text-align: center;">
+            <div style="font-size:15px; font-weight:700; color:var(--gold);">${activeP.name}</div>
+            <div style="font-size:11px; color:#999; margin-top:2px;">${activeP.pDesc || ''}</div>
         </div>
     </div>`;
 
-    const oldSum = document.getElementById('dynamicSummary');
-    if(oldSum) oldSum.remove();
-    document.getElementById('optionBox').insertAdjacentHTML('afterend', summaryHtml);
+    // --- 2. ส่วนล่าง: สร้างส่วนสรุปราคาใหม่ (ย้ายมาไว้ใกล้ปุ่มถัดไป) ---
+    const summaryHtml = `
+    <div id="dynamicSummary" class="order-summary-box" style="margin: 15px 0 5px 0; padding: 12px; background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px;">
+        <div style="display: flex; justify-content: center; gap: 5px; margin-bottom: 8px;">
+            ${activeP.disc > 0 ? `<span class="pill pill-red" style="background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:4px; font-size:10px;">ลด ${activeP.disc}%</span>` : ''}
+            ${activeP.ship === 0 ? `<span class="pill pill-free-ship" style="border:1px solid #38ef7d; color:#38ef7d; background:rgba(56,239,125,0.1); padding:2px 8px; border-radius:4px; font-size:10px;">ส่งฟรี</span>` : `<span class="pill pill-gold" style="background:var(--gold-grad); color:#000; padding:2px 8px; border-radius:4px; font-size:10px;">ค่าส่ง ฿${activeP.ship}</span>`}
+        </div>
+        
+        <div style="font-size:11px; color:var(--text-dim); text-align:center; margin-bottom: 8px; line-height: 1.4;">
+            ${activeP.summary || 'ยังไม่ได้เลือกรายการ'}
+        </div>
 
-    // อัปเดตปุ่มถัดไป
-    const nextBtn = document.getElementById('mainNextBtn');
-    if (totalItems === 0) {
-        nextBtn.disabled = true; nextBtn.style.opacity = "0.5"; nextBtn.innerText = "กรุณาเลือกรายการ";
-    } else {
-        nextBtn.disabled = false; nextBtn.style.opacity = "1"; nextBtn.innerText = "ถัดไป (กรอกที่อยู่)";
+        <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:10px; text-align:center;">
+            <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+            <div style="display:flex; justify-content:center; align-items:baseline; gap:8px;">
+                ${(activeP.disc > 0 && totalItems > 0) ? `<span style="text-decoration: line-through; color: #777; font-size: 14px;">฿${totalBeforeDisc.toLocaleString()}</span>` : ''}
+                <div id="finalTotalDisplay" style="font-size:28px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+            </div>
+        </div>
+    </div>`;
+
+    // แทรกสรุปราคาลงไปต่อท้ายรายการเลือกสินค้า (optionBox)
+    const box = document.getElementById('optionBox');
+    const oldSummary = document.getElementById('dynamicSummary');
+    if(oldSummary) oldSummary.remove(); // ลบอันเก่าออกก่อนกันซ้ำ
+    box.insertAdjacentHTML('afterend', summaryHtml);
+
+    // อัปเดตสถานะปุ่ม
+    const btn = document.getElementById('submitBtn');
+    if (totalItems === 0) { 
+        btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
+    } else if (totalItems < activeP.min) { 
+        btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
+    } else { 
+        btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
     }
-    
-    // เรียก togglePay เพื่อจัดการเรื่องพิกัด/เซลฟี่ตามปกติ
+
+    const currentPayType = document.querySelector('input[name="payType"]:checked').value;
     togglePay(currentPayType);
 }
-
+    
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
     // 1. แยกรูปภาพออกมา (รองรับทั้งแบบรูปเดียว หรือหลายรูปคั่นด้วยคอมม่า)
