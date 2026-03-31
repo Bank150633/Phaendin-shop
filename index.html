@@ -862,8 +862,7 @@ function updatePrice() {
     // 3. อัปเดต HTML (ส่วนที่แสดงตัวเลขส่วนลดสีแดงจะขยับตามที่นี่)
     const mediaFiles = activeP.img.split(',').filter(m => m.trim() !== "").map(m => m.trim());
     const mediaCount = mediaFiles.length;
-
-    document.getElementById('orderDetail').innerHTML = `
+       document.getElementById('orderDetail').innerHTML = `
     <div class="image-slider-container" style="position: relative;">
         ${percentHtml} 
         ${mediaCount > 1 ? `<div id="imgNum" class="img-counter">1 / ${mediaCount}</div>` : ''}
@@ -880,12 +879,18 @@ function updatePrice() {
     </div>
 
     <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 0 0 15px 15px;">
-        <div style="font-size:14px; font-weight:700; color:var(--gold); margin-bottom:8px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom:5px;">
+        <div style="font-size:14px; font-weight:700; color:var(--gold); margin-bottom:2px;">
             ${activeP.name}
         </div>
+        
+        <div style="font-size:11px; color:var(--text-dim); margin-bottom:8px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom:5px;">
+            ${activeP.pDesc || ''} 
+        </div>
+
         <div style="margin-bottom: 10px;">
             ${summaryListHtml || '<div style="text-align:center; color:#666; font-size:11px; padding:10px;">กรุณาเลือกรายการสินค้า</div>'}
         </div>
+        
         <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; font-size: 11px; border: 1px dashed rgba(212,175,55,0.2);">
             <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
                 <span>ราคาปกติ:</span>
