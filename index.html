@@ -660,48 +660,40 @@
     const filtered = db.filter(p => p[0].toLowerCase().includes(query));
     
     document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
-        let pName = (p[0] || '').replace(/'/g, "\\'");
+        let pName = p[0] || '';
         let priceNormal = parseFloat(p[3] || 0);    
         let pricePromo = parseFloat(p[10] || 0);   
         let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
-        let provinceName = p[13] || '';
-        let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
+        let currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
 
-        let images = (p[1] || '').split(',').map(img => img.trim());
-        let currentPrice = pricePromo > 0 && expiryDate > now ? pricePromo : priceNormal;
-        let percentDiscount = pricePromo > 0 && expiryDate > now ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
+        // สร้าง Object ข้อมูลสินค้าเพื่อส่งเข้าฟังก์ชัน
+        const productData = {
+            n: p[0],
+            pNormal: priceNormal,
+            s: parseFloat(p[8] || 0),
+            optStr: p[9] || "",
+            discPercent: (pricePromo > 0 && expiryDate > now) ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0,
+            maxLimit: parseInt(p[12] || 999),
+            imgUrl: p[1] || "",
+            minLimit: parseInt(p[14] || 1),
+            isAllowed: (p[15] || 'NO').trim().toUpperCase(),
+            pDesc: p[2] || ""
+        };
 
         return `
         <div class="card">
-            <div class="media-wrap" style="position: relative;">
-                <div class="badge-container">
-                    ${percentDiscount > 0 ? `<span class="badge bg-red">ลด ${percentDiscount}%</span>` : ''}
-                    ${(p[4] && p[4] !== '-') ? `<span class="badge" style="background: var(--green-grad); color: #fff;">${p[4]}</span>` : ''}
-                    ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
-                </div>
-                ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                
-                <div style="width: 100%; height: 100%; overflow: hidden;">
-                    ${renderMedia(images[0], true)}
-                </div>
-
-                ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
+            <div class="media-wrap">
+                ${renderMedia((p[1] || '').split(',')[0], true)}
             </div>
             <div class="info">
-                <div class="p-name">${p[0]}</div>
-                <div class="p-desc">${p[2] || ''}</div>
-                <div class="p-price">
-                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
-                    <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
-                </div>                    
+                <div class="p-name">${pName}</div>
+                <div class="p-price">฿${currentPrice.toLocaleString()}</div>
             </div>
-            
-<button class="buy-now" onclick='openOrder(${JSON.stringify(p[0])}, ${priceNormal}, ${parseFloat(p[8]||0)}, ${JSON.stringify(p[9]||"")}, ${percentDiscount}, ${parseInt(p[12]||999)}, ${JSON.stringify(p[1])}, ${parseInt(p[14]||1)}, ${JSON.stringify(canInstall)}, ${JSON.stringify(p[2])})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
-
+            <button class="buy-now" onclick='prepareOrder(${JSON.stringify(productData)})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
 }
- 
+
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
