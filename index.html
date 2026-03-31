@@ -410,7 +410,43 @@
     color: #888;
     margin-top: 10px;
 }
+/* ส่วนขยายตารางผ่อนภายในบิล */
+.receipt-installment-plan {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 2px dotted #eee; /* เส้นปรุแยกส่วนสินค้ากับส่วนผ่อน */
+    animation: fadeInDown 0.4s ease-out;
+}
 
+.plan-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-bottom: 4px;
+    color: #555;
+}
+
+.plan-row.highlight {
+    font-weight: bold;
+    color: #000;
+    background: #f9f9f9;
+    padding: 4px 0;
+}
+
+.receipt-badge-install {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    margin-bottom: 8px;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
     </style>
 </head>
@@ -767,7 +803,6 @@ function changeVQty(label, price, delta) {
 }          
    
 function updatePrice() {
-    let subtotalNormal = 0;
     let subtotalDiscounted = 0;
     let summaryItems = [];
     let totalItems = 0;
@@ -779,7 +814,6 @@ function updatePrice() {
             let qty = selectedOptions[key].qty;
             let unitPrice = selectedOptions[key].price;
             let discountedUnitPrice = Math.round(unitPrice * (1 - (discP / 100)));
-            
             subtotalDiscounted += (discountedUnitPrice * qty);
             
             summaryItems.push(`
@@ -793,21 +827,51 @@ function updatePrice() {
     }
     
     activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
-    activeP.summary = Object.entries(selectedOptions)
-        .filter(([_, item]) => item.qty > 0)
-        .map(([name, item]) => `${name} x${item.qty}`).join(', ');
-
     const currentPayType = document.querySelector('input[name="payType"]:checked')?.value || 'จ่ายเต็ม';
 
-    // โครงสร้างใบเสร็จ (Digital Bill)
+    // --- ส่วนคำนวณการผ่อน (ถ้าเลือกผ่อน) ---
+    let installmentHtml = '';
+    if (currentPayType === 'ผ่อนไปใช้ไป' && activeP.finalTotal > 0) {
+        const totalWithInterest = Math.round(activeP.finalTotal * 1.2);
+        const perMonth = Math.round(totalWithInterest / 3);
+        
+        const getNextDate = (m) => {
+            const d = new Date();
+            d.setMonth(d.getMonth() + m);
+            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+        };
+
+        installmentHtml = `
+            <div class="receipt-installment-plan">
+                <div class="receipt-badge-install">แผนชำระผ่อน (3 งวด)</div>
+                <div class="plan-row highlight">
+                    <span>งวดที่ 1 (วันนี้)</span>
+                    <span>฿${perMonth.toLocaleString()}</span>
+                </div>
+                <div class="plan-row">
+                    <span>งวดที่ 2 (${getNextDate(1)})</span>
+                    <span>฿${perMonth.toLocaleString()}</span>
+                </div>
+                <div class="plan-row">
+                    <span>งวดที่ 3 (${getNextDate(2)})</span>
+                    <span>฿${perMonth.toLocaleString()}</span>
+                </div>
+                <div style="font-size:9px; color:#999; margin-top:5px; text-align:right;">
+                    * รวมยอดผ่อนทั้งสิ้น ฿${totalWithInterest.toLocaleString()}
+                </div>
+            </div>
+        `;
+    }
+
+    // --- โครงสร้างบิลใหม่ ---
     const summaryHtml = `
     <div id="dynamicSummary" class="receipt-box">
         <div class="receipt-header">
-            <div style="font-weight:bold; font-size:14px;">PHAENDIN STORE</div>
-            <div style="font-size:10px;">ORDER SUMMARY: ${now}</div>
+            <div style="font-weight:bold; font-size:15px; letter-spacing:1px;">PHAENDIN STORE</div>
+            <div style="font-size:9px; color:#888;">วันที่: ${now}</div>
         </div>
 
-        ${summaryItems.length > 0 ? summaryItems.join('') : '<div style="text-align:center;">- ยังไม่มีรายการ -</div>'}
+        ${summaryItems.length > 0 ? summaryItems.join('') : '<div style="text-align:center; padding:10px;">- ยังไม่ได้เลือกสินค้า -</div>'}
         
         <div class="receipt-divider"></div>
 
@@ -816,39 +880,33 @@ function updatePrice() {
             <span>${activeP.ship === 0 ? 'FREE' : '฿'+activeP.ship.toLocaleString()}</span>
         </div>
 
-        ${discP > 0 ? `<div class="receipt-item" style="color:red;"><span>ส่วนลดโปรโมชั่น</span><span>-${discP}%</span></div>` : ''}
+        ${discP > 0 ? `<div class="receipt-item" style="color:#e63946;"><span>ส่วนลด (${discP}%)</span><span>-฿${Math.round(subtotalDiscounted * discP/100).toLocaleString()}</span></div>` : ''}
 
         <div class="receipt-divider"></div>
 
         <div class="receipt-total">
-            <span>ยอดสุทธิ</span>
+            <span>ยอดชำระสุทธิ</span>
             <span>฿${activeP.finalTotal.toLocaleString()}</span>
         </div>
 
-        <div class="receipt-footer">
-            --- ขอบคุณที่ไว้วางใจ ---
+        ${installmentHtml} <div class="receipt-footer">
+            <div style="margin-top:10px; border-top:1px solid #eee; padding-top:5px;">*** ขอบคุณที่ใช้บริการ ***</div>
         </div>
-
-        ${activeP.canInstall === 'YES' ? `
-            <div id="toggleInstallBtn" class="single-install-btn ${currentPayType === 'ผ่อนไปใช้ไป' ? 'active' : ''}" 
-                 onclick="toggleSinglePay()" style="margin-top:15px; border-radius:4px;">
-                <i class="fa-solid fa-calendar-check"></i> เปลี่ยนเป็นผ่อนชำระ
-            </div>
-        ` : ''}
     </div>`;
 
     const oldSum = document.getElementById('dynamicSummary');
     if(oldSum) oldSum.remove();
     document.getElementById('optionBox').insertAdjacentHTML('afterend', summaryHtml);
 
-    // เช็คสถานะปุ่มถัดไป
+    // อัปเดตปุ่มถัดไป
     const nextBtn = document.getElementById('mainNextBtn');
     if (totalItems === 0) {
-        nextBtn.disabled = true; nextBtn.style.opacity = "0.5"; nextBtn.innerText = "เลือกสินค้าเพื่อสั่งซื้อ";
+        nextBtn.disabled = true; nextBtn.style.opacity = "0.5"; nextBtn.innerText = "กรุณาเลือกรายการ";
     } else {
-        nextBtn.disabled = false; nextBtn.style.opacity = "1"; nextBtn.innerText = "ดำเนินการต่อ (กรอกที่อยู่)";
+        nextBtn.disabled = false; nextBtn.style.opacity = "1"; nextBtn.innerText = "ถัดไป (กรอกที่อยู่)";
     }
-
+    
+    // เรียก togglePay เพื่อจัดการเรื่องพิกัด/เซลฟี่ตามปกติ
     togglePay(currentPayType);
 }
 
