@@ -693,6 +693,21 @@
         </div>`;
     }).join('');
 }
+function prepareOrder(data) {
+    // เรียกใช้ openOrder เดิมโดยส่งค่ากระจายออกมา
+    openOrder(
+        data.n, 
+        data.pNormal, 
+        data.s, 
+        data.optStr, 
+        data.discPercent, 
+        data.maxLimit, 
+        data.imgUrl, 
+        data.minLimit, 
+        data.isAllowed, 
+        data.pDesc
+    );
+}
 
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
