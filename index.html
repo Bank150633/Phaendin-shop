@@ -10,15 +10,12 @@
     <style>
         /* บังคับใช้ธีมมืดเป็นค่าพื้นฐาน */
         :root { 
-    /* สีใหม่ธีมแผ่นดิน */
-    --thai-blue: #00247D;    /* น้ำเงินกรมท่า */
-    --thai-red: #ED1C24;     /* แดงชาด */
-    --thai-white: #FFFFFF;   /* ขาวบริสุทธิ์ */
-    
-    /* หลอกค่าตัวแปรเดิม (Gold) ให้กลายเป็นสีน้ำเงินแทน */
-    --gold: var(--thai-blue); 
-    --gold-grad: linear-gradient(145deg, #003399 0%, #00247D 100%);
-    --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ED1C24 100%);
+            --gold: #D4AF37; 
+            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
+            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ff416c 100%);
+            --green-grad: linear-gradient(145deg, #11998e 0%, #38ef7d 100%);
+            --blue-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
+            --fb-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
             --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --text-dim: #BBBBBB; --input-bg: #1A1A1A; 
         }
 
@@ -87,7 +84,7 @@
             position: absolute;
             top: 4px;
             right: 4px;
-            background: var(--thai-red);
+            background: var(--gold-grad);
             color: #000;
             font-size: 7.5px;
             padding: 2px 5px;
@@ -103,9 +100,7 @@
         .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
         .old-price { text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400; }
-        .new-price, #finalTotalDisplay { 
-    color: var(--thai-red) !important; 
-}
+        .new-price { color: #ff4b2b; }
 
         .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
         .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
