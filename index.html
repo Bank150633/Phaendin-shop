@@ -353,18 +353,7 @@
     align-items: stretch;
     position: relative; /* สำคัญ: เพื่อให้กล่อง #installmentInfo อ้างอิงตำแหน่งจากตรงนี้ */
 }
-/* ปุ่มผ่อนในกล่องบิล */
-.single-install-btn {
-    display: block; width: 100%; margin-top: 12px; padding: 10px;
-    border-radius: 10px; font-size: 12px; text-align: center;
-    border: 1.5px solid rgba(212, 175, 55, 0.4); color: var(--gold);
-    background: rgba(212, 175, 55, 0.05); cursor: pointer; transition: 0.3s; font-weight: 600;
-}
-/* เมื่อกดเลือกผ่อนแล้วจะเป็นสีทอง */
-.single-install-btn.active {
-    background: var(--gold-grad); color: #000; border-color: var(--gold);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-}
+
 
     </style>
 </head>
@@ -463,18 +452,24 @@
     </div>
 </div>
 <div class="modal-footer-fixed">
-        <div id="step-1-footer">
-        <div id="installmentInfo" style="display:none; margin-bottom:10px; padding:10px; background:rgba(212,175,55,0.05); border-radius:10px; border:1px solid var(--gold); font-size:12px;"></div> 
-        
-        <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
-        <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none">
-
+    <div id="step-1-footer">
         <div class="footer-btn-group">
-            <button type="button" class="buy-now" id="mainNextBtn" onclick="nextStep(2)" 
-                    style="flex: 1; border-radius: 12px; height: 50px; font-size: 16px; font-weight: bold;">
-                ถัดไป (กรอกที่อยู่)
+            <div id="installmentInfo"></div> <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
+                <div style="font-size: 11px; font-weight: bold; color: #fff;">ชำระสด</div>
+                <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
+            </div>
+
+            <div id="pay-install" class="btn-pay-option" onclick="togglePay('ผ่อนไปใช้ไป')">
+                <div style="font-size: 11px; font-weight: bold; color: #fff;">ผ่อนชำระ</div>
+                <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none">
+            </div>
+
+            <button type="button" class="buy-now" onclick="nextStep(2)" 
+                    style="flex: 1.5; border-radius: 10px; padding: 0; height: 48px; margin: 0; font-size: 13px; font-weight: bold;">
+                ถัดไป (ที่อยู่)
             </button>
         </div>
+    </div>
     </div>
 
     <div id="step-2-footer" style="display:none;">
@@ -638,6 +633,14 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         pDesc: pDesc
     };
 
+    const payInstallBtn = document.getElementById('pay-install');
+    if (activeP.canInstall === 'YES') {
+        payInstallBtn.style.display = 'block';
+    } else {
+        payInstallBtn.style.display = 'none';
+        togglePay('จ่ายเต็ม');
+    }
+
     const box = document.getElementById('optionBox');
     box.innerHTML = '';
     selectedOptions = {};
@@ -706,109 +709,92 @@ function changeVQty(label, price, delta) {
     }
 }          
    
-    function updatePrice() {
+function updatePrice() {
+    let subtotalNormal = 0; 
     let subtotalDiscounted = 0; 
-    let summaryItems = [];
+    let summaryText = [];
     let totalItems = 0;
+    
     let discP = parseFloat(activeP.disc) || 0; 
 
-    // คำนวณยอด
     for (let key in selectedOptions) { 
         if(selectedOptions[key].qty > 0) {
             let qty = selectedOptions[key].qty;
             let unitPrice = selectedOptions[key].price;
+            subtotalNormal += (unitPrice * qty);
             let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
-            summaryItems.push(`<div style="display:flex; justify-content:space-between; margin-bottom:2px;">
-                <span>${key} x${qty}</span>
-                <span>฿${(Math.round(discountedUnitPrice) * qty).toLocaleString()}</span>
-            </div>`);
+            summaryText.push(`${key} x${qty}`); 
             totalItems += qty; 
         } 
     }
     
-    // คำนวณยอดสุทธิ (สินค้า + ค่าส่ง)
-    activeP.finalTotal = totalItems > 0 ? Math.round(subtotalDiscounted) + activeP.ship : 0;
-    activeP.summary = Object.entries(selectedOptions)
-        .filter(([_, item]) => item.qty > 0)
-        .map(([name, item]) => `${name} (x${item.qty})`).join(', ');
+    subtotalNormal = Math.round(subtotalNormal);
+    subtotalDiscounted = Math.round(subtotalDiscounted);
+    activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
+    let totalBeforeDisc = subtotalNormal + activeP.ship;
+    activeP.summary = summaryText.join(', ');
 
-    // ตรวจสอบสถานะการผ่อนปัจจุบัน
-    const currentPayType = document.querySelector('input[name="payType"]:checked')?.value || 'จ่ายเต็ม';
+    let images = activeP.img.split(',').map(img => img.trim());
+    let imgCount = images.length; 
 
-    // สร้างกล่องบิลสรุปรายการ
-    const summaryHtml = `
-    <div id="dynamicSummary" style="margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px;">
-        <div style="font-size: 11px; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.1); padding-bottom: 5px; margin-bottom: 8px;">สรุปรายการสั่งซื้อ</div>
-        <div style="font-size: 12px; color: #ddd; margin-bottom: 10px;">
-            ${summaryItems.length > 0 ? summaryItems.join('') : '<div style="text-align:center;">กรุณาเลือกสินค้า</div>'}
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #bbb;">
-            <span>ค่าจัดส่ง:</span>
-            <span>${activeP.ship === 0 ? 'ส่งฟรี' : '฿'+activeP.ship}</span>
-        </div>
-        <div style="border-top: 1px dashed rgba(212,175,55,0.4); margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 13px; font-weight: bold; color: #fff;">ยอดชำระ:</span>
-            <span id="finalTotalDisplay" style="font-size: 22px; font-weight: 800; color: var(--gold);">฿${activeP.finalTotal.toLocaleString()}</span>
-        </div>
-        ${activeP.canInstall === 'YES' ? `
-            <div id="toggleInstallBtn" class="single-install-btn ${currentPayType === 'ผ่อนไปใช้ไป' ? 'active' : ''}" 
-                 onclick="toggleSinglePay()">
-                <i class="fa-solid fa-calendar-check"></i> ต้องการผ่อนชำระ (3 งวด)
+    // --- 1. ส่วนบน: แสดงแค่รูปและชื่อสินค้า (ลดขนาดลงเพื่อให้เห็นปุ่มด้านล่างง่ายขึ้น) ---
+    document.getElementById('orderDetail').innerHTML = `
+    <div style="padding: 0; overflow: hidden; position: relative; border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; margin-bottom: 8px;">
+        ${imgCount > 1 ? `<div class="img-counter" id="imgNum">1 / ${imgCount}</div>` : ''}
+        <div style="position: relative; width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden;">
+            <div id="m-slider" onscroll="updateDots(this, ${imgCount})" style="display: flex; overflow-x: auto; scroll-snap-type: x mandatory; width: 100%; height: 100%; scrollbar-width: none;">
+                ${images.map(img => `<div style="min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; align-items: center; justify-content: center;">${renderMedia(img, true)}</div>`).join('')}
             </div>
-        ` : ''}
+            ${imgCount > 1 ? `<div class="dot-container">${images.map((_, i) => `<div class="dot ${i===0?'active':''}" id="modal-dot-${i}"></div>`).join('')}</div>` : ''}
+        </div>
+        <div style="padding: 8px; text-align: center;">
+            <div style="font-size:15px; font-weight:700; color:var(--gold);">${activeP.name}</div>
+            <div style="font-size:11px; color:#999; margin-top:2px;">${activeP.pDesc || ''}</div>
+        </div>
     </div>`;
 
-    const oldSum = document.getElementById('dynamicSummary');
-    if(oldSum) oldSum.remove();
-    document.getElementById('optionBox').insertAdjacentHTML('afterend', summaryHtml);
+    // --- 2. ส่วนล่าง: สร้างส่วนสรุปราคาใหม่ (ย้ายมาไว้ใกล้ปุ่มถัดไป) ---
+    const summaryHtml = `
+    <div id="dynamicSummary" class="order-summary-box" style="margin: 15px 0 5px 0; padding: 12px; background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px;">
+        <div style="display: flex; justify-content: center; gap: 5px; margin-bottom: 8px;">
+            ${activeP.disc > 0 ? `<span class="pill pill-red" style="background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:4px; font-size:10px;">ลด ${activeP.disc}%</span>` : ''}
+            ${activeP.ship === 0 ? `<span class="pill pill-free-ship" style="border:1px solid #38ef7d; color:#38ef7d; background:rgba(56,239,125,0.1); padding:2px 8px; border-radius:4px; font-size:10px;">ส่งฟรี</span>` : `<span class="pill pill-gold" style="background:var(--gold-grad); color:#000; padding:2px 8px; border-radius:4px; font-size:10px;">ค่าส่ง ฿${activeP.ship}</span>`}
+        </div>
+        
+        <div style="font-size:11px; color:var(--text-dim); text-align:center; margin-bottom: 8px; line-height: 1.4;">
+            ${activeP.summary || 'ยังไม่ได้เลือกรายการ'}
+        </div>
 
-    // เช็คปุ่ม "ถัดไป"
-    const nextBtn = document.getElementById('mainNextBtn');
-    if (totalItems === 0) {
-        nextBtn.disabled = true; nextBtn.style.opacity = "0.5"; nextBtn.innerText = "กรุณาเลือกสินค้า";
-    } else {
-        nextBtn.disabled = false; nextBtn.style.opacity = "1"; nextBtn.innerText = "ถัดไป (กรอกที่อยู่)";
+        <div style="border-top: 1px dashed rgba(212,175,55,0.3); padding-top:10px; text-align:center;">
+            <span style="font-size:11px; color:var(--gold);">ยอดชำระสุทธิ</span>
+            <div style="display:flex; justify-content:center; align-items:baseline; gap:8px;">
+                ${(activeP.disc > 0 && totalItems > 0) ? `<span style="text-decoration: line-through; color: #777; font-size: 14px;">฿${totalBeforeDisc.toLocaleString()}</span>` : ''}
+                <div id="finalTotalDisplay" style="font-size:28px; font-weight:800; color:#fff;">฿${activeP.finalTotal.toLocaleString()}</div>
+            </div>
+        </div>
+    </div>`;
+
+    // แทรกสรุปราคาลงไปต่อท้ายรายการเลือกสินค้า (optionBox)
+    const box = document.getElementById('optionBox');
+    const oldSummary = document.getElementById('dynamicSummary');
+    if(oldSummary) oldSummary.remove(); // ลบอันเก่าออกก่อนกันซ้ำ
+    box.insertAdjacentHTML('afterend', summaryHtml);
+
+    // อัปเดตสถานะปุ่ม
+    const btn = document.getElementById('submitBtn');
+    if (totalItems === 0) { 
+        btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
+    } else if (totalItems < activeP.min) { 
+        btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
+    } else { 
+        btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
     }
 
+    const currentPayType = document.querySelector('input[name="payType"]:checked').value;
     togglePay(currentPayType);
 }
-
-function toggleSinglePay() {
-    const radios = document.getElementsByName('payType');
-    const nextType = (radios[0].checked) ? 'ผ่อนไปใช้ไป' : 'จ่ายเต็ม';
-    togglePay(nextType);
-}
-
-function togglePay(type) {
-    const total = activeP.finalTotal || 0;
-    const radios = document.getElementsByName('payType');
-    const display = document.getElementById('finalTotalDisplay');
-    const instBox = document.getElementById('installmentInfo');
-    const sec = document.getElementById('securitySection');
-    const toggleBtn = document.getElementById('toggleInstallBtn');
-
-    if(type === 'จ่ายเต็ม') {
-        radios[0].checked = true;
-        if(sec) sec.style.display = 'none';
-        if(instBox) instBox.style.display = 'none';
-        if(toggleBtn) toggleBtn.classList.remove('active');
-        if(display) display.innerText = `฿${total.toLocaleString()}`;
-    } else {
-        radios[1].checked = true;
-        const perMonth = Math.round((total * 1.2) / 3); // สูตรเดิม บวก 20% หาร 3
-        if(instBox) {
-            instBox.innerHTML = `📋 <b>รายละเอียดการผ่อน:</b> งวดละ ฿${perMonth.toLocaleString()} (3 งวด)`;
-            instBox.style.display = 'block';
-        }
-        if(sec) sec.style.display = 'block';
-        if(toggleBtn) toggleBtn.classList.add('active');
-        if(display) display.innerText = `฿${perMonth.toLocaleString()}/งวด`;
-    }
-    if(typeof checkBlacklist === "function") checkBlacklist();
-}
-
-
+    
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
     // 1. แยกรูปภาพออกมา (รองรับทั้งแบบรูปเดียว หรือหลายรูปคั่นด้วยคอมม่า)
@@ -1039,10 +1025,80 @@ function nextStep(step) {
     }
 }
     init();
-  function toggleSinglePay() {
-    const nextType = (document.getElementsByName('payType')[0].checked) ? 'ผ่อนไปใช้ไป' : 'จ่ายเต็ม';
-    togglePay(nextType);
+  function togglePay(type) {
+    const sec = document.getElementById('securitySection');
+    const instBox = document.getElementById('installmentInfo');
+    const fBox = document.getElementById('pay-full');
+    const iBox = document.getElementById('pay-install');
+    const radios = document.getElementsByName('payType');
+    const topPriceDisplay = document.getElementById('finalTotalDisplay');
+    const lineContainer = document.getElementById('lineAccept')?.parentElement?.parentElement;
+
+    // ยอดเงินต้น (ราคาสินค้า + ค่าส่ง)
+    const total = Number(activeP.finalTotal) || 0; 
+
+    if(type === 'จ่ายเต็ม') {
+        sec.style.display = 'none';
+        instBox.style.display = 'none';
+        if(lineContainer) lineContainer.style.display = 'none';
+        
+        fBox.style.border = '2px solid var(--gold)'; 
+        fBox.style.background = 'rgba(212,175,55,0.2)';
+        iBox.style.border = '1px solid rgba(255,255,255,0.1)'; 
+        iBox.style.background = 'transparent';
+        
+        radios[0].checked = true;
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${total.toLocaleString()}`;
+    } else {
+        // --- ส่วนคำนวณการผ่อน ---
+        const feePercent = 1.2; // บวกเพิ่ม 20%
+        const totalWithFee = Math.round(total * feePercent); 
+        const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0; // หาร 3 งวด
+        
+        // ฟังก์ชันช่วยหาวันที่ในอนาคต
+        const getFutureDate = (m) => {
+            const d = new Date();
+            d.setMonth(d.getMonth() + m);
+            return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+        };
+
+        // แสดงรายละเอียดลงในกล่องล่างสุด
+        instBox.innerHTML = `
+            <div style="font-weight: bold; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.3); margin-bottom: 8px; padding-bottom: 5px; font-size: 12px;">
+                📋 รายละเอียดการผ่อน (3 งวด)
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>งวดที่ 1 (ชำระวันนี้):</span>
+                <span style="color: var(--gold); font-weight: bold;">฿${perMonth.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span>งวดที่ 2 (${getFutureDate(1)}):</span>
+                <span>฿${perMonth.toLocaleString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                <span>งวดที่ 3 (${getFutureDate(2)}):</span>
+                <span>฿${perMonth.toLocaleString()}</span>
+            </div>
+            <div style="border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 6px; font-size: 10px; color: #aaa; text-align: center;">
+                * ยอดรวมผ่อนทั้งหมด ฿${totalWithFee.toLocaleString()} (รวมค่าบริการแล้ว)
+            </div>
+        `;
+
+        instBox.style.display = 'block';
+        sec.style.display = 'block';
+        if(lineContainer) lineContainer.style.display = 'block';
+        
+        iBox.style.border = '2px solid var(--gold)'; 
+        iBox.style.background = 'rgba(212,175,55,0.2)';
+        fBox.style.border = '1px solid rgba(255,255,255,0.1)'; 
+        fBox.style.background = 'transparent';
+        
+        radios[1].checked = true;
+        if(topPriceDisplay) topPriceDisplay.innerText = `฿${perMonth.toLocaleString()}/งวด`;
+    }
+    checkBlacklist(); 
 }
+
   
 function getLocation() {
     const btn = document.getElementById('btnLocation');
