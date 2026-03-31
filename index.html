@@ -353,7 +353,25 @@
     align-items: stretch;
     position: relative; /* สำคัญ: เพื่อให้กล่อง #installmentInfo อ้างอิงตำแหน่งจากตรงนี้ */
 }
-
+/* กล่องสรุปยอดแบบ All-in-One */
+.summary-container {
+    background: rgba(212,175,55,0.08);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 15px;
+}
+/* ปุ่มผ่อนจิ๋ว */
+.pay-toggle-group {
+    display: flex; background: #000; padding: 2px; border-radius: 8px; gap: 2px; border: 0.5px solid var(--gold);
+}
+.pay-btn-mini {
+    flex: 1; padding: 4px 10px; font-size: 10px; border-radius: 6px; border: none; background: transparent; color: #888; cursor: pointer;
+}
+.pay-btn-mini.active {
+    background: var(--gold-grad); color: #000; font-weight: bold;
+}
+        
 
     </style>
 </head>
@@ -453,24 +471,13 @@
 </div>
 <div class="modal-footer-fixed">
     <div id="step-1-footer">
-        <div class="footer-btn-group">
-            <div id="installmentInfo"></div> <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
-                <div style="font-size: 11px; font-weight: bold; color: #fff;">ชำระสด</div>
-                <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
-            </div>
-
-            <div id="pay-install" class="btn-pay-option" onclick="togglePay('ผ่อนไปใช้ไป')">
-                <div style="font-size: 11px; font-weight: bold; color: #fff;">ผ่อนชำระ</div>
-                <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none">
-            </div>
-
-            <button type="button" class="buy-now" onclick="nextStep(2)" 
-                    style="flex: 1.5; border-radius: 10px; padding: 0; height: 48px; margin: 0; font-size: 13px; font-weight: bold;">
-                ถัดไป (ที่อยู่)
-            </button>
-        </div>
+        <div id="installmentInfo" style="margin-bottom: 8px; display:none;"></div>
+        
+        <button type="button" class="buy-now" onclick="nextStep(2)" style="width: 100%; height: 45px; border-radius: 10px; font-size: 14px;">
+            ถัดไป (กรอกที่อยู่จัดส่ง)
+        </button>
     </div>
-    </div>
+</div>
 
     <div id="step-2-footer" style="display:none;">
         <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
