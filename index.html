@@ -818,25 +818,27 @@ function changeVQty(label, price, delta) {
         
         updatePrice(); 
     }
-}          
-
+} 
+    
 function updatePrice() {
     let subtotalNormal = 0; 
     let subtotalDiscounted = 0; 
     let summaryListHtml = "";
     let totalItems = 0;
-    let discP = parseFloat(activeP.disc) || 0; 
-     // --- ส่วนที่ต้องเพิ่ม: สร้าง HTML สำหรับป้ายส่วนลด ---
+    let discP = parseFloat(activeP.disc) || 0; // ดึง % ส่วนลดมาใช้เสมอ
+
+    // 1. สร้างป้าย % ส่วนลดสีแดง (ไม่ซ่อน)
     let percentHtml = "";
     if (discP > 0) {
         percentHtml = `<div class="promo-badge-slider">ลด ${discP}%</div>`;
     }
 
-    // 1. คำนวณรายการสินค้า
+    // 2. วนลูปคำนวณยอดตามจำนวน (Qty) ที่ขยับ
     for (let key in selectedOptions) { 
-        if(selectedOptions[key].qty > 0) {
-            let qty = selectedOptions[key].qty;
-            let unitPrice = selectedOptions[key].price;
+        let qty = selectedOptions[key].qty;
+        let unitPrice = selectedOptions[key].price;
+        
+        if(qty > 0) {
             subtotalNormal += (unitPrice * qty);
             let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
@@ -852,20 +854,18 @@ function updatePrice() {
     
     subtotalNormal = Math.round(subtotalNormal);
     subtotalDiscounted = Math.round(subtotalDiscounted);
-    let totalDiscountAmount = subtotalNormal - subtotalDiscounted;
+    let totalDiscountAmount = subtotalNormal - subtotalDiscounted; // ยอดเงินที่ลดไป (จะขยับตาม Qty)
+    
     activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
     activeP.summary = Object.entries(selectedOptions).filter(([_, v]) => v.qty > 0).map(([k, v]) => `${k} x${v.qty}`).join(', ');
 
-    // 2. ดึงข้อมูลรูปภาพมาทำ Slider ใหม่
+    // 3. อัปเดต HTML (ส่วนที่แสดงตัวเลขส่วนลดสีแดงจะขยับตามที่นี่)
     const mediaFiles = activeP.img.split(',').filter(m => m.trim() !== "").map(m => m.trim());
     const mediaCount = mediaFiles.length;
 
-    // แก้ไขตรงส่วนนี้ (มองหาบรรทัดที่เขียนว่า document.getElementById('orderDetail').innerHTML)
     document.getElementById('orderDetail').innerHTML = `
     <div class="image-slider-container" style="position: relative;">
-        
         ${percentHtml} 
-
         ${mediaCount > 1 ? `<div id="imgNum" class="img-counter">1 / ${mediaCount}</div>` : ''}
         <div class="slider-wrapper" onscroll="updateDots(this, ${mediaCount})">
             ${mediaFiles.map((url, i) => `
@@ -877,25 +877,26 @@ function updatePrice() {
                 </div>
             `).join('')}
         </div>
-        ${mediaCount > 1 ? `<div class="dot-container">${mediaFiles.map((_, i) => `<div id="modal-dot-${i}" class="dot ${i === 0 ? 'active' : ''}"></div>`).join('')}</div>` : ''}
     </div>
 
     <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 0 0 15px 15px;">
         <div style="font-size:14px; font-weight:700; color:var(--gold); margin-bottom:8px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom:5px;">
             ${activeP.name}
         </div>
-          <div style="font-size:11px; color:var(--text-dim); margin-bottom:12px; line-height:1.4;">
-        ${activeP.pDesc ? activeP.pDesc : ''} 
-    </div>
         <div style="margin-bottom: 10px;">
             ${summaryListHtml || '<div style="text-align:center; color:#666; font-size:11px; padding:10px;">กรุณาเลือกรายการสินค้า</div>'}
         </div>
         <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; font-size: 11px; border: 1px dashed rgba(212,175,55,0.2);">
             <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
                 <span>ราคาปกติ:</span>
-                <span style="color: #fff;">฿${subtotalNormal.toLocaleString()}</span> 
+                <span style="color: #fff; text-decoration: line-through;">฿${subtotalNormal.toLocaleString()}</span> 
             </div>
-            ${totalDiscountAmount > 0 ? `<div style="display:flex; justify-content:space-between; margin-bottom:3px; color: #ff4b2b;"><span>ส่วนลด:</span><span>- ฿${totalDiscountAmount.toLocaleString()}</span></div>` : ''}
+            
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: #ff4b2b;">
+                <span>ส่วนลด (${discP}%):</span>
+                <span>- ฿${totalDiscountAmount.toLocaleString()}</span>
+            </div>
+
             <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
                 <span>ค่าจัดส่ง:</span>
                 <span style="color: ${activeP.ship === 0 ? '#38ef7d' : '#fff'};">${activeP.ship === 0 ? 'ส่งฟรี' : `฿${activeP.ship.toLocaleString()}`}</span>
@@ -907,9 +908,9 @@ function updatePrice() {
         </div>
     </div>`;
 
-    // 4. อัปเดตสถานะปุ่ม (ห้ามลบ)
     checkBlacklist(); 
-}    
+}
+
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
     // 1. แยกรูปภาพออกมา (รองรับทั้งแบบรูปเดียว หรือหลายรูปคั่นด้วยคอมม่า)
