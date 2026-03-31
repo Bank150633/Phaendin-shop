@@ -804,7 +804,7 @@ function updatePrice() {
 
     // 3. เขียน HTML เข้า orderDetail (รวม Slider + บิล)
     document.getElementById('orderDetail').innerHTML = `
-    <div class="image-slider-container">
+    <div class="image-slider-container" style="position: relative;">
         ${mediaCount > 1 ? `<div id="imgNum" class="img-counter">1 / ${mediaCount}</div>` : ''}
         <div class="slider-wrapper" onscroll="updateDots(this, ${mediaCount})">
             ${mediaFiles.map((url, i) => `
