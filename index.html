@@ -843,11 +843,14 @@ function updatePrice() {
             let discountedUnitPrice = unitPrice * (1 - (discP / 100));
             subtotalDiscounted += (discountedUnitPrice * qty);
             totalItems += qty; 
-
+// แก้ไข HTML ส่วนนี้เพื่อแสดงราคาขีดฆ่า
             summaryListHtml += `
             <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; color: #fff;">
                 <span>• ${key} x${qty}</span>
-                <span>฿${Math.round(discountedUnitPrice * qty).toLocaleString()}</span>
+                <div style="text-align: right;">
+                    ${discP > 0 ? `<span style="text-decoration: line-through; color: #888; font-size: 9px; margin-right: 5px;">฿${(unitPrice * qty).toLocaleString()}</span>` : ''}
+                    <span style="font-weight: bold; color: #fff;">฿${Math.round(discountedUnitPrice * qty).toLocaleString()}</span>
+                </div>
             </div>`;
         } 
     }
