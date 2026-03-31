@@ -737,53 +737,101 @@ function changeVQty(label, price, delta) {
         updatePrice(); 
     }
 }          
+
 function updatePrice() {
-    let subtotal = 0;
-    let summaryHtml = "";
+    let subtotalNormal = 0; // ราคาเต็มก่อนหักส่วนลด
+    let subtotalDiscounted = 0; // ราคาสุทธิหลังหักส่วนลด
+    let summaryListHtml = "";
     let totalItems = 0;
+    
+    let discP = parseFloat(activeP.disc) || 0; 
 
-    // สร้างรายการสินค้าที่เลือกแบบลิสต์บิล
-    for (let key in selectedOptions) {
-        if (selectedOptions[key].qty > 0) {
+    // 1. คำนวณรายการสินค้า
+    for (let key in selectedOptions) { 
+        if(selectedOptions[key].qty > 0) {
             let qty = selectedOptions[key].qty;
-            let price = Math.round(selectedOptions[key].price * (1 - (activeP.disc / 100)));
-            subtotal += (price * qty);
-            totalItems += qty;
-            summaryHtml += `
-                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:2px;">
-                    <span>- ${key} x${qty}</span>
-                    <span>฿${(price * qty).toLocaleString()}</span>
-                </div>`;
-        }
+            let unitPrice = selectedOptions[key].price;
+            
+            subtotalNormal += (unitPrice * qty);
+            
+            let discountedUnitPrice = unitPrice * (1 - (discP / 100));
+            subtotalDiscounted += (discountedUnitPrice * qty);
+            
+            totalItems += qty; 
+
+            summaryListHtml += `
+            <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; color: #fff;">
+                <span>• ${key} x${qty}</span>
+                <span>฿${Math.round(discountedUnitPrice * qty).toLocaleString()}</span>
+            </div>`;
+        } 
     }
+    
+    // 2. คำนวณยอดรวมสุทธิ
+    subtotalNormal = Math.round(subtotalNormal);
+    subtotalDiscounted = Math.round(subtotalDiscounted);
+    let totalDiscountAmount = subtotalNormal - subtotalDiscounted;
+    activeP.finalTotal = totalItems > 0 ? subtotalDiscounted + activeP.ship : 0;
+    activeP.summary = Object.entries(selectedOptions).filter(([_, v]) => v.qty > 0).map(([k, v]) => `${k} x${v.qty}`).join(', ');
 
-    activeP.finalTotal = subtotal > 0 ? subtotal + activeP.ship : 0;
-    activeP.summary = Object.entries(selectedOptions)
-        .filter(([_, v]) => v.qty > 0)
-        .map(([k, v]) => `${k} x${v.qty}`).join(', ');
-
-    // แสดงผลใน Modal (ตรง orderDetail หรือสร้าง div ใหม่)
+    // 3. แสดงผล "บิลจิ๋ว" ใน Modal
     document.getElementById('orderDetail').innerHTML = `
-        <div style="border: 1px solid var(--gold); border-radius: 12px; overflow: hidden; margin-bottom: 10px;">
-            <div style="width:100%; aspect-ratio:16/9;">${renderMedia(activeP.img.split(',')[0], true)}</div>
-            <div style="padding: 10px; background: rgba(212,175,55,0.05);">
-                <div style="font-weight:bold; color:var(--gold); border-bottom:1px solid rgba(212,175,55,0.2); padding-bottom:5px; margin-bottom:5px;">🧾 รายละเอียดรายการ</div>
-                ${summaryHtml || '<div style="text-align:center; color:#666; font-size:11px;">ยังไม่ได้เลือกสินค้า</div>'}
-                <div style="border-top:1px dashed rgba(212,175,55,0.3); margin-top:5px; padding-top:5px; display:flex; justify-content:space-between; font-weight:bold; font-size:13px;">
-                    <span>รวมทั้งสิ้น</span>
-                    <span style="color:#38ef7d;">฿${activeP.finalTotal.toLocaleString()}</span>
+    <div style="border: 1px solid var(--gold); border-radius: 15px; overflow: hidden; margin-bottom: 12px; background: rgba(0,0,0,0.3);">
+        <div style="position: relative; width: 100%; aspect-ratio: 16/9;">
+            ${renderMedia(activeP.img.split(',')[0], true)}
+            ${activeP.disc > 0 ? `<div style="position:absolute; top:10px; left:10px; background:var(--red-grad); color:#fff; padding:2px 8px; border-radius:5px; font-size:10px; font-weight:bold;">SALE ${activeP.disc}%</div>` : ''}
+        </div>
+        
+        <div style="padding: 12px;">
+            <div style="font-size:14px; font-weight:700; color:var(--gold); margin-bottom:8px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom:5px;">
+                ${activeP.name}
+            </div>
+            
+            <div style="margin-bottom: 10px;">
+                ${summaryListHtml || '<div style="text-align:center; color:#666; font-size:11px; padding:10px;">กรุณาเลือกรายการสินค้า</div>'}
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; font-size: 11px; border: 1px dashed rgba(212,175,55,0.2);">
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
+                    <span>ราคาปกติ:</span>
+                    <span style="text-decoration: line-through;">฿${subtotalNormal.toLocaleString()}</span>
+                </div>
+                
+                ${totalDiscountAmount > 0 ? `
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: #ff4b2b;">
+                    <span>ส่วนลดโปรโมชั่น:</span>
+                    <span>- ฿${totalDiscountAmount.toLocaleString()}</span>
+                </div>` : ''}
+
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px; color: var(--text-dim);">
+                    <span>ค่าจัดส่ง:</span>
+                    <span style="color: ${activeP.ship === 0 ? '#38ef7d' : '#fff'};">
+                        ${activeP.ship === 0 ? 'ส่งฟรี' : `฿${activeP.ship.toLocaleString()}`}
+                    </span>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top:8px; padding-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; color:var(--gold); font-size:12px;">ยอดชำระสุทธิ:</span>
+                    <span style="font-size:22px; font-weight:800; color:#38ef7d;">฿${activeP.finalTotal.toLocaleString()}</span>
                 </div>
             </div>
         </div>
-    `;
+    </div>`;
 
-    // อัปเดตราคาในปุ่มและส่วนอื่นๆ
-    const totalDisplay = document.getElementById('finalTotalDisplay');
-    if(totalDisplay) totalDisplay.innerText = `฿${activeP.finalTotal.toLocaleString()}`;
-    
-    togglePay(document.querySelector('input[name="payType"]:checked').value);
+    // 4. อัปเดตสถานะปุ่มกด
+    const btn = document.getElementById('submitBtn');
+    if (totalItems === 0) { 
+        btn.disabled = true; btn.innerText = "เลือกสินค้า"; btn.style.opacity = "0.5"; 
+    } else if (totalItems < activeP.min) { 
+        btn.disabled = true; btn.innerText = `ขั้นต่ำ ${activeP.min} ชิ้น`; btn.style.opacity = "0.5"; 
+    } else { 
+        btn.disabled = false; btn.innerText = "ยืนยันการสั่งซื้อ"; btn.style.opacity = "1"; 
+    }
+
+    // อัปเดตราคาในโหมดจ่ายเงิน
+    const currentPayType = document.querySelector('input[name="payType"]:checked').value;
+    togglePay(currentPayType);
 }
-   
 
     
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
