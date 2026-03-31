@@ -851,8 +851,9 @@ summaryListHtml += `
         ${discP > 0 ? `<span style="text-decoration: line-through; color: #888; font-size: 9px; margin-right: 5px;">฿${(unitPrice * qty).toLocaleString()}</span>` : ''}
         <span style="font-weight: bold; color: #fff;">฿${Math.round(discountedUnitPrice * qty).toLocaleString()}</span>
     </div>
-</div>`;
-
+</div>
+ }
+}
     
     subtotalNormal = Math.round(subtotalNormal);
     subtotalDiscounted = Math.round(subtotalDiscounted);
