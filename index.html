@@ -354,6 +354,16 @@
     position: relative; /* สำคัญ: เพื่อให้กล่อง #installmentInfo อ้างอิงตำแหน่งจากตรงนี้ */
 }
 
+.slider-wrapper {
+    display: flex; /* บังคับเรียงหน้ากระดาน */
+    overflow-x: auto; /* เปิดให้เลื่อนซ้ายขวา */
+    scroll-snap-type: x mandatory; /* ปัดแล้วเด้งเข้ากลางรูปพอดี */
+    -webkit-overflow-scrolling: touch; /* ให้ลื่นใน iPhone */
+}
+.slide-item {
+    min-width: 100%; /* 1 รูปเต็มจอพอดี */
+    scroll-snap-align: start;
+}
 
     </style>
 </head>
