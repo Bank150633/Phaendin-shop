@@ -659,11 +659,36 @@ function openOrder(data) {
         disc: data.discPercent, 
         max: data.maxLimit, 
         min: data.minLimit, 
-        img: data.imgUrl,
+        img: data.imgUrl, // URL ทั้งหมดที่คั่นด้วยคอมม่า
         canInstall: data.isAllowed,
         pDesc: data.pDesc
     };
 
+    // แยก URL ภาพ/วิดีโอ ออกเป็น Array
+    const mediaFiles = activeP.img.split(',').filter(m => m.trim() !== "").map(m => m.trim());
+    const mediaCount = mediaFiles.length;
+
+    // แก้ไขส่วนหัวของ Modal เพื่อแสดง Slider
+    document.getElementById('orderDetail').innerHTML = `
+    <div class="image-slider-container">
+        ${mediaCount > 1 ? `<div id="imgNum" class="img-counter">1 / ${mediaCount}</div>` : ''}
+
+        <div class="slider-wrapper" onscroll="updateDots(this, ${mediaCount})">
+            ${mediaFiles.map((url, i) => `
+                <div class="slide-item">
+                    ${url.match(/\.(mp4|webm|mov)$/i) 
+                        ? `<video src="${url}" autoplay loop muted playsinline></video>` 
+                        : `<img src="${url}" onclick="zoom('${activeP.img}')">`
+                    }
+                </div>
+            `).join('')}
+        </div>
+
+        ${mediaCount > 1 ? `
+        <div class="dot-container">
+            ${mediaFiles.map((_, i) => `<div id="modal-dot-${i}" class="dot ${i === 0 ? 'active' : ''}"></div>`).join('')}
+        </div>` : ''}
+    </div>`;
     // เช็คปุ่มผ่อน
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
