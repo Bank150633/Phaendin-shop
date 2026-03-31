@@ -344,12 +344,7 @@
 }
 
 .slider-wrapper {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    height: 250px; /* บีบความสูงให้เล็กลงเพื่อให้เห็นเลขชัดขึ้น */
-    background: #000;
+    height: 100%; /* ให้ความสูงพอดีกับ container ที่เราบีบไว้ */
 }
 .slide-item {
     min-width: 100%;
@@ -363,19 +358,18 @@
     max-height: 100%;
     object-fit: contain; /* ภาพจะเล็กลงและเห็นครบใบ ไม่ล้นเฟรม */
 }
+/* ปรับตำแหน่งตัวเลข 1/2 ให้กลับเข้ามาอยู่ในภาพ */
 .img-counter {
     position: absolute;
-    top: 15px; /* ดันเลขลงมานิดหน่อย */
-    right: 15px;
-    background: rgba(0,0,0,0.7);
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
     color: var(--gold);
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    z-index: 99; /* มั่นใจว่าอยู่หน้าสุด */
-    border: 1px solid var(--gold);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    z-index: 99;
 }
-       
     </style>
 </head>
 <body>
