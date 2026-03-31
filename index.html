@@ -834,6 +834,25 @@ function updateZoomDots(el, total) {
     const numEl = document.getElementById('zoomNum');
     if (numEl) numEl.innerText = `${index + 1} / ${total}`;
 }
+// ฟังก์ชันจัดการการแสดงผลรูปภาพหรือวิดีโอ
+function renderMedia(url, isThumb = false) {
+    if (!url) return '';
+    const cleanUrl = url.trim();
+    if (cleanUrl.match(/\.(mp4|webm|mov)$/i)) {
+        return `<video src="${cleanUrl}" ${isThumb ? 'muted loop autoplay playsinline' : 'controls'} style="width:100%; height:100%; object-fit:cover;"></video>`;
+    }
+    return `<img src="${cleanUrl}" style="width:100%; height:100%; object-fit:${isThumb ? 'cover' : 'contain'};">`;
+}
+
+// ฟังก์ชันซูมรูปภาพ
+function zoom(url) {
+    const overlay = document.getElementById('zoomOverlay');
+    const content = document.getElementById('zoomContent');
+    const urls = url.split(',');
+    
+    content.innerHTML = urls.map(u => renderMedia(u.trim())).join('');
+    overlay.style.display = 'flex';
+}
 
     function closeZoom() { document.getElementById('zoomOverlay').style.display = 'none'; document.getElementById('zoomContent').innerHTML = ''; }
     function openModal(id) { const m = document.getElementById(id); m.style.display='flex'; setTimeout(()=>m.classList.add('show'),10); }
