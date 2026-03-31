@@ -620,19 +620,51 @@ function updateMainDots(pIndex, el, total) {
         }
     }
 }
-function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimit, isAllowed, pDesc) {
+// ฟังก์ชันเตรียมข้อมูลก่อนเปิด Modal
+function prepareOrder(index) {
+    const p = db[index];
+    const now = new Date().getTime();
+    const priceNormal = parseFloat(p[3] || 0);
+    const pricePromo = parseFloat(p[10] || 0);
+    const expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
+    
+    // คำนวณราคาปัจจุบันและส่วนลด
+    const currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
+    const discPercent = (pricePromo > 0 && expiryDate > now) ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
+
+    const data = {
+        n: p[0],
+        pNormal: priceNormal,
+        currentPrice: currentPrice,
+        s: parseFloat(p[8] || 0),
+        optStr: p[9] || "",
+        discPercent: discPercent,
+        maxLimit: parseInt(p[12] || 999),
+        imgUrl: p[1] || "",
+        minLimit: parseInt(p[14] || 1),
+        isAllowed: (p[15] || 'NO').trim().toUpperCase(),
+        pDesc: p[2] || ""
+    };
+    
+    openOrder(data);
+}
+
+// ฟังก์ชันเปิด Modal แบบใหม่ (รับค่าเป็น Object ตัวเดียว)
+function openOrder(data) {
     activeP = { 
-        name: n, 
-        pNormal: parseFloat(pNormal), 
-        ship: parseFloat(s), 
-        disc: discPercent, 
-        max: parseInt(maxLimit) || 999, 
-        min: parseInt(minLimit) || 1, 
-        img: imgUrl,
-        canInstall: isAllowed,
-        pDesc: pDesc
+        name: data.n, 
+        pNormal: data.pNormal, 
+        currentPrice: data.currentPrice,
+        ship: data.s, 
+        disc: data.discPercent, 
+        max: data.maxLimit, 
+        min: data.minLimit, 
+        img: data.imgUrl,
+        canInstall: data.isAllowed,
+        pDesc: data.pDesc
     };
 
+    // เช็คปุ่มผ่อน
     const payInstallBtn = document.getElementById('pay-install');
     if (activeP.canInstall === 'YES') {
         payInstallBtn.style.display = 'block';
@@ -641,31 +673,28 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
         togglePay('จ่ายเต็ม');
     }
 
+    // ล้างตัวเลือกสินค้า
     const box = document.getElementById('optionBox');
     box.innerHTML = '';
     selectedOptions = {};
 
-    if (optStr && optStr !== '-') {
-        const opts = optStr.split(',');
+    if (data.optStr && data.optStr !== '-') {
+        const opts = data.optStr.split(',');
         opts.forEach((opt) => {
-            if (!opt.trim()) return;
             const parts = opt.split(':');
-            const label = parts[0] ? parts[0].trim() : 'สินค้า';
-            const price = parts[1] ? parseFloat(parts[1]) : pNormal;
+            const label = parts[0].trim();
+            const price = parts[1] ? parseFloat(parts[1]) : data.pNormal;
             let vImg = activeP.img.split(',')[0].trim();
-            if (parts.length > 2) { vImg = parts.slice(2).join(':').trim(); }
-            selectedOptions[label] = { qty: 0, price: price };
+            if (parts.length > 2) vImg = parts.slice(2).join(':').trim();
             
-            const dP = parseFloat(discPercent) || 0; 
-            const discountedPrice = Math.round(price * (1 - (dP / 100)));
+            selectedOptions[label] = { qty: 0, price: price };
+            const discountedPrice = Math.round(price * (1 - (activeP.disc / 100)));
 
             box.innerHTML += `
             <div class="variant-item">
                 <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
                 <div class="v-name">${label}</div>
-                <div class="v-price">
-                    ${dP > 0 ? `<span style="text-decoration:line-through; font-size:9px;">฿${price.toLocaleString()}</span> <span style="color:#ff4b2b;">฿${discountedPrice.toLocaleString()}</span>` : `฿${price.toLocaleString()}`}
-                </div>
+                <div class="v-price">฿${discountedPrice.toLocaleString()}</div>
                 <div class="v-ctrl">
                     <button type="button" class="v-btn" onclick="changeVQty('${label}', ${price}, -1)">-</button>
                     <span id="v-qty-${label}">0</span>
@@ -674,14 +703,14 @@ function openOrder(n, pNormal, s, optStr, discPercent, maxLimit, imgUrl, minLimi
             </div>`;
         });
     } else {
-        selectedOptions[n] = { qty: 1, price: pNormal };
+        selectedOptions[data.n] = { qty: 1, price: data.pNormal };
     }
     
     openModal('orderModal');
     updatePrice();
     nextStep(1); 
 }
-    
+
 function changeVQty(label, price, delta) {
     let totalNow = Object.values(selectedOptions).reduce((sum, item) => sum + item.qty, 0);
     
