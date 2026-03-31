@@ -826,6 +826,11 @@ function updatePrice() {
     let summaryListHtml = "";
     let totalItems = 0;
     let discP = parseFloat(activeP.disc) || 0; 
+     // --- ส่วนที่ต้องเพิ่ม: สร้าง HTML สำหรับป้ายส่วนลด ---
+    let percentHtml = "";
+    if (discP > 0) {
+        percentHtml = `<div class="promo-badge-slider">ลด ${discP}%</div>`;
+    }
 
     // 1. คำนวณรายการสินค้า
     for (let key in selectedOptions) { 
