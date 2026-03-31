@@ -860,9 +860,12 @@ function updatePrice() {
     const mediaFiles = activeP.img.split(',').filter(m => m.trim() !== "").map(m => m.trim());
     const mediaCount = mediaFiles.length;
 
-    // 3. เขียน HTML เข้า orderDetail (รวม Slider + บิล)
+    // แก้ไขตรงส่วนนี้ (มองหาบรรทัดที่เขียนว่า document.getElementById('orderDetail').innerHTML)
     document.getElementById('orderDetail').innerHTML = `
     <div class="image-slider-container" style="position: relative;">
+        
+        ${percentHtml} 
+
         ${mediaCount > 1 ? `<div id="imgNum" class="img-counter">1 / ${mediaCount}</div>` : ''}
         <div class="slider-wrapper" onscroll="updateDots(this, ${mediaCount})">
             ${mediaFiles.map((url, i) => `
