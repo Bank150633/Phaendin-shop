@@ -1146,22 +1146,24 @@ function nextStep(step) {
     }
 }
     init();
-  function togglePay(type) {
+    
+function togglePay(type) {
     const sec = document.getElementById('securitySection');
     const instBox = document.getElementById('installmentInfo');
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const radios = document.getElementsByName('payType');
     const topPriceDisplay = document.getElementById('finalTotalDisplay');
-    const lineContainer = document.getElementById('lineAccept')?.parentElement?.parentElement;
+    
+    // ค้นหา Container ของ Line Accept เพื่อซ่อน/แสดง
+    const lineContainer = document.getElementById('lineAccept')?.closest('div[style*="border: 1.5px dashed"]');
 
-    // ยอดเงินต้น (ราคาสินค้า + ค่าส่ง)
     const total = Number(activeP.finalTotal) || 0; 
 
     if(type === 'จ่ายเต็ม') {
         sec.style.display = 'none';
         instBox.style.display = 'none';
-        if(lineContainer) lineContainer.style.display = 'none';
+        if(lineContainer) lineContainer.style.display = 'none'; // ซ่อนส่วนยอมรับ Line เมื่อซื้อสด
         
         fBox.style.border = '2px solid var(--gold)'; 
         fBox.style.background = 'rgba(212,175,55,0.2)';
@@ -1171,19 +1173,16 @@ function nextStep(step) {
         radios[0].checked = true;
         if(topPriceDisplay) topPriceDisplay.innerText = `฿${total.toLocaleString()}`;
     } else {
-        // --- ส่วนคำนวณการผ่อน ---
-        const feePercent = 1.2; // บวกเพิ่ม 20%
+        const feePercent = 1.2;
         const totalWithFee = Math.round(total * feePercent); 
-        const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0; // หาร 3 งวด
+        const perMonth = total > 0 ? Math.round(totalWithFee / 3) : 0;
         
-        // ฟังก์ชันช่วยหาวันที่ในอนาคต
         const getFutureDate = (m) => {
             const d = new Date();
             d.setMonth(d.getMonth() + m);
             return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
         };
 
-        // แสดงรายละเอียดลงในกล่องล่างสุด
         instBox.innerHTML = `
             <div style="font-weight: bold; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.3); margin-bottom: 8px; padding-bottom: 5px; font-size: 12px;">
                 📋 รายละเอียดการผ่อน (3 งวด)
@@ -1207,7 +1206,7 @@ function nextStep(step) {
 
         instBox.style.display = 'block';
         sec.style.display = 'block';
-        if(lineContainer) lineContainer.style.display = 'block';
+        if(lineContainer) lineContainer.style.display = 'block'; // แสดงส่วนยอมรับ Line เมื่อเลือกผ่อน
         
         iBox.style.border = '2px solid var(--gold)'; 
         iBox.style.background = 'rgba(212,175,55,0.2)';
@@ -1220,7 +1219,6 @@ function nextStep(step) {
     checkBlacklist(); 
 }
 
-  
 function getLocation() {
     const btn = document.getElementById('btnLocation');
     if (navigator.geolocation) {
@@ -1280,8 +1278,8 @@ setInterval(() => {
         }
     });
 }, 1000);
-    
-   async function checkBlacklist() {
+
+ async function checkBlacklist() {
     const confirmBtn = document.getElementById('submitBtn'); 
     const statusDiv = document.getElementById('statusMsg');
     const lineAccept = document.getElementById('lineAccept');
@@ -1292,41 +1290,47 @@ setInterval(() => {
 
     const updateButtonStatus = (isBlacklisted = false) => {
         const isInstall = payType === 'ผ่อนไปใช้ไป';
-        
+        const nameOk = nameInput.length >= 3;
+        const phoneOk = phoneInput.length >= 10;
+        const addrOk = document.getElementById('cAddr').value.length > 5;
+
         if (isBlacklisted) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
             confirmBtn.innerText = "ไม่ผ่านเกณฑ์การผ่อน";
         } 
-        // ถ้าเป็นผ่อน และ ยังไม่ได้ติ๊กยอมรับ ให้ล็อคปุ่ม
         else if (isInstall && !lineAccept.checked) {
             confirmBtn.disabled = true;
             confirmBtn.style.opacity = "0.5";
-            confirmBtn.innerText = "กรุณาติ๊กยอมรับก่อน";
+            confirmBtn.innerText = "กรุณาติ๊กยอมรับเงื่อนไข";
         } 
-        // ถ้าซื้อสด หรือ ติ๊กยอมรับแล้ว ให้เปิดปุ่ม
-        else {
+        else if (nameOk && phoneOk && addrOk) {
+            // ถ้าข้อมูลครบ และไม่ใช่แบล็คลิสต์ (หรือเป็นซื้อสด) ให้เปิดปุ่ม
             confirmBtn.disabled = false;
             confirmBtn.style.opacity = "1";
             confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
+        } else {
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = "0.5";
+            confirmBtn.innerText = "กรุณากรอกข้อมูลให้ครบ";
         }
     };
 
-    // 1. ถ้าซื้อสด ไม่ต้องเช็คแบล็คลิสต์ และไม่ต้องรอติ๊ก
+    // หากเป็นซื้อสด ให้ข้ามการเช็คแบล็คลิสต์
     if (payType !== 'ผ่อนไปใช้ไป') {
-        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ โหมดชำระสด</span>";
+        statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ พร้อมดำเนินการ (ชำระสด)</span>";
         updateButtonStatus(false); 
         return; 
     }
 
-    // 2. ถ้าเลือกผ่อน แต่กรอกข้อมูลยังไม่ครบ
+    // หากเลือกผ่อน ตรวจสอบเบื้องต้น
     if (nameInput.length < 3 || phoneInput.length < 10) {
-        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบ</span>";
+        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อและเบอร์เพื่อตรวจสอบสิทธิ์</span>";
         updateButtonStatus(false);
         return;
     }
 
-    statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบสิทธิ์...</span>";
+    statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบสิทธิ์ผ่อน...</span>";
     
     try {
         const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
@@ -1353,18 +1357,17 @@ setInterval(() => {
         }
 
         if (foundBad) {
-            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่ผ่านสิทธิ์: ${reason}</b>`;
+            statusDiv.innerHTML = `<b style='color: #ff4444;'>❌ ไม่สามารถรับสิทธิ์ผ่อนได้: ${reason}</b>`;
             updateButtonStatus(true);
         } else {
-            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! กรุณาติ๊กยอมรับและแนบสลิป</span>";
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ผ่านเกณฑ์! โปรดกดยอมรับเงื่อนไขและแนบสลิป</span>";
             updateButtonStatus(false);
         }
     } catch (e) {
-        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบขัดข้อง</span>";
+        statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง</span>";
         updateButtonStatus(true);
     }
-}
-       
+}      
 // ฟังก์ชันช่วยให้ใช้เมาส์คลิกลากสไลด์ได้ในคอม
 function enableMouseDrag(el) {
     let isDown = false;
