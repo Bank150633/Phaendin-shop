@@ -10,12 +10,15 @@
     <style>
         /* บังคับใช้ธีมมืดเป็นค่าพื้นฐาน */
         :root { 
-            --gold: #D4AF37; 
-            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
-            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ff416c 100%);
-            --green-grad: linear-gradient(145deg, #11998e 0%, #38ef7d 100%);
-            --blue-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
-            --fb-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
+    /* สีใหม่ธีมแผ่นดิน */
+    --thai-blue: #00247D;    /* น้ำเงินกรมท่า */
+    --thai-red: #ED1C24;     /* แดงชาด */
+    --thai-white: #FFFFFF;   /* ขาวบริสุทธิ์ */
+    
+    /* หลอกค่าตัวแปรเดิม (Gold) ให้กลายเป็นสีน้ำเงินแทน */
+    --gold: var(--thai-blue); 
+    --gold-grad: linear-gradient(145deg, #003399 0%, #00247D 100%);
+    --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ED1C24 100%);
             --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --text-dim: #BBBBBB; --input-bg: #1A1A1A; 
         }
 
