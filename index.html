@@ -10,16 +10,15 @@
     <style>
         /* บังคับใช้ธีมมืดเป็นค่าพื้นฐาน */
         :root { 
-    /* สีหลัก: น้ำเงิน, แดง, ขาว */
-    --blue-main: #00247D;
-    --blue-grad: linear-gradient(145deg, #0033A0 0%, #00247D 100%);
-    --red-main: #ED1C24;
-    --red-grad: linear-gradient(145deg, #FF416C 0%, #ED1C24 100%);
-    --bg: #F0F2F5; 
-    --card: #FFFFFF; 
-    --text: #1A1A1A; 
-    --text-dim: #65676B; 
-    --input-bg: #FFFFFF;
+            --gold: #D4AF37; 
+            --gold-grad: linear-gradient(145deg, #f5d76e 0%, #d4af37 50%, #b8860b 100%);
+            --red-grad: linear-gradient(145deg, #ff4b2b 0%, #ff416c 100%);
+            --green-grad: linear-gradient(145deg, #11998e 0%, #38ef7d 100%);
+            --blue-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
+            --fb-grad: linear-gradient(145deg, #00c6ff 0%, #0072ff 100%);
+            --bg: #0A0A0A; --card: #141414; --text: #FFFFFF; --text-dim: #BBBBBB; --input-bg: #1A1A1A; 
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); padding-top: 55px; padding-bottom: 55px; transition: 0.3s; overflow-x: hidden; }
 
@@ -103,7 +102,7 @@
         .old-price { text-decoration: line-through; color: #888; font-size: 9px; font-weight: 400; }
         .new-price { color: #ff4b2b; }
 
-        .buy-now { width: 100%; background: var(--blue-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
+        .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
         .buy-now::after { content: ''; position: absolute; top: -50%; left: -60%; width: 20%; height: 200%; background: rgba(255, 255, 255, 0.4); transform: rotate(30deg); animation: shine 4s infinite; }
         @keyframes shine { 0% { left: -60%; } 20% { left: 120%; } 100% { left: 120%; } }
 
