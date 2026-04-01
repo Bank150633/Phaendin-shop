@@ -19,8 +19,13 @@
 
         .badge-container { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
         .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; color: white; }
-        .bg-red-sale { background: var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        .bg-green { background: #28a745; } .bg-province { background: var(--navy); border: 1px solid white; }
+        /* ป้ายลด % สีแดงเด่นๆ */
+        .bg-red-sale { background: var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.2); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        
+        .bg-green { background: #28a745; } 
+        .bg-yellow { background: #ffc107; color: #000; }
+        .bg-province { background: var(--navy); border: 1px solid white; }
         
         .p-info { padding: 12px; flex-grow: 1; }
         .p-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 2px; height: 35px; overflow: hidden; }
@@ -69,9 +74,10 @@
                 const expireTime = expire ? new Date(expire.replace(/-/g, "/")).getTime() : 0;
                 const isPromoActive = expireTime > now;
 
-                // ตรวจสอบราคาและการคำนวณ %
                 const price_sale = parseFloat(pPrice) || 0;
                 const price_full = parseFloat(fPrice) || price_sale;
+                
+                // ถ้ายูสเซอร์ยังไม่ถึงเวลาเลิกขาย ให้ใช้ราคาโปรฯ
                 const displayPrice = isPromoActive ? price_sale : price_full;
                 
                 let percentOff = 0;
@@ -84,7 +90,9 @@
                         <div class="badge-container">
                             ${province ? `<span class="badge bg-province">${province}</span>` : ''}
                             ${(isPromoActive && percentOff > 0) ? `<span class="badge bg-red-sale">ลด ${percentOff}%</span>` : ''}
-                            ${(isPromoActive && tGreen) ? `<span class="badge bg-green">${tGreen}</span>` : ''}
+                            
+                            ${tGreen ? `<span class="badge bg-green">${tGreen}</span>` : ''}
+                            ${tYellow ? `<span class="badge bg-yellow">${tYellow}</span>` : ''}
                         </div>
                         <div class="media-box">
                             <img src="${imgs.split(',')[0]}" class="p-img">
@@ -118,7 +126,7 @@
 
     function order(name, price, ship) {
         const total = price + parseFloat(ship);
-        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nยอดชำระ: ฿${total.toLocaleString()}`);
+        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nราคา: ฿${total.toLocaleString()}`);
     }
 
     loadStore();
