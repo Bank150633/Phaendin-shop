@@ -61,22 +61,34 @@
             const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
             const text = await res.text();
             
-            // ใช้ Regex ที่ฉลาดขึ้นเพื่อตัดแบ่งคอลัมน์ CSV
+            // ตัดแบ่งแถวและคอลัมน์ (รองรับกรณีมีเครื่องหมายคำพูดในช่อง)
             const rows = text.split('\n').slice(1);
             const db = rows.map(row => {
-                const matches = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                return matches ? matches.map(v => v.replace(/^"|"$/g, '').trim()) : [];
+                const columns = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                return columns.map(v => v.replace(/^"|"$/g, '').trim());
             });
 
             let html = "";
             db.forEach((p, i) => {
-                if (p.length < 5) return; // กันแถวว่าง
-                const [name, imgs, desc, pPrice, tGreen, tYellow, video, province, expire, min, max, ship, options, fPrice] = p;
-                
-                const currentPrice = parseFloat(pPrice) || 0;
+                if (p.length < 5) return; 
+
+                // กำหนดตัวแปรตามลำดับคอลัมน์ A-N
+                const name = p[0];    // A
+                const imgs = p[1];    // B
+                const desc = p[2];    // C
+                const pPrice = p[3];  // D (ราคาโปร)
+                const tGreen = p[4];  // E
+                const tYellow = p[5]; // F
+                const province = p[7]; // H
+                const expire = p[8];   // I
+                const ship = p[11];    // L
+                const options = p[12]; // M (ตัวเลือก)
+                const fPrice = p[13];  // N (ราคาเต็ม)
+
+                const basePrice = parseFloat(pPrice) || 0;
 
                 html += `
-                    <div class="p-card" id="card-${i}">
+                    <div class="p-card">
                         <div class="badge-container">
                             ${province ? `<span class="badge bg-province">${province}</span>` : ''}
                             <span class="badge bg-red-sale" id="sale-badge-${i}" style="display:none"></span>
@@ -84,45 +96,47 @@
                         </div>
                         <div class="media-box">
                             <img src="${imgs.split(',')[0]}" class="p-img">
-                            <div class="timer-display" id="timer-${i}" data-expire="${expire}" data-p="${pPrice}" data-f="${fPrice}" style="display:none"></div>
+                            <div class="timer-display" id="timer-${i}" 
+                                 data-expire="${expire}" 
+                                 data-p="${pPrice}" 
+                                 data-f="${fPrice}" style="display:none"></div>
                         </div>
                         <div class="p-info">
                             <div class="p-name">${name}</div>
                             <div class="p-desc">${desc || ''}</div>
-                            <div class="price-row" id="price-box-${i}">
-                                <span class="current-price" id="cur-price-${i}">฿${currentPrice.toLocaleString()}</span>
+                            <div class="price-row">
+                                <span class="current-price" id="cur-price-${i}">฿${basePrice.toLocaleString()}</span>
                                 <span class="old-price" id="old-price-${i}"></span>
                             </div>
                             <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
                             
-                            ${options && options !== "" ? `
+                            ${options ? `
                                 <select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">
-                                    ${options.split(',').map(o => {
-                                        const part = o.split(':');
+                                    ${options.split(',').map(item => {
+                                        const part = item.split(':');
                                         const label = part[0].trim();
-                                        const price = part[1] ? part[1].trim() : pPrice; // ถ้าไม่มีราคาแยก ให้ใช้ราคาหลัก
+                                        const price = part[1] ? part[1].trim() : pPrice;
                                         return `<option value="${price}">${label} ${part[1] ? '(฿'+parseFloat(price).toLocaleString()+')' : ''}</option>`;
                                     }).join('')}
                                 </select>
                             ` : ''}
                         </div>
-                        <button class="btn-buy" id="btn-buy-${i}" onclick="order('${name}', ${i}, ${ship})">สั่งซื้อสินค้า</button>
+                        <button class="btn-buy" onclick="order('${name}', ${i}, ${ship})">สั่งซื้อสินค้า</button>
                     </div>
                 `;
             });
             document.getElementById('app').innerHTML = html;
             startCountdown();
-        } catch (e) { console.error("โหลดข้อมูลไม่สำเร็จ:", e); }
+        } catch (e) { console.error("Error:", e); }
     }
 
     function updatePrice(id) {
         const select = document.getElementById(`opt-${id}`);
         const newPrice = parseFloat(select.value);
-        const curPriceEl = document.getElementById(`cur-price-${id}`);
         const timerEl = document.getElementById(`timer-${id}`);
         
-        curPriceEl.innerText = `฿${newPrice.toLocaleString()}`;
-        timerEl.setAttribute('data-p', newPrice); // อัปเดตเพื่อให้ Timer คำนวณ % ใหม่
+        document.getElementById(`cur-price-${id}`).innerText = `฿${newPrice.toLocaleString()}`;
+        timerEl.setAttribute('data-p', newPrice); // อัปเดตราคาใน timer เพื่อคำนวณ % ใหม่
     }
 
     function startCountdown() {
@@ -133,12 +147,10 @@
                 const expireData = el.getAttribute('data-expire');
                 if (!expireData) return;
 
-                const expireStr = expireData.replace(/-/g, "/");
+                const target = new Date(expireData.replace(/-/g, "/")).getTime();
+                const diff = target - now;
                 const priceSale = parseFloat(el.getAttribute('data-p')) || 0;
                 const priceFull = parseFloat(el.getAttribute('data-f')) || priceSale;
-                
-                const target = new Date(expireStr).getTime();
-                const diff = target - now;
 
                 const badge = document.getElementById(`sale-badge-${id}`);
                 const curPriceEl = document.getElementById(`cur-price-${id}`);
@@ -165,7 +177,6 @@
                     el.style.display = 'none';
                     badge.style.display = 'none';
                     oldPriceEl.style.display = 'none';
-                    // เมื่อหมดเวลา ให้ดีดราคากลับเป็นราคาเต็มจากคอลัมน์ N
                     curPriceEl.innerText = `฿${priceFull.toLocaleString()}`;
                 }
             });
@@ -180,5 +191,6 @@
 
     loadStore();
 </script>
+
 </body>
 </html>
