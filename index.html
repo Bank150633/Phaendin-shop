@@ -63,27 +63,23 @@
                 document.getElementById('app').innerHTML = db.map((p, index) => {
                     const price = parseFloat(p[3]); 
                     const videoUrl = p[6]; 
-                    const province = p[7];
-                    const tagGreen = p[4];
-                    const tagYellow = p[5];
-                    const expireTime = p[8]; // คอลัมน์ I
+                    const expireTime = p[8]; 
 
-                    // เช็คว่ามีวิดีโอไหม ถ้าไม่มีให้ใช้รูป
                     let mediaHtml = `<img src="${p[1]}" class="p-img" onerror="this.src='https://via.placeholder.com/150'">`;
                     if (videoUrl && videoUrl.trim() !== "") {
                         mediaHtml = `<video class="p-video" src="${videoUrl}" autoplay loop muted playsinline></video>`;
                     }
 
                     return `
-                        <div class="p-card">
+                        <div class="p-card" id="card-${index}">
                             <div class="badge-container">
-                                ${province ? `<span class="badge bg-province"><i class="fa-solid fa-location-dot"></i> ${province}</span>` : ''}
-                                ${tagGreen ? `<span class="badge bg-green">${tagGreen}</span>` : ''}
-                                ${tagYellow ? `<span class="badge bg-yellow">${tagYellow}</span>` : ''}
+                                ${p[7] ? `<span class="badge bg-province"><i class="fa-solid fa-location-dot"></i> ${p[7]}</span>` : ''}
+                                ${p[4] ? `<span class="badge bg-green">${p[4]}</span>` : ''}
+                                ${p[5] ? `<span class="badge bg-yellow">${p[5]}</span>` : ''}
                             </div>
                             <div class="media-box">
                                 ${mediaHtml}
-                                ${expireTime && expireTime.trim() !== "" ? `<div class="timer-box" data-time="${expireTime}">รอสักครู่...</div>` : ''}
+                                ${expireTime && expireTime.trim() !== "" ? `<div class="timer-box" data-card="card-${index}" data-time="${expireTime}">รอสักครู่...</div>` : ''}
                             </div>
                             <div class="p-info">
                                 <div class="p-name">${p[0]}</div>
@@ -102,20 +98,19 @@
             setInterval(() => {
                 document.querySelectorAll('.timer-box').forEach(el => {
                     const targetStr = el.getAttribute('data-time');
+                    const cardId = el.getAttribute('data-card');
                     const target = new Date(targetStr).getTime();
                     const now = new Date().getTime();
                     const diff = target - now;
 
-                    if (isNaN(target)) {
-                        el.style.display = 'none'; // ถ้าฟอร์แมตเวลาผิดให้ซ่อนไปเลย
-                    } else if (diff <= 0) {
-                        el.innerText = "หมดเวลาโปรโมชั่น";
-                        el.style.background = "#666";
+                    if (diff <= 0) {
+                        // ถ้าหมดเวลา ให้ซ่อนการ์ดสินค้าทั้งใบเลย
+                        document.getElementById(cardId).style.display = 'none';
                     } else {
                         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                         const s = Math.floor((diff % (1000 * 60)) / 1000);
-                        el.innerText = `เหลือ ${h}ชม. ${m}น. ${s}ว.`;
+                        el.innerText = `จบโปรใน ${h}ชม. ${m}น. ${s}ว.`;
                     }
                 });
             }, 1000);
@@ -123,7 +118,7 @@
 
         function handleOrder(name, price) {
             const installment = (price * 1.2).toLocaleString();
-            alert("สินค้า: " + name + "\nราคาผ่อน (+20%): ฿" + installment);
+            alert("สินค้า: " + name + "\nราคาเงินสด: ฿" + price.toLocaleString() + "\nราคาผ่อน (+20%): ฿" + installment);
         }
         load();
     </script>
