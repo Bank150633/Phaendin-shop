@@ -3,94 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PHAENDIN STORE | เว็บขายสินค้าและผ่อนชำระ</title>
+    <title>PHAENDIN STORE</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --th-blue: #0A1128;
-            --th-red: #ED1C24;
+            --th-navy: #00247D; /* สีน้ำเงินไทย */
+            --th-red: #ED1C24;  /* สีแดงไทย */
             --th-white: #FFFFFF;
-            --bg: #050A18;
-            --card-bg: #111B33;
-            --text-main: #FFFFFF;
-            --text-dim: #A0ACC0;
+            --bg-light: #F4F7FA;
+            --text-dark: #1A1A1A;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
-        body { background: var(--bg); color: var(--text-main); padding-top: 70px; padding-bottom: 80px; }
+        body { background: var(--bg-light); color: var(--text-dark); padding-top: 65px; padding-bottom: 80px; }
 
-        /* --- HEADER & LOGO --- */
+        /* --- Header: โทนน้ำเงินขาว --- */
         header {
             position: fixed; top: 0; width: 100%; height: 60px;
-            background: rgba(10, 17, 40, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--th-navy);
             border-bottom: 3px solid var(--th-red);
             display: flex; justify-content: center; align-items: center;
-            z-index: 1000;
+            z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .logo-img { height: 40px; width: auto; }
+        .logo-img { height: 35px; width: auto; filter: drop-shadow(0 0 2px white); }
 
-        /* --- BANNER SECTION (ป้องกันการเบี้ยว) --- */
-        .banner-container { padding: 10px; }
-        .bn-card {
-            background: #000; border-radius: 20px; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
+        /* --- Search Box --- */
+        .search-section { padding: 15px; background: var(--th-white); margin-bottom: 10px; }
+        .search-container {
+            position: relative; max-width: 500px; margin: 0 auto;
         }
-        .bn-img-box { width: 100%; height: 220px; position: relative; }
-        .bn-img-box img, .bn-img-box video { width: 100%; height: 100%; object-fit: cover; }
-        
-        .bn-info {
-            padding: 15px; background: linear-gradient(to top, var(--th-blue), transparent);
-            text-align: center;
-        }
-        .bn-title { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
-        
-        .timer-box {
-            display: inline-flex; gap: 8px; background: var(--th-red);
-            padding: 5px 15px; border-radius: 50px; margin-bottom: 10px;
-        }
-
-        /* --- SEARCH BAR --- */
-        .search-container { padding: 0 15px; margin-bottom: 15px; position: relative; }
-        .search-container i { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--text-dim); }
+        .search-container i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--th-navy); }
         #searchInput {
-            width: 100%; padding: 12px 12px 12px 45px; border-radius: 12px;
-            background: #1A2642; border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; outline: none;
+            width: 100%; padding: 12px 12px 12px 45px; border-radius: 50px;
+            border: 2px solid #E0E0E0; font-size: 16px; outline: none; transition: 0.3s;
         }
+        #searchInput:focus { border-color: var(--th-navy); }
 
-        /* --- PRODUCT GRID --- */
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
+        /* --- Product Grid: การ์ดขาวสะอาดตา --- */
+        .container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
         .p-card {
-            background: var(--card-bg); border-radius: 15px; overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;
+            background: var(--th-white); border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column;
+            border: 1px solid #EEE;
         }
-        .p-img { height: 160px; width: 100%; object-fit: cover; }
-        .p-detail { padding: 10px; flex-grow: 1; }
-        .p-name { font-size: 13px; font-weight: 600; height: 38px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .p-price { color: var(--th-red); font-size: 16px; font-weight: bold; margin-top: 5px; }
+        .p-img-box { position: relative; width: 100%; height: 160px; background: #f0f0f0; }
+        .p-img { width: 100%; height: 100%; object-fit: cover; }
         
+        .p-info { padding: 10px; flex-grow: 1; }
+        .p-name { font-size: 14px; font-weight: 600; color: var(--text-dark); line-height: 1.4; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        
+        .price-tag { margin-top: 8px; }
+        .p-price { color: var(--th-red); font-size: 18px; font-weight: bold; }
+        
+        /* --- ปุ่มสั่งซื้อ: สีแดงสด --- */
         .btn-buy {
-            width: 100%; padding: 10px; border: none; font-weight: bold;
-            background: linear-gradient(145deg, #ff4b2b, #ed1c24); color: #fff;
+            width: 100%; padding: 12px; border: none; font-weight: 600;
+            background: var(--th-red); color: white; cursor: pointer;
+            transition: 0.2s; font-size: 15px;
         }
+        .btn-buy:active { background: #b31217; transform: scale(0.98); }
 
-        /* --- FOOTER NAV --- */
+        /* --- Footer Nav: น้ำเงินไทย --- */
         nav {
             position: fixed; bottom: 0; width: 100%; height: 65px;
-            background: var(--th-blue); border-top: 2px solid var(--th-red);
-            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
+            background: var(--th-navy); display: flex; justify-content: space-around;
+            align-items: center; border-top: 3px solid var(--th-red);
         }
-        .nav-item { text-align: center; color: var(--text-dim); font-size: 11px; text-decoration: none; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 3px; }
-        .nav-item.active { color: var(--th-red); }
-
-        /* Modal & Helpers (เหมือนเดิม) */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 15px; }
-        .modal-content { background: var(--th-blue); width: 100%; max-width: 400px; border-radius: 20px; border: 2px solid var(--th-white); overflow: hidden; }
+        .nav-item { text-align: center; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 2px; }
+        .nav-item.active { color: var(--th-white); }
     </style>
 </head>
 <body>
@@ -99,70 +82,71 @@
     <img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" class="logo-img">
 </header>
 
-<div class="banner-container" id="bannerArea">
+<div class="search-section">
+    <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="ค้นหาชื่อสินค้า..." oninput="render()">
     </div>
-
-<div class="search-container">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." oninput="renderProducts()">
 </div>
 
-<div class="product-grid" id="productArea">
+<div class="container" id="productArea">
     </div>
 
 <nav>
-    <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i>หน้าแรก</a>
-    <a href="javascript:void(0)" onclick="checkShip()" class="nav-item"><i class="fa-solid fa-truck"></i>พัสดุ</a>
-    <a href="javascript:void(0)" onclick="checkBalance()" class="nav-item"><i class="fa-solid fa-wallet"></i>ยอดผ่อน</a>
+    <a href="#" class="nav-item active"><i class="fa-solid fa-store"></i>หน้าแรก</a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-box-open"></i>เช็คพัสดุ</a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-credit-card"></i>ยอดผ่อน</a>
 </nav>
 
 <script>
-    // ส่วนของการดึงข้อมูลจาก Google Sheets (ใช้ค่าเดิมที่คุณมี)
-    const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+    const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; // ID ชีทเดิมของคุณ
     let db = [];
 
     async function loadData() {
-        // ดึงข้อมูลสินค้า
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/export?format=csv&gid=0`);
-        const text = await res.text();
-        db = text.split('\n').slice(1).map(row => row.split(',').map(v => v.replace(/"/g,'').trim()));
-        renderProducts();
-        loadBanner();
+        try {
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
+            const text = await res.text();
+            
+            // ใช้ตัวแยกข้อมูลที่ป้องกันปัญหา NaN จากคอมม่าในช่องอธิบาย
+            db = text.split('\n').slice(1).map(row => {
+                return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
+            });
+            render();
+        } catch (e) { console.error("โหลดข้อมูลไม่สำเร็จ", e); }
     }
 
-    function renderProducts() {
+    function render() {
         const term = document.getElementById('searchInput').value.toLowerCase();
-        const html = db.filter(p => p[0].toLowerCase().includes(term)).map(p => `
-            <div class="p-card">
-                <img src="${p[1].split(',')[0]}" class="p-img">
-                <div class="p-detail">
-                    <div class="p-name">${p[0]}</div>
-                    <div class="p-price">฿${Number(p[3]).toLocaleString()}</div>
-                </div>
-                <button class="btn-buy" onclick="alert('สั่งซื้อ ${p[0]}')">สั่งซื้อ / ผ่อน</button>
-            </div>
-        `).join('');
-        document.getElementById('productArea').innerHTML = html;
-    }
+        const area = document.getElementById('productArea');
+        
+        const html = db.filter(p => p[0] && p[0].toLowerCase().includes(term)).map(p => {
+            // ดึงราคาจากคอลัมน์ D (Index 3)
+            let priceVal = parseFloat(p[3]);
+            let displayPrice = isNaN(priceVal) ? "รอราคา" : priceVal.toLocaleString();
+            let imgUrl = p[1] ? p[1].split(',')[0] : 'https://via.placeholder.com/300x300?text=No+Image';
 
-    async function loadBanner() {
-        const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Banner`);
-        const text = await res.text();
-        const b = text.split('\n')[1]?.split(',').map(v => v.replace(/"/g,'').trim());
-        if(b) {
-            document.getElementById('bannerArea').innerHTML = `
-                <div class="bn-card">
-                    <div class="bn-img-box"><img src="${b[0]}"></div>
-                    <div class="bn-info">
-                        <div class="bn-title">${b[1]}</div>
-                        <div class="timer-box">
-                            <span id="timer">00:00:00</span>
-                        </div>
-                        <button class="btn-buy" style="border-radius:50px; width:150px;">รับสิทธิ์</button>
+            return `
+                <div class="p-card">
+                    <div class="p-img-box">
+                        <img src="${imgUrl}" class="p-img" onerror="this.src='https://via.placeholder.com/300x300?text=Error'">
                     </div>
+                    <div class="p-info">
+                        <div class="p-name">${p[0]}</div>
+                        <div class="price-tag">
+                            <div class="p-price">฿${displayPrice}</div>
+                        </div>
+                    </div>
+                    <button class="btn-buy" onclick="handleOrder('${p[0]}', '${priceVal}')">สั่งซื้อ / ผ่อนชำระ</button>
                 </div>
             `;
-        }
+        }).join('');
+        
+        area.innerHTML = html || '<div style="grid-column: 1/-1; text-align:center; padding:20px;">ไม่พบสินค้าที่ค้นหา</div>';
+    }
+
+    function handleOrder(name, price) {
+        // ส่งต่อไปยังระบบ Apps Script หรือ Line OA เดิมของคุณ
+        alert(`กำลังทำรายการ: ${name}\nราคา: ฿${parseFloat(price).toLocaleString()}`);
     }
 
     loadData();
