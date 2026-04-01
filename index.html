@@ -571,9 +571,10 @@
     <input type="text" id="cName" placeholder="ชื่อ-นามสกุล ผู้รับ" required class="input-slim">
     <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์ (10 หลัก)" required class="input-slim">
     <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง (บ้านเลขที่, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์)" required class="input-slim" style="height: 80px;"></textarea>
+    <div id="statusMsg" style="text-align: center; margin-bottom: 10px; font-size: 12px; font-weight: bold;"></div>
 
-    <div id="securitySection" style="display:none; margin-top: 10px;">
-        <h5 style="color: #4285F4; font-size: 14px; margin-bottom: 10px;">🔒 ตรวจสอบสิทธิ์การผ่อน</h5>
+<div id="securitySection" style="display:none; margin-top: 10px;">
+    <h5 style="color: #4285F4; font-size: 14px; margin-bottom: 10px;">🔒 ตรวจสอบสิทธิ์การผ่อน</h5>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
             <button type="button" onclick="getLocation()" style="background: rgba(66, 133, 244, 0.1); color: #4285F4; border: 1px solid #4285F4; padding: 12px; border-radius: 10px; font-size: 11px;">
                 <i class="fa-solid fa-location-dot"></i> ปักหมุด GPS
@@ -1500,42 +1501,87 @@ function enableMouseDrag(el) {
 });
 observer.observe(document.getElementById('productGrid'), { childList: true });
 // --- ฟังก์ชันเช็คยอดผ่อน ---
-async function checkBalance() {
-    const phone = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้ลงทะเบียนผ่อน:"); 
-    if(!phone) return;
+async function checkBlacklist() {
+    const confirmBtn = document.getElementById('submitBtn'); 
+    const statusDiv = document.getElementById('statusMsg');
+    const lineAccept = document.getElementById('lineAccept');
     
-    const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
-    // อย่าลืม! เปลี่ยนเลข GID ด้านล่างให้ตรงกับหน้า Sheet "Payments" ของคุณนะครับ
-    const GID_PAYMENT = '1419626590'; // ปกติหน้าแรกจะเป็น 0 หรือดูจากท้าย URL ในเบราว์เซอร์
-    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID_PAYMENT}&refresh=${Date.now()}`;
-    
-    try {
-        const res = await fetch(url);
-        const csv = await res.text(); // แก้จาก response เป็น res
-        const rows = csv.split('\n').map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/"/g,'').trim()));
-        
-        // ค้นหาข้อมูลจากเบอร์โทร (คอลัมน์ A คือ index 0)
-        const data = rows.find(r => r[0] === phone);
-        
-        if(data) {
-            const message = `📊 ข้อมูลการผ่อนของคุณ: ${data[1]}\n` +
-                            `------------------------\n` +
-                            `💰 ยอดรวมทั้งหมด: ฿${parseFloat(data[2] || 0).toLocaleString()}\n` +
-                            `✅ จ่ายแล้ว: ฿${parseFloat(data[3] || 0).toLocaleString()}\n` +
-                            `🚨 ยอดค้างชำระ: ฿${parseFloat(data[4] || 0).toLocaleString()}\n` +
-                            `📅 ครบกำหนดถัดไป: ${data[5] || '-'}\n` +
-                            `📌 สถานะ: ${data[6] || '-'}\n` +
-                            `------------------------\n` +
-                            `*โปรดชำระเงินตามกำหนดเพื่อรักษาเครดิต*`;
-            alert(message);
+    // ดึงค่า Input
+    const nameInput = document.getElementById('cName').value.trim();
+    const phoneInput = document.getElementById('cPhone').value.trim();
+    const payType = document.querySelector('input[name="payType"]:checked')?.value;
+
+    // ฟังก์ชันเปิด/ปิดปุ่ม
+    const setButton = (enabled, text) => {
+        confirmBtn.disabled = !enabled;
+        confirmBtn.style.opacity = enabled ? "1" : "0.5";
+        confirmBtn.innerText = text;
+    };
+
+    // --- กรณีที่ 1: จ่ายเต็ม (ซื้อสด) ---
+    if (payType === 'จ่ายเต็ม') {
+        if (nameInput.length >= 3 && phoneInput.length >= 10) {
+            statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ พร้อมสั่งซื้อ (ชำระสด)</span>";
+            setButton(true, "ยืนยันการสั่งซื้อ");
         } else {
-            alert("❌ ไม่พบข้อมูลการผ่อนสำหรับเบอร์: " + phone + "\nหากเพิ่งสั่งซื้อ โปรดรอระบบอัปเดต 1-2 วันครับ");
+            statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อและเบอร์โทร</span>";
+            setButton(false, "กรุณากรอกข้อมูลให้ครบ");
         }
-    } catch(e) {
-        console.error(e);
-        alert("ขออภัย! ระบบขัดข้อง ไม่สามารถเช็คยอดได้ในขณะนี้");
+        return; // จบการทำงานทันที ไม่ต้องไปเช็คแบล็คลิสต์
     }
-                        }
+
+    // --- กรณีที่ 2: ผ่อนไปใช้ไป ---
+    if (payType === 'ผ่อนไปใช้ไป') {
+        // เช็คข้อมูลเบื้องต้น
+        if (nameInput.length < 3 || phoneInput.length < 10) {
+            statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณากรอกชื่อ-เบอร์ให้ครบก่อนตรวจสอบ</span>";
+            setButton(false, "กรุณากรอกข้อมูลให้ครบ");
+            return;
+        }
+
+        // เช็คการติ๊กยอมรับ Line
+        if (!lineAccept.checked) {
+            statusDiv.innerHTML = "<span style='color: #ff4444;'>📍 โปรดติ๊กยอมรับเงื่อนไขด้านล่าง</span>";
+            setButton(false, "กรุณาติ๊กยอมรับก่อน");
+            return;
+        }
+
+        // เริ่มเช็ค Blacklist จาก Google Sheets
+        statusDiv.innerHTML = "<span style='color: #D4AF37;'>⏳ กำลังตรวจสอบสิทธิ์ผ่อน...</span>";
+        
+        try {
+            const SHEET_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y'; 
+            const GID = '1416026715'; 
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}&refresh=${Date.now()}`;
+            
+            const response = await fetch(url);
+            const csvData = await response.text();
+            const rows = csvData.split('\n');
+            
+            let foundBad = false;
+            let searchName = nameInput.replace(/\s+/g, '').toLowerCase();
+
+            for (let i = 1; i < rows.length; i++) {
+                let cleanRow = rows[i].toLowerCase().replace(/["']/g, '').replace(/\s+/g, '');
+                if (cleanRow.includes(searchName) || cleanRow.includes(phoneInput)) {
+                    foundBad = true; break;
+                }
+            }
+
+            if (foundBad) {
+                statusDiv.innerHTML = "<b style='color: #ff4444;'>❌ ไม่ผ่านเกณฑ์การผ่อน</b>";
+                setButton(false, "ไม่สามารถผ่อนได้");
+            } else {
+                statusDiv.innerHTML = "<span style='color: #00ff00;'>✅ ตรวจสอบผ่าน! กดสั่งซื้อได้เลย</span>";
+                setButton(true, "ยืนยันการสั่งซื้อ");
+            }
+        } catch (e) {
+            statusDiv.innerHTML = "<span style='color: #ff4444;'>❌ ระบบตรวจสอบขัดข้อง</span>";
+            setButton(false, "ลองใหม่อีกครั้ง");
+        }
+    }
+}
+
                 
 </script>
 </body>
