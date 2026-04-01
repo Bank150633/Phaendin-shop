@@ -13,6 +13,9 @@
         header { position: fixed; top: 0; width: 100%; height: 60px; background: var(--navy); border-bottom: 3px solid var(--red); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
         .p-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; position: relative; }
+        /* ซ่อนการ์ดไว้ก่อนจนกว่าจะเช็คเวลาเสร็จ */
+        .p-card.checking { display: none; } 
+        
         .media-box { width: 100%; height: 160px; background: #000; position: relative; }
         .p-img, .p-video { width: 100%; height: 100%; object-fit: cover; }
         .badge-container { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
@@ -44,33 +47,33 @@
     <script>
         const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
         async function load() {
             try {
                 const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
                 const text = await res.text();
                 let db = text.split('\n').slice(1).map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()));
-
-                db = shuffleArray(db); 
                 
-                document.getElementById('app').innerHTML = db.map((p, index) => {
+                // สุ่มลำดับ
+                db.sort(() => Math.random() - 0.5);
+
+                const now = new Date().getTime();
+                let html = "";
+
+                db.forEach((p, index) => {
+                    const expireTimeStr = p[8] ? p[8].replace(/-/g, "/") : ""; // เปลี่ยน - เป็น / เพื่อให้รองรับทุก Browser
+                    const expireTime = expireTimeStr ? new Date(expireTimeStr).getTime() : null;
+
+                    // เงื่อนไข: ถ้ามีเวลาเลิกขาย และเวลาปัจจุบันมากกว่าเวลาที่กำหนด ให้ "ข้าม" (ไม่สร้าง HTML)
+                    if (expireTime && now > expireTime) return;
+
                     const price = parseFloat(p[3]); 
                     const videoUrl = p[6]; 
-                    const expireTime = p[8]; 
-
                     let mediaHtml = `<img src="${p[1]}" class="p-img" onerror="this.src='https://via.placeholder.com/150'">`;
                     if (videoUrl && videoUrl.trim() !== "") {
                         mediaHtml = `<video class="p-video" src="${videoUrl}" autoplay loop muted playsinline></video>`;
                     }
 
-                    return `
+                    html += `
                         <div class="p-card" id="card-${index}">
                             <div class="badge-container">
                                 ${p[7] ? `<span class="badge bg-province"><i class="fa-solid fa-location-dot"></i> ${p[7]}</span>` : ''}
@@ -79,7 +82,7 @@
                             </div>
                             <div class="media-box">
                                 ${mediaHtml}
-                                ${expireTime && expireTime.trim() !== "" ? `<div class="timer-box" data-card="card-${index}" data-time="${expireTime}">รอสักครู่...</div>` : ''}
+                                ${expireTime ? `<div class="timer-box" data-card="card-${index}" data-time="${expireTimeStr}">กำลังคำนวณ...</div>` : ''}
                             </div>
                             <div class="p-info">
                                 <div class="p-name">${p[0]}</div>
@@ -89,36 +92,38 @@
                             <button class="btn-buy" onclick="handleOrder('${p[0]}', ${price})">สั่งซื้อ / ผ่อนชำระ</button>
                         </div>
                     `;
-                }).join('');
+                });
+
+                document.getElementById('app').innerHTML = html;
                 startTimers();
             } catch (e) { console.error(e); }
         }
 
         function startTimers() {
-            setInterval(() => {
+            const update = () => {
+                const now = new Date().getTime();
                 document.querySelectorAll('.timer-box').forEach(el => {
                     const targetStr = el.getAttribute('data-time');
                     const cardId = el.getAttribute('data-card');
                     const target = new Date(targetStr).getTime();
-                    const now = new Date().getTime();
                     const diff = target - now;
 
                     if (diff <= 0) {
-                        // ถ้าหมดเวลา ให้ซ่อนการ์ดสินค้าทั้งใบเลย
                         document.getElementById(cardId).style.display = 'none';
                     } else {
-                        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const h = Math.floor(diff / (1000 * 60 * 60));
                         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                         const s = Math.floor((diff % (1000 * 60)) / 1000);
                         el.innerText = `จบโปรใน ${h}ชม. ${m}น. ${s}ว.`;
                     }
                 });
-            }, 1000);
+            };
+            update(); // รันทันที 1 ครั้ง
+            setInterval(update, 1000); // แล้วค่อยรันทุกวินาที
         }
 
         function handleOrder(name, price) {
-            const installment = (price * 1.2).toLocaleString();
-            alert("สินค้า: " + name + "\nราคาเงินสด: ฿" + price.toLocaleString() + "\nราคาผ่อน (+20%): ฿" + installment);
+            alert("สั่งซื้อ: " + name + "\nยอดผ่อน(+20%): ฿" + (price * 1.2).toLocaleString());
         }
         load();
     </script>
