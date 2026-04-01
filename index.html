@@ -14,39 +14,26 @@
         .container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
         
         .p-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; position: relative; }
-        
         .media-box { width: 100%; height: 170px; background: #000; position: relative; overflow: hidden; }
-        .slider-container { display: flex; transition: 0.3s; height: 100%; }
-        .slider-item { min-width: 100%; height: 100%; }
         .p-img, .p-video { width: 100%; height: 100%; object-fit: cover; }
-        .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 5px 8px; cursor: pointer; z-index: 5; font-size: 12px; border-radius: 50%; }
-        .prev { left: 5px; } .next { right: 5px; }
 
         .badge-container { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
         .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; color: white; }
         .bg-green { background: #28a745; } .bg-yellow { background: #ffc107; color: #000; } .bg-province { background: var(--navy); border: 1px solid white; }
         
-        .share-btn { position: absolute; top: 8px; right: 8px; background: white; color: var(--navy); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .timer-box { position: absolute; bottom: 0; width: 100%; background: rgba(237, 28, 36, 0.9); color: white; text-align: center; font-size: 10px; padding: 5px 0; font-weight: bold; z-index: 6; }
-
         .p-info { padding: 12px; flex-grow: 1; }
-        .p-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 2px; line-height: 1.3; }
-        /* ส่วนคำอธิบายสินค้า */
-        .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .p-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 2px; }
+        .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
         
-        .p-price { color: var(--red); font-size: 18px; font-weight: bold; }
-        .p-shipping { font-size: 10px; color: #888; margin-bottom: 8px; }
-        
-        .p-options { width: 100%; padding: 6px; font-size: 12px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 8px; background: #fff; }
-        .qty-box { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 10px; color: #444; }
-        .qty-box input { width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 4px; font-weight: bold; }
+        /* สไตล์ราคา */
+        .price-container { margin-top: auto; }
+        .current-price { color: var(--red); font-size: 18px; font-weight: bold; }
+        .old-price { color: #aaa; text-decoration: line-through; font-size: 12px; margin-left: 5px; display: none; }
 
-        .btn-buy { width: 100%; padding: 14px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; font-size: 14px; }
-        .btn-buy:disabled { background: var(--gray); cursor: not-allowed; }
-
+        .btn-buy { width: 100%; padding: 14px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; }
         nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--navy); display: flex; justify-content: space-around; align-items: center; border-top: 3px solid var(--red); z-index: 1000; }
         .nav-item { text-align: center; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 11px; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 2px; }
+        .nav-item i { font-size: 20px; display: block; }
     </style>
 </head>
 <body>
@@ -71,90 +58,46 @@
             );
 
             let html = "";
+            const now = new Date().getTime();
+
             db.forEach((p, i) => {
-                const [name, imgs, desc, price, tGreen, tYellow, video, province, expire, min, max, ship, options] = p;
-                const imgList = imgs ? imgs.split(',') : [];
+                const [name, imgs, desc, pPrice, tGreen, tYellow, video, province, expire, min, max, ship, options, fPrice] = p;
                 
+                const expireTime = expire ? new Date(expire.replace(/-/g, "/")).getTime() : 0;
+                const isPromoActive = expireTime > now;
+
+                // เลือกราคาที่จะแสดง
+                const displayPrice = isPromoActive ? pPrice : (fPrice || pPrice);
+                const showOldPrice = isPromoActive && fPrice;
+
                 html += `
                     <div class="p-card">
-                        <button class="share-btn" onclick="share('${name}')"><i class="fa-solid fa-share-nodes"></i></button>
                         <div class="badge-container">
                             ${province ? `<span class="badge bg-province">${province}</span>` : ''}
-                            ${tGreen ? `<span class="badge bg-green b-badge-${i}">${tGreen}</span>` : ''}
-                            ${tYellow ? `<span class="badge bg-yellow b-badge-${i}">${tYellow}</span>` : ''}
+                            ${(isPromoActive && tGreen) ? `<span class="badge bg-green">${tGreen}</span>` : ''}
+                            ${(isPromoActive && tYellow) ? `<span class="badge bg-yellow">${tYellow}</span>` : ''}
                         </div>
                         <div class="media-box">
-                            <div class="slider-container" id="slider-${i}">
-                                ${video ? `<div class="slider-item"><video src="${video}" class="p-video" autoplay loop muted playsinline></video></div>` : ''}
-                                ${imgList.map(url => `<div class="slider-item"><img src="${url.trim()}" class="p-img"></div>`).join('')}
-                            </div>
-                            ${imgList.length > 1 ? `
-                                <button class="slide-btn prev" onclick="moveSlide(${i}, -1)">❮</button>
-                                <button class="slide-btn next" onclick="moveSlide(${i}, 1)">❯</button>
-                            ` : ''}
-                            ${expire ? `<div class="timer-box" id="timer-${i}" data-time="${expire}">รอสักครู่...</div>` : ''}
+                            <img src="${imgs.split(',')[0]}" class="p-img">
                         </div>
                         <div class="p-info">
                             <div class="p-name">${name}</div>
                             <div class="p-desc">${desc || ''}</div>
-                            <div class="p-price">฿${parseFloat(price).toLocaleString()}</div>
-                            <div class="p-shipping"><i class="fa-solid fa-truck"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
-                            ${options ? `<select class="p-options" id="opt-${i}">${options.split(',').map(o => `<option>${o.trim()}</option>`).join('')}</select>` : ''}
-                            <div class="qty-box">จำนวนสั่งซื้อ: <input type="number" id="qty-${i}" value="${min || 1}" min="${min || 1}"></div>
+                            <div class="price-container">
+                                <span class="current-price">฿${parseFloat(displayPrice).toLocaleString()}</span>
+                                <span class="old-price" style="display: ${showOldPrice ? 'inline' : 'none'}">฿${parseFloat(fPrice).toLocaleString()}</span>
+                            </div>
                         </div>
-                        <button class="btn-buy" id="btn-${i}" onclick="order(${i}, '${name}', ${price}, ${min}, ${max}, ${ship})">สั่งซื้อสินค้า / ผ่อนชำระ</button>
+                        <button class="btn-buy" onclick="order('${name}', ${displayPrice})">สั่งซื้อสินค้า</button>
                     </div>
                 `;
             });
             document.getElementById('app').innerHTML = html;
-            startClock();
         } catch (e) { console.error(e); }
     }
 
-    let slideIndex = {};
-    function moveSlide(cardId, step) {
-        if (!slideIndex[cardId]) slideIndex[cardId] = 0;
-        const slider = document.getElementById(`slider-${cardId}`);
-        const total = slider.children.length;
-        slideIndex[cardId] = (slideIndex[cardId] + step + total) % total;
-        slider.style.transform = `translateX(-${slideIndex[cardId] * 100}%)`;
-    }
-
-    function startClock() {
-        setInterval(() => {
-            document.querySelectorAll('.timer-box').forEach(el => {
-                const targetStr = el.getAttribute('data-time').replace(/-/g, "/");
-                const target = new Date(targetStr).getTime();
-                const diff = target - new Date().getTime();
-                const id = el.id.split('-')[1];
-                if (diff <= 0) {
-                    el.innerText = "หมดเวลาโปรโมชั่น";
-                    el.style.background = "#666";
-                    document.getElementById(`btn-${id}`).disabled = true;
-                    document.querySelectorAll(`.b-badge-${id}`).forEach(b => b.style.display='none');
-                } else {
-                    const h = Math.floor(diff/3600000);
-                    const m = Math.floor((diff%3600000)/60000);
-                    const s = Math.floor((diff%60000)/1000);
-                    el.innerText = `จบโปรใน ${h}ชม. ${m}น. ${s}ว.`;
-                }
-            });
-        }, 1000);
-    }
-
-    function share(name) {
-        if (navigator.share) {
-            navigator.share({ title: 'PHAENDIN STORE', text: `ดูสินค้านี้: ${name}`, url: window.location.href });
-        } else { alert("เบราว์เซอร์ไม่รองรับการแชร์โดยตรง"); }
-    }
-
-    function order(id, name, price, min, max, ship) {
-        const qty = parseInt(document.getElementById(`qty-${id}`).value);
-        if (qty < min) return alert(`ขั้นต่ำการสั่งซื้อคือ ${min} ชิ้นครับ`);
-        if (max && qty > max) return alert(`ขออภัยครับ สินค้านี้จำกัดการซื้อไม่เกิน ${max} ชิ้น`);
-        
-        const total = (qty * price) + parseFloat(ship);
-        alert(`🛒 ยืนยันคำสั่งซื้อ\nสินค้า: ${name}\nจำนวน: ${qty}\nยอดชำระรวม: ฿${total.toLocaleString()}`);
+    function order(name, price) {
+        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nราคาปัจจุบัน: ฿${parseFloat(price).toLocaleString()}`);
     }
 
     loadStore();
