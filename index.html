@@ -58,36 +58,39 @@
 
     async function loadStore() {
     try {
-        // เปลี่ยนการดึงข้อมูลจาก CSV เป็น JSON Visualization API เพื่อความแม่นยำ
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:json`);
         const text = await res.text();
         
-        // ตัดส่วนหัวของ JSON ที่ Google ส่งมาออกเพื่อให้เป็น JSON ที่สมบูรณ์
-        const jsonData = JSON.parse(text.substring(47).slice(0, -2));
+        // ล้างหัว JSON
+        const jsonStr = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        const jsonData = JSON.parse(jsonStr);
         const rows = jsonData.table.rows;
         
         let html = "";
         rows.forEach((row, i) => {
-            const c = row.c; // ข้อมูลแต่ละคอลัมน์ (c[0]=A, c[1]=B, ...)
+            const c = row.c;
+            if (!c || !c[0]) return; // ข้ามแถวที่ไม่มีชื่อสินค้า
 
-            // ฟังก์ชันช่วยดึงค่า ป้องกัน Error กรณีช่องว่าง
-            const getV = (idx) => (c[idx] && c[idx].v !== null) ? c[idx].v : "";
+            // ฟังก์ชันดึงค่าที่ฉลาดขึ้น: ลองดึงค่าที่จัดรูปแบบแล้ว (.f) ก่อน ถ้าไม่มีค่อยเอาค่าดิบ (.v)
+            const getV = (idx) => {
+                if (!c[idx]) return "";
+                return c[idx].f ? c[idx].f : (c[idx].v !== null ? c[idx].v : "");
+            };
 
-            // --- อิงลำดับคอลัมน์ตามที่คุณกำหนดไว้ ---
-            const name     = getV(0);  // A: ชื่อ
-            const imgs     = getV(1);  // B: รูป (รองรับหลายรูปคั่นด้วยคอมมา)
-            const desc     = getV(2);  // C: รายละเอียด
-            const pPrice   = getV(3);  // D: ราคาโปร
-            const tGreen   = getV(4);  // E: แท็กเขียว
-            const province = getV(7);  // H: จังหวัด
-            const expire   = getV(8);  // I: เวลาหมดโปร
-            const ship     = getV(11); // L: ค่าขนส่ง
-            const optStr   = getV(12); // M: ตัวเลือกสินค้า (เช่น สีแดง:100,สีเขียว:120)
-            const fPrice   = getV(13); // N: ราคาเต็ม
-            // ------------------------------------
+            // ดึงข้อมูลตามคอลัมน์ A=0, B=1, C=2...
+            const name     = getV(0);  
+            const imgs     = getV(1);  
+            const desc     = getV(2);  
+            const pPrice   = getV(3).toString().replace(/,/g, ''); // ลบคอมมาออกเผื่อคำนวณ
+            const tGreen   = getV(4);  
+            const province = getV(7);  
+            const expire   = getV(8);  
+            const ship     = getV(11).toString().replace(/,/g, '') || "0"; 
+            const optStr   = getV(12); 
+            const fPrice   = getV(13).toString().replace(/,/g, ''); 
 
             const currentP = parseFloat(pPrice) || 0;
-            const firstImg = imgs.split(',')[0].trim(); // ดึงรูปแรกมาแสดง
+            const firstImg = imgs.split(',')[0].trim();
 
             html += `
                 <div class="p-card">
@@ -110,15 +113,16 @@
                             <span class="current-price" id="cur-price-${i}">฿${currentP.toLocaleString()}</span>
                             <span class="old-price" id="old-price-${i}"></span>
                         </div>
-                        <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ฿${parseFloat(ship || 0).toLocaleString()}</div>
+                        <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ฿${parseFloat(ship).toLocaleString()}</div>
                         
                         ${(optStr && optStr !== "") ? `
                             <select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">
                                 ${optStr.split(',').map(item => {
+                                    if(!item.includes(':')) return `<option value="${pPrice}">${item.trim()}</option>`;
                                     const part = item.split(':');
                                     const label = part[0].trim();
-                                    const val = part[1] ? part[1].trim() : pPrice;
-                                    return `<option value="${val}">${label} ${part[1] ? '(฿'+parseFloat(val).toLocaleString()+')' : ''}</option>`;
+                                    const val = part[1].trim().replace(/,/g, '');
+                                    return `<option value="${val}">${label} (฿${parseFloat(val).toLocaleString()})</option>`;
                                 }).join('')}
                             </select>
                         ` : ''}
@@ -130,62 +134,13 @@
         document.getElementById('app').innerHTML = html;
         startCountdown();
     } catch (e) { 
-        console.error("Error:", e);
-        document.getElementById('app').innerHTML = "<p style='padding:20px'>เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาตรวจสอบการตั้งค่าแชร์ไฟล์ Google Sheets</p>";
+        console.error("Fetch Error:", e);
+        document.getElementById('app').innerHTML = `<div style="padding:20px; text-align:center;">
+            <p>❌ โหลดข้อมูลไม่สำเร็จ</p>
+            <small style="color:gray">${e.message}</small>
+        </div>`;
     }
 }
-
-
-    function updatePrice(id) {
-        const select = document.getElementById(`opt-${id}`);
-        const timerEl = document.getElementById(`timer-${id}`);
-        const newPrice = parseFloat(select.value);
-        document.getElementById(`cur-price-${id}`).innerText = `฿${newPrice.toLocaleString()}`;
-        timerEl.setAttribute('data-p', newPrice);
-    }
-
-    function startCountdown() {
-        setInterval(() => {
-            const now = new Date().getTime();
-            document.querySelectorAll('.timer-display').forEach(el => {
-                const id = el.id.split('-')[1];
-                const expireData = el.getAttribute('data-expire');
-                if (!expireData || expireData === "") return;
-
-                const target = new Date(expireData.replace(/-/g, "/")).getTime();
-                const diff = target - now;
-                const pSale = parseFloat(el.getAttribute('data-p')) || 0;
-                const pFull = parseFloat(el.getAttribute('data-f')) || pSale;
-
-                const badge = document.getElementById(`sale-badge-${id}`);
-                const curPriceEl = document.getElementById(`cur-price-${id}`);
-                const oldPriceEl = document.getElementById(`old-price-${id}`);
-
-                if (diff > 0) {
-                    el.style.display = 'block';
-                    const h = Math.floor(diff/3600000);
-                    const m = Math.floor((diff%3600000)/60000);
-                    const s = Math.floor((diff%60000)/1000);
-                    el.innerText = `🔥 จบโปรใน ${h}:${m}:${s}`;
-                    
-                    if (pFull > pSale) {
-                        const pct = Math.round(((pFull - pSale) / pFull) * 100);
-                        badge.innerText = `ลด ${pct}%`;
-                        badge.style.display = 'inline-block';
-                        oldPriceEl.innerText = `฿${pFull.toLocaleString()}`;
-                        oldPriceEl.style.display = 'inline';
-                    }
-                } else {
-                    el.style.display = 'none';
-                    badge.style.display = 'none';
-                    oldPriceEl.style.display = 'none';
-                    if(!document.getElementById(`opt-${id}`)) {
-                        curPriceEl.innerText = `฿${pFull.toLocaleString()}`;
-                    }
-                }
-            });
-        }, 1000);
-    }
 
     function order(name, id, ship) {
         const pStr = document.getElementById(`cur-price-${id}`).innerText.replace('฿', '').replace(/,/g, '');
