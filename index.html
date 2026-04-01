@@ -17,15 +17,15 @@
         .media-box { width: 100%; height: 170px; background: #000; position: relative; overflow: hidden; }
         .p-img, .p-video { width: 100%; height: 100%; object-fit: cover; }
 
+        /* ป้ายต่างๆ */
         .badge-container { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
         .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; color: white; }
-        /* ป้ายลด % สีแดงเด่นๆ */
-        .bg-red-sale { background: var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.2); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        
+        .bg-red-sale { background: var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .bg-green { background: #28a745; } 
-        .bg-yellow { background: #ffc107; color: #000; }
         .bg-province { background: var(--navy); border: 1px solid white; }
+
+        /* ตัวนับเวลา (Timer Box) */
+        .timer-display { position: absolute; bottom: 0; width: 100%; background: rgba(237, 28, 36, 0.85); color: white; text-align: center; font-size: 11px; padding: 4px 0; font-weight: bold; z-index: 11; }
         
         .p-info { padding: 12px; flex-grow: 1; }
         .p-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 2px; height: 35px; overflow: hidden; }
@@ -66,67 +66,89 @@
             );
 
             let html = "";
-            const now = new Date().getTime();
-
             db.forEach((p, i) => {
                 const [name, imgs, desc, pPrice, tGreen, tYellow, video, province, expire, min, max, ship, options, fPrice] = p;
                 
-                const expireTime = expire ? new Date(expire.replace(/-/g, "/")).getTime() : 0;
-                const isPromoActive = expireTime > now;
-
-                const price_sale = parseFloat(pPrice) || 0;
-                const price_full = parseFloat(fPrice) || price_sale;
-                
-                // ถ้ายูสเซอร์ยังไม่ถึงเวลาเลิกขาย ให้ใช้ราคาโปรฯ
-                const displayPrice = isPromoActive ? price_sale : price_full;
-                
-                let percentOff = 0;
-                if (isPromoActive && price_full > price_sale) {
-                    percentOff = Math.round(((price_full - price_sale) / price_full) * 100);
-                }
-
+                // คำนวณราคาเบื้องต้น (เดี๋ยว JS Timer จะไปจัดการต่อ)
                 html += `
-                    <div class="p-card">
+                    <div class="p-card" id="card-${i}">
                         <div class="badge-container">
                             ${province ? `<span class="badge bg-province">${province}</span>` : ''}
-                            ${(isPromoActive && percentOff > 0) ? `<span class="badge bg-red-sale">ลด ${percentOff}%</span>` : ''}
-                            
+                            <span class="badge bg-red-sale" id="sale-badge-${i}" style="display:none"></span>
                             ${tGreen ? `<span class="badge bg-green">${tGreen}</span>` : ''}
-                            ${tYellow ? `<span class="badge bg-yellow">${tYellow}</span>` : ''}
                         </div>
                         <div class="media-box">
                             <img src="${imgs.split(',')[0]}" class="p-img">
+                            <div class="timer-display" id="timer-${i}" data-expire="${expire}" data-p="${pPrice}" data-f="${fPrice}" style="display:none"></div>
                         </div>
                         <div class="p-info">
                             <div class="p-name">${name}</div>
                             <div class="p-desc">${desc || ''}</div>
-                            
-                            <div class="price-row">
-                                <span class="current-price">฿${displayPrice.toLocaleString()}</span>
-                                ${ (isPromoActive && price_full > price_sale) ? `<span class="old-price">฿${price_full.toLocaleString()}</span>` : '' }
+                            <div class="price-row" id="price-box-${i}">
+                                <span class="current-price" id="cur-price-${i}">฿${parseFloat(pPrice).toLocaleString()}</span>
+                                <span class="old-price" id="old-price-${i}"></span>
                             </div>
-
-                            <div class="info-row">
-                                <i class="fa-solid fa-truck"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}
-                            </div>
-
-                            ${options ? `
-                                <select class="p-options" id="opt-${i}">
-                                    ${options.split(',').map(o => `<option>${o.trim()}</option>`).join('')}
-                                </select>
-                            ` : ''}
+                            <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
+                            ${options ? `<select class="p-options" id="opt-${i}">${options.split(',').map(o => `<option>${o.trim()}</option>`).join('')}</select>` : ''}
                         </div>
-                        <button class="btn-buy" onclick="order('${name}', ${displayPrice}, ${ship})">สั่งซื้อสินค้า</button>
+                        <button class="btn-buy" onclick="order('${name}', ${i}, ${ship})">สั่งซื้อสินค้า</button>
                     </div>
                 `;
             });
             document.getElementById('app').innerHTML = html;
+            startCountdown();
         } catch (e) { console.error(e); }
     }
 
-    function order(name, price, ship) {
-        const total = price + parseFloat(ship);
-        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nราคา: ฿${total.toLocaleString()}`);
+    function startCountdown() {
+        setInterval(() => {
+            const now = new Date().getTime();
+            document.querySelectorAll('.timer-display').forEach(el => {
+                const id = el.id.split('-')[1];
+                const expireStr = el.getAttribute('data-expire').replace(/-/g, "/");
+                const priceSale = parseFloat(el.getAttribute('data-p'));
+                const priceFull = parseFloat(el.getAttribute('data-f')) || priceSale;
+                
+                if (!expireStr) return;
+                const target = new Date(expireStr).getTime();
+                const diff = target - now;
+
+                const badge = document.getElementById(`sale-badge-${id}`);
+                const curPrice = document.getElementById(`cur-price-${id}`);
+                const oldPrice = document.getElementById(`old-price-${id}`);
+
+                if (diff > 0) {
+                    // ช่วงเวลาโปรโมชั่น
+                    el.style.display = 'block';
+                    const h = Math.floor(diff/3600000);
+                    const m = Math.floor((diff%3600000)/60000);
+                    const s = Math.floor((diff%60000)/1000);
+                    el.innerText = `🔥 จบโปรใน ${h}ชม. ${m}น. ${s}ว.`;
+                    
+                    // คำนวณ % และราคา
+                    if (priceFull > priceSale) {
+                        const pct = Math.round(((priceFull - priceSale) / priceFull) * 100);
+                        badge.innerText = `ลด ${pct}%`;
+                        badge.style.display = 'inline-block';
+                        oldPrice.innerText = `฿${priceFull.toLocaleString()}`;
+                        oldPrice.style.display = 'inline';
+                    }
+                    curPrice.innerText = `฿${priceSale.toLocaleString()}`;
+                } else {
+                    // หมดเวลาโปรโมชั่น
+                    el.style.display = 'none';
+                    badge.style.display = 'none';
+                    oldPrice.style.display = 'none';
+                    curPrice.innerText = `฿${priceFull.toLocaleString()}`;
+                }
+            });
+        }, 1000);
+    }
+
+    function order(name, id, ship) {
+        const price = document.getElementById(`cur-price-${id}`).innerText.replace('฿', '').replace(',', '');
+        const total = parseFloat(price) + parseFloat(ship);
+        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nยอดชำระ: ฿${total.toLocaleString()}`);
     }
 
     loadStore();
