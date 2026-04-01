@@ -482,9 +482,13 @@
             <span id="final-price-display" style="font-size: 18px; font-weight: 800; color: #38ef7d;">฿0</span>
         </div>
     </div>
-<input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()">
+
+    <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()">
+    
     <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()">
-  <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>  
+
+    <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>  
+
     <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
         <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
             <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS (สำหรับผ่อน)
@@ -492,12 +496,12 @@
         <input type="hidden" id="userLocation">
         <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('selfieIn').click()">
             <span id="selfieTxt" style="font-size:10px; color:var(--gold);">ถ่ายรูปเซลฟี่คู่กับบัตร</span>
-            <input type="file" id="selfieIn" style="display:none" onchange="handleSelfie(this)" accept="image/*" capture="user">
+            <input type="file" id="selfieIn" style="display:none" onchange="handleSelfie(this); checkBlacklist();" accept="image/*" capture="user">
             <img id="selfiePreview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
         </div>
     </div>
     
-    <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง (บ้านเลขที่ ตำบล อำเภอ จังหวัด)" required class="input-slim" style="height:60px;"></textarea>
+    <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง (บ้านเลขที่ ตำบล อำเภอ จังหวัด)" required class="input-slim" style="height:60px;" oninput="checkBlacklist()"></textarea>
     
     <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(212,175,55,0.2);">
         <p style="font-size:11px; color:var(--gold);">🏦 ช่องทางชำระเงิน: ธนาคารกสิกรไทย</p>
@@ -509,30 +513,10 @@
 
     <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('fileIn').click()">
         <span id="upTxt" style="font-size:10px; color:var(--gold);">คลิกเพื่อแนบสลิปโอนเงิน</span>
-        <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
+        <input type="file" id="fileIn" style="display:none" onchange="handleFile(this); checkBlacklist();" accept="image/*">
         <img id="preview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
     </div>
 </div>
-<div class="modal-footer-fixed">
-    <div id="step-1-footer">
-        <div class="footer-btn-group">
-            <div id="installmentInfo"></div> <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
-                <div style="font-size: 11px; font-weight: bold; color: #fff;">ชำระสด</div>
-                <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none">
-            </div>
-
-            <div id="pay-install" class="btn-pay-option" onclick="togglePay('ผ่อนไปใช้ไป')">
-                <div style="font-size: 11px; font-weight: bold; color: #fff;">ผ่อนชำระ</div>
-                <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none">
-            </div>
-
-            <button type="button" class="buy-now" onclick="nextStep(2)" 
-                    style="flex: 1.5; border-radius: 10px; padding: 0; height: 48px; margin: 0; font-size: 13px; font-weight: bold;">
-                ถัดไป (ที่อยู่)
-            </button>
-        </div>
-    </div>
-    </div>
 
     <div id="step-2-footer" style="display:none;">
         <div style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
