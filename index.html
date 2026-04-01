@@ -52,35 +52,37 @@
     <a href="#" class="nav-item"><i class="fa-solid fa-house"></i>หน้าแรก</a>
     <a href="#" class="nav-item"><i class="fa-solid fa-truck"></i>เช็คพัสดุ</a>
     <a href="#" class="nav-item"><i class="fa-solid fa-wallet"></i>ยอดผ่อน</a>
-</nav>
-  <script>
+</nav>        
+<script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
 
     async function loadStore() {
         try {
             const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
             const text = await res.text();
-            const rows = text.split('\n').slice(1);
+            
+            // แยกบรรทัดและกรองแถวว่าง
+            const rows = text.split('\n').filter(row => row.trim() !== "").slice(1);
             
             let html = "";
             rows.forEach((row, i) => {
-                // แยกคอลัมน์แบบรองรับเครื่องหมายคำพูด ""
-                const p = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
+                // ปรับ Regex ให้แม่นยำขึ้นเพื่อดึงข้อมูลทีละคอลัมน์ A, B, C...
+                const p = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                 
-                if (p.length < 5) return; 
+                if (p.length < 4) return; 
 
-                // --- ตรวจสอบลำดับคอลัมน์ให้แม่นยำ (เริ่มนับ 0) ---
-                const name     = p[0];  // A
-                const imgs     = p[1];  // B
-                const desc     = p[2];  // C
-                const pPrice   = p[3];  // D: ราคาขายปัจจุบัน
-                const tGreen   = p[4];  // E: ป้ายเขียว
-                const province = p[7];  // H: จังหวัด
-                const expire   = p[8];  // I: เวลาหมดโปร
-                const ship     = p[11] || "0"; // L: ค่าส่ง (ถ้าว่างให้เป็น 0)
-                const optStr   = p[12]; // M: ตัวเลือกสินค้า (ช่องที่หายไป)
-                const fPrice   = p[13]; // N: ราคาเต็ม
-                // -------------------------------------------
+                // --- ลำดับคอลัมน์ตามจริง (เริ่มจาก 0) ---
+                const name     = p[0]  || ""; // A
+                const imgs     = p[1]  || ""; // B
+                const desc     = p[2]  || ""; // C
+                const pPrice   = p[3]  || "0"; // D (ราคาขาย)
+                const tGreen   = p[4]  || ""; // E (ป้ายเขียว)
+                const province = p[7]  || ""; // H (จังหวัด)
+                const expire   = p[8]  || ""; // I (เวลา)
+                const ship     = p[11] || "0"; // L (ค่าส่ง)
+                const optStr   = p[12] || ""; // M (ตัวเลือก)
+                const fPrice   = p[13] || pPrice; // N (ราคาเต็ม)
+                // ------------------------------------
 
                 const displayPrice = parseFloat(pPrice) || 0;
 
@@ -92,7 +94,7 @@
                             ${tGreen ? `<span class="badge bg-green">${tGreen}</span>` : ''}
                         </div>
                         <div class="media-box">
-                            <img src="${imgs.split(',')[0]}" class="p-img">
+                            <img src="${imgs.split(',')[0]}" class="p-img" onerror="this.src='https://via.placeholder.com/150'">
                             <div class="timer-display" id="timer-${i}" 
                                  data-expire="${expire}" 
                                  data-p="${pPrice}" 
@@ -100,14 +102,14 @@
                         </div>
                         <div class="p-info">
                             <div class="p-name">${name}</div>
-                            <div class="p-desc">${desc || ''}</div>
+                            <div class="p-desc">${desc}</div>
                             <div class="price-row">
                                 <span class="current-price" id="cur-price-${i}">฿${displayPrice.toLocaleString()}</span>
                                 <span class="old-price" id="old-price-${i}"></span>
                             </div>
                             <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ฿${parseFloat(ship).toLocaleString()}</div>
                             
-                            ${(optStr && optStr !== "" && optStr !== "undefined") ? `
+                            ${(optStr && optStr !== "") ? `
                                 <select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">
                                     ${optStr.split(',').map(item => {
                                         const part = item.split(':');
@@ -130,6 +132,8 @@
     function updatePrice(id) {
         const select = document.getElementById(`opt-${id}`);
         const timerEl = document.getElementById(`timer-${id}`);
+        if (!select || !timerEl) return;
+        
         const newPrice = parseFloat(select.value);
         document.getElementById(`cur-price-${id}`).innerText = `฿${newPrice.toLocaleString()}`;
         timerEl.setAttribute('data-p', newPrice);
@@ -141,7 +145,7 @@
             document.querySelectorAll('.timer-display').forEach(el => {
                 const id = el.id.split('-')[1];
                 const expireData = el.getAttribute('data-expire');
-                if (!expireData) return;
+                if (!expireData || expireData.trim() === "") return;
 
                 const target = new Date(expireData.replace(/-/g, "/")).getTime();
                 const diff = target - now;
@@ -165,12 +169,18 @@
                         badge.style.display = 'inline-block';
                         oldPriceEl.innerText = `฿${pFull.toLocaleString()}`;
                         oldPriceEl.style.display = 'inline';
+                    } else {
+                        badge.style.display = 'none';
+                        oldPriceEl.style.display = 'none';
                     }
                 } else {
                     el.style.display = 'none';
                     badge.style.display = 'none';
                     oldPriceEl.style.display = 'none';
-                    curPriceEl.innerText = `฿${pFull.toLocaleString()}`;
+                    // ถ้ามีราคาเต็ม ให้แสดงราคาเต็มเมื่อหมดเวลา
+                    if (pFull > 0 && !document.getElementById(`opt-${id}`)) {
+                         curPriceEl.innerText = `฿${pFull.toLocaleString()}`;
+                    }
                 }
             });
         }, 1000);
@@ -184,7 +194,6 @@
 
     loadStore();
 </script>
-                  
 
 </body>
 </html>
