@@ -3,58 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHAENDIN STORE - Premium</title>
+    <title>PHAENDIN STORE</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --navy: #00247D; --red: #ED1C24; --white: #FFFFFF; --bg: #F0F2F5; --gray: #888; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
         body { background: var(--bg); padding-top: 65px; padding-bottom: 90px; }
-        
         header { position: fixed; top: 0; width: 100%; height: 60px; background: var(--navy); border-bottom: 3px solid var(--red); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
         
-        /* Card Design */
         .p-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; position: relative; }
-        .media-box { width: 100%; height: 170px; background: #000; position: relative; }
-        .p-img, .p-video { width: 100%; height: 100%; object-fit: cover; }
         
-        /* Badges */
+        /* Media Slider */
+        .media-box { width: 100%; height: 170px; background: #000; position: relative; overflow: hidden; }
+        .slider-container { display: flex; transition: 0.3s; height: 100%; }
+        .slider-item { min-width: 100%; height: 100%; }
+        .p-img, .p-video { width: 100%; height: 100%; object-fit: cover; }
+        .slide-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; padding: 5px 8px; cursor: pointer; z-index: 5; font-size: 12px; border-radius: 50%; }
+        .prev { left: 5px; } .next { right: 5px; }
+
         .badge-container { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
         .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; color: white; }
-        .bg-green { background: #28a745; }
-        .bg-yellow { background: #ffc107; color: #000; }
-        .bg-province { background: var(--navy); border: 1px solid white; }
-        .bg-installment { background: #17a2b8; } /* ป้ายผ่อนได้ */
+        .bg-green { background: #28a745; } .bg-yellow { background: #ffc107; color: #000; } .bg-province { background: var(--navy); border: 1px solid white; }
+        
+        .share-btn { position: absolute; top: 8px; right: 8px; background: white; color: var(--navy); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        .timer-box { position: absolute; bottom: 0; width: 100%; background: rgba(237, 28, 36, 0.9); color: white; text-align: center; font-size: 10px; padding: 5px 0; font-weight: bold; }
+        .timer-box { position: absolute; bottom: 0; width: 100%; background: rgba(237, 28, 36, 0.9); color: white; text-align: center; font-size: 10px; padding: 5px 0; font-weight: bold; z-index: 6; }
 
-        /* Info Section */
         .p-info { padding: 12px; flex-grow: 1; }
-        .p-name { font-size: 15px; font-weight: 600; color: var(--navy); height: 38px; overflow: hidden; margin-bottom: 4px; }
-        .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; height: 32px; overflow: hidden; }
-        .p-price { color: var(--red); font-size: 20px; font-weight: bold; }
-        .p-shipping { font-size: 10px; color: #444; margin-bottom: 10px; }
-
-        /* Inputs & Options */
+        .p-name { font-size: 14px; font-weight: 600; color: var(--navy); height: 35px; overflow: hidden; margin-bottom: 4px; }
+        .p-price { color: var(--red); font-size: 18px; font-weight: bold; }
+        .p-shipping { font-size: 10px; color: #666; margin-bottom: 8px; }
+        
         .p-options { width: 100%; padding: 6px; font-size: 12px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 8px; }
         .qty-box { display: flex; align-items: center; gap: 5px; font-size: 12px; margin-bottom: 10px; }
-        .qty-box input { width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; }
+        .qty-box input { width: 45px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 2px; }
 
-        .btn-buy { width: 100%; padding: 14px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-buy { width: 100%; padding: 12px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; }
         .btn-buy:disabled { background: var(--gray); cursor: not-allowed; }
 
-        nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--navy); display: flex; justify-content: space-around; align-items: center; border-top: 3px solid var(--red); }
-        .nav-item { text-align: center; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 12px; }
+        nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--navy); display: flex; justify-content: space-around; align-items: center; border-top: 3px solid var(--red); z-index: 1000; }
+        .nav-item { text-align: center; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 11px; }
         .nav-item i { font-size: 20px; display: block; }
     </style>
 </head>
 <body>
 
 <header><img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" height="35"></header>
-
 <div class="container" id="app"></div>
-
 <nav>
     <a href="#" class="nav-item"><i class="fa-solid fa-house"></i>หน้าแรก</a>
     <a href="#" class="nav-item"><i class="fa-solid fa-truck"></i>เช็คพัสดุ</a>
@@ -74,43 +71,36 @@
 
             let html = "";
             db.forEach((p, i) => {
-                const [name, img, desc, price, tGreen, tYellow, video, province, expire, min, max, ship, options] = p;
-                const isInstallment = true; // สมมติว่าทุกชิ้นผ่อนได้ (หรือจะผูกคอลัมน์เพิ่มก็ได้ครับ)
+                const [name, imgs, desc, price, tGreen, tYellow, video, province, expire, min, max, ship, options] = p;
+                const imgList = imgs ? imgs.split(',') : [];
                 
-                let media = `<img src="${img}" class="p-img">`;
-                if(video) media = `<video src="${video}" class="p-video" autoplay loop muted playsinline></video>`;
-
                 html += `
-                    <div class="p-card" id="card-${i}">
+                    <div class="p-card">
+                        <button class="share-btn" onclick="share('${name}')"><i class="fa-solid fa-share-nodes"></i></button>
                         <div class="badge-container">
                             ${province ? `<span class="badge bg-province">${province}</span>` : ''}
-                            ${tGreen ? `<span class="badge bg-green promo-${i}">${tGreen}</span>` : ''}
-                            ${tYellow ? `<span class="badge bg-yellow promo-${i}">${tYellow}</span>` : ''}
-                            <span class="badge bg-installment">ผ่อนได้ 0%</span>
+                            ${tGreen ? `<span class="badge bg-green p-badge-${i}">${tGreen}</span>` : ''}
+                            ${tYellow ? `<span class="badge bg-yellow p-badge-${i}">${tYellow}</span>` : ''}
                         </div>
                         <div class="media-box">
-                            ${media}
+                            <div class="slider-container" id="slider-${i}">
+                                ${video ? `<div class="slider-item"><video src="${video}" class="p-video" autoplay loop muted playsinline></video></div>` : ''}
+                                ${imgList.map(url => `<div class="slider-item"><img src="${url.trim()}" class="p-img"></div>`).join('')}
+                            </div>
+                            ${imgList.length > 1 ? `
+                                <button class="slide-btn prev" onclick="moveSlide(${i}, -1)">❮</button>
+                                <button class="slide-btn next" onclick="moveSlide(${i}, 1)">❯</button>
+                            ` : ''}
                             ${expire ? `<div class="timer-box" id="timer-${i}" data-time="${expire.replace(/-/g, "/建设")}">รอสักครู่...</div>` : ''}
                         </div>
                         <div class="p-info">
                             <div class="p-name">${name}</div>
-                            <div class="p-desc">${desc}</div>
                             <div class="p-price">฿${parseFloat(price).toLocaleString()}</div>
-                            <div class="p-shipping"><i class="fa-solid fa-truck-fast"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
-                            
-                            ${options ? `
-                                <select class="p-options" id="opt-${i}">
-                                    ${options.split(',').map(o => `<option value="${o}">${o}</option>`).join('')}
-                                </select>
-                            ` : ''}
-
-                            <div class="qty-box">
-                                จำนวน: <input type="number" id="qty-${i}" value="${min || 1}" min="${min || 1}" max="${max || 99}">
-                            </div>
+                            <div class="p-shipping">ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
+                            ${options ? `<select class="p-options" id="opt-${i}">${options.split(',').map(o => `<option>${o.trim()}</option>`).join('')}</select>` : ''}
+                            <div class="qty-box">จำนวน: <input type="number" id="qty-${i}" value="${min || 1}" min="${min || 1}" max="${max || 99}"></div>
                         </div>
-                        <button class="btn-buy" id="btn-${i}" onclick="order(${i}, '${name}', ${price}, ${min}, ${max}, ${ship})">
-                            สั่งซื้อสินค้า
-                        </button>
+                        <button class="btn-buy" id="btn-${i}" onclick="order(${i}, '${name}', ${price}, ${min}, ${max}, ${ship})">สั่งซื้อสินค้า</button>
                     </div>
                 `;
             });
@@ -119,16 +109,26 @@
         } catch (e) { console.error(e); }
     }
 
+    let slideIndex = {};
+    function moveSlide(cardId, step) {
+        if (!slideIndex[cardId]) slideIndex[cardId] = 0;
+        const slider = document.getElementById(`slider-${cardId}`);
+        const total = slider.children.length;
+        slideIndex[cardId] = (slideIndex[cardId] + step + total) % total;
+        slider.style.transform = `translateX(-${slideIndex[cardId] * 100}%)`;
+    }
+
     function startClock() {
         setInterval(() => {
             document.querySelectorAll('.timer-box').forEach(el => {
-                const target = new Date(el.getAttribute('data-time')).getTime();
+                const cleanDate = el.getAttribute('data-time').replace("/建设", "");
+                const target = new Date(cleanDate).getTime();
                 const diff = target - new Date().getTime();
                 const id = el.id.split('-')[1];
                 if (diff <= 0) {
                     el.innerText = "หมดเวลาโปรโมชั่น";
                     document.getElementById(`btn-${id}`).disabled = true;
-                    document.querySelectorAll(`.promo-${id}`).forEach(p => p.style.display='none');
+                    document.querySelectorAll(`.p-badge-${id}`).forEach(b => b.style.display='none');
                 } else {
                     const h = Math.floor(diff/3600000);
                     const m = Math.floor((diff%3600000)/60000);
@@ -139,17 +139,18 @@
         }, 1000);
     }
 
+    function share(name) {
+        if (navigator.share) {
+            navigator.share({ title: 'PHAENDIN STORE', text: `ดูสินค้านี้: ${name}`, url: window.location.href });
+        } else { alert("คัดลอกลิงก์แล้ว!"); }
+    }
+
     function order(id, name, price, min, max, ship) {
         const qty = parseInt(document.getElementById(`qty-${id}`).value);
-        const opt = document.getElementById(`opt-${id}`) ? document.getElementById(`opt-${id}`).value : 'ทั่วไป';
-        
-        if (qty < min) return alert(`ขั้นต่ำการสั่งซื้อคือ ${min} ชิ้น`);
-        if (qty > max) return alert(`สั่งได้ไม่เกิน ${max} ชิ้นต่อออเดอร์`);
-
+        const opt = document.getElementById(`opt-${id}`) ? document.getElementById(`opt-${id}`).value : 'ปกติ';
+        if (qty < min || qty > max) return alert(`สั่งได้ระหว่าง ${min} - ${max} ชิ้น`);
         const total = (qty * price) + parseFloat(ship);
-        const ins = (total * 1.2 / 10).toFixed(0); // ตัวอย่างผ่อน 10 งวด + ดอกเบี้ย 20%
-
-        alert(`🛒 ยืนยันการสั่งซื้อ\n------------------\nสินค้า: ${name} (${opt})\nจำนวน: ${qty}\nยอดรวม: ฿${total.toLocaleString()}\nผ่อนเพียง: ฿${ins} x 10 งวด`);
+        alert(`🛒 ยืนยันการสั่งซื้อ\n${name} (${opt})\nจำนวน: ${qty}\nยอดรวม: ฿${total.toLocaleString()}`);
     }
 
     loadStore();
