@@ -53,7 +53,6 @@
     <a href="#" class="nav-item"><i class="fa-solid fa-truck"></i>เช็คพัสดุ</a>
     <a href="#" class="nav-item"><i class="fa-solid fa-wallet"></i>ยอดผ่อน</a>
 </nav>
-
 <script>
     const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
 
@@ -61,12 +60,17 @@
         try {
             const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
             const text = await res.text();
-            let db = text.split('\n').slice(1).map(row => 
-                row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
-            );
+            
+            // ปรับการตัดคำ CSV ให้แม่นยำขึ้น
+            let rows = text.split('\n').slice(1);
+            let db = rows.map(row => {
+                // Regex นี้จะช่วยตัดคอมม่าที่อยู่นอกเครื่องหมายคำพูด ""
+                return row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
+            });
 
             let html = "";
             db.forEach((p, i) => {
+                if (p.length < 5) return; // ข้ามแถวที่ว่าง
                 const [name, imgs, desc, pPrice, tGreen, tYellow, video, province, expire, min, max, ship, options, fPrice] = p;
                 
                 html += `
@@ -84,7 +88,7 @@
                             <div class="p-name">${name}</div>
                             <div class="p-desc">${desc || ''}</div>
                             <div class="price-row" id="price-box-${i}">
-                                <span class="current-price" id="cur-price-${i}">฿${parseFloat(pPrice).toLocaleString()}</span>
+                                <span class="current-price" id="cur-price-${i}">฿${parseFloat(pPrice || 0).toLocaleString()}</span>
                                 <span class="old-price" id="old-price-${i}"></span>
                             </div>
                             <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
@@ -92,8 +96,11 @@
                             ${options ? `
                                 <select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">
                                     ${options.split(',').map(o => {
-                                        const [label, price] = o.split(':');
-                                        return `<option value="${price ? price.trim() : pPrice}">${label.trim()} ${price ? '(฿'+price+')' : ''}</option>`;
+                                        // แยกชื่อและราคาออกจากกัน (เช่น S:100)
+                                        const part = o.split(':');
+                                        const label = part[0].trim();
+                                        const price = part[1] ? part[1].trim() : pPrice;
+                                        return `<option value="${price}">${label} ${part[1] ? '(฿'+parseFloat(price).toLocaleString()+')' : ''}</option>`;
                                     }).join('')}
                                 </select>
                             ` : ''}
@@ -104,21 +111,17 @@
             });
             document.getElementById('app').innerHTML = html;
             startCountdown();
-        } catch (e) { console.error(e); }
+        } catch (e) { console.error("Error loading store:", e); }
     }
 
-    // ฟังก์ชันอัปเดตราคาตามที่เลือก
     function updatePrice(id) {
         const select = document.getElementById(`opt-${id}`);
         const newPrice = parseFloat(select.value);
-        const curPriceEl = document.getElementById(`cur-price-${id}`);
         const timerEl = document.getElementById(`timer-${id}`);
         
-        // อัปเดตราคาที่แสดงผล
-        curPriceEl.innerText = `฿${newPrice.toLocaleString()}`;
-        
-        // อัปเดตค่าใน Timer ให้คำนวณราคาใหม่ได้ถูกต้อง
+        // อัปเดตราคาชั่วคราวเพื่อให้ Timer คำนวณ % ใหม่ได้ทันที
         timerEl.setAttribute('data-p', newPrice);
+        document.getElementById(`cur-price-${id}`).innerText = `฿${newPrice.toLocaleString()}`;
     }
 
     function startCountdown() {
@@ -126,17 +129,19 @@
             const now = new Date().getTime();
             document.querySelectorAll('.timer-display').forEach(el => {
                 const id = el.id.split('-')[1];
-                const expireStr = el.getAttribute('data-expire').replace(/-/g, "/");
-                const priceSale = parseFloat(el.getAttribute('data-p'));
+                const expireData = el.getAttribute('data-expire');
+                if (!expireData) return;
+
+                const expireStr = expireData.replace(/-/g, "/");
+                const priceSale = parseFloat(el.getAttribute('data-p')) || 0;
                 const priceFull = parseFloat(el.getAttribute('data-f')) || priceSale;
                 
-                if (!expireStr || expireStr === "") return;
                 const target = new Date(expireStr).getTime();
                 const diff = target - now;
 
                 const badge = document.getElementById(`sale-badge-${id}`);
-                const curPrice = document.getElementById(`cur-price-${id}`);
-                const oldPrice = document.getElementById(`old-price-${id}`);
+                const curPriceEl = document.getElementById(`cur-price-${id}`);
+                const oldPriceEl = document.getElementById(`old-price-${id}`);
 
                 if (diff > 0) {
                     el.style.display = 'block';
@@ -149,17 +154,18 @@
                         const pct = Math.round(((priceFull - priceSale) / priceFull) * 100);
                         badge.innerText = `ลด ${pct}%`;
                         badge.style.display = 'inline-block';
-                        oldPrice.innerText = `฿${priceFull.toLocaleString()}`;
-                        oldPrice.style.display = 'inline';
+                        oldPriceEl.innerText = `฿${priceFull.toLocaleString()}`;
+                        oldPriceEl.style.display = 'inline';
                     } else {
                         badge.style.display = 'none';
-                        oldPrice.style.display = 'none';
+                        oldPriceEl.style.display = 'none';
                     }
+                    curPriceEl.innerText = `฿${priceSale.toLocaleString()}`;
                 } else {
                     el.style.display = 'none';
                     badge.style.display = 'none';
-                    oldPrice.style.display = 'none';
-                    curPrice.innerText = `฿${priceFull.toLocaleString()}`;
+                    oldPriceEl.style.display = 'none';
+                    curPriceEl.innerText = `฿${priceFull.toLocaleString()}`;
                 }
             });
         }, 1000);
@@ -167,12 +173,12 @@
 
     function order(name, id, ship) {
         const priceStr = document.getElementById(`cur-price-${id}`).innerText.replace('฿', '').replace(/,/g, '');
-        const price = parseFloat(priceStr);
-        const total = price + parseFloat(ship);
-        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nราคา: ฿${price.toLocaleString()}\nรวมส่ง: ฿${total.toLocaleString()}`);
+        const total = parseFloat(priceStr) + parseFloat(ship);
+        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nราคา: ฿${parseFloat(priceStr).toLocaleString()}\nรวมส่ง: ฿${total.toLocaleString()}`);
     }
 
     loadStore();
 </script>
+
 </body>
 </html>
