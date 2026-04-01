@@ -69,7 +69,6 @@
             db.forEach((p, i) => {
                 const [name, imgs, desc, pPrice, tGreen, tYellow, video, province, expire, min, max, ship, options, fPrice] = p;
                 
-                // คำนวณราคาเบื้องต้น (เดี๋ยว JS Timer จะไปจัดการต่อ)
                 html += `
                     <div class="p-card" id="card-${i}">
                         <div class="badge-container">
@@ -89,15 +88,37 @@
                                 <span class="old-price" id="old-price-${i}"></span>
                             </div>
                             <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
-                            ${options ? `<select class="p-options" id="opt-${i}">${options.split(',').map(o => `<option>${o.trim()}</option>`).join('')}</select>` : ''}
+                            
+                            ${options ? `
+                                <select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">
+                                    ${options.split(',').map(o => {
+                                        const [label, price] = o.split(':');
+                                        return `<option value="${price ? price.trim() : pPrice}">${label.trim()} ${price ? '(฿'+price+')' : ''}</option>`;
+                                    }).join('')}
+                                </select>
+                            ` : ''}
                         </div>
-                        <button class="btn-buy" onclick="order('${name}', ${i}, ${ship})">สั่งซื้อสินค้า</button>
+                        <button class="btn-buy" id="btn-buy-${i}" onclick="order('${name}', ${i}, ${ship})">สั่งซื้อสินค้า</button>
                     </div>
                 `;
             });
             document.getElementById('app').innerHTML = html;
             startCountdown();
         } catch (e) { console.error(e); }
+    }
+
+    // ฟังก์ชันอัปเดตราคาตามที่เลือก
+    function updatePrice(id) {
+        const select = document.getElementById(`opt-${id}`);
+        const newPrice = parseFloat(select.value);
+        const curPriceEl = document.getElementById(`cur-price-${id}`);
+        const timerEl = document.getElementById(`timer-${id}`);
+        
+        // อัปเดตราคาที่แสดงผล
+        curPriceEl.innerText = `฿${newPrice.toLocaleString()}`;
+        
+        // อัปเดตค่าใน Timer ให้คำนวณราคาใหม่ได้ถูกต้อง
+        timerEl.setAttribute('data-p', newPrice);
     }
 
     function startCountdown() {
@@ -109,7 +130,7 @@
                 const priceSale = parseFloat(el.getAttribute('data-p'));
                 const priceFull = parseFloat(el.getAttribute('data-f')) || priceSale;
                 
-                if (!expireStr) return;
+                if (!expireStr || expireStr === "") return;
                 const target = new Date(expireStr).getTime();
                 const diff = target - now;
 
@@ -118,24 +139,23 @@
                 const oldPrice = document.getElementById(`old-price-${id}`);
 
                 if (diff > 0) {
-                    // ช่วงเวลาโปรโมชั่น
                     el.style.display = 'block';
                     const h = Math.floor(diff/3600000);
                     const m = Math.floor((diff%3600000)/60000);
                     const s = Math.floor((diff%60000)/1000);
                     el.innerText = `🔥 จบโปรใน ${h}ชม. ${m}น. ${s}ว.`;
                     
-                    // คำนวณ % และราคา
                     if (priceFull > priceSale) {
                         const pct = Math.round(((priceFull - priceSale) / priceFull) * 100);
                         badge.innerText = `ลด ${pct}%`;
                         badge.style.display = 'inline-block';
                         oldPrice.innerText = `฿${priceFull.toLocaleString()}`;
                         oldPrice.style.display = 'inline';
+                    } else {
+                        badge.style.display = 'none';
+                        oldPrice.style.display = 'none';
                     }
-                    curPrice.innerText = `฿${priceSale.toLocaleString()}`;
                 } else {
-                    // หมดเวลาโปรโมชั่น
                     el.style.display = 'none';
                     badge.style.display = 'none';
                     oldPrice.style.display = 'none';
@@ -146,9 +166,10 @@
     }
 
     function order(name, id, ship) {
-        const price = document.getElementById(`cur-price-${id}`).innerText.replace('฿', '').replace(',', '');
-        const total = parseFloat(price) + parseFloat(ship);
-        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nยอดชำระ: ฿${total.toLocaleString()}`);
+        const priceStr = document.getElementById(`cur-price-${id}`).innerText.replace('฿', '').replace(/,/g, '');
+        const price = parseFloat(priceStr);
+        const total = price + parseFloat(ship);
+        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nราคา: ฿${price.toLocaleString()}\nรวมส่ง: ฿${total.toLocaleString()}`);
     }
 
     loadStore();
