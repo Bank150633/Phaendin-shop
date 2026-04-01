@@ -15,7 +15,6 @@
         
         .p-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; position: relative; }
         
-        /* Media Slider */
         .media-box { width: 100%; height: 170px; background: #000; position: relative; overflow: hidden; }
         .slider-container { display: flex; transition: 0.3s; height: 100%; }
         .slider-item { min-width: 100%; height: 100%; }
@@ -28,24 +27,26 @@
         .bg-green { background: #28a745; } .bg-yellow { background: #ffc107; color: #000; } .bg-province { background: var(--navy); border: 1px solid white; }
         
         .share-btn { position: absolute; top: 8px; right: 8px; background: white; color: var(--navy); border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
         .timer-box { position: absolute; bottom: 0; width: 100%; background: rgba(237, 28, 36, 0.9); color: white; text-align: center; font-size: 10px; padding: 5px 0; font-weight: bold; z-index: 6; }
 
         .p-info { padding: 12px; flex-grow: 1; }
-        .p-name { font-size: 14px; font-weight: 600; color: var(--navy); height: 35px; overflow: hidden; margin-bottom: 4px; }
-        .p-price { color: var(--red); font-size: 18px; font-weight: bold; }
-        .p-shipping { font-size: 10px; color: #666; margin-bottom: 8px; }
+        .p-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 2px; line-height: 1.3; }
+        /* ส่วนคำอธิบายสินค้า */
+        .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         
-        .p-options { width: 100%; padding: 6px; font-size: 12px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 8px; }
-        .qty-box { display: flex; align-items: center; gap: 5px; font-size: 12px; margin-bottom: 10px; }
-        .qty-box input { width: 45px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 2px; }
+        .p-price { color: var(--red); font-size: 18px; font-weight: bold; }
+        .p-shipping { font-size: 10px; color: #888; margin-bottom: 8px; }
+        
+        .p-options { width: 100%; padding: 6px; font-size: 12px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 8px; background: #fff; }
+        .qty-box { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 10px; color: #444; }
+        .qty-box input { width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; padding: 4px; font-weight: bold; }
 
-        .btn-buy { width: 100%; padding: 12px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; }
+        .btn-buy { width: 100%; padding: 14px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; font-size: 14px; }
         .btn-buy:disabled { background: var(--gray); cursor: not-allowed; }
 
         nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--navy); display: flex; justify-content: space-around; align-items: center; border-top: 3px solid var(--red); z-index: 1000; }
         .nav-item { text-align: center; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 11px; }
-        .nav-item i { font-size: 20px; display: block; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 2px; }
     </style>
 </head>
 <body>
@@ -79,8 +80,8 @@
                         <button class="share-btn" onclick="share('${name}')"><i class="fa-solid fa-share-nodes"></i></button>
                         <div class="badge-container">
                             ${province ? `<span class="badge bg-province">${province}</span>` : ''}
-                            ${tGreen ? `<span class="badge bg-green p-badge-${i}">${tGreen}</span>` : ''}
-                            ${tYellow ? `<span class="badge bg-yellow p-badge-${i}">${tYellow}</span>` : ''}
+                            ${tGreen ? `<span class="badge bg-green b-badge-${i}">${tGreen}</span>` : ''}
+                            ${tYellow ? `<span class="badge bg-yellow b-badge-${i}">${tYellow}</span>` : ''}
                         </div>
                         <div class="media-box">
                             <div class="slider-container" id="slider-${i}">
@@ -91,16 +92,17 @@
                                 <button class="slide-btn prev" onclick="moveSlide(${i}, -1)">❮</button>
                                 <button class="slide-btn next" onclick="moveSlide(${i}, 1)">❯</button>
                             ` : ''}
-                            ${expire ? `<div class="timer-box" id="timer-${i}" data-time="${expire.replace(/-/g, "/建设")}">รอสักครู่...</div>` : ''}
+                            ${expire ? `<div class="timer-box" id="timer-${i}" data-time="${expire}">รอสักครู่...</div>` : ''}
                         </div>
                         <div class="p-info">
                             <div class="p-name">${name}</div>
+                            <div class="p-desc">${desc || ''}</div>
                             <div class="p-price">฿${parseFloat(price).toLocaleString()}</div>
-                            <div class="p-shipping">ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
+                            <div class="p-shipping"><i class="fa-solid fa-truck"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
                             ${options ? `<select class="p-options" id="opt-${i}">${options.split(',').map(o => `<option>${o.trim()}</option>`).join('')}</select>` : ''}
-                            <div class="qty-box">จำนวน: <input type="number" id="qty-${i}" value="${min || 1}" min="${min || 1}" max="${max || 99}"></div>
+                            <div class="qty-box">จำนวนสั่งซื้อ: <input type="number" id="qty-${i}" value="${min || 1}" min="${min || 1}"></div>
                         </div>
-                        <button class="btn-buy" id="btn-${i}" onclick="order(${i}, '${name}', ${price}, ${min}, ${max}, ${ship})">สั่งซื้อสินค้า</button>
+                        <button class="btn-buy" id="btn-${i}" onclick="order(${i}, '${name}', ${price}, ${min}, ${max}, ${ship})">สั่งซื้อสินค้า / ผ่อนชำระ</button>
                     </div>
                 `;
             });
@@ -121,19 +123,20 @@
     function startClock() {
         setInterval(() => {
             document.querySelectorAll('.timer-box').forEach(el => {
-                const cleanDate = el.getAttribute('data-time').replace("/建设", "");
-                const target = new Date(cleanDate).getTime();
+                const targetStr = el.getAttribute('data-time').replace(/-/g, "/");
+                const target = new Date(targetStr).getTime();
                 const diff = target - new Date().getTime();
                 const id = el.id.split('-')[1];
                 if (diff <= 0) {
                     el.innerText = "หมดเวลาโปรโมชั่น";
+                    el.style.background = "#666";
                     document.getElementById(`btn-${id}`).disabled = true;
-                    document.querySelectorAll(`.p-badge-${id}`).forEach(b => b.style.display='none');
+                    document.querySelectorAll(`.b-badge-${id}`).forEach(b => b.style.display='none');
                 } else {
                     const h = Math.floor(diff/3600000);
                     const m = Math.floor((diff%3600000)/60000);
                     const s = Math.floor((diff%60000)/1000);
-                    el.innerText = `จบโปรใน ${h}:${m}:${s}`;
+                    el.innerText = `จบโปรใน ${h}ชม. ${m}น. ${s}ว.`;
                 }
             });
         }, 1000);
@@ -142,15 +145,16 @@
     function share(name) {
         if (navigator.share) {
             navigator.share({ title: 'PHAENDIN STORE', text: `ดูสินค้านี้: ${name}`, url: window.location.href });
-        } else { alert("คัดลอกลิงก์แล้ว!"); }
+        } else { alert("เบราว์เซอร์ไม่รองรับการแชร์โดยตรง"); }
     }
 
     function order(id, name, price, min, max, ship) {
         const qty = parseInt(document.getElementById(`qty-${id}`).value);
-        const opt = document.getElementById(`opt-${id}`) ? document.getElementById(`opt-${id}`).value : 'ปกติ';
-        if (qty < min || qty > max) return alert(`สั่งได้ระหว่าง ${min} - ${max} ชิ้น`);
+        if (qty < min) return alert(`ขั้นต่ำการสั่งซื้อคือ ${min} ชิ้นครับ`);
+        if (max && qty > max) return alert(`ขออภัยครับ สินค้านี้จำกัดการซื้อไม่เกิน ${max} ชิ้น`);
+        
         const total = (qty * price) + parseFloat(ship);
-        alert(`🛒 ยืนยันการสั่งซื้อ\n${name} (${opt})\nจำนวน: ${qty}\nยอดรวม: ฿${total.toLocaleString()}`);
+        alert(`🛒 ยืนยันคำสั่งซื้อ\nสินค้า: ${name}\nจำนวน: ${qty}\nยอดชำระรวม: ฿${total.toLocaleString()}`);
     }
 
     loadStore();
