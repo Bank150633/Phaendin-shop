@@ -3,34 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHAENDIN STORE</title>
+    <title>PHAENDIN STORE - Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --navy: #00247D; --red: #ED1C24; --white: #FFFFFF; --bg: #F4F7FA; --gray: #bbb; }
+        :root { --navy: #00247D; --red: #ED1C24; --white: #FFFFFF; --bg: #F0F2F5; --gray: #888; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kanit', sans-serif; }
-        body { background: var(--bg); padding-top: 65px; padding-bottom: 80px; }
+        body { background: var(--bg); padding-top: 65px; padding-bottom: 90px; }
+        
         header { position: fixed; top: 0; width: 100%; height: 60px; background: var(--navy); border-bottom: 3px solid var(--red); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
-        .p-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; position: relative; }
         
-        .media-box { width: 100%; height: 160px; background: #000; position: relative; }
+        /* Card Design */
+        .p-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; position: relative; }
+        .media-box { width: 100%; height: 170px; background: #000; position: relative; }
         .p-img, .p-video { width: 100%; height: 100%; object-fit: cover; }
         
+        /* Badges */
         .badge-container { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 10; }
-        .badge { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; }
+        .badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; color: white; }
         .bg-green { background: #28a745; }
         .bg-yellow { background: #ffc107; color: #000; }
         .bg-province { background: var(--navy); border: 1px solid white; }
-        
-        .timer-box { position: absolute; bottom: 0; width: 100%; background: rgba(237, 28, 36, 0.9); color: #fff; text-align: center; font-size: 10px; padding: 4px 0; font-weight: bold; }
+        .bg-installment { background: #17a2b8; } /* ป้ายผ่อนได้ */
 
-        .p-info { padding: 10px; flex-grow: 1; }
-        .p-name { font-size: 14px; font-weight: 600; line-height: 1.2; height: 35px; overflow: hidden; color: var(--navy); }
-        .p-desc { font-size: 11px; color: #666; margin-top: 4px; height: 30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-        .p-price { color: var(--red); font-size: 19px; font-weight: bold; margin-top: 8px; }
-        
-        .btn-buy { width: 100%; padding: 12px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; }
+        .timer-box { position: absolute; bottom: 0; width: 100%; background: rgba(237, 28, 36, 0.9); color: white; text-align: center; font-size: 10px; padding: 5px 0; font-weight: bold; }
+
+        /* Info Section */
+        .p-info { padding: 12px; flex-grow: 1; }
+        .p-name { font-size: 15px; font-weight: 600; color: var(--navy); height: 38px; overflow: hidden; margin-bottom: 4px; }
+        .p-desc { font-size: 11px; color: #666; margin-bottom: 8px; height: 32px; overflow: hidden; }
+        .p-price { color: var(--red); font-size: 20px; font-weight: bold; }
+        .p-shipping { font-size: 10px; color: #444; margin-bottom: 10px; }
+
+        /* Inputs & Options */
+        .p-options { width: 100%; padding: 6px; font-size: 12px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 8px; }
+        .qty-box { display: flex; align-items: center; gap: 5px; font-size: 12px; margin-bottom: 10px; }
+        .qty-box input { width: 50px; text-align: center; border: 1px solid #ddd; border-radius: 4px; }
+
+        .btn-buy { width: 100%; padding: 14px; border: none; background: var(--red); color: white; font-weight: 600; cursor: pointer; transition: 0.3s; }
         .btn-buy:disabled { background: var(--gray); cursor: not-allowed; }
 
         nav { position: fixed; bottom: 0; width: 100%; height: 65px; background: var(--navy); display: flex; justify-content: space-around; align-items: center; border-top: 3px solid var(--red); }
@@ -39,95 +50,109 @@
     </style>
 </head>
 <body>
-    <header><img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" height="35"></header>
-    <div class="container" id="app"></div>
-    <nav>
-        <a href="#" class="nav-item"><i class="fa-solid fa-house"></i>หน้าแรก</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-truck"></i>เช็คพัสดุ</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-wallet"></i>ยอดผ่อน</a>
-    </nav>
 
-    <script>
-        const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+<header><img src="https://i.ibb.co/2YMs6gVk/grok-image-1772523136707.jpg" height="35"></header>
 
-        async function load() {
-            try {
-                const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
-                const text = await res.text();
-                let db = text.split('\n').slice(1).map(row => row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim()));
+<div class="container" id="app"></div>
+
+<nav>
+    <a href="#" class="nav-item"><i class="fa-solid fa-house"></i>หน้าแรก</a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-truck"></i>เช็คพัสดุ</a>
+    <a href="#" class="nav-item"><i class="fa-solid fa-wallet"></i>ยอดผ่อน</a>
+</nav>
+
+<script>
+    const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+
+    async function loadStore() {
+        try {
+            const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
+            const text = await res.text();
+            let db = text.split('\n').slice(1).map(row => 
+                row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim())
+            );
+
+            let html = "";
+            db.forEach((p, i) => {
+                const [name, img, desc, price, tGreen, tYellow, video, province, expire, min, max, ship, options] = p;
+                const isInstallment = true; // สมมติว่าทุกชิ้นผ่อนได้ (หรือจะผูกคอลัมน์เพิ่มก็ได้ครับ)
                 
-                db.sort(() => Math.random() - 0.5);
+                let media = `<img src="${img}" class="p-img">`;
+                if(video) media = `<video src="${video}" class="p-video" autoplay loop muted playsinline></video>`;
 
-                let html = "";
-                db.forEach((p, index) => {
-                    const price = parseFloat(p[3]); 
-                    const videoUrl = p[6]; 
-                    const expireTimeStr = p[8] ? p[8].replace(/-/g, "/") : "";
-
-                    let mediaHtml = `<img src="${p[1]}" class="p-img" onerror="this.src='https://via.placeholder.com/150'">`;
-                    if (videoUrl && videoUrl.trim() !== "") {
-                        mediaHtml = `<video class="p-video" src="${videoUrl}" autoplay loop muted playsinline></video>`;
-                    }
-
-                    html += `
-                        <div class="p-card" id="card-${index}">
-                            <div class="badge-container">
-                                ${p[7] ? `<span class="badge bg-province"><i class="fa-solid fa-location-dot"></i> ${p[7]}</span>` : ''}
-                                ${p[4] ? `<span class="badge bg-green promo-badge-${index}">${p[4]}</span>` : ''}
-                                ${p[5] ? `<span class="badge bg-yellow promo-badge-${index}">${p[5]}</span>` : ''}
-                            </div>
-                            <div class="media-box">
-                                ${mediaHtml}
-                                ${expireTimeStr ? `<div class="timer-box" id="timer-${index}" data-time="${expireTimeStr}">รอสักครู่...</div>` : ''}
-                            </div>
-                            <div class="p-info">
-                                <div class="p-name">${p[0]}</div>
-                                <div class="p-desc">${p[2] || ''}</div>
-                                <div class="p-price">฿${isNaN(price) ? '0' : price.toLocaleString()}</div>
-                            </div>
-                            <button class="btn-buy" id="btn-${index}" onclick="handleOrder('${p[0]}', ${price})">สั่งซื้อ / ผ่อนชำระ</button>
+                html += `
+                    <div class="p-card" id="card-${i}">
+                        <div class="badge-container">
+                            ${province ? `<span class="badge bg-province">${province}</span>` : ''}
+                            ${tGreen ? `<span class="badge bg-green promo-${i}">${tGreen}</span>` : ''}
+                            ${tYellow ? `<span class="badge bg-yellow promo-${i}">${tYellow}</span>` : ''}
+                            <span class="badge bg-installment">ผ่อนได้ 0%</span>
                         </div>
-                    `;
-                });
+                        <div class="media-box">
+                            ${media}
+                            ${expire ? `<div class="timer-box" id="timer-${i}" data-time="${expire.replace(/-/g, "/建设")}">รอสักครู่...</div>` : ''}
+                        </div>
+                        <div class="p-info">
+                            <div class="p-name">${name}</div>
+                            <div class="p-desc">${desc}</div>
+                            <div class="p-price">฿${parseFloat(price).toLocaleString()}</div>
+                            <div class="p-shipping"><i class="fa-solid fa-truck-fast"></i> ค่าส่ง: ${ship == '0' ? 'ส่งฟรี' : '฿'+ship}</div>
+                            
+                            ${options ? `
+                                <select class="p-options" id="opt-${i}">
+                                    ${options.split(',').map(o => `<option value="${o}">${o}</option>`).join('')}
+                                </select>
+                            ` : ''}
 
-                document.getElementById('app').innerHTML = html;
-                startTimers();
-            } catch (e) { console.error(e); }
-        }
+                            <div class="qty-box">
+                                จำนวน: <input type="number" id="qty-${i}" value="${min || 1}" min="${min || 1}" max="${max || 99}">
+                            </div>
+                        </div>
+                        <button class="btn-buy" id="btn-${i}" onclick="order(${i}, '${name}', ${price}, ${min}, ${max}, ${ship})">
+                            สั่งซื้อสินค้า
+                        </button>
+                    </div>
+                `;
+            });
+            document.getElementById('app').innerHTML = html;
+            startClock();
+        } catch (e) { console.error(e); }
+    }
 
-        function startTimers() {
-            const update = () => {
-                const now = new Date().getTime();
-                document.querySelectorAll('.timer-box').forEach(el => {
-                    const targetStr = el.getAttribute('data-time');
-                    const id = el.id.split('-')[1];
-                    const target = new Date(targetStr).getTime();
-                    const diff = target - now;
-                    const btn = document.getElementById(`btn-${id}`);
-                    const promoBadges = document.querySelectorAll(`.promo-badge-${id}`);
+    function startClock() {
+        setInterval(() => {
+            document.querySelectorAll('.timer-box').forEach(el => {
+                const target = new Date(el.getAttribute('data-time')).getTime();
+                const diff = target - new Date().getTime();
+                const id = el.id.split('-')[1];
+                if (diff <= 0) {
+                    el.innerText = "หมดเวลาโปรโมชั่น";
+                    document.getElementById(`btn-${id}`).disabled = true;
+                    document.querySelectorAll(`.promo-${id}`).forEach(p => p.style.display='none');
+                } else {
+                    const h = Math.floor(diff/3600000);
+                    const m = Math.floor((diff%3600000)/60000);
+                    const s = Math.floor((diff%60000)/1000);
+                    el.innerText = `จบโปรใน ${h}:${m}:${s}`;
+                }
+            });
+        }, 1000);
+    }
 
-                    if (diff <= 0) {
-                        el.innerText = "หมดเวลาโปรโมชั่น";
-                        el.style.background = "#555";
-                        if (btn) btn.disabled = true; // ปิดปุ่ม
-                        // สั่งซ่อนป้าย %ส่วนลด หรือ 1แถม1 เมื่อหมดเวลา
-                        promoBadges.forEach(badge => badge.style.display = 'none');
-                    } else {
-                        const h = Math.floor(diff / (1000 * 60 * 60));
-                        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                        const s = Math.floor((diff % (1000 * 60)) / 1000);
-                        el.innerText = `เหลือ ${h}ชม. ${m}น. ${s}ว.`;
-                    }
-                });
-            };
-            update();
-            setInterval(update, 1000);
-        }
+    function order(id, name, price, min, max, ship) {
+        const qty = parseInt(document.getElementById(`qty-${id}`).value);
+        const opt = document.getElementById(`opt-${id}`) ? document.getElementById(`opt-${id}`).value : 'ทั่วไป';
+        
+        if (qty < min) return alert(`ขั้นต่ำการสั่งซื้อคือ ${min} ชิ้น`);
+        if (qty > max) return alert(`สั่งได้ไม่เกิน ${max} ชิ้นต่อออเดอร์`);
 
-        function handleOrder(name, price) {
-            alert("สั่งซื้อ: " + name + "\nยอดผ่อน: ฿" + (price * 1.2).toLocaleString());
-        }
-        load();
-    </script>
+        const total = (qty * price) + parseFloat(ship);
+        const ins = (total * 1.2 / 10).toFixed(0); // ตัวอย่างผ่อน 10 งวด + ดอกเบี้ย 20%
+
+        alert(`🛒 ยืนยันการสั่งซื้อ\n------------------\nสินค้า: ${name} (${opt})\nจำนวน: ${qty}\nยอดรวม: ฿${total.toLocaleString()}\nผ่อนเพียง: ฿${ins} x 10 งวด`);
+    }
+
+    loadStore();
+</script>
 </body>
 </html>
