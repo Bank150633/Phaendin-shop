@@ -15,7 +15,6 @@
         .container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 10px; }
         .p-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; position: relative; }
         
-        /* --- ส่วนของป้ายแท็ก --- */
         .badge-container { position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 5px; z-index: 10; }
         .badge-green { background: #28a745; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         .badge-yellow { background: #ffc107; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
@@ -41,13 +40,26 @@
     </nav>
     <script>
         const S_ID = '14bgucoSdLmBEd3HeMGAmhb4bSwQ0JplYRvOWGbJsp2Y';
+        
+        // ฟังก์ชันสำหรับสุ่มลำดับสินค้า
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
         async function load() {
             try {
                 const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv`);
                 const text = await res.text();
-                const db = text.split('\n').slice(1).map(row => {
+                let db = text.split('\n').slice(1).map(row => {
                     return row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                 });
+
+                // สั่งให้สุ่มลำดับข้อมูลก่อนแสดงผล
+                db = shuffleArray(db); 
                 
                 document.getElementById('app').innerHTML = db.map(p => {
                     const price = parseFloat(p[3]); 
@@ -72,6 +84,7 @@
                 }).join('');
             } catch (e) { console.error(e); }
         }
+
         function handleOrder(name, price) {
             const installment = (price * 1.2).toLocaleString();
             alert("สินค้า: " + name + "\nราคาเงินสด: ฿" + price.toLocaleString() + "\nราคาผ่อน (+20%): ฿" + installment);
