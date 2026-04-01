@@ -433,7 +433,76 @@
     opacity: 1;
     transform: scale(1.1);
 }
-   
+   /* ปรับปรุง Container ของ Modal ให้ดูสะอาดขึ้น */
+.modal-card {
+    background: #0f0f0f; /* ดำสนิทขึ้นเพื่อให้สีทองเด่น */
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+}
+
+/* บล็อกสรุปราคาด้านบน */
+.summary-header-box {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(0,0,0,0) 100%);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* ปรับปรุง Input ให้ดู Minimal */
+.input-slim {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+    padding: 12px 15px !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+    transition: 0.3s;
+}
+
+.input-slim:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+}
+
+/* ส่วนของเลขบัญชีให้ดูเหมือนบัตร ATM */
+.bank-card {
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.bank-card::after {
+    content: 'KBANK';
+    position: absolute;
+    right: -10px;
+    bottom: -5px;
+    font-size: 40px;
+    font-weight: 900;
+    opacity: 0.05;
+    font-style: italic;
+}
+
+/* ปุ่มแนบสลิปที่ดูเหมือนปุ่มอัปโหลดจริง */
+.upload-zone {
+    border: 2px dashed #444;
+    background: rgba(255,255,255,0.02);
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-zone:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.05);
+}
+
     </style>
 </head>
 <body>
@@ -485,51 +554,61 @@
                     <div id="orderDetail"></div>
                     <div id="optionBox"></div>
                 </div>
-<div id="step-2" style="display:none;">
-    <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
-        <i class="fa-solid fa-chevron-left"></i> ย้อนกลับไปแก้ไขรายการ
-    </p>
+<div id="step-2" style="display:none; padding: 5px;">
+    <div onclick="nextStep(1)" style="color: var(--text-dim); font-size: 13px; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 5px;">
+        <i class="fa-solid fa-arrow-left"></i> ย้อนกลับไปเลือกสินค้า
+    </div>
 
-    <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 12px; margin-bottom: 15px;">
-        <div style="font-size: 11px; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">รายการสั่งซื้อของคุณ:</div>
-        <div id="final-item-list" style="font-size: 13px; color: #fff; line-height: 1.5; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
+    <div class="summary-header-box">
+        <div style="font-size: 12px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px;">ยอดชำระสุทธิ</div>
+        <div id="final-price-display" style="font-size: 32px; font-weight: 800; color: #fff; margin: 5px 0;">฿0</div>
+        <div id="final-item-list" style="font-size: 12px; color: var(--text-dim);"></div>
+    </div>
+
+    <h5 style="color: var(--gold); font-size: 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+        <i class="fa-solid fa-truck-fast"></i> ข้อมูลการจัดส่ง
+    </h5>
+    <input type="text" id="cName" placeholder="ชื่อ-นามสกุล ผู้รับ" required class="input-slim">
+    <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์ (10 หลัก)" required class="input-slim">
+    <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง (บ้านเลขที่, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์)" required class="input-slim" style="height: 80px;"></textarea>
+
+    <div id="securitySection" style="display:none; margin-top: 10px;">
+        <h5 style="color: #4285F4; font-size: 14px; margin-bottom: 10px;">🔒 ตรวจสอบสิทธิ์การผ่อน</h5>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <button type="button" onclick="getLocation()" style="background: rgba(66, 133, 244, 0.1); color: #4285F4; border: 1px solid #4285F4; padding: 12px; border-radius: 10px; font-size: 11px;">
+                <i class="fa-solid fa-location-dot"></i> ปักหมุด GPS
+            </button>
+            <button type="button" onclick="document.getElementById('selfieIn').click()" style="background: rgba(212, 175, 55, 0.1); color: var(--gold); border: 1px solid var(--gold); padding: 12px; border-radius: 10px; font-size: 11px;">
+                <i class="fa-solid fa-camera"></i> ถ่ายรูปเซลฟี่
+            </button>
+        </div>
+    </div>
+
+    <div class="bank-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <div style="color: var(--gold); font-size: 11px; margin-bottom: 15px;">โอนชำระเงินผ่านธนาคาร</div>
+                <div style="font-size: 18px; letter-spacing: 2px; color: #fff; font-weight: 600; margin-bottom: 5px;" id="accNumber">035-8-56762-2</div>
+                <div style="font-size: 12px; color: var(--text-dim);">วัชระ ชันสิน (ธ.กสิกรไทย)</div>
             </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 11px; color: var(--text-dim);">ยอดชำระสุทธิ (รวมค่าส่ง):</span>
-            <span id="final-price-display" style="font-size: 18px; font-weight: 800; color: #38ef7d;">฿0</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Kasikornbank_logo.svg" style="height: 25px;">
         </div>
-    </div>
-<input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()">
-    <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()">
-  <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>  
-    <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
-        <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
-            <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS (สำหรับผ่อน)
+        <button type="button" onclick="copyToClipboard('0358567622')" style="margin-top: 15px; width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 11px; padding: 8px; border-radius: 8px;">
+            <i class="fa-solid fa-copy"></i> คัดลอกเลขบัญชี
         </button>
-        <input type="hidden" id="userLocation">
-        <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('selfieIn').click()">
-            <span id="selfieTxt" style="font-size:10px; color:var(--gold);">ถ่ายรูปเซลฟี่คู่กับบัตร</span>
-            <input type="file" id="selfieIn" style="display:none" onchange="handleSelfie(this)" accept="image/*" capture="user">
-            <img id="selfiePreview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
-        </div>
-    </div>
-    
-    <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง (บ้านเลขที่ ตำบล อำเภอ จังหวัด)" required class="input-slim" style="height:60px;"></textarea>
-    
-    <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(212,175,55,0.2);">
-        <p style="font-size:11px; color:var(--gold);">🏦 ช่องทางชำระเงิน: ธนาคารกสิกรไทย</p>
-        <img src="https://i.ibb.co/0yYSsMDh/004999092296200-20260322-004801.jpg" style="width:140px; border-radius:8px; margin: 8px 0;">
-        <p style="font-size:13px; color:#fff; font-weight:bold;">035-8-56762-2</p>
-        <p style="font-size:10px; color:var(--text-dim);">วัชระ ชันสิน</p>
-        <button type="button" onclick="copyToClipboard('0358567622')" style="margin-top:8px; background:transparent; border:1px solid var(--gold); color:var(--gold); font-size:10px; padding:4px 10px; border-radius:20px;">คัดลอกเลขบัญชี</button>
     </div>
 
-    <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('fileIn').click()">
-        <span id="upTxt" style="font-size:10px; color:var(--gold);">คลิกเพื่อแนบสลิปโอนเงิน</span>
+    <div class="upload-zone" onclick="document.getElementById('fileIn').click()">
+        <div id="upTxt" style="text-align: center;">
+            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 24px; color: var(--gold); margin-bottom: 8px;"></i>
+            <div style="font-size: 12px; color: #fff;">แนบสลิปการโอนเงิน</div>
+            <div style="font-size: 10px; color: #666;">รองรับไฟล์ JPG, PNG</div>
+        </div>
         <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
-        <img id="preview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
+        <img id="preview" style="display:none; width: 100%; max-height: 200px; object-fit: contain; border-radius: 10px; margin-top: 10px;">
     </div>
 </div>
+
 <div class="modal-footer-fixed">
     <div id="step-1-footer">
         <div class="footer-btn-group">
