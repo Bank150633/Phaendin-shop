@@ -776,19 +776,22 @@ function openOrder(data) {
             const discountedPriceV = Math.round(priceNormalV * (1 - (activeP.disc / 100)));
 
             box.innerHTML += `
-            <div class="variant-item">
-                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
-                <div class="v-name">${label}</div>
-                <div class="v-price">
-                    ${activeP.disc > 0 ? `<span class="old-price-v">฿${priceNormalV.toLocaleString()}</span>` : ''}
-                    <span style="color: ${activeP.disc > 0 ? '#ff4b2b' : 'var(--gold)'};">฿${discountedPriceV.toLocaleString()}</span>
-                </div>
-                <div class="v-ctrl">
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, -1)">-</button>
-                    <span id="v-qty-${label}">0</span>
-                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, 1)">+</button>
-                </div>
-            </div>`;
+<div class="variant-item">
+    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
+    <div class="v-name">${label}</div>
+    <div class="v-price">
+        ${discP > 0 ? `<span class="old-price-v">฿${priceNormalV.toLocaleString()}</span>` : ''}
+        
+        <span style="color: ${discP > 0 ? '#ff4b2b' : 'var(--gold)'}; font-weight: bold;">
+            ฿${discountedPriceV.toLocaleString()}
+        </span>
+    </div>
+    <div class="v-ctrl">
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, -1)">-</button>
+        <span id="v-qty-${label}">0</span>
+        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, 1)">+</button>
+    </div>
+</div>`;
         });
     }
 
