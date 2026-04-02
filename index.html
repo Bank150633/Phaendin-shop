@@ -1037,100 +1037,105 @@ function nextStep(step) {
         s2.style.display = 'none'; f2.style.display = 'none';
     }
 }
+// ฟังก์ชันบีบอัดรูปภาพให้เล็กลงก่อนส่ง
+async function compressImage(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800; // บีบความกว้างเหลือ 800px (ประหยัดพื้นที่มาก)
+                let width = img.width;
+                let height = img.height;
 
-        document.getElementById('orderForm').onsubmit = async (e) => {
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                // บีบคุณภาพเหลือ 70% ไฟล์จะเล็กลงมหาศาล
+                resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
+            };
+        };
+    });
+}
+    // 2. ส่วนของ onsubmit ที่แก้ไขแล้ว
+document.getElementById('orderForm').onsubmit = async (e) => {
     e.preventDefault();
     
-    // ดึงค่าจาก Radio ที่เราเพิ่ม name เข้าไปเมื่อกี้
-    const payTypeElement = document.querySelector('input[name="payType"]:checked');
-    const payType = payTypeElement ? payTypeElement.value : 'จ่ายเต็ม'; // กันเหนียวถ้าหาไม่เจอให้เป็นจ่ายเต็ม
-
+    const payType = document.querySelector('input[name="payType"]:checked')?.value || 'จ่ายเต็ม';
     const gps = document.getElementById('userLocation').value;
     const selfieFile = document.getElementById('selfieIn').files[0];
     const slipFile = document.getElementById('fileIn').files[0];
 
-    // ถ้าเลือกผ่อน ต้องเช็ค GPS และ รูปถ่าย
+    // ตรวจสอบเงื่อนไข
     if (payType === 'ผ่อนไปใช้ไป') {
         if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
         if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
     }
-        if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
+    if(!slipFile) return alert("⚠️ กรุณาแนบสลิปโอนเงิน!");
 
-        const btn = document.getElementById('submitBtn');
-        btn.innerText = "กำลังส่งข้อมูล..."; btn.disabled = true;
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = "กำลังประมวลผลรูปภาพ..."; 
+    btn.disabled = true;
 
-        const toBase64 = file => new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]);
+    try {
+        // บีบอัดรูปทั้งสองใบ (ถ้ามี)
+        const slipBase64 = await compressImage(slipFile);
+        let selfieBase64 = "";
+        if (selfieFile) {
+            btn.innerText = "กำลังบีบอัดรูปเซลฟี่...";
+            selfieBase64 = await compressImage(selfieFile);
+        }
+
+        const isInstall = payType === 'ผ่อนไปใช้ไป';
+        const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
+        const perMonth = Math.round(totalFull / 3);
+
+        const sendData = { 
+            productDetail: `${activeP.name} (${activeP.summary})`, 
+            customerName: document.getElementById('cName').value, 
+            customerPhone: document.getElementById('cPhone').value, 
+            customerAddress: document.getElementById('cAddr').value,
+            payType: isInstall ? `ผ่อน (งวดละ ฿${perMonth.toLocaleString()})` : `ชำระสด (฿${totalFull.toLocaleString()})`, 
+            gps: gps || "-",       
+            file: slipBase64,      
+            selfie: selfieBase64   
+        };
+
+        btn.innerText = "กำลังบันทึกลงฐานข้อมูล...";
+
+        // ส่งข้อมูลไปยัง Google Apps Script
+        const response = await fetch(APPS_URL, { 
+            method: 'POST', 
+            body: new URLSearchParams(sendData), 
+            mode: 'no-cors' 
         });
 
-        try {
-            const slipBase64 = await toBase64(slipFile);
-            let selfieBase64 = selfieFile ? await toBase64(selfieFile) : "";
-
-            // --- คำนวณยอดสำหรับส่ง Data และ Line ---
-            // --- แก้ไขส่วนเตรียมข้อมูลส่ง Google Sheets ---
-const isInstall = document.querySelector('input[name="payType"]:checked').value === 'ผ่อนไปใช้ไป';
-const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
-const perMonth = Math.round(totalFull / 3);
-
-const sendData = { 
-    productDetail: `${activeP.name} (${activeP.summary})`, 
-    customerName: document.getElementById('cName').value, 
-    customerPhone: document.getElementById('cPhone').value, 
-    customerAddress: document.getElementById('cAddr').value,
-    // แก้ไขบรรทัดนี้: ให้ส่งสถานะไปชัดเจนว่าผ่อนหรือสด
-    payType: isInstall ? `ผ่อน (งวดละ ฿${perMonth.toLocaleString()})` : `ชำระสด (฿${totalFull.toLocaleString()})`, 
-    gps: gps || "-",       
-    file: slipBase64,      
-    selfie: selfieBase64   
-};
-
-            // 1. ส่งข้อมูลเข้า Google Sheets (แบบไม่รอผลเพื่อความเร็ว)
-            fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(sendData), mode: 'no-cors' });
-
-            // 2. เตรียมข้อความ Line
-            let paymentDetail = `💰 ยอดชำระสุทธิ: ฿${totalFull.toLocaleString()}`;
-            if (isInstall) {
-                paymentDetail = `📌 รายละเอียดการผ่อน (3 งวด):\n` +
-                                `✅ งวดที่ 1 (วันนี้): ฿${perMonth.toLocaleString()}\n` +
-                                `🗓️ งวดที่ 2 (${getNextMonth(1)}): ฿${perMonth.toLocaleString()}\n` +
-                                `🗓️ งวดที่ 3 (${getNextMonth(2)}): ฿${perMonth.toLocaleString()}\n` +
-                                `--------------------------\n` +
-                                `ยอดรวมผ่อน (+20%): ฿${totalFull.toLocaleString()}`;
-            }
-
-            const msg = `🧾 บิลสั่งซื้อ Phaendin Store\n` +
-                        `--------------------------\n` +
-                        `คุณ: ${sendData.customerName}\n` +
-                        `สินค้า: ${activeP.name}\n` +
-                        `${paymentDetail}\n` +
-                        `--------------------------\n` +
-                        `*(ลูกค้ากด 'ส่ง' เพื่อรับใบเสร็จ)*`;
-
-                        const lineUrl = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
-
-            // 3. แจ้งสำเร็จ
-            if (isInstall) {
-                // ถ้า "ผ่อน" ให้ไปที่ Line
-                alert("✅ สั่งซื้อสำเร็จ! ระบบกำลังนำคุณไปรับใบเสร็จการผ่อนใน Line OA");
-                window.location.href = lineUrl; 
-            } else {
-                // ถ้า "ซื้อสด" ให้แจ้งสำเร็จแล้วอยู่หน้าเดิม (หรือรีโหลด)
-                alert("✅ สั่งซื้อสำเร็จ! ขอบคุณที่ไว้วางใจ Phaendin Store ครับ");
-                location.reload(); 
-            }
-
-        } catch(err) {
-
-            console.error(err);
-            alert("❌ เกิดข้อผิดพลาด กรุณาลดขนาดรูปภาพแล้วลองใหม่อีกครั้ง");
-            btn.disabled = false;
-            btn.innerText = "ยืนยันการสั่งซื้อ";
+        alert("✅ สั่งซื้อสำเร็จ! ข้อมูลถูกบันทึกเรียบร้อยแล้ว");
+        
+        // ถ้าเป็นผ่อน ให้เด้งไปหา Line พร้อมข้อความบิล (ถ้าคุณต้องการ)
+        if (isInstall) {
+             const msg = `บิลผ่อน: ${activeP.name}\nลูกค้า: ${sendData.customerName}`;
+             window.location.href = `https://line.me/R/oaMessage/@197uadhw/?${encodeURIComponent(msg)}`;
+        } else {
+             location.reload();
         }
-    };
 
+    } catch(err) {
+        console.error(err);
+        alert("❌ เกิดข้อผิดพลาด: " + err.message);
+        btn.disabled = false;
+        btn.innerText = "ยืนยันการสั่งซื้อ";
+    }
+};
+        
     function tick() { if(!bannerEnd) return; const d = bannerEnd - Date.now(); if(d > 0) { document.getElementById('th').innerText = Math.floor(d/3600000).toString().padStart(2,'0'); document.getElementById('tm').innerText = Math.floor((d%3600000)/60000).toString().padStart(2,'0'); document.getElementById('ts').innerText = Math.floor((d%60000)/1000).toString().padStart(2,'0'); } }
     async function checkShip() {
     const p = prompt("กรุณากรอกเบอร์โทรศัพท์ที่ใช้สั่งซื้อ:"); 
