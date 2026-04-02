@@ -416,7 +416,15 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     border: 1px solid rgba(255,255,255,0.2);
 }
-      
+  #lineBoxContainer {
+    display: none; /* เพิ่มบรรทัดนี้ */
+    margin: 10px 0; 
+    padding: 12px; 
+    background: rgba(6, 199, 85, 0.05); 
+    border-radius: 12px; 
+    border: 1.5px dashed #06c755;
+}
+    
     </style>
 </head>
 <body>
@@ -787,7 +795,7 @@ function openOrder(data) {
         else {
         selectedOptions[data.n] = { qty: 1, price: data.pNormal };
     }
-    
+    togglePay('จ่ายเต็ม');
     openModal('orderModal');
     updatePrice();
     nextStep(1); 
@@ -1151,29 +1159,29 @@ function nextStep(step) {
     }
 }
     init();
-  function togglePay(type) {
+ function togglePay(type) {
     const radios = document.getElementsByName('payType');
     const fBox = document.getElementById('pay-full');
     const iBox = document.getElementById('pay-install');
     const sec = document.getElementById('securitySection');
-    // อ้างอิงถึง container ของกล่องติ๊กไลน์
-    const lineBox = document.getElementById('lineBoxContainer');
+    const lineBox = document.getElementById('lineBoxContainer'); // กล่องติ๊ก Line
 
     if(type === 'จ่ายเต็ม') {
         radios[0].checked = true;
         fBox.classList.add('active');
         iBox.classList.remove('active');
-        sec.style.display = 'none';
-        if(lineBox) lineBox.style.display = 'none'; // ซ่อนกล่องดำ
+        sec.style.display = 'none';      // ซ่อน GPS/Selfie
+        if(lineBox) lineBox.style.display = 'none'; // ซ่อนกล่องติ๊ก Line ทันที!
     } else {
         radios[1].checked = true;
         iBox.classList.add('active');
         fBox.classList.remove('active');
-        sec.style.display = 'block';
-        if(lineBox) lineBox.style.display = 'block'; // โชว์กล่องดำ
+        sec.style.display = 'block';     // โชว์ GPS/Selfie
+        if(lineBox) lineBox.style.display = 'block'; // โชว์กล่องติ๊ก Line
     }
     updatePrice();
-}
+    checkBlacklist(); // เรียกเช็คสถานะปุ่มยืนยันใหม่
+} 
 
 function getLocation() {
     const btn = document.getElementById('btnLocation');
