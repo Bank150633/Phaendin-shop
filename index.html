@@ -1047,7 +1047,7 @@ async function compressImage(file) {
             img.src = event.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const MAX_WIDTH = 800; 
+                const MAX_WIDTH = 500; 
                 let width = img.width;
                 let height = img.height;
 
@@ -1061,7 +1061,7 @@ async function compressImage(file) {
                 ctx.drawImage(img, 0, 0, width, height);
                 
                 // แก้ไขจุดนี้: ใช้ toDataURL ตรงๆ แล้วตัดเอาแค่ Base64
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.5);
                 resolve(dataUrl.split(',')[1]); 
             };
             img.onerror = reject;
