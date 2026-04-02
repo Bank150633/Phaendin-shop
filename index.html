@@ -1070,27 +1070,22 @@ function nextStep(step) {
             let selfieBase64 = selfieFile ? await toBase64(selfieFile) : "";
 
             // --- คำนวณยอดสำหรับส่ง Data และ Line ---
-            const isInstall = payType === 'ผ่อนไปใช้ไป';
-            const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
-            const perMonth = Math.round(totalFull / 3);
+            // --- แก้ไขส่วนเตรียมข้อมูลส่ง Google Sheets ---
+const isInstall = document.querySelector('input[name="payType"]:checked').value === 'ผ่อนไปใช้ไป';
+const totalFull = Math.round(isInstall ? activeP.finalTotal * 1.2 : activeP.finalTotal);
+const perMonth = Math.round(totalFull / 3);
 
-            const getNextMonth = (m) => {
-                const d = new Date();
-                d.setMonth(d.getMonth() + m);
-                return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
-            };
-
-            // สร้าง Object ข้อมูลสำหรับส่งไป Google Sheets
-            const sendData = { 
-                productDetail: `${activeP.name} (${activeP.summary})`, 
-                customerName: document.getElementById('cName').value, 
-                customerPhone: document.getElementById('cPhone').value, 
-                customerAddress: document.getElementById('cAddr').value,
-                payType: isInstall ? `ผ่อน (งวดละ ฿${perMonth.toLocaleString()})` : `จ่ายเต็ม (฿${totalFull.toLocaleString()})`, 
-                gps: gps || "-",       
-                file: slipBase64,      
-                selfie: selfieBase64   
-            };
+const sendData = { 
+    productDetail: `${activeP.name} (${activeP.summary})`, 
+    customerName: document.getElementById('cName').value, 
+    customerPhone: document.getElementById('cPhone').value, 
+    customerAddress: document.getElementById('cAddr').value,
+    // แก้ไขบรรทัดนี้: ให้ส่งสถานะไปชัดเจนว่าผ่อนหรือสด
+    payType: isInstall ? `ผ่อน (งวดละ ฿${perMonth.toLocaleString()})` : `ชำระสด (฿${totalFull.toLocaleString()})`, 
+    gps: gps || "-",       
+    file: slipBase64,      
+    selfie: selfieBase64   
+};
 
             // 1. ส่งข้อมูลเข้า Google Sheets (แบบไม่รอผลเพื่อความเร็ว)
             fetch(APPS_URL, { method: 'POST', body: new URLSearchParams(sendData), mode: 'no-cors' });
