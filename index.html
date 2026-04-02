@@ -1244,71 +1244,83 @@ setInterval(() => {
 }, 1000);
     
   async function checkBlacklist() {
-    const confirmBtn = document.getElementById('submitBtn'); 
-    const statusDiv = document.getElementById('statusMsg');
-    const lineAccept = document.getElementById('lineAccept');
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
     const name = document.getElementById('cName').value.trim();
     const phone = document.getElementById('cPhone').value.trim();
+    const lineAccept = document.getElementById('lineAccept');
+    
+    const statusDiv = document.getElementById('statusMsg');
+    const confirmBtn = document.getElementById('submitBtn');
+    
+    // รายการส่วนประกอบที่ต้องการ "ล็อค" เมื่อเงื่อนไขไม่ครบ
+    const securitySec = document.getElementById('securitySection');
+    const addrInput = document.getElementById('cAddr');
+    const bankSection = document.querySelector('#step-2 div[style*="text-align:center"]');
+    const slipSection = document.getElementById('preview').parentElement;
 
-    // --- 1. ถ้าซื้อสด: ปลดล็อคปุ่มทันที ไม่ต้องเช็คอะไร ---
+    const lockableElements = [securitySec, addrInput, bankSection, slipSection];
+
+    // ฟังก์ชันช่วยจัดการสถานะการล็อค
+    const setElementsState = (isLocked) => {
+        lockableElements.forEach(el => {
+            if (el) {
+                el.style.opacity = isLocked ? "0.3" : "1"; // ทำให้ดูจางเมื่อกดไม่ได้
+                el.style.pointerEvents = isLocked ? "none" : "auto"; // บล็อกการคลิก
+                // ถ้าเป็น input หรือ textarea ให้ disabled ด้วย
+                const inputs = el.querySelectorAll('input, textarea, button');
+                inputs.forEach(input => input.disabled = isLocked);
+                if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') el.disabled = isLocked;
+            }
+        });
+        confirmBtn.disabled = isLocked;
+        confirmBtn.style.opacity = isLocked ? "0.5" : "1";
+    };
+
+    // --- กรณี "จ่ายเต็ม" (ซื้อสด) ---
     if (payType === 'จ่ายเต็ม') {
+        setElementsState(false);
         statusDiv.innerHTML = "<span style='color: #38ef7d;'>✅ โหมดชำระสด พร้อมสั่งซื้อ</span>";
-        confirmBtn.disabled = false;
-        confirmBtn.style.opacity = "1";
         confirmBtn.innerText = "ยืนยันการสั่งซื้อ";
-        return; 
-    }
-
-    // --- 2. ถ้าผ่อน: ต้องติ๊กยอมรับ Line ก่อน ---
-    if (!lineAccept.checked) {
-        confirmBtn.disabled = true;
-        confirmBtn.style.opacity = "0.5";
-        confirmBtn.innerText = "กรุณาติ๊กยอมรับเงื่อนไข";
-        statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ กรุณาติ๊กยอมรับการแจ้งเตือน Line</span>";
         return;
     }
 
-    // --- 3. ถ้าผ่อน: ต้องกรอกชื่อและเบอร์ก่อนถึงจะเริ่มเช็ค ---
-    if (name.length < 3 || phone.length < 10) {
-        confirmBtn.disabled = true;
-        confirmBtn.style.opacity = "0.5";
-        statusDiv.innerHTML = "<span style='color: #888;'>⏳ รอข้อมูลชื่อและเบอร์...</span>";
+    // --- กรณี "ผ่อน" ---
+    // ขั้นแรก: ต้องกรอก ชื่อ-เบอร์ และติ๊ก Line ให้ครบก่อนถึงจะเริ่มเช็ค
+    if (name.length < 3 || phone.length < 10 || !lineAccept.checked) {
+        setElementsState(true);
+        if (!lineAccept.checked && name.length >= 3 && phone.length >= 10) {
+            statusDiv.innerHTML = "<span style='color: #ffaa00;'>⚠️ โปรดติ๊กยอมรับเงื่อนไข Line เพื่อเปิดใช้งานฟอร์ม</span>";
+        } else {
+            statusDiv.innerHTML = "<span style='color: #888;'>⏳ กรุณากรอกชื่อ เบอร์ และติ๊ก Line...</span>";
+        }
         return;
     }
 
-    // --- 4. เริ่มขั้นตอนการเช็คแบล็กลิสต์จาก Google Sheets ---
+    // ขั้นที่สอง: เริ่มเช็ค Blacklist จาก Google Sheets
     statusDiv.innerHTML = "<span style='color: var(--gold);'>🔍 กำลังตรวจสอบเครดิต...</span>";
     
     try {
-        // ดึงข้อมูลจากหน้า Sheet ชื่อ "Blacklist" (ตรวจสอบชื่อ Sheet ในไฟล์ของคุณด้วยนะครับ)
         const res = await fetch(`https://docs.google.com/spreadsheets/d/${S_ID}/gviz/tq?tqx=out:csv&sheet=Blacklist`);
         const text = await res.text();
         const rows = text.split('\n').map(r => r.split(',').map(v => v.replace(/"/g,'').trim()));
 
-        // เช็คว่าชื่อหรือเบอร์ ตรงกับในรายการแบล็กลิสต์ไหม
         const isBlacklisted = rows.some(r => (r[0] === name || r[1] === phone));
 
         if (isBlacklisted) {
-            statusDiv.innerHTML = "<span style='color: #ff4b2b;'>❌ ขออภัย! คุณไม่ได้รับสิทธิ์ผ่อน (ติดแบล็กลิสต์)</span>";
-            confirmBtn.disabled = true;
-            confirmBtn.style.opacity = "0.5";
-            confirmBtn.innerText = "ไม่สามารถทำรายการได้";
+            statusDiv.innerHTML = "<span style='color: #ff4b2b;'>❌ ไม่ได้รับสิทธิ์ผ่อน (ติดแบล็กลิสต์)</span>";
+            setElementsState(true);
+            confirmBtn.innerText = "ทำรายการไม่ได้";
+            alert("ขออภัย! ข้อมูลนี้ติดแบล็กลิสต์ ไม่สามารถผ่อนได้ครับ");
         } else {
-            statusDiv.innerHTML = "<span style='color: #38ef7d;'>✅ ตรวจสอบผ่าน! คุณได้รับสิทธิ์ผ่อนชำระ</span>";
-            confirmBtn.disabled = false;
-            confirmBtn.style.opacity = "1";
+            statusDiv.innerHTML = "<span style='color: #38ef7d;'>✅ ตรวจสอบผ่าน! กรุณากรอกข้อมูลส่วนที่เหลือ</span>";
+            setElementsState(false);
             confirmBtn.innerText = "ยืนยันการสั่งซื้อ (ผ่อน)";
         }
     } catch (e) {
-        console.error("Blacklist Error:", e);
-        // ถ้าเชื่อมต่อไม่ได้ ให้ปล่อยผ่านไปก่อนเพื่อไม่ให้เสียลูกค้า
-        statusDiv.innerHTML = "<span style='color: #38ef7d;'>✅ พร้อมทำรายการ</span>";
-        confirmBtn.disabled = false;
-        confirmBtn.style.opacity = "1";
+        setElementsState(false); // ถ้า Error ให้ยอมให้ทำรายการได้
     }
 }
- 
+
 // ฟังก์ชันช่วยให้ใช้เมาส์คลิกลากสไลด์ได้ในคอม
 function enableMouseDrag(el) {
     let isDown = false;
