@@ -624,13 +624,13 @@
     const filtered = db.filter(p => p[0].toLowerCase().includes(query));
     
     document.getElementById('productGrid').innerHTML = filtered.map((p, pIndex) => {
-        let pName = (p[0] || '').replace(/'/g, "\\'");
+        // หาค่า Index จริงจากฐานข้อมูลหลัก เพื่อให้กดแล้วข้อมูลไม่สลับกันตอนค้นหา
+        const actualIndex = db.findIndex(item => item[0] === p[0]);
+        
         let priceNormal = parseFloat(p[3] || 0);    
         let pricePromo = parseFloat(p[10] || 0);   
         let expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
         let provinceName = p[13] || '';
-        let canInstall = (p[15] || 'NO').trim().toUpperCase(); 
-
         let images = (p[1] || '').split(',').map(img => img.trim());
         let currentPrice = pricePromo > 0 && expiryDate > now ? pricePromo : priceNormal;
         let percentDiscount = pricePromo > 0 && expiryDate > now ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
@@ -644,26 +644,24 @@
                     ${[p[5], p[6], p[7]].filter(t => t && t !== '-' && !t.includes('%')).map(t => `<span class="badge bg-gold">${t}</span>`).join('')}
                 </div>
                 ${provinceName ? `<div class="province-badge"><i class="fa-solid fa-location-dot" style="font-size:7px;"></i> ${provinceName}</div>` : ''}
-                
                 <div style="width: 100%; height: 100%; overflow: hidden;">
                     ${renderMedia(images[0], true)}
                 </div>
-
                 ${(pricePromo > 0 && expiryDate > now) ? `<div class="p-timer-badge" data-expire="${p[11]}">⏳ 00:00:00</div>` : ''}
             </div>
             <div class="info">
                 <div class="p-name">${p[0]}</div>
                 <div class="p-desc">${p[2] || ''}</div>
                 <div class="p-price">
-                    ${currentPrice < priceNormal ? `<span class="old-price">฿${priceNormal.toLocaleString()}</span>` : ''}
+                    ${currentPrice < priceNormal ? `<span class="old-price" style="text-decoration:line-through; color:#888; font-size:9px; margin-right:5px;">฿${priceNormal.toLocaleString()}</span>` : ''}
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>                    
             </div>
-            <button class="buy-now" onclick='prepareOrder(${pIndex})'>สั่งซื้อ / ดูรูปเพิ่ม</button>
+            <button class="buy-now" onclick="prepareOrder(${actualIndex})">สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
 }
- 
+
 // เพิ่มฟังก์ชันควบคุม Dot สำหรับหน้าหลัก
 function updateMainDots(pIndex, el, total) {
     const index = Math.round(el.scrollLeft / el.offsetWidth);
