@@ -65,76 +65,90 @@
             const rows = jsonData.table.rows;
             
             let html = "";
-            rows.forEach((row, i) => {
-                const c = row.c;
-                if (!c || !c[0]) return;
+                    rows.forEach((row, i) => {
+            const c = row.c;
+            if (!c || !c[0]) return;
 
-                const getV = (idx) => {
-                    if (!c[idx]) return "";
-                    return c[idx].f ? c[idx].f : (c[idx].v !== null ? c[idx].v : "");
-                };
+            const getV = (idx) => {
+                if (!c[idx]) return "";
+                // ดึงค่า v (value) ตรงๆ จะแม่นยำกว่าในกรณีที่มีสูตรหรือ format แปลกๆ
+                return c[idx].v !== null ? c[idx].v.toString() : "";
+            };
 
-                const name     = getV(0);  
-                const imgs     = getV(1);  
-                const desc     = getV(2);  
-                const pPrice   = getV(3).toString().replace(/[^0-9.]/g, ''); // เอาเฉพาะตัวเลข
-                const tGreen   = getV(4);  
-                const province = getV(7);  
-                const expire   = getV(8);  
-                const ship     = getV(11).toString().replace(/[^0-9.]/g, '') || "0"; 
-                const optStr   = getV(12); // คอลัมน์ M
-                const fPrice   = getV(13).toString().replace(/[^0-9.]/g, ''); 
+            const name     = getV(0);  
+            const imgs     = getV(1);  
+            const desc     = getV(2);  
+            const pPrice   = getV(3).replace(/[^0-9.]/g, ''); 
+            const tGreen   = getV(4);  
+            const province = getV(7);  
+            const expire   = getV(8);  
+            const ship     = getV(11).replace(/[^0-9.]/g, '') || "0"; 
+            const optStr   = getV(12); // คอลัมน์ M
+            const fPrice   = getV(13).replace(/[^0-9.]/g, ''); 
 
-                const currentP = parseFloat(pPrice) || 0;
-                const firstImg = imgs.split(',')[0].trim();
+            const currentP = parseFloat(pPrice) || 0;
+            
+            // ปรับการดึงรูปภาพ: ถ้า imgs มีหลายอัน (คั่นด้วยคอมมา) ให้เอาแค่อันแรก
+            let firstImg = "https://via.placeholder.com/170?text=No+Image";
+            if (imgs.includes("http")) {
+                firstImg = imgs.split(',')[0].split(' ')[0].trim(); 
+            }
 
-                // ตรวจสอบ Option แบบละเอียด
-                let optionHTML = "";
-                if (optStr && optStr.trim() !== "") {
-                    optionHTML = `<select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">`;
-                    const options = optStr.split(',');
-                    options.forEach(item => {
-                        if (item.includes(':')) {
-                            const part = item.split(':');
-                            const label = part[0].trim();
-                            const val = part[1].trim().replace(/[^0-9.]/g, '');
+            // ตรวจสอบ Option (คอลัมน์ M)
+            let optionHTML = "";
+            if (optStr && optStr.trim() !== "" && optStr !== "null") {
+                optionHTML = `<select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">`;
+                const options = optStr.split(','); // แยกด้วยคอมมา
+                
+                options.forEach(item => {
+                    const cleanItem = item.trim();
+                    if (cleanItem.includes(':')) {
+                        // แบบระบุราคา -> ชื่อ:ราคา
+                        const part = cleanItem.split(':');
+                        const label = part[0].trim();
+                        const val = part[1].trim().replace(/[^0-9.]/g, '');
+                        if (val) {
                             optionHTML += `<option value="${val}">${label} (฿${parseFloat(val).toLocaleString()})</option>`;
                         } else {
-                            // ถ้าไม่มีเครื่องหมาย : ให้แสดงชื่อและใช้ราคาหลัก
-                            optionHTML += `<option value="${pPrice}">${item.trim()}</option>`;
+                            optionHTML += `<option value="${pPrice}">${label}</option>`;
                         }
-                    });
-                    optionHTML += `</select>`;
-                }
+                    } else if (cleanItem.length > 0) {
+                        // แบบไม่มีราคา (เช่น แถวที่ 11 "แป้ง15-16แผ่น") -> ใช้ราคาหลัก
+                        optionHTML += `<option value="${pPrice}">${cleanItem}</option>`;
+                    }
+                });
+                optionHTML += `</select>`;
+            }
 
-                html += `
-                    <div class="p-card">
-                        <div class="badge-container">
-                            ${province ? `<span class="badge bg-province">${province}</span>` : ''}
-                            <span class="badge bg-red-sale" id="sale-badge-${i}" style="display:none"></span>
-                            ${tGreen ? `<span class="badge bg-green">${tGreen}</span>` : ''}
-                        </div>
-                        <div class="media-box">
-                            <img src="${firstImg}" class="p-img" onerror="this.src='https://via.placeholder.com/170?text=No+Image'">
-                            <div class="timer-display" id="timer-${i}" 
-                                 data-expire="${expire}" 
-                                 data-p="${pPrice}" 
-                                 data-f="${fPrice}" style="display:none"></div>
-                        </div>
-                        <div class="p-info">
-                            <div class="p-name">${name}</div>
-                            <div class="p-desc">${desc}</div>
-                            <div class="price-row">
-                                <span class="current-price" id="cur-price-${i}">฿${currentP.toLocaleString()}</span>
-                                <span class="old-price" id="old-price-${i}"></span>
-                            </div>
-                            <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ฿${parseFloat(ship).toLocaleString()}</div>
-                            ${optionHTML}
-                        </div>
-                        <button class="btn-buy" onclick="order('${name}', ${i}, '${ship}')">สั่งซื้อสินค้า</button>
+            html += `
+                <div class="p-card">
+                    <div class="badge-container">
+                        ${province ? `<span class="badge bg-province">${province}</span>` : ''}
+                        <span class="badge bg-red-sale" id="sale-badge-${i}" style="display:none"></span>
+                        ${tGreen ? `<span class="badge bg-green">${tGreen}</span>` : ''}
                     </div>
-                `;
-            });
+                    <div class="media-box">
+                        <img src="${firstImg}" class="p-img" onerror="this.src='https://via.placeholder.com/170?text=No+Image'">
+                        <div class="timer-display" id="timer-${i}" 
+                             data-expire="${expire}" 
+                             data-p="${pPrice}" 
+                             data-f="${fPrice}" style="display:none"></div>
+                    </div>
+                    <div class="p-info">
+                        <div class="p-name">${name}</div>
+                        <div class="p-desc">${desc}</div>
+                        <div class="price-row">
+                            <span class="current-price" id="cur-price-${i}">฿${currentP.toLocaleString()}</span>
+                            <span class="old-price" id="old-price-${i}"></span>
+                        </div>
+                        <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ฿${parseFloat(ship).toLocaleString()}</div>
+                        ${optionHTML}
+                    </div>
+                    <button class="btn-buy" onclick="order('${name}', ${i}, '${ship}')">สั่งซื้อสินค้า</button>
+                </div>
+            `;
+        });
+
             document.getElementById('app').innerHTML = html;
             if (typeof startCountdown === "function") startCountdown();
         } catch (e) { 
