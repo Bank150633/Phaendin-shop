@@ -657,7 +657,7 @@
                     <span class="${currentPrice < priceNormal ? 'new-price' : ''}">฿${currentPrice.toLocaleString()}</span>
                 </div>                    
             </div>
-            <button class="buy-now" onclick="prepareOrder(${actualIndex})">สั่งซื้อ / ดูรูปเพิ่ม</button>
+            <button class="buy-now" onclick="prepareOrder(${pIndex})">สั่งซื้อ / ดูรูปเพิ่ม</button>
         </div>`;
     }).join('');
 }
@@ -675,13 +675,18 @@ function updateMainDots(pIndex, el, total) {
 }
 // ฟังก์ชันเตรียมข้อมูลก่อนเปิด Modal
 function prepareOrder(index) {
-    const p = db[index];
+    // ดึง query ปัจจุบันมาหาข้อมูลที่แสดงอยู่บนหน้าจอขณะนั้น
+    const query = document.getElementById('search').value.toLowerCase();
+    const filtered = db.filter(p => p[0].toLowerCase().includes(query));
+    const p = filtered[index]; // ดึงข้อมูลสินค้าตัวที่คลิก
+
+    if (!p) return;
+
     const now = new Date().getTime();
     const priceNormal = parseFloat(p[3] || 0);
     const pricePromo = parseFloat(p[10] || 0);
     const expiryDate = p[11] ? new Date(p[11]).getTime() : 0;
     
-    // คำนวณราคาปัจจุบันและส่วนลด
     const currentPrice = (pricePromo > 0 && expiryDate > now) ? pricePromo : priceNormal;
     const discPercent = (pricePromo > 0 && expiryDate > now) ? Math.round(((priceNormal - pricePromo) / priceNormal) * 100) : 0;
 
@@ -699,7 +704,7 @@ function prepareOrder(index) {
         pDesc: p[2] || ""
     };
     
-    openOrder(data);
+    openOrder(data); // ส่งข้อมูลไปเปิด Modal
 }
 
 // ฟังก์ชันเปิด Modal แบบใหม่ (รับค่าเป็น Object ตัวเดียว)
@@ -763,7 +768,7 @@ function openOrder(data) {
 
         if (data.optStr && data.optStr !== '-') {
         const opts = data.optStr.split(',');
-        opts.forEach((opt) => {
+            opts.forEach((opt) => {
             const parts = opt.split(':');
             const label = parts[0].trim();
             const priceNormalV = parts[1] ? parseFloat(parts[1]) : data.pNormal;
@@ -772,27 +777,27 @@ function openOrder(data) {
             
             selectedOptions[label] = { qty: 0, price: priceNormalV };
             
-            // คำนวณราคาโปรโมชั่น (ถ้ามีส่วนลดจากหน้าหลัก)
-            const discountedPriceV = Math.round(priceNormalV * (1 - (activeP.disc / 100)));
+            // ใช้ currentDisc แทน discP เพื่อป้องกัน Error
+            const currentDisc = activeP.disc || 0;
+            const discountedPriceV = Math.round(priceNormalV * (1 - (currentDisc / 100)));
 
             box.innerHTML += `
-<div class="variant-item">
-    <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
-    <div class="v-name">${label}</div>
-    <div class="v-price">
-        ${discP > 0 ? `<span class="old-price-v">฿${priceNormalV.toLocaleString()}</span>` : ''}
-        
-        <span style="color: ${discP > 0 ? '#ff4b2b' : 'var(--gold)'}; font-weight: bold;">
-            ฿${discountedPriceV.toLocaleString()}
-        </span>
-    </div>
-    <div class="v-ctrl">
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, -1)">-</button>
-        <span id="v-qty-${label}">0</span>
-        <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, 1)">+</button>
-    </div>
-</div>`;
-        });
+            <div class="variant-item">
+                <img src="${vImg}" class="v-img" onclick="zoom('${vImg}')">
+                <div class="v-name">${label}</div>
+                <div class="v-price">
+                    ${currentDisc > 0 ? `<span class="old-price-v">฿${priceNormalV.toLocaleString()}</span>` : ''}
+                    <span style="color: ${currentDisc > 0 ? '#ff4b2b' : 'var(--gold)'}; font-weight: bold;">
+                        ฿${discountedPriceV.toLocaleString()}
+                    </span>
+                </div>
+                <div class="v-ctrl">
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, -1)">-</button>
+                    <span id="v-qty-${label}">0</span>
+                    <button type="button" class="v-btn" onclick="changeVQty('${label}', ${priceNormalV}, 1)">+</button>
+                </div>
+            </div>`;
+        });        
     }
 
         else {
