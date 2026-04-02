@@ -1039,7 +1039,7 @@ function nextStep(step) {
 }
 // ฟังก์ชันบีบอัดรูปภาพให้เล็กลงก่อนส่ง
 async function compressImage(file) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (event) => {
@@ -1047,7 +1047,7 @@ async function compressImage(file) {
             img.src = event.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
-                const MAX_WIDTH = 800; // บีบความกว้างเหลือ 800px (ประหยัดพื้นที่มาก)
+                const MAX_WIDTH = 800; 
                 let width = img.width;
                 let height = img.height;
 
@@ -1059,12 +1059,17 @@ async function compressImage(file) {
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                // บีบคุณภาพเหลือ 70% ไฟล์จะเล็กลงมหาศาล
-                resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
+                
+                // แก้ไขจุดนี้: ใช้ toDataURL ตรงๆ แล้วตัดเอาแค่ Base64
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                resolve(dataUrl.split(',')[1]); 
             };
+            img.onerror = reject;
         };
+        reader.onerror = reject;
     });
 }
+
     // 2. ส่วนของ onsubmit ที่แก้ไขแล้ว
 document.getElementById('orderForm').onsubmit = async (e) => {
     e.preventDefault();
