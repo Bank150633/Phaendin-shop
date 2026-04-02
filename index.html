@@ -1039,17 +1039,21 @@ function nextStep(step) {
 }
 
         document.getElementById('orderForm').onsubmit = async (e) => {
-        e.preventDefault();
-        
-        const payType = document.querySelector('input[name="payType"]:checked').value;
-        const gps = document.getElementById('userLocation').value;
-        const selfieFile = document.getElementById('selfieIn').files[0];
-        const slipFile = document.getElementById('fileIn').files[0];
+    e.preventDefault();
+    
+    // ดึงค่าจาก Radio ที่เราเพิ่ม name เข้าไปเมื่อกี้
+    const payTypeElement = document.querySelector('input[name="payType"]:checked');
+    const payType = payTypeElement ? payTypeElement.value : 'จ่ายเต็ม'; // กันเหนียวถ้าหาไม่เจอให้เป็นจ่ายเต็ม
 
-        if (payType === 'ผ่อนไปใช้ไป') {
-            if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
-            if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
-        }
+    const gps = document.getElementById('userLocation').value;
+    const selfieFile = document.getElementById('selfieIn').files[0];
+    const slipFile = document.getElementById('fileIn').files[0];
+
+    // ถ้าเลือกผ่อน ต้องเช็ค GPS และ รูปถ่าย
+    if (payType === 'ผ่อนไปใช้ไป') {
+        if (!gps) return alert("⚠️ กรุณาปักหมุด GPS ก่อนครับ");
+        if (!selfieFile) return alert("⚠️ กรุณาถ่ายรูปเซลฟี่คู่กับบัตรครับ");
+    }
         if(!slipFile) return alert("กรุณาแนบสลิปโอนเงิน!");
 
         const btn = document.getElementById('submitBtn');
