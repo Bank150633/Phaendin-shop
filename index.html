@@ -826,7 +826,7 @@ function updatePrice() {
     let totalItems = 0;
     let discP = parseFloat(activeP.disc) || 0;
 
-    // 1. คำนวณยอดรวมสินค้าทั้งหมด
+    // 1. คำนวณยอดรวมสินค้า
     for (let key in selectedOptions) { 
         let qty = selectedOptions[key].qty;
         let unitPrice = selectedOptions[key].price;
@@ -850,43 +850,62 @@ function updatePrice() {
     const payType = document.querySelector('input[name="payType"]:checked')?.value;
     const isInstall = payType === 'ผ่อนไปใช้ไป';
 
-    // --- ส่วนที่ดึงรายละเอียดการผ่อนกลับมา ---
-    let installmentDetailHtml = "";
+    // --- ส่วนสลับข้อมูล (Information Switching) ---
+    let priceDisplayArea = ""; 
     let displayPrice = activeP.finalTotal;
-    let priceLabel = "ยอดชำระสุทธิ:";
+    let priceLabel = "ยอดชำระสุทธิ";
 
     if (isInstall && activeP.finalTotal > 0) {
-        const totalWithFee = Math.round(activeP.finalTotal * 1.2); // ดอกเบี้ย 20%
+        // กรณีเลือก "ผ่อนชำระ" -> แสดงตารางงวดพร้อมชื่อเดือนอัตโนมัติ
+        const totalWithFee = Math.round(activeP.finalTotal * 1.2);
         const perMonth = Math.round(totalWithFee / 3);
         displayPrice = perMonth;
-        priceLabel = "ยอดชำระงวดแรก:";
+        priceLabel = "ยอดงวดแรก";
 
-        // สร้างกล่องแสดงงวดการผ่อน
-        installmentDetailHtml = `
-            <div style="margin-top:10px; padding:10px; background:rgba(212,175,55,0.1); border-radius:10px; border:1px dashed var(--gold);">
-                <div style="font-size:10px; color:var(--gold); margin-bottom:5px; font-weight:bold;">📅 รายละเอียดการผ่อน 3 งวด</div>
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:#eee;"><span>งวดที่ 1 (วันนี้):</span> <b>฿${perMonth.toLocaleString()}</b></div>
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:#eee;"><span>งวดที่ 2 (อีก 30 วัน):</span> <b>฿${perMonth.toLocaleString()}</b></div>
-                <div style="display:flex; justify-content:space-between; font-size:11px; color:#eee;"><span>งวดที่ 3 (อีก 60 วัน):</span> <b>฿${perMonth.toLocaleString()}</b></div>
-                <div style="text-align:right; font-size:9px; color:#888; margin-top:5px; border-top:1px solid rgba(255,255,255,0.1); padding-top:3px;">รวมยอดผ่อนทั้งสิ้น (รวมดอกเบี้ย): ฿${totalWithFee.toLocaleString()}</div>
+        // Logic คำนวณชื่อเดือนภาษาไทยอัตโนมัติ
+        const monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+        const d = new Date();
+        const m1 = monthNames[d.getMonth()]; // เดือนปัจจุบัน
+        d.setMonth(d.getMonth() + 1);
+        const m2 = monthNames[d.getMonth()]; // เดือนถัดไป
+        d.setMonth(d.getMonth() + 1);
+        const m3 = monthNames[d.getMonth()]; // เดือนถัดไปอีก
+
+        priceDisplayArea = `
+            <div style="border-top: 1px dashed rgba(212,175,55,0.3); margin-top:10px; padding-top:10px;">
+                <div style="font-size:11px; color:var(--gold); margin-bottom:8px; font-weight:bold; text-align:center;">🗓️ แผนการผ่อนชำระ (รายเดือน)</div>
+                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+                    <span style="color:#aaa;">งวดที่ 1 (${m1}):</span> <span style="color:#fff; font-weight:bold;">฿${perMonth.toLocaleString()}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+                    <span style="color:#aaa;">งวดที่ 2 (${m2}):</span> <span style="color:#fff; font-weight:bold;">฿${perMonth.toLocaleString()}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+                    <span style="color:#aaa;">งวดที่ 3 (${m3}):</span> <span style="color:#fff; font-weight:bold;">฿${perMonth.toLocaleString()}</span>
+                </div>
+                <div style="text-align:right; font-size:9px; color:#666; margin-top:5px; border-top: 1px solid rgba(255,255,255,0.05); padding-top:4px;">
+                    ยอดรวมรวมดอกเบี้ย: ฿${totalWithFee.toLocaleString()}
+                </div>
+            </div>
+        `;
+    } else {
+        // กรณี "ชำระสด" -> แสดงรายละเอียดราคา/ส่วนลดปกติ
+        priceDisplayArea = `
+            <div style="border-top: 1px dashed rgba(255,255,255,0.1); margin-top:10px; padding-top:10px;">
+                <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa;">
+                    <span>ราคาปกติ:</span> <span>฿${subtotalNormal.toLocaleString()}</span>
+                </div>
+                ${discP > 0 ? `<div style="display:flex; justify-content:space-between; font-size:10px; color:#ff4b2b;">
+                    <span>ส่วนลด (${discP}%):</span> <span>-฿${(subtotalNormal - subtotalDiscounted).toLocaleString()}</span>
+                </div>` : ''}
+                <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa;">
+                    <span>ค่าจัดส่ง:</span> <span style="color:${activeP.ship === 0 ? '#38ef7d' : '#fff'};">${activeP.ship === 0 ? 'ส่งฟรี' : '฿' + activeP.ship.toLocaleString()}</span>
+                </div>
             </div>
         `;
     }
 
-    // ส่วนแสดงค่าจัดส่งและส่วนลด
-    let costDetailHtml = `
-        <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa; margin-top:5px;">
-            <span>ราคาปกติ:</span> <span>฿${subtotalNormal.toLocaleString()}</span>
-        </div>
-        ${discP > 0 ? `<div style="display:flex; justify-content:space-between; font-size:10px; color:#ff4b2b;">
-            <span>ส่วนลด (${discP}%):</span> <span>-฿${(subtotalNormal - subtotalDiscounted).toLocaleString()}</span>
-        </div>` : ''}
-        <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa;">
-            <span>ค่าจัดส่ง:</span> <span style="color:${activeP.ship === 0 ? '#38ef7d' : '#fff'};">${activeP.ship === 0 ? 'ส่งฟรี' : '฿' + activeP.ship.toLocaleString()}</span>
-        </div>
-    `;
-
-    // 2. แสดงผลทั้งหมดลงใน orderDetail
+    // 2. Render ข้อมูลทั้งหมดลงใน Modal
     const mediaFiles = activeP.img.split(',').filter(m => m.trim() !== "").map(m => m.trim());
     document.getElementById('orderDetail').innerHTML = `
     <div class="image-slider-container">
@@ -897,9 +916,8 @@ function updatePrice() {
     <div style="padding: 12px;">
         <div style="font-size:14px; font-weight:700; color:var(--gold);">${activeP.name}</div>
         <div style="margin: 8px 0;">${summaryListHtml || '<div style="text-align:center; font-size:11px; color:#666;">กรุณาเลือกสินค้า</div>'}</div>
-        ${costDetailHtml}
         
-        ${installmentDetailHtml} <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); margin-top:10px;">
+        ${priceDisplayArea} <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); margin-top:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-weight:bold; color:var(--gold); font-size:12px;">${priceLabel}</span>
                 <span style="font-size:26px; font-weight:800; color:#38ef7d;">฿${displayPrice.toLocaleString()}</span>
@@ -909,7 +927,6 @@ function updatePrice() {
     
     checkBlacklist(); 
 }
-
 
     function renderMedia(url, isMuted) { if(!url) return ''; return url.match(/\.(mp4|webm|mov)$/i) ? `<video src="${url}" ${isMuted?'autoplay loop muted playsinline':'controls autoplay'} style="width:100%; height:100%; object-fit:cover;"></video>` : `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`; }
     function zoom(url) {
