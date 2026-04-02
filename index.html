@@ -77,16 +77,35 @@
                 const name     = getV(0);  
                 const imgs     = getV(1);  
                 const desc     = getV(2);  
-                const pPrice   = getV(3).toString().replace(/,/g, ''); 
+                const pPrice   = getV(3).toString().replace(/[^0-9.]/g, ''); // เอาเฉพาะตัวเลข
                 const tGreen   = getV(4);  
                 const province = getV(7);  
                 const expire   = getV(8);  
-                const ship     = getV(11).toString().replace(/,/g, '') || "0"; 
-                const optStr   = getV(12); 
-                const fPrice   = getV(13).toString().replace(/,/g, ''); 
+                const ship     = getV(11).toString().replace(/[^0-9.]/g, '') || "0"; 
+                const optStr   = getV(12); // คอลัมน์ M
+                const fPrice   = getV(13).toString().replace(/[^0-9.]/g, ''); 
 
                 const currentP = parseFloat(pPrice) || 0;
                 const firstImg = imgs.split(',')[0].trim();
+
+                // ตรวจสอบ Option แบบละเอียด
+                let optionHTML = "";
+                if (optStr && optStr.trim() !== "") {
+                    optionHTML = `<select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">`;
+                    const options = optStr.split(',');
+                    options.forEach(item => {
+                        if (item.includes(':')) {
+                            const part = item.split(':');
+                            const label = part[0].trim();
+                            const val = part[1].trim().replace(/[^0-9.]/g, '');
+                            optionHTML += `<option value="${val}">${label} (฿${parseFloat(val).toLocaleString()})</option>`;
+                        } else {
+                            // ถ้าไม่มีเครื่องหมาย : ให้แสดงชื่อและใช้ราคาหลัก
+                            optionHTML += `<option value="${pPrice}">${item.trim()}</option>`;
+                        }
+                    });
+                    optionHTML += `</select>`;
+                }
 
                 html += `
                     <div class="p-card">
@@ -110,25 +129,14 @@
                                 <span class="old-price" id="old-price-${i}"></span>
                             </div>
                             <div class="info-row"><i class="fa-solid fa-truck"></i> ค่าส่ง: ฿${parseFloat(ship).toLocaleString()}</div>
-                            
-                            ${(optStr && optStr !== "") ? `
-                                <select class="p-options" id="opt-${i}" onchange="updatePrice(${i})">
-                                    ${optStr.split(',').map(item => {
-                                        if(!item.includes(':')) return `<option value="${pPrice}">${item.trim()}</option>`;
-                                        const part = item.split(':');
-                                        const label = part[0].trim();
-                                        const val = part[1].trim().replace(/,/g, '');
-                                        return `<option value="${val}">${label} (฿${parseFloat(val).toLocaleString()})</option>`;
-                                    }).join('')}
-                                </select>
-                            ` : ''}
+                            ${optionHTML}
                         </div>
                         <button class="btn-buy" onclick="order('${name}', ${i}, '${ship}')">สั่งซื้อสินค้า</button>
                     </div>
                 `;
             });
             document.getElementById('app').innerHTML = html;
-            startCountdown(); // เรียกใช้ตัวนับเวลา
+            if (typeof startCountdown === "function") startCountdown();
         } catch (e) { 
             console.error(e);
             document.getElementById('app').innerHTML = `<div style="padding:20px;text-align:center;">❌ โหลดข้อมูลไม่สำเร็จ<br><small>${e.message}</small></div>`;
@@ -137,9 +145,10 @@
 
     function updatePrice(id) {
         const select = document.getElementById(`opt-${id}`);
-        const timerEl = document.getElementById(`timer-${id}`);
+        if (!select) return;
         const newPrice = parseFloat(select.value);
         document.getElementById(`cur-price-${id}`).innerText = `฿${newPrice.toLocaleString()}`;
+        const timerEl = document.getElementById(`timer-${id}`);
         if(timerEl) timerEl.setAttribute('data-p', newPrice);
     }
 
@@ -181,14 +190,15 @@
     }
 
     function order(name, id, ship) {
-        const pStr = document.getElementById(`cur-price-${id}`).innerText.replace('฿', '').replace(/,/g, '');
+        const curPriceEl = document.getElementById(`cur-price-${id}`);
+        const pStr = curPriceEl.innerText.replace(/[^0-9.]/g, '');
         const total = parseFloat(pStr) + parseFloat(ship || 0);
-        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nยอดชำระ: ฿${total.toLocaleString()}`);
+        alert(`🛒 ยืนยันการสั่งซื้อ: ${name}\nยอดชำระรวมค่าส่ง: ฿${total.toLocaleString()}`);
     }
 
-    // เริ่มทำงานเมื่อโหลดหน้าเว็บ
     loadStore();
 </script>
+
 
 
 </body>
