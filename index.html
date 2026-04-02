@@ -100,13 +100,15 @@
         .p-desc { font-size: 8px; color: var(--text-dim); text-align: center; line-height: 1.1; height: 18px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .p-price { font-size: 12px; font-weight: 700; color: #fff; margin-top: auto; padding-top: 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
         /* ราคาขีดฆ่าในตัวเลือกสินค้า */
-        .old-price-v { 
-            text-decoration: line-through; 
-            color: #888; 
-            font-size: 8px; 
-            margin-right: 3px;
-            font-weight: 400;
-        }
+        /* ราคาขีดฆ่าในตัวเลือกสินค้า (Modal) */
+.old-price-v { 
+    text-decoration: line-through !important; /* บังคับให้มีเส้นขีดฆ่า */
+    color: #888 !important; 
+    font-size: 9px; 
+    margin-right: 5px;
+    display: inline-block; /* บังคับให้แสดงผลในบรรทัดเดียวกัน */
+}
+
         .new-price { color: #ff4b2b; }
 
         .buy-now { width: 100%; background: var(--gold-grad); color: #000; border: none; padding: 6px 0; font-weight: 700; font-size: 10px; cursor: pointer; border-radius: 0 0 8px 8px; text-transform: uppercase; position: relative; overflow: hidden; }
