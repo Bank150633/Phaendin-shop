@@ -479,89 +479,57 @@
             <h4 style="color:var(--gold); font-size:14px; margin-left: 10px;">ยืนยันการสั่งซื้อ</h4>
             <i class="fa-solid fa-xmark" onclick="closeModal('orderModal')" style="cursor:pointer; color:var(--gold); font-size:22px; padding:10px;"></i>
         </div>
+     <form id="orderForm" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+    
+    <div id="step-1">
+        <div id="orderDetail"></div>
+        </div>
 
-        <form id="orderForm" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
-            
-<div id="step-2" style="display:none;">
-    <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
-        <i class="fa-solid fa-chevron-left"></i> ย้อนกลับไปแก้ไขรายการ
-    </p>
+    <div id="step-2" style="display:none; padding: 15px;">
+        <p onclick="nextStep(1)" style="color:var(--gold); font-size:11px; cursor:pointer; margin-bottom:12px;"> 
+            <i class="fa-solid fa-chevron-left"></i> ย้อนกลับไปแก้ไขรายการ
+        </p>
 
-    <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 12px; margin-bottom: 15px;">
-        <div style="font-size: 11px; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">รายการสั่งซื้อของคุณ:</div>
-        <div id="final-item-list" style="font-size: 13px; color: #fff; line-height: 1.5; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 12px; padding: 12px; margin-bottom: 15px;">
+            <div style="font-size: 11px; color: var(--gold); margin-bottom: 5px; text-transform: uppercase;">รายการสั่งซื้อของคุณ:</div>
+            <div id="final-item-list" style="font-size: 13px; color: #fff; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; color: var(--text-dim);">ยอดชำระสุทธิ:</span>
+                <span id="final-price-display" style="font-size: 18px; font-weight: 800; color: #38ef7d;">฿0</span>
             </div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 11px; color: var(--text-dim);">ยอดชำระสุทธิ (รวมค่าส่ง):</span>
-            <span id="final-price-display" style="font-size: 18px; font-weight: 800; color: #38ef7d;">฿0</span>
         </div>
-    </div>
-<input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()">
-    <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()">
-  <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>  
-    <div id="securitySection" style="display:none; margin-bottom:12px; padding:12px; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--gold);">
-        <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
-            <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS (สำหรับผ่อน)
-        </button>
-        <input type="hidden" id="userLocation">
-        <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('selfieIn').click()">
-            <span id="selfieTxt" style="font-size:10px; color:var(--gold);">ถ่ายรูปเซลฟี่คู่กับบัตร</span>
-            <input type="file" id="selfieIn" style="display:none" onchange="handleSelfie(this)" accept="image/*" capture="user">
-            <img id="selfiePreview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
-        </div>
-    </div>
-    
-    <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง (บ้านเลขที่ ตำบล อำเภอ จังหวัด)" required class="input-slim" style="height:60px;"></textarea>
-    
-    <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(212,175,55,0.2);">
-        <p style="font-size:11px; color:var(--gold);">🏦 ช่องทางชำระเงิน: ธนาคารกสิกรไทย</p>
-        <img src="https://i.ibb.co/0yYSsMDh/004999092296200-20260322-004801.jpg" style="width:140px; border-radius:8px; margin: 8px 0;">
-        <p style="font-size:13px; color:#fff; font-weight:bold;">035-8-56762-2</p>
-        <p style="font-size:10px; color:var(--text-dim);">วัชระ ชันสิน</p>
-        <button type="button" onclick="copyToClipboard('0358567622')" style="margin-top:8px; background:transparent; border:1px solid var(--gold); color:var(--gold); font-size:10px; padding:4px 10px; border-radius:20px;">คัดลอกเลขบัญชี</button>
-    </div>
 
-    <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('fileIn').click()">
-        <span id="upTxt" style="font-size:10px; color:var(--gold);">คลิกเพื่อแนบสลิปโอนเงิน</span>
-        <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
-        <img id="preview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
-    </div>
-</div>
-<div class="modal-footer-fixed">
-    <div id="step-1-footer">
-        <div class="footer-btn-group">
-            <div id="installmentInfo"></div> 
-            <div id="pay-full" class="btn-pay-option active" onclick="togglePay('จ่ายเต็ม')">
-    <div style="font-size: 11px; font-weight: bold; color: #fff;">ชำระสด</div>
-    <input type="radio" name="payType" value="จ่ายเต็ม" checked style="display: none"> </div>
-
-<div id="pay-install" class="btn-pay-option" onclick="togglePay('ผ่อนไปใช้ไป')">
-    <div style="font-size: 11px; font-weight: bold; color: #fff;">ผ่อนชำระ</div>
-    <input type="radio" name="payType" value="ผ่อนไปใช้ไป" style="display: none"> </div>
-
-            <button type="button" class="buy-now" onclick="nextStep(2)" 
-                    style="flex: 1.5; border-radius: 10px; padding: 0; height: 48px; margin: 0; font-size: 13px; font-weight: bold;">
-                ถัดไป (ที่อยู่)
+        <input type="text" id="cName" placeholder="ชื่อ-นามสกุล" required class="input-slim" oninput="checkBlacklist()">
+        <input type="tel" id="cPhone" placeholder="เบอร์โทรศัพท์" required class="input-slim" oninput="checkBlacklist()">
+        <div id="statusMsg" style="font-size: 11px; margin-bottom: 8px; font-weight: bold; text-align: center; min-height: 15px;"></div>  
+        
+        <div id="securitySection" style="display:none; margin-bottom:12px;">
+            <button type="button" id="btnLocation" onclick="getLocation()" style="width:100%; padding:10px; background:#4285F4; color:#fff; border:none; border-radius:8px; margin-bottom:10px;">
+                <i class="fa-solid fa-location-crosshairs"></i> ปักหมุด GPS (สำหรับผ่อน)
             </button>
+            <input type="hidden" id="userLocation">
+            <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('selfieIn').click()">
+                <span id="selfieTxt" style="font-size:10px; color:var(--gold);">ถ่ายรูปเซลฟี่คู่กับบัตร</span>
+                <input type="file" id="selfieIn" style="display:none" onchange="handleSelfie(this)" accept="image/*" capture="user">
+                <img id="selfiePreview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
+            </div>
+        </div>
+        
+        <textarea id="cAddr" placeholder="ที่อยู่จัดส่ง" required class="input-slim" style="height:60px;"></textarea>
+        
+        <div style="text-align:center; margin: 10px 0; background:rgba(212,175,55,0.05); padding:15px; border-radius:12px; border: 1px solid rgba(212,175,55,0.2);">
+            <p style="font-size:11px; color:var(--gold);">🏦 กสิกรไทย: 035-8-56762-2</p>
+            <p style="font-size:10px; color:var(--text-dim);">วัชระ ชันสิน</p>
+        </div>
+
+        <div style="border:1px dashed var(--gold); padding:10px; border-radius:10px; text-align:center;" onclick="document.getElementById('fileIn').click()">
+            <span id="upTxt" style="font-size:10px; color:var(--gold);">คลิกแนบสลิปโอนเงิน</span>
+            <input type="file" id="fileIn" style="display:none" onchange="handleFile(this)" accept="image/*">
+            <img id="preview" style="display:none; width:80px; margin:5px auto; border-radius:6px;">
         </div>
     </div>
-    </div>
-
-    <div id="step-2-footer" style="display:none;">
-    <div id="lineBoxContainer" style="margin: 10px 0; padding: 12px; background: rgba(6, 199, 85, 0.05); border-radius: 12px; border: 1.5px dashed #06c755;">
-        <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-            <input type="checkbox" id="lineAccept" onchange="checkBlacklist()" style="width: 22px; height: 22px; accent-color: #06c755;">
-            <span style="font-size: 11px; color: #fff; line-height: 1.4;">
-                <b>[บังคับ]</b> ฉันยอมรับการรับใบเสร็จและแจ้งเตือนยอดผ่อนผ่าน Line OA
-            </span>
-        </label>
-    </div>
-    <button type="submit" id="submitBtn" class="buy-now" disabled style="border-radius:10px; padding: 12px 0; opacity: 0.5;">
-        ยืนยันการสั่งซื้อ
-    </button>
-</div>
-</div>                      
-        </form>
+</form>
+        
     </div>
 </div>
 
