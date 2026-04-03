@@ -135,66 +135,74 @@
 #optionBox { 
     display: flex !important; 
     overflow-x: auto !important; 
-    gap: 8px; /* ลดช่องว่างระหว่างกล่อง */
-    padding: 10px 5px;
+    gap: 6px; 
+    padding: 8px 0;
     width: 100%;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
 }
 
 .variant-item { 
-    flex: 0 0 95px; /* ลดความกว้างลงจาก 120px เหลือ 95px */
+    flex: 0 0 85px; /* เล็กลงจาก 95px */
     background: rgba(255,255,255,0.03); 
-    padding: 6px; /* ลด padding รอบๆ */
-    border-radius: 10px; 
+    padding: 5px; 
+    border-radius: 8px; 
     border: 1px solid rgba(212,175,55,0.1); 
     display: flex;
     flex-direction: column; 
     align-items: center;
     scroll-snap-align: start;
+    transition: 0.2s;
+}
+
+.variant-item.active-item {
+    border-color: var(--gold);
+    background: rgba(212,175,55,0.1);
 }
 
 .v-img { 
     width: 100% !important; 
     aspect-ratio: 1/1 !important; 
-    border-radius: 6px; 
+    border-radius: 5px; 
     object-fit: cover; 
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .v-name { 
-    font-size: 8.5px !important; /* ตัวหนังสือเล็กลง */
-    height: 20px !important; 
-    line-height: 1 !important;
+    font-size: 8px !important; 
+    color: #fff;
+    text-align: center;
+    height: 12px; 
+    overflow: hidden;
     margin-bottom: 2px;
 }
 
 .v-price { 
     font-size: 9px !important; 
-    margin-bottom: 5px; 
+    margin-bottom: 4px; 
 }
 
-/* ปรับปุ่มเพิ่ม/ลดให้เล็กลงมาก */
 .v-ctrl { 
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
-    background: rgba(0,0,0,0.4) !important;
-    padding: 2px 4px !important;
-    border-radius: 6px !important;
-}
-
-.v-btn { 
-    width: 18px !important; /* เล็กลง */
-    height: 18px !important; 
-    font-size: 9px !important; 
+    background: #000 !important;
+    padding: 1px 3px !important;
     border-radius: 4px !important;
 }
 
-#v-qty { 
-    font-size: 9px !important; 
+.v-btn { 
+    width: 16px !important; 
+    height: 16px !important; 
+    font-size: 8px !important; 
+    border-radius: 3px !important;
+    background: var(--gold-grad);
+    border: none;
+    color: #000;
 }
+
+#v-qty { font-size: 9px !important; }
 
 
         .v-info { flex-grow: 1; }
