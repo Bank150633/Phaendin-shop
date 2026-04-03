@@ -849,6 +849,9 @@ function updatePrice() {
     let totalItems = 0;
     let discP = parseFloat(activeP.disc) || 0;
 
+    // ดึงเนื้อหาตัวเลือกสินค้าเดิมมาเก็บไว้ก่อน เพื่อนำไปวางในตำแหน่งใหม่
+    const currentOptionBox = document.getElementById('optionBox').innerHTML;
+
     for (let key in selectedOptions) { 
         let qty = selectedOptions[key].qty;
         let unitPrice = selectedOptions[key].price;
@@ -882,11 +885,9 @@ function updatePrice() {
         displayPrice = perMonth;
         priceLabel = "ยอดงวดแรก";
 
-        // --- เพิ่มส่วนวันที่ผ่อนอัตโนมัติ ---
         const monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
         const d = new Date();
-        const today = d.getDate(); // วันที่กดสั่ง (เช่น วันที่ 2)
-        
+        const today = d.getDate();
         const m1 = `${today} ${monthNames[d.getMonth()]}`;
         d.setMonth(d.getMonth() + 1);
         const m2 = `${today} ${monthNames[d.getMonth()]}`;
@@ -905,8 +906,7 @@ function updatePrice() {
                 <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; color:#eee;">
                     <span>งวดที่ 3 (${m3}):</span> <b>฿${perMonth.toLocaleString()}</b>
                 </div>
-            </div>
-        `;
+            </div>`;
     } else {
         priceDisplayArea = `
             <div style="border-top: 1px dashed rgba(255,255,255,0.1); margin-top:10px; padding-top:10px;">
@@ -919,11 +919,12 @@ function updatePrice() {
                 <div style="display:flex; justify-content:space-between; font-size:10px; color:#aaa;">
                     <span>ค่าจัดส่ง:</span> <span style="color:${activeP.ship === 0 ? '#38ef7d' : '#fff'};">${activeP.ship === 0 ? 'ส่งฟรี' : '฿' + activeP.ship.toLocaleString()}</span>
                 </div>
-            </div>
-        `;
+            </div>`;
     }
 
     const mediaFiles = activeP.img.split(',').filter(m => m.trim() !== "").map(m => m.trim());
+    
+    // --- ย้ายตำแหน่งชุดโค้ด HTML ใหม่ ---
     document.getElementById('orderDetail').innerHTML = `
     <div class="image-slider-container">
         <div class="slider-wrapper" onscroll="updateDots(this, ${mediaFiles.length})">
@@ -932,8 +933,17 @@ function updatePrice() {
     </div>
     <div style="padding: 12px;">
         <div style="font-size:14px; font-weight:700; color:var(--gold);">${activeP.name}</div>
-        <div style="margin: 8px 0;">${summaryListHtml || '<div style="text-align:center; font-size:11px; color:#666;">กรุณาเลือกสินค้า</div>'}</div>
+        
+        <div style="margin: 8px 0;">
+            ${summaryListHtml || '<div style="text-align:center; font-size:11px; color:#666;">กรุณาเลือกสินค้า</div>'}
+        </div>
+
+        <div id="optionBox" style="display: flex; overflow-x: auto; gap: 6px; padding: 5px 0;">
+            ${currentOptionBox}
+        </div>
+
         ${priceDisplayArea}
+        
         <div style="background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); margin-top:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-weight:bold; color:var(--gold); font-size:12px;">${priceLabel}</span>
@@ -941,6 +951,7 @@ function updatePrice() {
             </div>
         </div>
     </div>`;
+
     checkBlacklist(); 
 }
 
