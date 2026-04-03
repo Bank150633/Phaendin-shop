@@ -142,7 +142,6 @@ let cheapest = prices.length ? Math.min(...prices) : 0;
 
 let result = analyze(prices, price);
     
-}
     output.innerHTML = `
     <div class="result ${result.className}">
         <b>${result.status}</b><br><br>
@@ -164,6 +163,7 @@ let result = analyze(prices, price);
         <small>ดึงข้อมูลจาก API จริงแล้ว</small>
     </div>
 `;
+}
 </script>
 
 </body>
