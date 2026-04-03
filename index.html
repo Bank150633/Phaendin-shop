@@ -61,17 +61,39 @@ small { color: #94a3b8; }
 
 <script>
 
-// 🔥 MOCK API (เปลี่ยนเป็นของจริงทีหลัง)
 async function fetchMarketPrices(product) {
-    // จำลองหลายร้าน
-    return [
-        9500 + Math.random()*2000,
-        10200 + Math.random()*1500,
-        9800 + Math.random()*1000,
-        11000 + Math.random()*2000
-    ];
-}
 
+    const url = "https://real-time-product-search.p.rapidapi.com/search?q=" + encodeURIComponent(product);
+
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': 'ใส่APIKEYตรงนี้',
+            'X-RapidAPI-Host': 'real-time-product-search.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const res = await fetch(url, options);
+        const data = await res.json();
+
+        let prices = [];
+
+        if (data.data) {
+            prices = data.data.map(item => {
+                let priceText = item.price || "";
+                let number = parseFloat(priceText.replace(/[^\d]/g, ""));
+                return number;
+            }).filter(p => !isNaN(p));
+        }
+
+        return prices.length ? prices : [1000]; // กัน error
+
+    } catch (err) {
+        console.error(err);
+        return [1000];
+    }
+}
 function analyze(prices, userPrice) {
     let avg = prices.reduce((a,b)=>a+b,0) / prices.length;
     let min = Math.min(...prices);
