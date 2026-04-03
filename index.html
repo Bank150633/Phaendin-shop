@@ -136,26 +136,30 @@ async function checkPrice() {
     output.innerHTML = "กำลังเช็คราคา...";
 
     let prices = await fetchMarketPrices(product);
-    let result = analyze(prices, price);
 
-    output.innerHTML = `
-        <div class="result ${result.className}">
-            <b>${result.status}</b><br><br>
+// 🔥 เพิ่มตรงนี้
+let cheapest = prices.length ? Math.min(...prices) : 0;
 
-            💰 ราคาคุณ: ${price} บาท<br>
-            📊 ราคาเฉลี่ย: ${result.avg.toFixed(0)} บาท<br>
-            🔻 ต่ำสุด: ${result.min.toFixed(0)} บาท<br>
-            🔺 สูงสุด: ${result.max.toFixed(0)} บาท<br><br>
-
-            📉 ต่างจากตลาด: ${result.diff.toFixed(1)}%<br><br>
-
-            💡 <b>${result.advice}</b><br><br>
-
-            <small>ระบบกำลังใช้ข้อมูลจำลอง (พร้อมต่อ API จริง)</small>
-        </div>
-    `;
+let result = analyze(prices, price);
+    
 }
+    output.innerHTML = `
+    <div class="result ${result.className}">
+        <b>${result.status}</b><br><br>
 
+        💰 ราคาคุณ: ${price} บาท<br>
+        🛒 ราคาถูกสุด: ${cheapest.toFixed(0)} บาท<br>
+        📊 ราคาเฉลี่ย: ${result.avg.toFixed(0)} บาท<br>
+        🔻 ต่ำสุด: ${result.min.toFixed(0)} บาท<br>
+        🔺 สูงสุด: ${result.max.toFixed(0)} บาท<br><br>
+
+        📉 ต่างจากตลาด: ${result.diff.toFixed(1)}%<br><br>
+
+        💡 <b>${result.advice}</b><br><br>
+
+        <small>ดึงข้อมูลจาก API จริงแล้ว</small>
+    </div>
+`;
 </script>
 
 </body>
