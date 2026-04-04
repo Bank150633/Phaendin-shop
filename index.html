@@ -1,170 +1,60 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Price Checker</title>
-
-<style>
-body {
-    font-family: Arial;
-    background: #020617;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-.container {
-    background: #0f172a;
-    padding: 25px;
-    border-radius: 15px;
-    width: 380px;
-}
-input, button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: none;
-}
-button {
-    background: #22c55e;
-    font-weight: bold;
-    cursor: pointer;
-}
-.result {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 10px;
-}
-.good { background: #16a34a; }
-.mid { background: #eab308; color:black;}
-.bad { background: #dc2626; }
-
-small { color: #94a3b8; }
-</style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-
-<body>
-
-<div class="container">
-    <h2>💸 Smart Price Checker</h2>
-
-    <input type="text" id="product" placeholder="ชื่อสินค้า เช่น iPhone 13">
-    <input type="number" id="price" placeholder="ราคาที่เจอ (บาท)">
-
-    <button onclick="checkPrice()">เช็คราคา</button>
-
-    <div id="output"></div>
-</div>
-
-<script>
-
-async function fetchMarketPrices(product) {
-
-    const url = "https://real-time-product-search.p.rapidapi.com/search?q=" + encodeURIComponent(product);
-
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': 'ใส่APIKEYตรงนี้',
-            'X-RapidAPI-Host': 'real-time-product-search.p.rapidapi.com'
-        }
-    };
-
-    try {
-        const res = await fetch(url, options);
-        const data = await res.json();
-
-        let prices = [];
-
-        if (data.data) {
-            prices = data.data.map(item => {
-                let priceText = item.price || "";
-                let number = parseFloat(priceText.replace(/[^\d]/g, ""));
-                return number;
-            }).filter(p => !isNaN(p));
-        }
-
-        return prices.length ? prices : [1000]; // กัน error
-
-    } catch (err) {
-        console.error(err);
-        return [1000];
-    }
-}
-function analyze(prices, userPrice) {
-    let avg = prices.reduce((a,b)=>a+b,0) / prices.length;
-    let min = Math.min(...prices);
-    let max = Math.max(...prices);
-
-    let diff = ((userPrice - avg) / avg) * 100;
-
-    let status, className, advice;
-
-    if (diff > 20) {
-        status = "🔴 แพงเกินไป";
-        className = "bad";
-        advice = "แนะนำให้รอ หรือหาซื้อร้านอื่น";
-    } else if (diff < -15) {
-        status = "🟢 ถูกมาก คุ้ม!";
-        className = "good";
-        advice = "ราคานี้น่าซื้อทันที";
-    } else {
-        status = "🟡 ราคาปกติ";
-        className = "mid";
-        advice = "อาจลองเปรียบเทียบเพิ่มก่อนตัดสินใจ";
-    }
-
-    return {
-        avg, min, max, diff,
-        status, className, advice
-    };
-}
-
-async function checkPrice() {
-    let product = document.getElementById("product").value;
-    let price = parseFloat(document.getElementById("price").value);
-    let output = document.getElementById("output");
-
-    if (!product || !price) {
-        output.innerHTML = "<div class='result bad'>กรอกข้อมูลก่อน</div>";
-        return;
-    }
-
-    output.innerHTML = "กำลังเช็คราคา...";
-
-    let prices = await fetchMarketPrices(product);
-
-// 🔥 เพิ่มตรงนี้
-let cheapest = prices.length ? Math.min(...prices) : 0;
-
-let result = analyze(prices, price);
+<body class="bg-slate-100 min-h-screen p-4">
+  <div class="max-w-md mx-auto">
+    <h1 class="text-2xl font-bold text-blue-600 mb-6"><i class="fa-solid fa-hand-holding-heart mr-2"></i>ยืมของเพื่อนบ้าน</h1>
     
-    output.innerHTML = `
-    <div class="result ${result.className}">
-        <b>${result.status}</b><br><br>
-
-        💰 ราคาคุณ: ${price} บาท<br>
-        🛒 ราคาถูกสุด: ${cheapest.toFixed(0)} บาท<br>
-        📊 ราคาเฉลี่ย: ${result.avg.toFixed(0)} บาท<br>
-        🔻 ต่ำสุด: ${result.min.toFixed(0)} บาท<br>
-        🔺 สูงสุด: ${result.max.toFixed(0)} บาท<br><br>
-
-        📉 ต่างจากตลาด: ${result.diff.toFixed(1)}%<br><br>
-
-        💡 <b>${result.advice}</b><br><br>
-
-        <a href="https://shopee.co.th/search?keyword=${encodeURIComponent(product)}" target="_blank">
-            <button>🛒 ไปดูราคาจริง</button>
-        </a>
-
-        <small>ดึงข้อมูลจาก API จริงแล้ว</small>
+    <div id="item-list" class="grid gap-4">
+      <p class="text-center text-gray-400">กำลังโหลดข้อมูล...</p>
     </div>
-`;
-}
-</script>
+  </div>
 
+  <script>
+    // ดึงข้อมูลมาโชว์ตอนเปิดหน้า
+    window.onload = function() {
+      google.script.run.withSuccessHandler(showItems).getItemsForBorrow();
+    };
+
+    function showItems(items) {
+      const container = document.getElementById('item-list');
+      if (items.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500">ยังไม่มีของให้ยืมในขณะนี้</p>';
+        return;
+      }
+
+      container.innerHTML = items.map(item => `
+        <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4 border-l-4 ${item.status === 'Available' ? 'border-green-500' : 'border-red-400'}">
+          <img src="${item.img || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-lg object-cover bg-gray-100">
+          <div class="flex-1">
+            <h3 class="font-bold text-gray-800">${item.name}</h3>
+            <p class="text-xs text-gray-400 italic">${item.category}</p>
+            <p class="text-sm font-bold text-blue-600">มัดจำ ${item.deposit}.-</p>
+          </div>
+          <div>
+            ${item.status === 'Available' 
+              ? `<button onclick="requestBorrow('${item.id}', '${item.name}')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">ยืม</button>`
+              : `<span class="text-red-400 text-xs font-bold italic">ไม่ว่าง</span>`}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function requestBorrow(id, name) {
+      const userName = prompt("ชื่อของคุณ (เลขที่บ้าน):");
+      const contact = prompt("เบอร์โทร หรือ Line ID:");
+      
+      if (userName && contact) {
+        container.innerHTML = '<p class="text-center text-gray-500">กำลังบันทึก...</p>';
+        google.script.run.withSuccessHandler(msg => {
+          alert(msg);
+          location.reload(); // รีโหลดหน้าเพื่ออัปเดตสถานะ
+        }).saveBorrowRequest(id, userName, contact);
+      }
+    }
+  </script>
 </body>
 </html>
