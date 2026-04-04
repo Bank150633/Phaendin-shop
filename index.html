@@ -2,57 +2,47 @@
 <html>
 <head>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-slate-100 min-h-screen p-4">
+<body class="bg-gray-100 p-4">
   <div class="max-w-md mx-auto">
-    <h1 class="text-2xl font-bold text-blue-600 mb-6"><i class="fa-solid fa-hand-holding-heart mr-2"></i>ยืมของเพื่อนบ้าน</h1>
-    
-    <div id="item-list" class="grid gap-4">
-      <p class="text-center text-gray-400">กำลังโหลดข้อมูล...</p>
-    </div>
+    <h1 class="text-2xl font-bold text-blue-600 mb-6 text-center">NeighborShare</h1>
+    <div id="list" class="space-y-4 text-center text-gray-400 italic">กำลังโหลดของ...</div>
   </div>
 
   <script>
-    // ดึงข้อมูลมาโชว์ตอนเปิดหน้า
-    window.onload = function() {
-      google.script.run.withSuccessHandler(showItems).getItemsForBorrow();
+    // เมื่อเปิดแอป ให้ดึงข้อมูลมาโชว์
+    window.onload = () => {
+      google.script.run.withSuccessHandler(draw).getItems();
     };
 
-    function showItems(items) {
-      const container = document.getElementById('item-list');
-      if (items.length === 0) {
-        container.innerHTML = '<p class="text-center text-gray-500">ยังไม่มีของให้ยืมในขณะนี้</p>';
-        return;
-      }
-
-      container.innerHTML = items.map(item => `
-        <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4 border-l-4 ${item.status === 'Available' ? 'border-green-500' : 'border-red-400'}">
-          <img src="${item.img || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-lg object-cover bg-gray-100">
-          <div class="flex-1">
-            <h3 class="font-bold text-gray-800">${item.name}</h3>
-            <p class="text-xs text-gray-400 italic">${item.category}</p>
-            <p class="text-sm font-bold text-blue-600">มัดจำ ${item.deposit}.-</p>
-          </div>
-          <div>
-            ${item.status === 'Available' 
-              ? `<button onclick="requestBorrow('${item.id}', '${item.name}')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-bold">ยืม</button>`
-              : `<span class="text-red-400 text-xs font-bold italic">ไม่ว่าง</span>`}
+    function draw(data) {
+      const list = document.getElementById('list');
+      if (data.length === 0) { list.innerHTML = 'ไม่มีของในระบบ'; return; }
+      
+      list.innerHTML = data.map(row => `
+        <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4">
+          <img src="${row[3] || 'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-xl object-cover bg-gray-50">
+          <div class="flex-1 text-left">
+            <h3 class="font-bold text-gray-800">${row[1]}</h3>
+            <p class="text-blue-500 font-bold text-sm">มัดจำ ${row[4]}.-</p>
+            <div class="mt-2 text-right">
+              ${row[5] == 'Available' 
+                ? `<button onclick="borrow('${row[0]}')" class="bg-blue-600 text-white px-4 py-1 rounded-lg text-xs">ยืม</button>`
+                : `<span class="text-red-400 text-xs italic font-bold">ไม่ว่าง</span>`}
+            </div>
           </div>
         </div>
       `).join('');
     }
 
-    function requestBorrow(id, name) {
-      const userName = prompt("ชื่อของคุณ (เลขที่บ้าน):");
-      const contact = prompt("เบอร์โทร หรือ Line ID:");
-      
-      if (userName && contact) {
-        container.innerHTML = '<p class="text-center text-gray-500">กำลังบันทึก...</p>';
+    function borrow(id) {
+      const name = prompt("ชื่อเล่น/เลขที่บ้านของคุณ:");
+      const tel = prompt("เบอร์โทรหรือ Line ID:");
+      if (name && tel) {
         google.script.run.withSuccessHandler(msg => {
           alert(msg);
-          location.reload(); // รีโหลดหน้าเพื่ออัปเดตสถานะ
-        }).saveBorrowRequest(id, userName, contact);
+          location.reload();
+        }).saveBorrow(id, name, tel);
       }
     }
   </script>
