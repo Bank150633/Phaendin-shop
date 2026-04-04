@@ -1,50 +1,136 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบยืมของ</title>
+<style>
+body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
+h1,h2 { color: #333; }
+input, button { padding: 8px; margin: 5px; }
+button { cursor: pointer; }
+#items { margin-top: 20px; }
+.item { display: flex; justify-content: space-between; margin-bottom: 5px; background: #fff; padding: 5px 10px; border-radius: 5px; }
+.item button { margin-left: 5px; }
+</style>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
 </head>
-<body class="bg-gray-100 p-4">
-  <div class="max-w-md mx-auto">
-    <h1 class="text-2xl font-bold text-blue-600 mb-6 text-center">NeighborShare</h1>
-    <div id="list" class="space-y-4 text-center text-gray-400 italic">กำลังโหลดของ...</div>
+<body>
+
+<h1>ระบบยืมของ</h1>
+
+<div id="login">
+  <input type="email" id="email" placeholder="อีเมล">
+  <input type="password" id="password" placeholder="รหัสผ่าน">
+  <button onclick="signup()">สมัครสมาชิก</button>
+  <button onclick="login()">ล็อกอิน</button>
+</div>
+
+<div id="items" style="display:none;">
+  <h2>รายการของ</h2>
+  <div>
+    <input type="text" id="new-item" placeholder="ชื่อของ">
+    <button onclick="addItem()">เพิ่มของ</button>
   </div>
+  <div id="item-list"></div>
+  <button onclick="logout()">ออกจากระบบ</button>
+</div>
 
-  <script>
-    // เมื่อเปิดแอป ให้ดึงข้อมูลมาโชว์
-    window.onload = () => {
-      google.script.run.withSuccessHandler(draw).getItems();
-    };
+<script>
+  // 🔹 ใส่ Firebase Config ของคุณ
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+  };
 
-    function draw(data) {
-      const list = document.getElementById('list');
-      if (data.length === 0) { list.innerHTML = 'ไม่มีของในระบบ'; return; }
-      
-      list.innerHTML = data.map(row => `
-        <div class="bg-white p-4 rounded-2xl shadow-sm flex items-center gap-4">
-          <img src="${row[3] || 'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-xl object-cover bg-gray-50">
-          <div class="flex-1 text-left">
-            <h3 class="font-bold text-gray-800">${row[1]}</h3>
-            <p class="text-blue-500 font-bold text-sm">มัดจำ ${row[4]}.-</p>
-            <div class="mt-2 text-right">
-              ${row[5] == 'Available' 
-                ? `<button onclick="borrow('${row[0]}')" class="bg-blue-600 text-white px-4 py-1 rounded-lg text-xs">ยืม</button>`
-                : `<span class="text-red-400 text-xs italic font-bold">ไม่ว่าง</span>`}
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const auth = firebase.auth();
 
-    function borrow(id) {
-      const name = prompt("ชื่อเล่น/เลขที่บ้านของคุณ:");
-      const tel = prompt("เบอร์โทรหรือ Line ID:");
-      if (name && tel) {
-        google.script.run.withSuccessHandler(msg => {
-          alert(msg);
-          location.reload();
-        }).saveBorrow(id, name, tel);
-      }
-    }
-  </script>
+  // สมัครสมาชิก
+  function signup() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => alert('สมัครสมาชิกเรียบร้อย'))
+      .catch(e => alert(e.message));
+  }
+
+  // ล็อกอิน
+  function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        document.getElementById('login').style.display='none';
+        document.getElementById('items').style.display='block';
+        loadItems();
+      })
+      .catch(e => alert(e.message));
+  }
+
+  // ออกจากระบบ
+  function logout() {
+    auth.signOut().then(() => {
+      document.getElementById('login').style.display='block';
+      document.getElementById('items').style.display='none';
+    });
+  }
+
+  // เพิ่มของ
+  function addItem() {
+    const name = document.getElementById('new-item').value;
+    if(!name) return alert("กรอกชื่อของก่อน");
+    db.collection('items').add({ 
+      name, 
+      status: 'available', 
+      borrower: '', 
+      createdAt: firebase.firestore.FieldValue.serverTimestamp() 
+    });
+    document.getElementById('new-item').value='';
+  }
+
+  // โหลดรายการของ
+  function loadItems() {
+    const list = document.getElementById('item-list');
+    db.collection('items').orderBy('createdAt').onSnapshot(snapshot => {
+      list.innerHTML = '';
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          ${data.name} - <b>${data.status}</b>
+          ${data.status === 'available' 
+            ? `<button onclick="borrowItem('${doc.id}','${auth.currentUser.email}')">ยืม</button>` 
+            : (data.borrower === auth.currentUser.email ? `<button onclick="returnItem('${doc.id}')">คืน</button>` : '')}
+        `;
+        list.appendChild(div);
+      });
+    });
+  }
+
+  // ยืมของ
+  function borrowItem(id, user) {
+    db.collection('items').doc(id).update({
+      status: 'borrowed',
+      borrower: user
+    });
+  }
+
+  // คืนของ
+  function returnItem(id) {
+    db.collection('items').doc(id).update({
+      status: 'available',
+      borrower: ''
+    });
+  }
+</script>
+
 </body>
 </html>
