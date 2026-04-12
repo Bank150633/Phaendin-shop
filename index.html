@@ -18,20 +18,42 @@
 </head>
 <body class="bg-slate-50 min-h-screen pb-20">
 
-    <!-- Login Overlay (First time only) -->
+    <!-- Auth Overlay (Login / Register) -->
     <div id="loginOverlay" class="fixed inset-0 bg-blue-600 z-[300] hidden items-center justify-center p-6 text-white text-center">
-        <div class="max-w-sm w-full space-y-8 animate-fade-in">
-            <div class="bg-white p-4 rounded-3xl inline-block shadow-2xl mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="max-w-sm w-full space-y-6 animate-fade-in">
+            <div class="bg-white p-4 rounded-3xl inline-block shadow-2xl mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
             </div>
-            <h1 class="text-3xl font-bold">ยินดีต้อนรับสู่ Phaendin Rent</h1>
-            <p class="text-blue-100 opacity-80">กรุณาตั้งชื่อและรหัสผ่านเพื่อใช้จัดการข้อมูลของคุณเอง</p>
-            <div class="space-y-4">
-                <input type="text" id="regUser" placeholder="ชื่อเล่นของคุณ" class="w-full px-6 py-4 rounded-2xl bg-white/20 border border-white/30 text-white placeholder:text-blue-100 outline-none focus:bg-white/30 transition-all text-lg font-bold">
-                <input type="password" id="regPass" placeholder="รหัสผ่าน 4 ตัว" maxlength="4" class="w-full px-6 py-4 rounded-2xl bg-white/20 border border-white/30 text-white placeholder:text-blue-100 outline-none focus:bg-white/30 transition-all text-lg font-bold text-center tracking-[0.5em]">
-                <button onclick="registerUser()" class="w-full bg-white text-blue-600 py-4 rounded-2xl font-black text-xl shadow-xl active:scale-95 transition-all">เริ่มต้นใช้งาน</button>
+            
+            <div id="authContent">
+                <h1 id="authTitle" class="text-3xl font-bold mb-2">เข้าสู่ระบบ</h1>
+                <p id="authDesc" class="text-blue-100 opacity-80 mb-8 text-sm">ระบุชื่อและรหัสผ่านเพื่อจัดการประกาศของคุณ</p>
+                
+                <div class="space-y-4">
+                    <input type="text" id="authUserName" placeholder="ชื่อเล่นของคุณ" class="w-full px-6 py-4 rounded-2xl bg-white/20 border border-white/30 text-white placeholder:text-blue-100 outline-none focus:bg-white/30 transition-all text-lg font-bold">
+                    
+                    <div class="relative">
+                        <input type="password" id="authUserPass" placeholder="รหัส 4 ตัว" maxlength="4" class="w-full px-6 py-4 rounded-2xl bg-white/20 border border-white/30 text-white placeholder:text-blue-100 outline-none focus:bg-white/30 transition-all text-lg font-bold text-center tracking-[0.5em]">
+                        <button onclick="togglePassVisibility()" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" id="eyeIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <button id="authMainBtn" onclick="processAuth()" class="w-full bg-white text-blue-600 py-4 rounded-2xl font-black text-xl shadow-xl active:scale-95 transition-all">ตกลง</button>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-white/10">
+                    <p id="switchText" class="text-sm text-blue-100">ยังไม่เคยใช้งานใช่ไหม?</p>
+                    <button onclick="toggleAuthMode()" id="switchBtn" class="mt-2 text-white font-bold underline underline-offset-4 decoration-2">สมัครสมาชิกใหม่</button>
+                </div>
+                
+                <p class="mt-6 text-[10px] text-blue-200/60 leading-relaxed italic">
+                    * เนื่องจากเป็นระบบทดสอบ ข้อมูลจะเก็บไว้ในบราวเซอร์นี้เท่านั้น<br>หากลบแคช ข้อมูลอาจสูญหายได้
+                </p>
             </div>
         </div>
     </div>
@@ -40,7 +62,7 @@
     <header class="bg-blue-600 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="bg-white p-1.5 rounded-lg shadow-inner">
+                <div class="bg-white p-1.5 rounded-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                     </svg>
@@ -52,12 +74,9 @@
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="openAddModal()" class="bg-yellow-400 hover:bg-yellow-500 text-blue-900 px-5 py-2 rounded-full font-bold transition-all transform active:scale-95 shadow-md flex items-center gap-2">
-                    <svg hthttptpthttphthttptphthttptptp://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
-                    </svg>
                     ลงของเช่า
                 </button>
-                <button onclick="logout()" class="p-2 text-blue-200 hover:text-white">
+                <button onclick="logout()" class="p-2 text-blue-200 hover:text-white" title="ออกจากระบบ">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
@@ -88,7 +107,6 @@
 
         <div id="itemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
 
-        <!-- Empty State -->
         <div id="emptyState" class="hidden text-center py-20 bg-white rounded-3xl border-2 border-dashed border-slate-200">
             <h3 class="text-xl font-bold text-slate-500">ไม่พบรายการเช่า</h3>
             <p class="text-slate-400 mt-2">ลองค้นหาใหม่หรือเป็นคนแรกที่ลงประกาศสินค้า!</p>
@@ -99,19 +117,16 @@
     <div id="modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-modal">
             <div class="bg-blue-600 px-6 py-4 flex justify-between items-center text-white">
-                <div class="flex items-center gap-2">
-                    <h2 id="modalTitle" class="text-xl font-bold">ลงข้อมูลของให้เช่า</h2>
-                </div>
+                <h2 id="modalTitle" class="text-xl font-bold">ลงของเช่า</h2>
                 <button onclick="toggleModal(false)" class="text-white hover:rotate-90 transition-all p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l18 18" /></svg>
                 </button>
             </div>
             <form id="rentForm" onsubmit="handleForm(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto no-scrollbar">
                 <input type="hidden" id="editItemId">
-                
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">ชื่อสินค้า *</label>
-                    <input type="text" id="itemName" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <input type="text" id="itemName" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -130,12 +145,12 @@
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">สถานที่ (จังหวัด/เขต) *</label>
-                    <input type="text" id="itemLoc" required placeholder="เช่น ลาดพร้าว กทม." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">สถานที่ *</label>
+                    <input type="text" id="itemLoc" required placeholder="เช่น ลาดพร้าว กทม." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">ลิงก์รูปภาพสินค้า (URL)</label>
-                    <input type="url" id="itemImage" placeholder="https://..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm">
+                    <label class="block text-xs font-bold text-blue-600 uppercase tracking-wider mb-1">รูปภาพ (URL)</label>
+                    <input type="url" id="itemImage" placeholder="https://..." class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">เบอร์ติดต่อ/LINE *</label>
@@ -145,28 +160,29 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">รายละเอียด</label>
                     <textarea id="itemDesc" rows="2" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
                 </div>
-                
-                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 shadow-xl active:scale-95">
-                    ลงประกาศ
+                <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 active:scale-95 transition-all">
+                    บันทึกข้อมูล
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Alert Dialog -->
-    <div id="customAlert" class="fixed inset-0 bg-black/50 z-[200] hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center">
+    <!-- Custom Alert -->
+    <div id="customAlert" class="fixed inset-0 bg-black/50 z-[400] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center animate-modal">
             <h3 id="alertTitle" class="text-xl font-bold text-slate-800 mb-2"></h3>
             <p id="alertMsg" class="text-slate-500 mb-6"></p>
-            <button onclick="closeAlert()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-all">ตกลง</button>
+            <button onclick="closeAlert()" class="w-full py-3 bg-blue-600 text-white rounded-xl font-bold transition-all">รับทราบ</button>
         </div>
     </div>
 
     <script>
         let items = JSON.parse(localStorage.getItem('phaendin_rent_items')) || [];
         let userAccount = JSON.parse(localStorage.getItem('phaendin_user_account')) || null;
+        let registeredUsers = JSON.parse(localStorage.getItem('phaendin_registered_users')) || []; // เก็บ User ทั้งหมดที่เคยสมัครในเครื่องนี้
         let currentCategory = 'ทั้งหมด';
         let isEditing = false;
+        let authMode = 'login'; // 'login' or 'register'
 
         window.onload = function() {
             checkUser();
@@ -177,29 +193,88 @@
             if (!userAccount) {
                 document.getElementById('loginOverlay').classList.remove('hidden');
                 document.getElementById('loginOverlay').classList.add('flex');
+                updateAuthUI();
             } else {
                 document.getElementById('loginOverlay').classList.add('hidden');
                 document.getElementById('currentUserDisplay').innerText = `คุณกำลังใช้เป็น: ${userAccount.username}`;
             }
         }
 
-        function registerUser() {
-            const user = document.getElementById('regUser').value.trim();
-            const pass = document.getElementById('regPass').value.trim();
+        function updateAuthUI() {
+            const title = document.getElementById('authTitle');
+            const desc = document.getElementById('authDesc');
+            const mainBtn = document.getElementById('authMainBtn');
+            const switchText = document.getElementById('switchText');
+            const switchBtn = document.getElementById('switchBtn');
+
+            if (authMode === 'login') {
+                title.innerText = 'เข้าสู่ระบบ';
+                desc.innerText = 'ระบุชื่อและรหัสผ่านเพื่อจัดการประกาศของคุณ';
+                mainBtn.innerText = 'เข้าใช้งาน';
+                switchText.innerText = 'ยังไม่เคยใช้งานใช่ไหม?';
+                switchBtn.innerText = 'สมัครสมาชิกใหม่';
+            } else {
+                title.innerText = 'สมัครสมาชิกใหม่';
+                desc.innerText = 'ตั้งชื่อและรหัสผ่าน 4 ตัวเพื่อใช้ส่วนตัว';
+                mainBtn.innerText = 'ลงทะเบียน';
+                switchText.innerText = 'มีบัญชีอยู่แล้ว?';
+                switchBtn.innerText = 'กลับไปเข้าสู่ระบบ';
+            }
+        }
+
+        function toggleAuthMode() {
+            authMode = authMode === 'login' ? 'register' : 'login';
+            updateAuthUI();
+        }
+
+        function togglePassVisibility() {
+            const passInput = document.getElementById('authUserPass');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.05 10.05 0 014.115-5.115M9.9 9.9a3 3 0 114.2 4.2M12 5c4.478 0 8.268 2.943 9.542 7a10.05 10.05 0 01-1.378 2.875M12 12V12" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />';
+            } else {
+                passInput.type = 'password';
+                eyeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />';
+            }
+        }
+
+        function processAuth() {
+            const user = document.getElementById('authUserName').value.trim();
+            const pass = document.getElementById('authUserPass').value.trim();
             
             if (user.length < 2 || pass.length !== 4) {
-                alert("กรุณาใส่ชื่อ และรหัสผ่าน 4 ตัวอักษร");
+                showAlert("ข้อมูลไม่ครบ", "กรุณาระบุชื่อและรหัสผ่าน 4 หลักให้ถูกต้อง");
                 return;
             }
 
-            userAccount = { username: user, passcode: pass };
-            localStorage.setItem('phaendin_user_account', JSON.stringify(userAccount));
-            checkUser();
+            if (authMode === 'register') {
+                const exists = registeredUsers.find(u => u.username.toLowerCase() === user.toLowerCase());
+                if (exists) {
+                    showAlert("ชื่อนี้มีผู้ใช้แล้ว", "กรุณาใช้ชื่ออื่น หรือกลับไปเข้าสู่ระบบ");
+                    return;
+                }
+                const newUser = { username: user, passcode: pass };
+                registeredUsers.push(newUser);
+                localStorage.setItem('phaendin_registered_users', JSON.stringify(registeredUsers));
+                userAccount = newUser;
+                localStorage.setItem('phaendin_user_account', JSON.stringify(userAccount));
+                checkUser();
+            } else {
+                const found = registeredUsers.find(u => u.username.toLowerCase() === user.toLowerCase() && u.passcode === pass);
+                if (found) {
+                    userAccount = found;
+                    localStorage.setItem('phaendin_user_account', JSON.stringify(userAccount));
+                    checkUser();
+                } else {
+                    showAlert("ข้อมูลผิดพลาด", "ชื่อหรือรหัสผ่านไม่ถูกต้อง หากลืมรหัสผ่าน ให้ลองนึกดูอีกครั้งนะครับ");
+                }
+            }
             renderItems();
         }
 
         function logout() {
-            if (confirm('ต้องการออกจากระบบ? คุณจะต้องกรอกรหัสเดิมเพื่อเข้าถึงข้อมูลเดิม')) {
+            if (confirm('ต้องการออกจากระบบ? คุณต้องกรอกรหัสเดิมเพื่อกลับเข้ามาจัดการประกาศของคุณ')) {
                 localStorage.removeItem('phaendin_user_account');
                 location.reload();
             }
@@ -219,10 +294,7 @@
         function toggleModal(show) {
             document.getElementById('modal').classList.toggle('hidden', !show);
             if (show) document.getElementById('modal').classList.add('flex');
-            else {
-                document.getElementById('rentForm').reset();
-                isEditing = false;
-            }
+            else document.getElementById('rentForm').reset();
         }
 
         function openAddModal() {
@@ -251,7 +323,6 @@
         function handleForm(e) {
             e.preventDefault();
             const id = document.getElementById('editItemId').value;
-            
             const itemData = {
                 name: document.getElementById('itemName').value,
                 price: document.getElementById('itemPrice').value,
@@ -260,14 +331,12 @@
                 image: document.getElementById('itemImage').value || 'https://images.unsplash.com/photo-1581244276891-6bc6127498f1?auto=format&fit=crop&q=80&w=500',
                 desc: document.getElementById('itemDesc').value,
                 contact: document.getElementById('itemContact').value,
-                ownerId: userAccount.username // ผูกติดกับ User ที่ล็อคอิน
+                ownerId: userAccount.username
             };
 
             if (isEditing) {
-                const index = items.findIndex(i => i.id == id);
-                if (index !== -1 && items[index].ownerId === userAccount.username) {
-                    items[index] = { ...items[index], ...itemData };
-                }
+                const idx = items.findIndex(i => i.id == id);
+                if (idx !== -1 && items[idx].ownerId === userAccount.username) items[idx] = { ...items[idx], ...itemData };
             } else {
                 items.unshift({ id: Date.now(), ...itemData });
             }
@@ -275,15 +344,12 @@
             localStorage.setItem('phaendin_rent_items', JSON.stringify(items));
             toggleModal(false);
             renderItems();
-            showAlert("สำเร็จ!", "ข้อมูลของคุณถูกบันทึกแล้ว");
+            showAlert("สำเร็จ", "ข้อมูลถูกบันทึกเรียบร้อย");
         }
 
         function deleteItem(id) {
-            const item = items.find(i => i.id === id);
-            if (!item || item.ownerId !== userAccount.username) return;
-
             if (confirm('ยืนยันการลบประกาศนี้?')) {
-                items = items.filter(i => i.id !== id);
+                items = items.filter(i => i.id !== id || i.ownerId !== userAccount.username);
                 localStorage.setItem('phaendin_rent_items', JSON.stringify(items));
                 renderItems();
             }
@@ -302,26 +368,18 @@
             if (!userAccount) return;
             const grid = document.getElementById('itemsGrid');
             const search = document.getElementById('searchInput').value.toLowerCase();
-            const emptyState = document.getElementById('emptyState');
-            
             const filtered = items.filter(item => {
                 const text = (item.name + item.desc + item.loc).toLowerCase();
                 return text.includes(search) && (currentCategory === 'ทั้งหมด' || item.category === currentCategory);
             });
 
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
+            document.getElementById('emptyState').classList.toggle('hidden', filtered.length > 0);
             grid.innerHTML = filtered.map(item => {
                 const isOwner = item.ownerId === userAccount.username;
                 return `
                 <div class="item-card bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 flex flex-col group relative">
                     ${isOwner ? `
-                    <div class="absolute top-4 right-4 z-10 flex gap-2">
+                    <div class="absolute top-3 right-3 z-10 flex gap-1.5">
                          <button onclick="openEditModal(${item.id})" class="p-2 bg-white text-blue-600 rounded-full shadow-lg hover:bg-blue-600 hover:text-white transition-all">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>
                         </button>
@@ -329,36 +387,27 @@
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                         </button>
                     </div>` : ''}
-
-                    <div class="h-48 bg-slate-100 relative">
+                    <div class="h-44 bg-slate-100 relative">
                         <img src="${item.image}" class="w-full h-full object-cover">
                         <div class="absolute bottom-3 left-3 flex gap-1">
-                            <span class="bg-blue-600 text-white px-2 py-0.5 rounded-lg text-[10px] font-bold">${item.category}</span>
+                            <span class="bg-blue-600 text-white px-2 py-0.5 rounded-lg text-[10px] font-bold shadow-md">${item.category}</span>
                             <span class="bg-black/50 backdrop-blur text-white px-2 py-0.5 rounded-lg text-[10px]">${item.loc}</span>
                         </div>
                     </div>
                     <div class="p-5 flex-grow">
-                        <div class="flex justify-between items-start mb-2">
+                        <div class="flex justify-between items-start mb-1">
                             <h3 class="font-bold text-slate-800 line-clamp-1">${item.name}</h3>
                             <span class="text-blue-600 font-bold">฿${item.price}</span>
                         </div>
-                        <p class="text-slate-500 text-xs mb-4 line-clamp-2 italic">${item.desc || '-'}</p>
-                        
+                        <p class="text-slate-400 text-[11px] mb-3 line-clamp-2 h-8 leading-relaxed italic">${item.desc || '-'}</p>
                         <div class="flex items-center justify-between border-t pt-4">
-                            <span class="text-[10px] text-slate-400 font-bold uppercase">โดย ${item.ownerId}</span>
-                            <button onclick="window.open('https://line.me/ti/p/~${item.contact}')" class="bg-green-500 text-white px-4 py-1.5 rounded-xl text-[10px] font-bold shadow-md">
-                                ติดต่อเช่า
-                            </button>
+                            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">โดย ${item.ownerId}</span>
+                            <button onclick="window.open('https://line.me/ti/p/~${item.contact}')" class="bg-green-500 text-white px-4 py-1.5 rounded-xl text-[10px] font-bold shadow-md hover:bg-green-600">ติดต่อเช่า</button>
                         </div>
                     </div>
                 </div>
             `}).join('');
         }
     </script>
-
-    <style>
-        @keyframes modalAnim { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-modal { animation: modalAnim 0.3s ease-out; }
-    </style>
 </body>
 </html>
