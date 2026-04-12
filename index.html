@@ -31,6 +31,11 @@ button {
   border:none;
   padding:10px;
   border-radius:8px;
+  margin-top:5px;
+}
+
+.delete {
+  background:red;
 }
 
 img { width:100%; border-radius:10px; }
@@ -41,7 +46,6 @@ img { width:100%; border-radius:10px; }
 
 <header>
   <h2>🔄 Phaendin Rent</h2>
-  <p>เว็บให้คนลงของเพื่อปล่อยเช่า</p>
 </header>
 
 <div class="container">
@@ -74,7 +78,7 @@ function addItem(){
   const desc = document.getElementById("desc").value;
 
   if(!owner || !name || !price){
-    alert("กรอกข้อมูลให้ครบ");
+    alert("กรอกให้ครบ");
     return;
   }
 
@@ -84,6 +88,12 @@ function addItem(){
   render();
 
   document.querySelectorAll("input, textarea").forEach(el=>el.value="");
+}
+
+function deleteItem(i){
+  items.splice(i,1);
+  localStorage.setItem("items", JSON.stringify(items));
+  render();
 }
 
 function render(){
@@ -98,14 +108,11 @@ function render(){
         <p>${item.desc || ""}</p>
         <b>${item.price} บาท/วัน</b><br>
         <small>👤 ${item.owner}</small><br><br>
-        <button onclick="rent(${i})">จอง</button>
+        <button onclick="alert('จอง: ${item.name}')">จอง</button>
+        <button class="delete" onclick="deleteItem(${i})">ลบ</button>
       </div>
     `;
   });
-}
-
-function rent(i){
-  alert("คุณจอง: " + items[i].name);
 }
 
 render();
