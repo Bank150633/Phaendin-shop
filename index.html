@@ -108,7 +108,7 @@ function render(){
         <p>${item.desc || ""}</p>
         <b>${item.price} บาท/วัน</b><br>
         <small>👤 ${item.owner}</small><br><br>
-        <button onclick="alert('จอง: ${item.name}')">จอง</button>
+        <button onclick="contact('${item.owner}')">ติดต่อ</button>
         <button class="delete" onclick="deleteItem(${i})">ลบ</button>
       </div>
     `;
@@ -116,6 +116,9 @@ function render(){
 }
 
 render();
+  function contact(owner){
+  alert("ติดต่อเจ้าของ: " + owner + "\n(เพิ่ม LINE หรือเบอร์ในขั้นต่อไป)");
+}
 </script>
 
 </body>
