@@ -3,133 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ระบบยืมของ</title>
-<style>
-body { font-family: sans-serif; padding: 20px; background: #f0f2f5; }
-h1,h2 { color: #333; }
-input, button { padding: 8px; margin: 5px; }
-button { cursor: pointer; }
-#items { margin-top: 20px; }
-.item { display: flex; justify-content: space-between; margin-bottom: 5px; background: #fff; padding: 5px 10px; border-radius: 5px; }
-.item button { margin-left: 5px; }
-</style>
+<title>Phaendin Rent</title>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
+<style>
+body { font-family:sans-serif; margin:0; background:#f1f5f9;}
+header { background:#0ea5e9; color:#fff; padding:15px; text-align:center;}
+.container { padding:15px; max-width:500px; margin:auto;}
+
+.card {
+  background:#fff;
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:12px;
+  box-shadow:0 3px 6px rgba(0,0,0,0.1);
+}
+
+input, textarea {
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+button {
+  width:100%;
+  background:#0ea5e9;
+  color:#fff;
+  border:none;
+  padding:10px;
+  border-radius:8px;
+}
+
+img { width:100%; border-radius:10px; }
+</style>
 </head>
+
 <body>
 
-<h1>ระบบยืมของ</h1>
+<header>
+  <h2>🔄 Phaendin Rent</h2>
+  <p>เว็บให้คนลงของเพื่อปล่อยเช่า</p>
+</header>
 
-<div id="login">
-  <input type="email" id="email" placeholder="อีเมล">
-  <input type="password" id="password" placeholder="รหัสผ่าน">
-  <button onclick="signup()">สมัครสมาชิก</button>
-  <button onclick="login()">ล็อกอิน</button>
-</div>
+<div class="container">
 
-<div id="items" style="display:none;">
-  <h2>รายการของ</h2>
-  <div>
-    <input type="text" id="new-item" placeholder="ชื่อของ">
-    <button onclick="addItem()">เพิ่มของ</button>
-  </div>
-  <div id="item-list"></div>
-  <button onclick="logout()">ออกจากระบบ</button>
+<h3>📦 ลงของให้เช่า</h3>
+
+<input id="owner" placeholder="ชื่อคุณ">
+<input id="name" placeholder="ชื่อสินค้า">
+<input id="price" placeholder="ราคา/วัน">
+<input id="image" placeholder="ลิงก์รูปภาพ">
+<textarea id="desc" placeholder="รายละเอียด"></textarea>
+
+<button onclick="addItem()">โพสต์สินค้า</button>
+
+<hr>
+
+<h3>🔍 สินค้าทั้งหมด</h3>
+<div id="list"></div>
+
 </div>
 
 <script>
-  // 🔹 ใส่ Firebase Config ของคุณ
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-  };
+let items = JSON.parse(localStorage.getItem("items")) || [];
 
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  const auth = firebase.auth();
+function addItem(){
+  const owner = document.getElementById("owner").value;
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const image = document.getElementById("image").value;
+  const desc = document.getElementById("desc").value;
 
-  // สมัครสมาชิก
-  function signup() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(() => alert('สมัครสมาชิกเรียบร้อย'))
-      .catch(e => alert(e.message));
+  if(!owner || !name || !price){
+    alert("กรอกข้อมูลให้ครบ");
+    return;
   }
 
-  // ล็อกอิน
-  function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        document.getElementById('login').style.display='none';
-        document.getElementById('items').style.display='block';
-        loadItems();
-      })
-      .catch(e => alert(e.message));
-  }
+  items.unshift({owner,name,price,image,desc});
+  localStorage.setItem("items", JSON.stringify(items));
 
-  // ออกจากระบบ
-  function logout() {
-    auth.signOut().then(() => {
-      document.getElementById('login').style.display='block';
-      document.getElementById('items').style.display='none';
-    });
-  }
+  render();
 
-  // เพิ่มของ
-  function addItem() {
-    const name = document.getElementById('new-item').value;
-    if(!name) return alert("กรอกชื่อของก่อน");
-    db.collection('items').add({ 
-      name, 
-      status: 'available', 
-      borrower: '', 
-      createdAt: firebase.firestore.FieldValue.serverTimestamp() 
-    });
-    document.getElementById('new-item').value='';
-  }
+  document.querySelectorAll("input, textarea").forEach(el=>el.value="");
+}
 
-  // โหลดรายการของ
-  function loadItems() {
-    const list = document.getElementById('item-list');
-    db.collection('items').orderBy('createdAt').onSnapshot(snapshot => {
-      list.innerHTML = '';
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-          ${data.name} - <b>${data.status}</b>
-          ${data.status === 'available' 
-            ? `<button onclick="borrowItem('${doc.id}','${auth.currentUser.email}')">ยืม</button>` 
-            : (data.borrower === auth.currentUser.email ? `<button onclick="returnItem('${doc.id}')">คืน</button>` : '')}
-        `;
-        list.appendChild(div);
-      });
-    });
-  }
+function render(){
+  const list = document.getElementById("list");
+  list.innerHTML = "";
 
-  // ยืมของ
-  function borrowItem(id, user) {
-    db.collection('items').doc(id).update({
-      status: 'borrowed',
-      borrower: user
-    });
-  }
+  items.forEach((item,i)=>{
+    list.innerHTML += `
+      <div class="card">
+        ${item.image ? `<img src="${item.image}">` : ""}
+        <h3>${item.name}</h3>
+        <p>${item.desc || ""}</p>
+        <b>${item.price} บาท/วัน</b><br>
+        <small>👤 ${item.owner}</small><br><br>
+        <button onclick="rent(${i})">จอง</button>
+      </div>
+    `;
+  });
+}
 
-  // คืนของ
-  function returnItem(id) {
-    db.collection('items').doc(id).update({
-      status: 'available',
-      borrower: ''
-    });
-  }
+function rent(i){
+  alert("คุณจอง: " + items[i].name);
+}
+
+render();
 </script>
 
 </body>
