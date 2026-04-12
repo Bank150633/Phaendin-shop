@@ -76,13 +76,14 @@ function addItem(){
   const price = document.getElementById("price").value;
   const image = document.getElementById("image").value;
   const desc = document.getElementById("desc").value;
-
+  const contact = document.getElementById("contact").value;
+  
   if(!owner || !name || !price){
     alert("กรอกให้ครบ");
     return;
   }
 
-  items.unshift({owner,name,price,image,desc});
+  items.unshift({owner,name,price,image,desc,contact});
   localStorage.setItem("items", JSON.stringify(items));
 
   render();
