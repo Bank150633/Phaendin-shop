@@ -110,7 +110,7 @@ function render(){
         <b>${item.price} บาท/วัน</b><br>
         <br><br>
         <small>👤 ${item.owner}</small><br>
-        <small>📞 ${item.contact || "-"}</small><button onclick="contact('${item.owner}')">ติดต่อ</button>
+        <small>📞 ${item.contact || "-"}</small><button onclick="contact('${item.contact}')">ติดต่อ</button>
         <button class="delete" onclick="deleteItem(${i})">ลบ</button>
       </div>
     `;
