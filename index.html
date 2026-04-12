@@ -108,8 +108,9 @@ function render(){
         <h3>${item.name}</h3>
         <p>${item.desc || ""}</p>
         <b>${item.price} บาท/วัน</b><br>
-        <small>👤 ${item.owner}</small><br><br>
-        <button onclick="contact('${item.owner}')">ติดต่อ</button>
+        <br><br>
+        <small>👤 ${item.owner}</small><br>
+        <small>📞 ${item.contact || "-"}</small><button onclick="contact('${item.owner}')">ติดต่อ</button>
         <button class="delete" onclick="deleteItem(${i})">ลบ</button>
       </div>
     `;
