@@ -2,40 +2,78 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Phaendin Rental</title>
+    <title>Phaendin Rental - คลังสินค้าให้เช่า</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Kanit', sans-serif; }</style>
 </head>
-<body class="bg-gray-50">
-    <nav class="bg-blue-600 p-4 text-white flex justify-between">
-        <h1 class="font-bold">Phaendin Rental</h1>
-        <button onclick="alert('ฟีเจอร์ลงทะเบียนกำลังมา!')" class="bg-white text-blue-600 px-3 py-1 rounded-full text-sm">+ ลงประกาศ</button>
+<body class="bg-gray-100">
+
+    <nav class="bg-blue-700 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Phaendin Rental</h1>
+            <span class="text-xs bg-blue-500 px-2 py-1 rounded">ระบบเช่าออนไลน์</span>
+        </div>
     </nav>
 
-    <div class="p-6 max-w-6xl mx-auto">
-        <div id="app" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <p>กำลังโหลดสินค้า...</p>
+    <header class="bg-white py-8 border-b">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-800">ค้นหาสินค้าให้เช่า</h2>
+            <p class="text-gray-500 mt-2">ประหยัดกว่าซื้อใหม่ แบ่งปันของใช้ในชุมชน</p>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <div id="product-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="col-span-full text-center py-10">
+                <p class="text-gray-400 animate-pulse">กำลังดึงข้อมูลจากคลังส่วนกลาง...</p>
+            </div>
         </div>
     </div>
 
     <script>
+        // *** วาง URL ของ Google Apps Script ของคุณตรงนี้ ***
         const API_URL = "ใส่_URL_ที่ก๊อปมาจาก_GAS_ตรงนี้";
 
-        async function loadData() {
-            const res = await fetch(API_URL);
-            const data = await res.json();
-            const container = document.getElementById('app');
-            container.innerHTML = data.map(item => `
-                <div class="bg-white shadow rounded-xl overflow-hidden">
-                    <img src="${item[5]}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold">${item[2]}</h3>
-                        <p class="text-blue-600">${item[3]} บาท/วัน</p>
-                        <a href="https://line.me/ti/p/~${item[4]}" class="block mt-4 bg-green-500 text-white text-center py-2 rounded">ติดต่อเช่า</a>
-                    </div>
-                </div>
-            `).join('');
+        async function fetchProducts() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                renderProducts(data);
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('product-container').innerHTML = "<p class='text-red-500 text-center col-span-full'>ไม่สามารถโหลดข้อมูลได้ กรุณาตรวจสอบการตั้งค่า API</p>";
+            }
         }
-        loadData();
+
+        function renderProducts(products) {
+            const container = document.getElementById('product-container');
+            container.innerHTML = ""; // ล้างหน้าจอ
+
+            products.forEach(item => {
+                // item[0]=ID, item[1]=ชื่อ, item[2]=ประเภท, item[3]=ค่าประกัน, item[4]=ค่าเช่า, item[5]=รูปภาพ
+                const card = `
+                    <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-200">
+                        <img src="${item[5] || 'https://via.placeholder.com/400x300?text=No+Image'}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${item[2]}</span>
+                            <h3 class="text-lg font-bold text-gray-800 mt-2">${item[1]}</h3>
+                            <div class="mt-4 flex justify-between items-end">
+                                <div>
+                                    <p class="text-gray-400 text-xs text-decoration-line: line-through">ประกัน ${item[3]}.-</p>
+                                    <p class="text-blue-600 font-bold text-xl">${item[4]} <span class="text-sm">บาท/วัน</span></p>
+                                </div>
+                                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700">จองเลย</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+
+        fetchProducts();
     </script>
 </body>
 </html>
