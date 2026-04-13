@@ -24,6 +24,7 @@
             <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">ลงประกาศสินค้าใหม่</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input type="text" id="newOwner" placeholder="👤 ชื่อผู้ประกาศ (ชื่อของคุณ)" class="p-3 border rounded-xl w-full md:col-span-2 border-blue-300 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none mb-2">
+                <input type="text" id="newContact" placeholder="📞 เบอร์โทร หรือ Line ID ของคุณ" class="p-3 border rounded-xl w-full md:col-span-2 border-blue-300 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none mb-2">
                 <input type="text" id="newName" placeholder="ชื่อสินค้า" class="p-3 border rounded-xl w-full focus:ring-2 focus:ring-blue-500 outline-none">
                 <input type="text" id="newCategory" placeholder="หมวดหมู่ (เช่น อุปกรณ์ช่าง, ไอที)" class="p-3 border rounded-xl w-full">
                 <input type="number" id="newDeposit" placeholder="ค่าประกัน (บาท)" class="p-3 border rounded-xl w-full">
@@ -166,6 +167,7 @@
 
     const data = {
         owner: document.getElementById('newOwner').value, // เพิ่มบรรทัดนี้
+        contact: document.getElementById('newContact').value,
         name: document.getElementById('newName').value,
         category: document.getElementById('newCategory').value,
         deposit: document.getElementById('newDeposit').value,
