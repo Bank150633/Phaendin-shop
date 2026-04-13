@@ -47,21 +47,23 @@
             }
         }
 
-        function renderProducts(products) {
+                function renderProducts(products) {
             const container = document.getElementById('product-container');
-            container.innerHTML = ""; // ล้างหน้าจอ
+            container.innerHTML = ""; 
 
             products.forEach(item => {
-                // item[0]=ID, item[1]=ชื่อ, item[2]=ประเภท, item[3]=ค่าประกัน, item[4]=ค่าเช่า, item[5]=รูปภาพ
+                // อ้างอิงตามรูปชีทของคุณ: 
+                // 0:ID, 1:ชื่อ, 2:ประเภท, 3:ค่าประกัน, 4:ค่าเช่า, 5:รูปภาพ
                 const card = `
                     <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-200">
-                        <img src="${item[5] || 'https://via.placeholder.com/400x300?text=No+Image'}" class="w-full h-48 object-cover">
+                        <img src="${item[5] && item[5].includes('http') ? item[5] : 'https://via.placeholder.com/400x300?text=No+Image'}" 
+                             class="w-full h-48 object-cover">
                         <div class="p-4">
                             <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${item[2]}</span>
                             <h3 class="text-lg font-bold text-gray-800 mt-2">${item[1]}</h3>
                             <div class="mt-4 flex justify-between items-end">
                                 <div>
-                                    <p class="text-gray-400 text-xs text-decoration-line: line-through">ประกัน ${item[3]}.-</p>
+                                    <p class="text-gray-400 text-xs">ประกัน ${item[3]}.-</p>
                                     <p class="text-blue-600 font-bold text-xl">${item[4]} <span class="text-sm">บาท/วัน</span></p>
                                 </div>
                                 <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700">จองเลย</button>
@@ -72,6 +74,7 @@
                 container.innerHTML += card;
             });
         }
+
 
         fetchProducts();
     </script>
