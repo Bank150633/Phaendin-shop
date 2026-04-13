@@ -107,10 +107,10 @@
 
             products.forEach(item => {
                 const name = item[1] || 'ไม่มีชื่อ';
-                const owner = item[10] || 'ไม่ระบุชื่อ';
+                const owner = item[8] || 'ไม่ระบุชื่อ';
                 const status = item[6] || 'ว่าง';
                 const isAvailable = status === 'ว่าง';
-                const mapLink = item[7] || null; // คอลัมน์ H
+                const mapLink = item[7] || null; 
 
                 const card = `
                     <div class="product-card bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200" data-name="${name}">
