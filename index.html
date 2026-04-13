@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Phaendin Rental - คลังสินค้าให้เช่า</title>
+    <title>Phaendin Rental - ระบบเช่าและลงทะเบียน</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>body { font-family: 'Kanit', sans-serif; }</style>
 </head>
@@ -13,49 +13,79 @@
     <nav class="bg-blue-700 text-white p-4 shadow-md sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
             <h1 class="text-xl font-bold">Phaendin Rental</h1>
-            <span class="text-xs bg-blue-500 px-2 py-1 rounded">ระบบเช่าออนไลน์</span>
+            <button onclick="toggleForm()" class="bg-orange-500 px-4 py-2 rounded-lg font-bold text-sm hover:bg-orange-600 transition">
+                ➕ ลงประกาศเช่า
+            </button>
         </div>
     </nav>
 
-    <header class="bg-white py-8 border-b">
+    <div id="add-product-form" class="hidden container mx-auto px-4 mt-6">
+        <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-orange-400">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">ลงประกาศสินค้าใหม่</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" id="newName" placeholder="ชื่อสินค้า" class="p-3 border rounded-xl w-full focus:ring-2 focus:ring-blue-500 outline-none">
+                <input type="text" id="newCategory" placeholder="หมวดหมู่ (เช่น อุปกรณ์ช่าง, ไอที)" class="p-3 border rounded-xl w-full">
+                <input type="number" id="newDeposit" placeholder="ค่าประกัน (บาท)" class="p-3 border rounded-xl w-full">
+                <input type="number" id="newPrice" placeholder="ราคาเช่า/วัน (บาท)" class="p-3 border rounded-xl w-full">
+                <input type="text" id="newImg" placeholder="URL รูปภาพสินค้า" class="p-3 border rounded-xl w-full">
+                
+                <div class="flex flex-col gap-2">
+                    <input type="text" id="newLocation" placeholder="พิกัด (ละติจูด, ลองจิจูด)" class="p-3 border rounded-xl w-full bg-gray-50" readonly>
+                    <button type="button" onclick="getCurrentLocation()" class="bg-green-600 text-white py-2 rounded-xl font-bold hover:bg-green-700 transition flex items-center justify-center gap-2">
+                        📍 กดเพื่อดึงพิกัดที่อยู่ปัจจุบัน
+                    </button>
+                </div>
+            </div>
+            <div class="mt-6 flex gap-4">
+                <button onclick="submitProduct()" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-blue-700">ยืนยันลงประกาศ</button>
+                <button onclick="toggleForm()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-bold text-lg hover:bg-gray-300">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
+    <header class="bg-white py-8 border-b mt-4">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl font-bold text-gray-800">ค้นหาสินค้าให้เช่า</h2>
             <p class="text-gray-500 mt-2">ประหยัดกว่าซื้อใหม่ แบ่งปันของใช้ในชุมชน</p>
         </div>
     </header>
 
-    <div class="container mx-auto px-4 mt-6">
-        <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
-            <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="🔍 ค้นหาสินค้าที่ต้องการ..." 
-                   class="p-3 border rounded-xl w-full md:w-1/2 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
-            
-            <button onclick="window.open('https://forms.gle/XXXXXXX')" 
-                    class="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 transition shadow-lg w-full md:w-auto">
-                ➕ ปล่อยเช่าของตัวเอง
-            </button>
-        </div>
+    <div class="container mx-auto px-4 mt-6 text-center">
+        <input type="text" id="searchInput" onkeyup="searchProducts()" placeholder="🔍 ค้นหาสินค้าที่ต้องการ..." 
+               class="p-3 border rounded-xl w-full md:w-1/2 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
     </div>
 
     <div class="container mx-auto px-4 py-8">
         <div id="product-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="col-span-full text-center py-10">
-                <p class="text-gray-400 animate-pulse">กำลังดึงข้อมูลจากคลังส่วนกลาง...</p>
+                <p class="text-gray-400 animate-pulse">กำลังดึงข้อมูล...</p>
             </div>
         </div>
     </div>
 
     <script>
-        // *** 1. ใส่ URL ของ Google Apps Script ของคุณ ***
-        const API_URL = "https://script.google.com/macros/s/AKfycbzPLP6wn_zpiqWWeePIeDDHHGTDu0u2sZoCNp_MdYb9RnLphzxofrV80FOGiEDfqBzZHw/exec";
+        const API_URL = "ใส่_URL_APPS_SCRIPT_ของคุณตรงนี้";
 
-        // *** 2. ฟังก์ชันค้นหาสินค้า ***
-        function searchProducts() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('product-card');
-            
-            for (let i = 0; i < cards.length; i++) {
-                let name = cards[i].getAttribute('data-name').toLowerCase();
-                cards[i].style.display = name.includes(input) ? "" : "none";
+        function toggleForm() {
+            const form = document.getElementById('add-product-form');
+            form.classList.toggle('hidden');
+        }
+
+        // ฟังก์ชันดึงพิกัดปัจจุบัน
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                alert("กำลังขอตำแหน่งปัจจุบันของคุณ...");
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    // สร้างเป็นลิงก์ Google Maps เก็บไว้
+                    document.getElementById('newLocation').value = `https://www.google.com/maps?q=${lat},${lng}`;
+                    alert("ปักหมุดสำเร็จ!");
+                }, function(error) {
+                    alert("ดึงพิกัดล้มเหลว: กรุณาเปิด GPS");
+                });
+            } else {
+                alert("เบราว์เซอร์ไม่รองรับ");
             }
         }
 
@@ -66,7 +96,7 @@
                 renderProducts(data);
             } catch (error) {
                 console.error("Error:", error);
-                document.getElementById('product-container').innerHTML = "<p class='text-red-500 text-center col-span-full'>ไม่สามารถโหลดข้อมูลได้</p>";
+                document.getElementById('product-container').innerHTML = "<p class='text-red-500 text-center col-span-full'>โหลดข้อมูลไม่สำเร็จ</p>";
             }
         }
 
@@ -78,32 +108,49 @@
                 const name = item[1] || 'ไม่มีชื่อ';
                 const status = item[6] || 'ว่าง';
                 const isAvailable = status === 'ว่าง';
+                const mapLink = item[7] || null; // คอลัมน์ H
 
                 const card = `
-                    <div class="product-card bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-gray-200" data-name="${name}">
-                        <img src="${item[5] || 'https://via.placeholder.com/400x300?text=No+Image'}" 
-                             class="w-full h-48 object-cover ${!isAvailable ? 'grayscale opacity-50' : ''}">
+                    <div class="product-card bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200" data-name="${name}">
+                        <img src="${item[5] || 'https://via.placeholder.com/400x300'}" class="w-full h-48 object-cover ${!isAvailable ? 'grayscale opacity-50' : ''}">
                         <div class="p-4">
                             <div class="flex justify-between items-start">
                                 <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${item[2]}</span>
                                 <span class="text-[10px] ${isAvailable ? 'text-green-500' : 'text-red-500'} font-bold uppercase">${status}</span>
                             </div>
                             <h3 class="text-lg font-bold text-gray-800 mt-2">${name}</h3>
-                            <div class="mt-4 flex justify-between items-end border-t pt-4">
-                                <div>
-                                    <p class="text-gray-400 text-xs">ประกัน ${item[3]}.-</p>
-                                    <p class="text-blue-600 font-bold text-xl">${item[4]} <span class="text-sm">บาท/วัน</span></p>
+                            
+                            <div class="mt-4 flex flex-col gap-2 border-t pt-4">
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <p class="text-gray-400 text-xs">ประกัน ${item[3]}.-</p>
+                                        <p class="text-blue-600 font-bold text-xl">${item[4]} <span class="text-sm">บาท/วัน</span></p>
+                                    </div>
+                                    <button onclick="${isAvailable ? `window.location.href='https://line.me/R/ti/p/@ไอดีของคุณ?text=สนใจเช่า: ${name}'` : ''}"
+                                            class="${isAvailable ? 'bg-blue-600' : 'bg-gray-400'} text-white px-4 py-2 rounded-lg text-sm font-semibold">
+                                        ${isAvailable ? 'จองเลย' : 'ไม่ว่าง'}
+                                    </button>
                                 </div>
-                                <button onclick="${isAvailable ? `window.location.href='https://line.me/R/ti/p/@ไอดีของคุณ?text=สนใจเช่า: ${name}%0A-เริ่มยืม:%0A-คืนวันที่:'` : ''}"
-                                        class="${isAvailable ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'} text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
-                                    ${isAvailable ? 'จองเลย' : 'ไม่ว่าง'}
-                                </button>
+                                ${mapLink ? `
+                                    <a href="${mapLink}" target="_blank" class="text-center text-xs text-red-500 font-bold bg-red-50 py-2 rounded-lg border border-red-200">
+                                        📍 ดูพิกัดรับสินค้า
+                                    </a>
+                                ` : ''}
                             </div>
                         </div>
                     </div>
                 `;
                 container.innerHTML += card;
             });
+        }
+
+        function searchProducts() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('product-card');
+            for (let i = 0; i < cards.length; i++) {
+                let name = cards[i].getAttribute('data-name').toLowerCase();
+                cards[i].style.display = name.includes(input) ? "" : "none";
+            }
         }
 
         fetchProducts();
