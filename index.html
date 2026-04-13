@@ -2,111 +2,40 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phaendin Rental Store</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <title>Phaendin Rental</title>
 </head>
-<body class="bg-gray-50 min-h-screen">
-
-    <nav class="bg-blue-600 text-white p-4 shadow-lg mb-8">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">Phaendin Rental</h1>
-            <span class="text-sm bg-blue-500 px-2 py-1 rounded">ระบบเช่าสินค้าออนไลน์</span>
-        </div>
+<body class="bg-gray-50">
+    <nav class="bg-blue-600 p-4 text-white flex justify-between">
+        <h1 class="font-bold">Phaendin Rental</h1>
+        <button onclick="alert('ฟีเจอร์ลงทะเบียนกำลังมา!')" class="bg-white text-blue-600 px-3 py-1 rounded-full text-sm">+ ลงประกาศ</button>
     </nav>
 
-    <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-1">
-            <div class="bg-white p-6 rounded-2xl shadow-md sticky top-4 border-2 border-blue-100">
-                <h2 class="text-xl font-bold mb-4 text-gray-800">ลงประกาศเช่าสินค้า</h2>
-                <div class="space-y-4">
-                    <input type="text" id="title" placeholder="ชื่อสินค้า (เช่น สว่านไฟฟ้า)" class="w-full p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
-                    <input type="number" id="price" placeholder="ราคาเช่าต่อวัน (บาท)" class="w-full p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
-                    <input type="text" id="img_url" placeholder="ลิงก์รูปภาพจากเน็ต (URL)" class="w-full p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400">
-                    <textarea id="details" placeholder="รายละเอียดการเช่า..." class="w-full p-2 border rounded-lg outline-none focus:ring-2 focus:ring-blue-400 h-24"></textarea>
-                    <button onclick="saveProduct()" id="saveBtn" class="w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 shadow-md">บันทึกและลงประกาศ</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="lg:col-span-2">
-            <h2 class="text-xl font-bold mb-4 text-gray-800">สินค้าให้เช่าล่าสุด</h2>
-            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <p class="text-gray-500">กำลังเชื่อมต่อฐานข้อมูล...</p>
-            </div>
+    <div class="p-6 max-w-6xl mx-auto">
+        <div id="app" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <p>กำลังโหลดสินค้า...</p>
         </div>
     </div>
 
     <script>
-        // --- แก้ไขจุดที่สลับกันให้แล้วครับ ---
-        const SB_URL = "https://gwmcpndmitygnsaopdee.supabase.co"; 
-        const SB_KEY = "sb_publishable_2Ch6eZtccCk2CRHJq6YWtg_CFUMGlW2"; // ค่าจากรูป 1654 ของคุณ
-        
-        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+        const API_URL = "ใส่_URL_ที่ก๊อปมาจาก_GAS_ตรงนี้";
 
-        async function loadProducts() {
-            try {
-                const { data, error } = await _supabase
-                    .from('products')
-                    .select('*')
-                    .order('id', { ascending: false });
-
-                if (error) throw error;
-
-                const listArea = document.getElementById('product-list');
-                listArea.innerHTML = data.length === 0 ? "ยังไม่มีสินค้าในระบบ" : "";
-
-                data.forEach(item => {
-                    listArea.innerHTML += `
-                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-md transition">
-                            <img src="${item.img_url || 'https://via.placeholder.com/150'}" class="w-full h-48 object-cover">
-                            <div class="p-4">
-                                <h3 class="font-bold text-lg text-gray-800">${item.title}</h3>
-                                <p class="text-blue-600 font-bold text-xl">${item.price} บาท/วัน</p>
-                                <p class="text-gray-600 text-sm mt-2">${item.details || ''}</p>
-                                <button class="mt-4 w-full bg-blue-100 text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-200">สนใจเช่า</button>
-                            </div>
-                        </div>`;
-                });
-            } catch (e) {
-                document.getElementById('product-list').innerHTML = "เชื่อมต่อไม่ได้: " + e.message;
-            }
+        async function loadData() {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            const container = document.getElementById('app');
+            container.innerHTML = data.map(item => `
+                <div class="bg-white shadow rounded-xl overflow-hidden">
+                    <img src="${item[5]}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold">${item[2]}</h3>
+                        <p class="text-blue-600">${item[3]} บาท/วัน</p>
+                        <a href="https://line.me/ti/p/~${item[4]}" class="block mt-4 bg-green-500 text-white text-center py-2 rounded">ติดต่อเช่า</a>
+                    </div>
+                </div>
+            `).join('');
         }
-
-        async function saveProduct() {
-            const btn = document.getElementById('saveBtn');
-            const title = document.getElementById('title').value;
-            const price = document.getElementById('price').value;
-            const details = document.getElementById('details').value;
-            const img_url = document.getElementById('img_url').value;
-
-            if(!title || !price) return alert("กรุณากรอกชื่อและราคาครับ");
-
-            btn.innerText = "กำลังบันทึก...";
-            btn.disabled = true;
-
-            const { error } = await _supabase
-                .from('products')
-                .insert([{ 
-                    title: title, 
-                    price: Number(price), // แปลงเป็นตัวเลขให้ตรงกับ database
-                    details: details, 
-                    img_url: img_url 
-                }]);
-
-            if (error) {
-                alert("พลาด: " + error.message);
-            } else {
-                alert("ลงประกาศสำเร็จ!");
-                loadProducts(); 
-                document.querySelectorAll('input, textarea').forEach(el => el.value = "");
-            }
-            btn.innerText = "บันทึกและลงประกาศ";
-            btn.disabled = false;
-        }
-
-        loadProducts();
+        loadData();
     </script>
 </body>
 </html>
