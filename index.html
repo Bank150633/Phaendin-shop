@@ -162,50 +162,50 @@
 
         fetchProducts();
         async function submitProduct(event) {
-    // ป้องกันหน้าเว็บรีโหลดเองก่อนส่งข้อมูลสำเร็จ
     if (event) event.preventDefault();
 
     const data = {
-        owner: document.getElementById('newOwner').value, // เพิ่มบรรทัดนี้
-        contact: document.getElementById('newContact').value,
-        name: document.getElementById('newName').value,
-        category: document.getElementById('newCategory').value,
-        deposit: document.getElementById('newDeposit').value,
-        price: document.getElementById('newPrice').value,
-        img: document.getElementById('newImg').value,
-        location: document.getElementById('newLocation').value
+        owner: document.getElementById('newOwner').value.trim(),
+        contact: document.getElementById('newContact').value.trim(),
+        name: document.getElementById('newName').value.trim(),
+        category: document.getElementById('newCategory').value.trim(),
+        deposit: document.getElementById('newDeposit').value.trim(),
+        price: document.getElementById('newPrice').value.trim(),
+        img: document.getElementById('newImg').value.trim(),
+        location: document.getElementById('newLocation').value.trim()
     };
 
-    // เช็คความเรียบร้อยก่อนส่ง
-    if (!data.name || !data.location) {
-        alert("⚠️ กรุณากรอกชื่อสินค้าและ 'กดปุ่มสีเขียว' เพื่อปักหมุดพิกัดด้วยครับ");
+    // 1. ตรวจสอบว่ากรอกครบทุกช่องไหม
+    if (Object.values(data).some(value => value === "")) {
+        alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่องก่อนลงประกาศครับ");
         return;
     }
 
-    // จัดการปุ่มกดเพื่อไม่ให้คนกดซ้ำระหว่างรอ
-    const btn = document.querySelector('button[onclick="submitProduct()"]') || event.target;
-    const originalText = btn.innerText;
+    // 2. ตรวจสอบเบอร์โทร (บังคับเป็นตัวเลข 9-10 หลัก)
+    // ถ้าพี่อยากให้กรอกได้ทั้ง Line ID และเบอร์ ให้ข้ามส่วนนี้ไปได้
+    const phonePattern = /^[0-9]{9,10}$/;
+    if (data.contact.length >= 9 && !isNaN(data.contact) && !phonePattern.test(data.contact)) {
+        alert("⚠️ กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (เป็นตัวเลข 9-10 หลัก)");
+        return;
+    }
+
+    // ส่วนการส่งข้อมูล (เหมือนเดิม)
+    const btn = event.target;
     btn.innerText = "⏳ กำลังบันทึกข้อมูล...";
     btn.disabled = true;
-    btn.classList.add('opacity-50', 'cursor-not-allowed');
 
     try {
-        // ส่งข้อมูลไปที่ Google Apps Script
-        const response = await fetch(API_URL, {
+        await fetch(API_URL, {
             method: 'POST',
-            mode: 'no-cors', // สำคัญ: เพื่อป้องกันปัญหา CORS เวลาคุยกับ Google Script
-            cache: 'no-cache',
+            mode: 'no-cors',
             body: JSON.stringify(data)
         });
-
-        alert("✅ ลงประกาศสินค้าสำเร็จแล้ว!");
-        window.location.reload(); // รีโหลดหน้าเพื่ออัปเดตรายการใหม่
+        alert("✅ ลงประกาศสำเร็จ! ข้อมูลติดต่อของคุณถูกบันทึกแล้ว");
+        window.location.reload();
     } catch (error) {
-        console.error("Error:", error);
-        alert("❌ เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง");
-        btn.innerText = originalText;
+        alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
+        btn.innerText = "ยืนยันลงประกาศ";
         btn.disabled = false;
-        btn.classList.remove('opacity-50', 'cursor-not-allowed');
     }
 }
     </script>
