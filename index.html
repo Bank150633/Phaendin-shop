@@ -29,9 +29,14 @@
                 <input type="text" id="newCategory" placeholder="หมวดหมู่ (เช่น อุปกรณ์ช่าง, ไอที)" class="p-3 border rounded-xl w-full">
                 <input type="number" id="newDeposit" placeholder="ค่าประกัน (บาท)" class="p-3 border rounded-xl w-full">
                 <input type="number" id="newPrice" placeholder="ราคาเช่า/วัน (บาท)" class="p-3 border rounded-xl w-full">
-                <input type="text" id="newImg" placeholder="URL รูปภาพสินค้า" class="p-3 border rounded-xl w-full">
                 
-                <div class="flex flex-col gap-2">
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700 mb-1">📸 ถ่ายรูปสินค้า หรือ เลือกรูปภาพ</label>
+                    <input type="file" id="imageInput" accept="image/*" capture="environment" 
+                           class="p-3 border-2 border-dashed border-blue-300 rounded-xl w-full bg-blue-50">
+                </div>
+                
+                <div class="flex flex-col gap-2 md:col-span-2">
                     <input type="text" id="newLocation" placeholder="พิกัด (ละติจูด, ลองจิจูด)" class="p-3 border rounded-xl w-full bg-gray-50" readonly>
                     <button type="button" onclick="getCurrentLocation()" class="bg-green-600 text-white py-2 rounded-xl font-bold hover:bg-green-700 transition flex items-center justify-center gap-2">
                         📍 กดเพื่อดึงพิกัดที่อยู่ปัจจุบัน
@@ -39,7 +44,7 @@
                 </div>
             </div>
             <div class="mt-6 flex gap-4">
-                <button onclick="submitProduct(event)" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-blue-700">ยืนยันลงประกาศ</button>
+                <button onclick="submitProduct(event)" id="submitBtn" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-bold text-lg hover:bg-blue-700">ยืนยันลงประกาศ</button>
                 <button onclick="toggleForm()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-bold text-lg hover:bg-gray-300">ยกเลิก</button>
             </div>
         </div>
@@ -66,21 +71,19 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbylU3eY3GhvFSTBQq0goUc2qzaLmcSWNWMrA-DjJwyhjUer1fEr0GGukZx-UJecMUK76Q/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxfApjrq-n4_Q1o1Qy0WZzsgsNQ0juHqS9DiTU_bf5zD1Et9sqFzOJ-7vdwO37wPMhkCg/exec";
 
         function toggleForm() {
             const form = document.getElementById('add-product-form');
             form.classList.toggle('hidden');
         }
 
-        // ฟังก์ชันดึงพิกัดปัจจุบัน
         function getCurrentLocation() {
             if (navigator.geolocation) {
                 alert("กำลังขอตำแหน่งปัจจุบันของคุณ...");
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
-                    // สร้างเป็นลิงก์ Google Maps เก็บไว้
                     document.getElementById('newLocation').value = `https://www.google.com/maps?q=${lat},${lng}`;
                     alert("ปักหมุดสำเร็จ!");
                 }, function(error) {
@@ -105,14 +108,11 @@
         function renderProducts(products) {
             const container = document.getElementById('product-container');
             container.innerHTML = ""; 
-
             products.forEach(item => {
                 const name = item[1] || 'ไม่มีชื่อ';
-                // แก้จุดนี้: ดึงชื่อจากคอลัมน์ I (ลำดับที่ 8) เพราะในชีทคุณ แบงค์/แมงกี้ อยู่ช่องนี้
                 const owner = item[8] || 'ไม่ระบุชื่อ'; 
                 const status = item[6] || 'ว่าง';
                 const isAvailable = status === 'ว่าง';
-                // แก้จุดนี้: ดึงพิกัดจากคอลัมน์ H (ลำดับที่ 7)
                 const mapLink = item[7] || null; 
 
                 const card = `
@@ -120,13 +120,11 @@
                         <img src="${item[5] || 'https://via.placeholder.com/400x300'}" class="w-full h-48 object-cover ${!isAvailable ? 'grayscale opacity-50' : ''}">
                         <div class="p-4">
                             <p class="text-[10px] text-blue-600 font-bold mb-1">👤 เจ้าของ: ${owner}</p>
-
                             <div class="flex justify-between items-start">
                                 <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${item[2]}</span>
                                 <span class="text-[10px] ${isAvailable ? 'text-green-500' : 'text-red-500'} font-bold uppercase">${status}</span>
                             </div>
                             <h3 class="text-lg font-bold text-gray-800 mt-2">${name}</h3>
-                            
                             <div class="mt-4 flex flex-col gap-2 border-t pt-4">
                                 <div class="flex justify-between items-end">
                                     <div>
@@ -138,11 +136,7 @@
                                         ${isAvailable ? 'จองเลย' : 'ไม่ว่าง'}
                                     </button>
                                 </div>
-                                ${mapLink ? `
-                                    <a href="${mapLink}" target="_blank" class="text-center text-xs text-red-500 font-bold bg-red-50 py-2 rounded-lg border border-red-200">
-                                        📍 ดูพิกัดรับสินค้า
-                                    </a>
-                                ` : ''}
+                                ${mapLink ? `<a href="${mapLink}" target="_blank" class="text-center text-xs text-red-500 font-bold bg-red-50 py-2 rounded-lg border border-red-200">📍 ดูพิกัดรับสินค้า</a>` : ''}
                             </div>
                         </div>
                     </div>
@@ -160,54 +154,62 @@
             }
         }
 
-        fetchProducts();
+        // จุดที่แก้ 2: แก้ฟังก์ชัน Submit ใหม่หมด เพื่อแปลงรูปภาพเป็น Base64 ส่งไป Drive
         async function submitProduct(event) {
-    if (event) event.preventDefault();
+            if (event) event.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert("⚠️ กรุณาถ่ายรูปสินค้าก่อนลงประกาศครับ");
+                return;
+            }
 
-    const data = {
-        owner: document.getElementById('newOwner').value.trim(),
-        contact: document.getElementById('newContact').value.trim(),
-        name: document.getElementById('newName').value.trim(),
-        category: document.getElementById('newCategory').value.trim(),
-        deposit: document.getElementById('newDeposit').value.trim(),
-        price: document.getElementById('newPrice').value.trim(),
-        img: document.getElementById('newImg').value.trim(),
-        location: document.getElementById('newLocation').value.trim()
-    };
+            const data = {
+                owner: document.getElementById('newOwner').value.trim(),
+                contact: document.getElementById('newContact').value.trim(),
+                name: document.getElementById('newName').value.trim(),
+                category: document.getElementById('newCategory').value.trim(),
+                deposit: document.getElementById('newDeposit').value.trim(),
+                price: document.getElementById('newPrice').value.trim(),
+                location: document.getElementById('newLocation').value.trim(),
+                imageFile: "" 
+            };
 
-    // 1. ตรวจสอบว่ากรอกครบทุกช่องไหม
-    if (Object.values(data).some(value => value === "")) {
-        alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่องก่อนลงประกาศครับ");
-        return;
-    }
+            if (Object.values(data).some(v => v === "" && v !== data.imageFile)) {
+                alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่องครับ");
+                return;
+            }
 
-    // 2. ตรวจสอบเบอร์โทร (บังคับเป็นตัวเลข 9-10 หลัก)
-    // ถ้าพี่อยากให้กรอกได้ทั้ง Line ID และเบอร์ ให้ข้ามส่วนนี้ไปได้
-    const phonePattern = /^[0-9]{9,10}$/;
-    if (data.contact.length >= 9 && !isNaN(data.contact) && !phonePattern.test(data.contact)) {
-        alert("⚠️ กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง (เป็นตัวเลข 9-10 หลัก)");
-        return;
-    }
+            btn.innerText = "⏳ กำลังประมวลผลรูปภาพ...";
+            btn.disabled = true;
 
-    // ส่วนการส่งข้อมูล (เหมือนเดิม)
-    const btn = event.target;
-    btn.innerText = "⏳ กำลังบันทึกข้อมูล...";
-    btn.disabled = true;
+            // แปลงไฟล์รูปภาพเป็น Base64
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async function () {
+                data.imageFile = reader.result;
+                
+                btn.innerText = "⏳ กำลังอัปโหลดข้อมูลและรูปภาพ...";
+                try {
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: JSON.stringify(data)
+                    });
+                    alert("✅ ลงประกาศและอัปโหลดรูปสำเร็จ!");
+                    window.location.reload();
+                } catch (error) {
+                    alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
+                    btn.innerText = "ยืนยันลงประกาศ";
+                    btn.disabled = false;
+                }
+            };
+        }
 
-    try {
-        await fetch(API_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(data)
-        });
-        alert("✅ ลงประกาศสำเร็จ! ข้อมูลติดต่อของคุณถูกบันทึกแล้ว");
-        window.location.reload();
-    } catch (error) {
-        alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
-        btn.innerText = "ยืนยันลงประกาศ";
-        btn.disabled = false;
-    }
-}
+        fetchProducts();
     </script>
 </body>
 </html>
