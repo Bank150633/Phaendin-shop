@@ -71,7 +71,7 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbxfApjrq-n4_Q1o1Qy0WZzsgsNQ0juHqS9DiTU_bf5zD1Et9sqFzOJ-7vdwO37wPMhkCg/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbzjA4J9esD9QqCsDsfk--NYxzzYncj2oDcWgVqCMqSL0Hrvn29GYOAPwrXj9RyBRmiHeg/exec";
 
         function toggleForm() {
             const form = document.getElementById('add-product-form');
@@ -167,16 +167,16 @@
                 return;
             }
 
-            const data = {
-                owner: document.getElementById('newOwner').value.trim(),
-                contact: document.getElementById('newContact').value.trim(),
-                name: document.getElementById('newName').value.trim(),
-                category: document.getElementById('newCategory').value.trim(),
-                deposit: document.getElementById('newDeposit').value.trim(),
-                price: document.getElementById('newPrice').value.trim(),
-                location: document.getElementById('newLocation').value.trim(),
-                imageFile: "" 
-            };
+                const data = {
+        owner: document.getElementById('newOwner').value.trim(),
+        contact: document.getElementById('newContact').value.trim(),
+        name: document.getElementById('newName').value.trim(),
+        category: document.getElementById('newCategory').value.trim(),
+        deposit: document.getElementById('newDeposit').value.trim(),
+        price: document.getElementById('newPrice').value.trim(),
+        location: document.getElementById('newLocation').value.trim(),
+        imageFile: base64Image // ต้องชื่อ imageFile ให้ตรงกับในสคริปต์
+    };
 
             if (Object.values(data).some(v => v === "" && v !== data.imageFile)) {
                 alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่องครับ");
