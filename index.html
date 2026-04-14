@@ -71,7 +71,7 @@
     </div>
 <script>
     // 1. ตรวจสอบ API_URL: เช็คให้ชัวร์ว่าตรงกับที่ Deploy ล่าสุด
-    const API_URL = "https://script.google.com/macros/s/AKfycbwYqJnYJQskv0ANOSPI9uMcMUkeFNYYf44pZ6BpehGvZ1JFdQ9X_jBeMNUVJe9dfAL9Fg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbx0A5LtRlE5bLRo5qVUr9AmoWo0luYXXMaM_1FcjNXjyS1aoKIMGri5ZCKRUu1YDU1r9w/exec";
 
     function toggleForm() {
         const form = document.getElementById('add-product-form');
@@ -103,64 +103,43 @@
         });
     }
 
-    // ฟังก์ชันส่งข้อมูล (แก้ไขใหม่ให้ปุ่มทำงานได้จริง)
-    async function submitProduct(event) {
+        async function submitProduct(event) {
         if (event) event.preventDefault();
-        
         const btn = document.getElementById('submitBtn');
         const fileInput = document.getElementById('imageInput');
         const file = fileInput.files[0];
-        
-        // ดึงค่าจากฟอร์ม
-        const owner = document.getElementById('newOwner').value.trim();
-        const contact = document.getElementById('newContact').value.trim();
-        const name = document.getElementById('newName').value.trim();
-        const category = document.getElementById('newCategory').value.trim();
-        const deposit = document.getElementById('newDeposit').value.trim();
-        const price = document.getElementById('newPrice').value.trim();
-        const location = document.getElementById('newLocation').value.trim();
 
-        // 1. เช็คความพร้อมของข้อมูล
-        if (!owner || !contact || !name || !file) {
-            alert("⚠️ กรุณากรอกข้อมูลสำคัญ (ชื่อ, ติดต่อ, สินค้า) และถ่ายรูปด้วยครับ");
-            return;
-        }
+        if (!file) { alert("📸 กรุณาถ่ายรูปก่อนครับ"); return; }
 
-        // 2. เริ่มการทำงานของปุ่ม
         btn.innerText = "⏳ กำลังอัปโหลด...";
         btn.disabled = true;
 
         try {
-            // 3. แปลงรูปภาพเป็น Base64
-            const base64Image = await readFileAsDataURL(file);
-            
-            const data = {
-                owner: owner,
-                contact: contact,
-                name: name,
-                category: category,
-                deposit: deposit,
-                price: price,
-                location: location,
-                imageFile: base64Image
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async function () {
+                const data = {
+                    name: document.getElementById('newName').value,
+                    category: document.getElementById('newCategory').value,
+                    deposit: document.getElementById('newDeposit').value,
+                    price: document.getElementById('newPrice').value,
+                    owner: document.getElementById('newOwner').value,
+                    contact: document.getElementById('newContact').value,
+                    location: document.getElementById('newLocation').value,
+                    imageFile: reader.result // ชื่อต้องตรงกับใน Script
+                };
+
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                });
+
+                alert("✅ ลงประกาศสำเร็จ!");
+                window.location.reload();
             };
-
-            // 4. ส่งข้อมูลไป Google Script
-            await fetch(API_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                cache: 'no-cache',
-                body: JSON.stringify(data)
-            });
-
-            // 5. แจ้งผล
-            alert("✅ ลงประกาศสำเร็จ!");
-            window.location.reload(); 
-
-        } catch (error) {
-            console.error("Error:", error);
-            alert("❌ เกิดข้อผิดพลาด: " + error.message);
-            btn.innerText = "ยืนยันลงประกาศ";
+        } catch (e) {
+            alert("❌ พัง: " + e.message);
             btn.disabled = false;
         }
     }
