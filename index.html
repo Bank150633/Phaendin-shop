@@ -70,7 +70,7 @@
         </div>
     </div>
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycby6GVjvs57OA0w04uXmagReBLx_50pXNf4VOpRzZpR_Zv5V-Fnc5p0sy4N3O4octCvrDw/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwo48tgpVzLNX38Y18olSrwt0RP4hI6q6ULmEKqMzatED08RXKVpHRSzMESS3qokBNfIQ/exec";
 
     function toggleForm() {
         document.getElementById('add-product-form').classList.toggle('hidden');
@@ -97,11 +97,12 @@
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async function () {
+        // ชื่อในนี้ต้องตรงกับ data. ในสคริปต์ด้านบนเป๊ะๆ
         const dataToSend = {
             name: document.getElementById('newName').value,
             category: document.getElementById('newCategory').value,
-            deposit: document.getElementById('newDeposit').value, // เงินประกัน
-            price: document.getElementById('newPrice').value,     // ราคาเช่า
+            deposit: document.getElementById('newDeposit').value, // ค่าประกัน
+            price: document.getElementById('newPrice').value,     // ค่าเช่า
             owner: document.getElementById('newOwner').value,
             contact: document.getElementById('newContact').value,
             location: document.getElementById('newLocation').value,
