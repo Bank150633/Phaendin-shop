@@ -69,147 +69,117 @@
             </div>
         </div>
     </div>
+<script>
+    // 1. ตรวจสอบ API_URL: มั่นใจว่าคัดลอกมาจากหน้า "ทำให้ใช้งานได้" ล่าสุด
+    const API_URL = "https://script.google.com/macros/s/AKfycbxNW_B-lYYU0bMlep-4jc3VRjM8DmKUYouM0Qltza5ZDo0sy__KGWEO5lfUvyB_4cgkKg/exec";
 
-    <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzjA4J9esD9QqCsDsfk--NYxzzYncj2oDcWgVqCMqSL0Hrvn29GYOAPwrXj9RyBRmiHeg/exec";
+    function toggleForm() {
+        const form = document.getElementById('add-product-form');
+        form.classList.toggle('hidden');
+    }
 
-        function toggleForm() {
-            const form = document.getElementById('add-product-form');
-            form.classList.toggle('hidden');
-        }
-
-        function getCurrentLocation() {
-            if (navigator.geolocation) {
-                alert("กำลังขอตำแหน่งปัจจุบันของคุณ...");
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    document.getElementById('newLocation').value = `https://www.google.com/maps?q=${lat},${lng}`;
-                    alert("ปักหมุดสำเร็จ!");
-                }, function(error) {
-                    alert("ดึงพิกัดล้มเหลว: กรุณาเปิด GPS");
-                });
-            } else {
-                alert("เบราว์เซอร์ไม่รองรับ");
-            }
-        }
-
-        async function fetchProducts() {
-            try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
-                renderProducts(data);
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('product-container').innerHTML = "<p class='text-red-500 text-center col-span-full'>โหลดข้อมูลไม่สำเร็จ</p>";
-            }
-        }
-
-        function renderProducts(products) {
-            const container = document.getElementById('product-container');
-            container.innerHTML = ""; 
-            products.forEach(item => {
-                const name = item[1] || 'ไม่มีชื่อ';
-                const owner = item[8] || 'ไม่ระบุชื่อ'; 
-                const status = item[6] || 'ว่าง';
-                const isAvailable = status === 'ว่าง';
-                const mapLink = item[7] || null; 
-
-                const card = `
-                    <div class="product-card bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200" data-name="${name}">
-                        <img src="${item[5] || 'https://via.placeholder.com/400x300'}" class="w-full h-48 object-cover ${!isAvailable ? 'grayscale opacity-50' : ''}">
-                        <div class="p-4">
-                            <p class="text-[10px] text-blue-600 font-bold mb-1">👤 เจ้าของ: ${owner}</p>
-                            <div class="flex justify-between items-start">
-                                <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${item[2]}</span>
-                                <span class="text-[10px] ${isAvailable ? 'text-green-500' : 'text-red-500'} font-bold uppercase">${status}</span>
-                            </div>
-                            <h3 class="text-lg font-bold text-gray-800 mt-2">${name}</h3>
-                            <div class="mt-4 flex flex-col gap-2 border-t pt-4">
-                                <div class="flex justify-between items-end">
-                                    <div>
-                                        <p class="text-gray-400 text-xs">ประกัน ${item[3]}.-</p>
-                                        <p class="text-blue-600 font-bold text-xl">${item[4]} <span class="text-sm">บาท/วัน</span></p>
-                                    </div>
-                                    <button onclick="${isAvailable ? `window.location.href='https://line.me/R/ti/p/@ไอดีของคุณ?text=สนใจเช่า: ${name}'` : ''}"
-                                            class="${isAvailable ? 'bg-blue-600' : 'bg-gray-400'} text-white px-4 py-2 rounded-lg text-sm font-semibold">
-                                        ${isAvailable ? 'จองเลย' : 'ไม่ว่าง'}
-                                    </button>
-                                </div>
-                                ${mapLink ? `<a href="${mapLink}" target="_blank" class="text-center text-xs text-red-500 font-bold bg-red-50 py-2 rounded-lg border border-red-200">📍 ดูพิกัดรับสินค้า</a>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += card;
+    function getCurrentLocation() {
+        if (navigator.geolocation) {
+            alert("กำลังขอตำแหน่งปัจจุบัน...");
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                document.getElementById('newLocation').value = `https://www.google.com/maps?q=${lat},${lng}`;
+                alert("ปักหมุดสำเร็จ!");
+            }, function(error) {
+                alert("ดึงพิกัดล้มเหลว: กรุณาเปิด GPS");
             });
         }
+    }
 
-        function searchProducts() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('product-card');
-            for (let i = 0; i < cards.length; i++) {
-                let name = cards[i].getAttribute('data-name').toLowerCase();
-                cards[i].style.display = name.includes(input) ? "" : "none";
-            }
+    // ฟังก์ชันส่งข้อมูล (แก้ไขใหม่ให้ปุ่มไม่ค้าง)
+    async function submitProduct(event) {
+        if (event) event.preventDefault();
+        
+        const btn = document.getElementById('submitBtn');
+        const fileInput = document.getElementById('imageInput');
+        const file = fileInput.files[0];
+        
+        // เช็กว่ากรอกข้อมูลครบไหม
+        const owner = document.getElementById('newOwner').value.trim();
+        const contact = document.getElementById('newContact').value.trim();
+        const name = document.getElementById('newName').value.trim();
+
+        if (!owner || !contact || !name || !file) {
+            alert("⚠️ กรุณากรอกข้อมูลสำคัญ (ชื่อ, ติดต่อ, สินค้า) และถ่ายรูปด้วยครับ");
+            return;
         }
 
-        // จุดที่แก้ 2: แก้ฟังก์ชัน Submit ใหม่หมด เพื่อแปลงรูปภาพเป็น Base64 ส่งไป Drive
-        async function submitProduct(event) {
-            if (event) event.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            
-            const fileInput = document.getElementById('imageInput');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                alert("⚠️ กรุณาถ่ายรูปสินค้าก่อนลงประกาศครับ");
-                return;
-            }
+        // เริ่มต้นการส่งข้อมูล
+        btn.innerText = "⏳ กำลังประมวลผล...";
+        btn.disabled = true; // ป้องกันการกดซ้ำ
 
-                const data = {
-        owner: document.getElementById('newOwner').value.trim(),
-        contact: document.getElementById('newContact').value.trim(),
-        name: document.getElementById('newName').value.trim(),
-        category: document.getElementById('newCategory').value.trim(),
-        deposit: document.getElementById('newDeposit').value.trim(),
-        price: document.getElementById('newPrice').value.trim(),
-        location: document.getElementById('newLocation').value.trim(),
-        imageFile: base64Image // ต้องชื่อ imageFile ให้ตรงกับในสคริปต์
-    };
-
-            if (Object.values(data).some(v => v === "" && v !== data.imageFile)) {
-                alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่องครับ");
-                return;
-            }
-
-            btn.innerText = "⏳ กำลังประมวลผลรูปภาพ...";
-            btn.disabled = true;
-
-            // แปลงไฟล์รูปภาพเป็น Base64
+        try {
+            // อ่านไฟล์รูปภาพ
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = async function () {
-                data.imageFile = reader.result;
+                const base64Image = reader.result;
                 
-                btn.innerText = "⏳ กำลังอัปโหลดข้อมูลและรูปภาพ...";
-                try {
-                    await fetch(API_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        body: JSON.stringify(data)
-                    });
-                    alert("✅ ลงประกาศและอัปโหลดรูปสำเร็จ!");
-                    window.location.reload();
-                } catch (error) {
-                    alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
-                    btn.innerText = "ยืนยันลงประกาศ";
-                    btn.disabled = false;
-                }
-            };
-        }
+                const data = {
+                    owner: owner,
+                    contact: contact,
+                    name: name,
+                    category: document.getElementById('newCategory').value.trim(),
+                    deposit: document.getElementById('newDeposit').value.trim(),
+                    price: document.getElementById('newPrice').value.trim(),
+                    location: document.getElementById('newLocation').value.trim(),
+                    imageFile: base64Image
+                };
 
-        fetchProducts();
-    </script>
+                // ส่งไป Google Script
+                await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(data)
+                });
+
+                alert("✅ ลงประกาศสำเร็จ!");
+                window.location.reload(); // รีโหลดหน้าเว็บ
+            };
+        } catch (error) {
+            console.error(error);
+            alert("❌ เกิดข้อผิดพลาด: " + error.message);
+            btn.innerText = "ยืนยันลงประกาศ";
+            btn.disabled = false;
+        }
+    }
+
+    // ดึงข้อมูลมาโชว์หน้าแรก
+    async function fetchProducts() {
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            renderProducts(data);
+        } catch (e) {
+            document.getElementById('product-container').innerHTML = "โหลดข้อมูลไม่สำเร็จ";
+        }
+    }
+
+    function renderProducts(products) {
+        const container = document.getElementById('product-container');
+        container.innerHTML = ""; 
+        products.forEach(item => {
+            container.innerHTML += `
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
+                    <img src="${item[5] || 'https://via.placeholder.com/400'}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold">${item[1]}</h3>
+                        <p class="text-blue-600 font-bold">${item[4]} บาท/วัน</p>
+                        <p class="text-xs text-gray-400">เจ้าของ: ${item[8]}</p>
+                    </div>
+                </div>`;
+        });
+    }
+
+    fetchProducts();
+</script>
+
+            
 </body>
 </html>
