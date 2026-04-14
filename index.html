@@ -71,7 +71,7 @@
     </div>
 <script>
     // 1. ตรวจสอบ API_URL: เช็คให้ชัวร์ว่าตรงกับที่ Deploy ล่าสุด
-    const API_URL = "https://script.google.com/macros/s/AKfycbx0A5LtRlE5bLRo5qVUr9AmoWo0luYXXMaM_1FcjNXjyS1aoKIMGri5ZCKRUu1YDU1r9w/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwJ85cM_fDSP4MIiOa_m21Jim4lr8QFZgdQFcuQUjYHVanoZemLgM1uCzKZPfC5TfKbXg/exec";
 
     function toggleForm() {
         const form = document.getElementById('add-product-form');
@@ -102,47 +102,47 @@
             reader.readAsDataURL(file);
         });
     }
+    async function submitProduct(event) {
+    if (event) event.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const fileInput = document.getElementById('imageInput');
+    const file = fileInput.files[0];
 
-        async function submitProduct(event) {
-        if (event) event.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const fileInput = document.getElementById('imageInput');
-        const file = fileInput.files[0];
+    if (!file) { alert("📸 กรุณาถ่ายรูปสินค้าก่อนครับ"); return; }
 
-        if (!file) { alert("📸 กรุณาถ่ายรูปก่อนครับ"); return; }
+    btn.innerText = "⏳ กำลังบันทึก...";
+    btn.disabled = true;
 
-        btn.innerText = "⏳ กำลังอัปโหลด...";
-        btn.disabled = true;
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async function () {
+        const data = {
+            name: document.getElementById('newName').value,
+            category: document.getElementById('newCategory').value,
+            deposit: document.getElementById('newDeposit').value,
+            price: document.getElementById('newPrice').value,
+            owner: document.getElementById('newOwner').value,
+            contact: document.getElementById('newContact').value,
+            location: document.getElementById('newLocation').value,
+            imageFile: reader.result // ต้องใช้ชื่อ imageFile ให้ตรงกับใน Script
+        };
 
         try {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async function () {
-                const data = {
-                    name: document.getElementById('newName').value,
-                    category: document.getElementById('newCategory').value,
-                    deposit: document.getElementById('newDeposit').value,
-                    price: document.getElementById('newPrice').value,
-                    owner: document.getElementById('newOwner').value,
-                    contact: document.getElementById('newContact').value,
-                    location: document.getElementById('newLocation').value,
-                    imageFile: reader.result // ชื่อต้องตรงกับใน Script
-                };
-
-                await fetch(API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(data)
-                });
-
-                alert("✅ ลงประกาศสำเร็จ!");
-                window.location.reload();
-            };
+            await fetch(API_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(data)
+            });
+            alert("✅ ลงประกาศสำเร็จ!");
+            window.location.reload();
         } catch (e) {
-            alert("❌ พัง: " + e.message);
+            alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
             btn.disabled = false;
+            btn.innerText = "ยืนยันลงประกาศ";
         }
-    }
+    };
+}
+
 
     // ดึงข้อมูลมาโชว์ (เหมือนเดิมแต่เพิ่มการจัดการ error)
     async function fetchProducts() {
