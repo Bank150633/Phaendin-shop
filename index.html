@@ -71,7 +71,7 @@
     </div>
 <script>
     // 🚩 จุดที่ 1: ต้องเอาลิงก์ที่ได้จากขั้นตอน "การ Deploy" (ที่ลงท้ายด้วย /exec) มาใส่ที่นี่
-    const API_URL = "https://script.google.com/macros/s/AKfycbxKCowoMN_Tgl7CeEuFDb7rswNW82ig9B-Rzp68qr5AA74iGkYcCdsahGPJX7iqjsJRLw/exec"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbyVi6aB7qvHScHm-MB97Yp_J_lSTGq9QZnM01mlkZnxRjMXoK2b2-EmXuh6jrz1VlerNA/exec"; 
 
     function toggleForm() {
         document.getElementById('add-product-form').classList.toggle('hidden');
@@ -133,34 +133,41 @@
     }
 
     async function fetchProducts() {
-        try {
-            const res = await fetch(API_URL);
-            const products = await res.json();
-            const container = document.getElementById('product-container');
-            container.innerHTML = "";
-            
-            if (products.length === 0) {
-                container.innerHTML = "<p class='col-span-full text-center text-gray-400'>ยังไม่มีสินค้าในขณะนี้</p>";
-                return;
-            }
-
-            products.forEach(item => {
-                container.innerHTML += `
-                    <div class="bg-white rounded-2xl shadow border p-2">
-                        <img src="${item[5] || 'https://via.placeholder.com/400'}" class="w-full h-40 object-cover rounded-xl">
-                        <div class="p-2">
-                            <h3 class="font-bold text-lg">${item[1]}</h3>
-                            <p class="text-blue-600 font-bold">${item[4]} บาท/วัน</p>
-                            <p class="text-xs text-gray-500">ประกัน: ${item[3]}.- | เจ้าของ: ${item[8]}</p>
-                            <a href="${item[7]}" target="_blank" class="block mt-2 text-center bg-gray-100 py-1 rounded-lg text-xs text-blue-500">📍 ดูแผนที่</a>
-                        </div>
-                    </div>`;
-            });
-        } catch (e) { 
-            console.error(e); 
-            document.getElementById('product-container').innerHTML = "<p class='col-span-full text-center text-red-400'>เชื่อมต่อข้อมูลไม่ได้ (เช็ก API_URL)</p>";
-        }
+    try {
+        const res = await fetch(API_URL);
+        const products = await res.json();
+        const container = document.getElementById('product-container');
+        container.innerHTML = "";
+        
+        products.forEach(item => {
+            // item[9] คือ ข้อมูลติดต่อ (Line ID) จากคอลัมน์ J
+            // item[5] คือ รูปภาพจากคอลัมน์ F
+            container.innerHTML += `
+                <div class="bg-white rounded-2xl shadow-lg border p-3 flex flex-col h-full">
+                    <img src="${item[5] || 'https://via.placeholder.com/400'}" class="w-full h-48 object-cover rounded-xl mb-3">
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-xl text-gray-800">${item[1]}</h3>
+                        <p class="text-blue-600 font-bold text-lg">${item[4]} บาท/วัน</p>
+                        <p class="text-sm text-gray-500 mt-1">💰 ประกัน: ${item[3]}.-</p>
+                        <p class="text-sm text-gray-500">👤 เจ้าของ: ${item[8]}</p>
+                    </div>
+                    
+                    <div class="mt-4 space-y-2">
+                        <a href="${item[7]}" target="_blank" class="block w-full text-center bg-gray-100 py-2 rounded-xl text-sm text-gray-600 border hover:bg-gray-200">📍 ดูแผนที่</a>
+                        
+                        <a href="https://line.me/ti/p/~${item[9]}" target="_blank" 
+                           class="block w-full text-center bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition shadow-md">
+                           🟢 กดจองผ่าน Line
+                        </a>
+                    </div>
+                </div>`;
+        });
+    } catch (e) { 
+        console.error(e);
+        document.getElementById('product-container').innerHTML = "<p class='col-span-full text-center text-red-500'>เชื่อมต่อข้อมูลไม่สำเร็จ</p>";
     }
+}
+
     fetchProducts();
 </script>
 
