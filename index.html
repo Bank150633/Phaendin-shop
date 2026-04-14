@@ -70,114 +70,77 @@
         </div>
     </div>
 <script>
-    // 1. ตรวจสอบ API_URL: เช็คให้ชัวร์ว่าตรงกับที่ Deploy ล่าสุด
-    const API_URL = "https://script.google.com/macros/s/AKfycbwJ85cM_fDSP4MIiOa_m21Jim4lr8QFZgdQFcuQUjYHVanoZemLgM1uCzKZPfC5TfKbXg/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxrAF1Wwylns31hztGrGDnTE0zrzC6u-b6dTA49ni3LcxxrSe_dymefqfZu6Vm2QDqSUw/exec";
 
     function toggleForm() {
-        const form = document.getElementById('add-product-form');
-        form.classList.toggle('hidden');
+        document.getElementById('add-product-form').classList.toggle('hidden');
     }
 
     function getCurrentLocation() {
         if (navigator.geolocation) {
-            alert("กำลังขอตำแหน่งปัจจุบัน...");
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                // ปรับรูปแบบลิงก์ให้ถูกต้องตามมาตรฐาน Google Maps
-                document.getElementById('newLocation').value = `https://www.google.com/maps?q=${lat},${lng}`;
-                alert("ปักหมุดสำเร็จ!");
-            }, function(error) {
-                alert("ดึงพิกัดล้มเหลว: กรุณาเปิด GPS");
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                document.getElementById('newLocation').value = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                alert("📍 ปักหมุดสำเร็จ!");
             });
         }
     }
 
-    // ฟังก์ชันสำหรับอ่านไฟล์รูปภาพ (แยกออกมาเพื่อไม่ให้โค้ดพันกัน)
-    function readFileAsDataURL(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
     async function submitProduct(event) {
-    if (event) event.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    const fileInput = document.getElementById('imageInput');
-    const file = fileInput.files[0];
+        event.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const file = document.getElementById('imageInput').files[0];
 
-    if (!file) { alert("📸 กรุณาถ่ายรูปสินค้าก่อนครับ"); return; }
+        if (!file) { alert("📸 กรุณาเลือกรูปภาพด้วยครับ"); return; }
 
-    btn.innerText = "⏳ กำลังบันทึก...";
-    btn.disabled = true;
+        btn.innerText = "⏳ กำลังบันทึก...";
+        btn.disabled = true;
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async function () {
-        const data = {
-            name: document.getElementById('newName').value,
-            category: document.getElementById('newCategory').value,
-            deposit: document.getElementById('newDeposit').value,
-            price: document.getElementById('newPrice').value,
-            owner: document.getElementById('newOwner').value,
-            contact: document.getElementById('newContact').value,
-            location: document.getElementById('newLocation').value,
-            imageFile: reader.result // ต้องใช้ชื่อ imageFile ให้ตรงกับใน Script
-        };
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async function () {
+            const sendData = {
+                name: document.getElementById('newName').value,
+                category: document.getElementById('newCategory').value,
+                deposit: document.getElementById('newDeposit').value,
+                price: document.getElementById('newPrice').value,
+                owner: document.getElementById('newOwner').value,
+                contact: document.getElementById('newContact').value,
+                location: document.getElementById('newLocation').value,
+                imageFile: reader.result
+            };
 
-        try {
             await fetch(API_URL, {
                 method: 'POST',
                 mode: 'no-cors',
-                body: JSON.stringify(data)
+                body: JSON.stringify(sendData)
             });
+
             alert("✅ ลงประกาศสำเร็จ!");
             window.location.reload();
-        } catch (e) {
-            alert("❌ เกิดข้อผิดพลาด กรุณาลองใหม่");
-            btn.disabled = false;
-            btn.innerText = "ยืนยันลงประกาศ";
-        }
-    };
-}
+        };
+    }
 
-
-    // ดึงข้อมูลมาโชว์ (เหมือนเดิมแต่เพิ่มการจัดการ error)
     async function fetchProducts() {
         try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            renderProducts(data);
-        } catch (e) {
-            console.log("Fetch error:", e);
-            document.getElementById('product-container').innerHTML = "<p class='text-gray-400 text-center py-10'>ไม่พบข้อมูลสินค้า</p>";
-        }
+            const res = await fetch(API_URL);
+            const products = await res.json();
+            const container = document.getElementById('product-container');
+            container.innerHTML = "";
+            products.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl shadow border p-2">
+                        <img src="${item[5] || 'https://via.placeholder.com/400'}" class="w-full h-40 object-cover rounded-xl">
+                        <div class="p-2">
+                            <h3 class="font-bold text-lg">${item[1]}</h3>
+                            <p class="text-blue-600 font-bold">${item[4]} บาท/วัน</p>
+                            <p class="text-xs text-gray-500">ประกัน: ${item[3]}.- | เจ้าของ: ${item[8]}</p>
+                        </div>
+                    </div>`;
+            });
+        } catch (e) { console.error(e); }
     }
-
-    function renderProducts(products) {
-        const container = document.getElementById('product-container');
-        container.innerHTML = ""; 
-        if (!products || products.length === 0) {
-            container.innerHTML = "<p class='text-gray-400 text-center py-10'>ไม่มีสินค้าในขณะนี้</p>";
-            return;
-        }
-        products.forEach(item => {
-            container.innerHTML += `
-                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border">
-                    <img src="${item[5] || 'https://via.placeholder.com/400'}" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg">${item[1]}</h3>
-                        <p class="text-blue-600 font-bold text-xl">${item[4]} <span class="text-sm">บาท/วัน</span></p>
-                        <p class="text-xs text-gray-500 mt-2">👤 เจ้าของ: ${item[8]}</p>
-                    </div>
-                </div>`;
-        });
-    }
-
     fetchProducts();
 </script>
-          
+
 </body>
 </html>
