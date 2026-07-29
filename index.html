@@ -3,43 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>รวมโปร 1 แถม 1 เด็ดๆ - Shopee | Lazada | TikTok</title>
+  <title>รวมโปร 1 แถม 1 - Shopee | Lazada | TikTok</title>
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts Prompt -->
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Prompt', sans-serif; }
+    body { 
+      font-family: 'Prompt', sans-serif; 
+      background-color: #f8fafc;
+    }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-slate-800">
 
-  <!-- Header Section -->
-  <header class="bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 text-white shadow-lg sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-      <div class="flex items-center gap-2">
-        <span class="bg-yellow-300 text-red-600 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider animate-pulse">Hot Deals</span>
-        <h1 class="text-2xl font-extrabold tracking-tight">รวมโปร 1 แถม 1</h1>
+  <!-- Header Section (โทนสีน้ำเงินกรมท่า ตัดแดงชาด) -->
+  <header class="bg-[#0f172a] text-white shadow-md border-b-4 border-[#b91c1c] sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div class="flex items-center gap-3">
+        <span class="bg-[#b91c1c] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider animate-pulse shadow">
+          ดีลเด็ดประจำวัน
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          รวมโปร <span class="text-[#ef4444]">1 แถม 1</span>
+        </h1>
       </div>
-      <p class="text-sm opacity-90">อัปเดตโปรเด็ด Shopee / Lazada / TikTok ทุกวัน</p>
+      <p class="text-xs sm:text-sm text-slate-300 font-light">
+        ช้อปสุดคุ้มจาก Shopee / Lazada / TikTok
+      </p>
     </div>
   </header>
 
-  <!-- Filter & Main Content -->
+  <!-- Main Content -->
   <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
     
-    <!-- Filter Buttons -->
+    <!-- Filter Buttons (แถบเลือกแพลตฟอร์ม) -->
     <div class="flex flex-wrap justify-center gap-2 mb-8">
-      <button onclick="filterCategory('all')" class="filter-btn active bg-gray-800 text-white px-4 py-2 rounded-full text-sm font-semibold shadow transition">
-        🔥 ทั้งหมด
+      <button onclick="filterCategory('all')" class="filter-btn active bg-[#1e293b] text-white hover:bg-[#0f172a] px-5 py-2 rounded-full text-sm font-semibold shadow transition">
+        🇹🇭 ทั้งหมด
       </button>
-      <button onclick="filterCategory('Shopee')" class="filter-btn bg-white text-orange-600 hover:bg-orange-50 border border-orange-200 px-4 py-2 rounded-full text-sm font-semibold shadow-sm transition">
+      <button onclick="filterCategory('Shopee')" class="filter-btn bg-white text-orange-600 hover:bg-orange-50 border border-slate-200 px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition">
         🧡 Shopee
       </button>
-      <button onclick="filterCategory('Lazada')" class="filter-btn bg-white text-blue-600 hover:bg-blue-50 border border-blue-200 px-4 py-2 rounded-full text-sm font-semibold shadow-sm transition">
+      <button onclick="filterCategory('Lazada')" class="filter-btn bg-white text-blue-600 hover:bg-blue-50 border border-slate-200 px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition">
         💙 Lazada
       </button>
-      <button onclick="filterCategory('TikTok')" class="filter-btn bg-white text-gray-900 hover:bg-gray-100 border border-gray-200 px-4 py-2 rounded-full text-sm font-semibold shadow-sm transition">
+      <button onclick="filterCategory('TikTok')" class="filter-btn bg-white text-slate-900 hover:bg-slate-100 border border-slate-200 px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition">
         🖤 TikTok
       </button>
     </div>
@@ -50,27 +59,27 @@
     </div>
 
     <!-- Loading State -->
-    <div id="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
-      <p class="mt-2 text-gray-500 text-sm">กำลังโหลดโปรโมชันเด็ดๆ...</p>
+    <div id="loading" class="text-center py-16">
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-[#b91c1c] border-t-transparent"></div>
+      <p class="mt-3 text-slate-500 text-sm font-medium">กำลังโหลดโปรโมชัน 1 แถม 1...</p>
     </div>
 
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-400 text-center py-6 border-t border-gray-800 mt-12 text-sm">
-    <p>© 2026 โปร 1 แถม 1 รวมดีลส่วนลดและโปรโมชันออนไลน์</p>
+  <!-- Footer (แถบน้ำเงินเข้ม + ขอบแดง) -->
+  <footer class="bg-[#0f172a] text-slate-400 text-center py-6 border-t-2 border-[#b91c1c] mt-12 text-sm">
+    <p>© 2026 ศูนย์รวมโปรโมชัน 1 แถม 1 สินค้าออนไลน์ราคาประหยัด</p>
   </footer>
 
-  <!-- Script การดึงข้อมูลและจัดการแสดงผล -->
+  <!-- JavaScript -->
   <script>
-    // ⚠️ 1. ใส่ Web App URL ของ Google Apps Script ที่คุณได้จากการ Deploy ตรงนี้
+    // ⚠️ ใส่ Web App URL ที่ได้จาก Google Apps Script ตรงนี้
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
-    // Mock Data สำหรับทดสอบแสดงผลลัพธ์ (ถ้าเชื่อม Google Sheets แล้ว โค้ดจะดึงจาก Sheets แทน)
+    // ตัวอย่างข้อมูลสำหรับทดสอบ (จะทำงานเมื่อยังไม่ได้เชื่อม Google Sheets)
     const mockProducts = [
       {
-        title: "[1แถม1] หูฟังบลูทูธไร้สาย เสียงดี เบสแน่น",
+        title: "[1แถม1] หูฟังบลูทูธไร้สาย เบสแน่น ตัดเสียงรบกวน",
         image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
         price: "299",
         originalPrice: "599",
@@ -78,7 +87,7 @@
         link: "https://shopee.co.th"
       },
       {
-        title: "[1แถม1] เสื้อยืด Oversize ผ้าคอตตอน 100%",
+        title: "[1แถม1] เสื้อยืด Oversize ผ้าคอตตอน 100% สวมใส่สบาย",
         image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
         price: "199",
         originalPrice: "390",
@@ -86,7 +95,7 @@
         link: "https://lazada.co.th"
       },
       {
-        title: "[1แถม1] แก้วเก็บความเย็น 30 oz สแตนเลส 304",
+        title: "[1แถม1] แก้วเก็บความเย็น 30 oz สแตนเลสอย่างดี",
         image: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=500",
         price: "159",
         originalPrice: "320",
@@ -97,11 +106,10 @@
 
     let allProducts = [];
 
-    // ดึงข้อมูลสินค้า
+    // ฟังก์ชั่นดึงข้อมูล
     async function fetchProducts() {
       try {
         if (GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
-          // ใช้ Mock Data ถ้ายังไม่ได้ใส่ URL จริง
           allProducts = mockProducts;
         } else {
           const res = await fetch(GOOGLE_SCRIPT_URL);
@@ -111,7 +119,7 @@
         renderProducts(allProducts);
       } catch (err) {
         console.error("Error fetching products:", err);
-        document.getElementById('loading').innerHTML = '<p class="text-red-500">โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง</p>';
+        document.getElementById('loading').innerHTML = '<p class="text-red-600 font-semibold">โหลดข้อมูลไม่สำเร็จ กรุณาตรวจสอบลิงก์ Google Script</p>';
       }
     }
 
@@ -120,41 +128,45 @@
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
 
+      if(products.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">ยังไม่มีสินค้าในหมวดหมู่นี้</div>`;
+        return;
+      }
+
       products.forEach(item => {
-        // กำหนดสี Badge ตามแพลตฟอร์ม
-        let badgeBg = 'bg-gray-800';
+        let badgeBg = 'bg-slate-800';
         if (item.platform === 'Shopee') badgeBg = 'bg-orange-500';
         if (item.platform === 'Lazada') badgeBg = 'bg-blue-600';
         if (item.platform === 'TikTok') badgeBg = 'bg-black';
 
         const card = `
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition flex flex-col justify-between group">
+          <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col justify-between group">
             <div class="relative">
               <img src="${item.image}" alt="${item.title}" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition duration-300">
-              <span class="absolute top-2 left-2 ${badgeBg} text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+              <span class="absolute top-2 left-2 ${badgeBg} text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
                 ${item.platform}
               </span>
-              <span class="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow animate-bounce">
+              <span class="absolute top-2 right-2 bg-[#b91c1c] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow">
                 1 แถม 1
               </span>
             </div>
             
             <div class="p-3 flex-grow flex flex-col justify-between">
               <div>
-                <h3 class="text-xs sm:text-sm font-medium text-gray-800 line-clamp-2 mb-2 leading-snug">
+                <h3 class="text-xs sm:text-sm font-semibold text-slate-800 line-clamp-2 mb-2 leading-snug">
                   ${item.title}
                 </h3>
               </div>
               
               <div>
                 <div class="flex items-baseline gap-1.5 my-1">
-                  <span class="text-red-600 font-bold text-base sm:text-lg">฿${item.price}</span>
-                  ${item.originalPrice ? `<span class="text-gray-400 text-xs line-through">฿${item.originalPrice}</span>` : ''}
+                  <span class="text-[#b91c1c] font-extrabold text-base sm:text-xl">฿${item.price}</span>
+                  ${item.originalPrice ? `<span class="text-slate-400 text-xs line-through">฿${item.originalPrice}</span>` : ''}
                 </div>
                 
                 <a href="${item.link}" target="_blank" rel="noopener noreferrer" 
-                   class="block w-full text-center bg-red-500 hover:bg-red-600 text-white text-xs font-bold py-2 rounded-lg transition shadow-sm mt-2">
-                  เช็คราคา / ซื้อเลย
+                   class="block w-full text-center bg-[#b91c1c] hover:bg-[#991b1b] text-white text-xs font-bold py-2 rounded transition shadow-sm mt-2">
+                  กดรับโปร 1 แถม 1
                 </a>
               </div>
             </div>
@@ -164,7 +176,7 @@
       });
     }
 
-    // ฟังก์ชั่นตัวกรองหมวดหมู่
+    // ฟังก์ชั่นกรองสินค้า
     function filterCategory(category) {
       if (category === 'all') {
         renderProducts(allProducts);
@@ -174,7 +186,7 @@
       }
     }
 
-    // เริ่มทำงานเมื่อโหลดหน้าเว็บ
+    // เรียกทำงานเมื่อเปิดหน้า
     fetchProducts();
   </script>
 </body>
