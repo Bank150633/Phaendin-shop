@@ -22,7 +22,7 @@
         </div>
     </header>
 
-    <!-- 📢 สินค้าโปรโมชั่น (ดึงจากชีท: คลังส่วนกลาง_สินค้าทั้งหมด) -->
+    <!-- 📢 สินค้าโปรโมชั่น -->
     <section class="max-w-4xl mx-auto px-4 mt-6">
         <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
             <div class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold tracking-wide mb-3">
@@ -121,9 +121,22 @@
                     <input type="text" id="custProduct" placeholder="เช่น โทรศัพท์" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
                 </div>
 
+                <!-- 📍 ส่วนปักหมุดที่อยู่จัดส่ง -->
                 <div>
-                    <label class="block text-sm font-medium text-slate-600 mb-1">หมายเหตุเพิ่มเติม</label>
-                    <textarea id="custNote" rows="2" placeholder="เช่น อาชีพ, ที่อยู่จัดส่ง หรือช่วงเวลาที่สะดวกรับสาย" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">สถานที่จัดส่ง / ปักหมุดพิกัด</label>
+                    <button type="button" id="getLocBtn" onclick="getLocation()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-lg border border-slate-300 transition flex items-center justify-center gap-2 text-sm">
+                        <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span id="locStatus">📍 กดปักหมุดที่อยู่ปัจจุบัน</span>
+                    </button>
+                    <!-- Hidden field ไว้เก็บลิงก์ Google Maps -->
+                    <input type="hidden" id="mapUrl" value="">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-600 mb-1">รายละเอียดที่อยู่ / หมายเหตุเพิ่มเติม</label>
+                    <textarea id="custNote" rows="2" placeholder="บ้านเลขที่, ซอย, ถนน หรือช่วงเวลาที่สะดวกรับสาย" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
                 </div>
 
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 rounded-lg shadow-sm transition flex items-center justify-center gap-2">
@@ -138,9 +151,8 @@
     </main>
 
     <script>
-        // 📌 ตั้งค่า Sheet ID และชื่อแท็บสินค้าตรงนี้
         const SHEET_ID = '1G7cpIlW-C3-ruQ0rAogw5F2xB7BQFD1V_bqL4wTU2HE'; 
-        const SHEET_NAME = 'คลังส่วนกลาง_สินค้าทั้งหมด'; // ระบุแท็บสินค้าชัดเจน
+        const SHEET_NAME = 'คลังส่วนกลาง_สินค้าทั้งหมด'; 
         const LINE_ID = "@yourlineid"; // ⚠️ เปลี่ยนเป็น Line ID ร้านคุณ
 
         const priceInput = document.getElementById('productPrice');
@@ -152,7 +164,7 @@
         const totalInterestEl = document.getElementById('totalInterest');
         const monthlyPaymentEl = document.getElementById('monthlyPayment');
 
-        // ฟังก์ชันช่วยแปลงราคาเป็นตัวเลขชัวร์ๆ
+        // ฟังก์ชันช่วยแปลงราคาเป็นตัวเลข
         const parsePrice = (cell) => {
             if (!cell) return 0;
             const rawVal = cell.v !== undefined && cell.v !== null ? cell.v : cell.f;
@@ -161,7 +173,53 @@
             return parseFloat(cleaned) || 0;
         };
 
-        // ฟังก์ชันดึงข้อมูลสินค้าจากแท็บ "คลังส่วนกลาง_สินค้าทั้งหมด"
+        // ฟังก์ชันดึงตำแหน่ง GPS
+        function getLocation() {
+            const statusEl = document.getElementById('locStatus');
+            const btn = document.getElementById('getLocBtn');
+            const mapUrlInput = document.getElementById('mapUrl');
+
+            if (!navigator.geolocation) {
+                alert('เบราว์เซอร์ของคุณไม่รองรับการดึงพิกัดตำแหน่ง');
+                return;
+            }
+
+            statusEl.innerText = '⏳ กำลังค้นหาพิกัด...';
+            btn.disabled = true;
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const url = `https://www.google.com/maps?q=${lat},${lng}`;
+                    
+                    mapUrlInput.value = url;
+                    statusEl.innerText = '✅ ปักหมุดเรียบร้อยแล้ว!';
+                    btn.className = "w-full bg-emerald-50 text-emerald-700 border-emerald-300 font-medium py-2.5 px-4 rounded-lg border transition flex items-center justify-center gap-2 text-sm";
+                    btn.disabled = false;
+                },
+                (error) => {
+                    btn.disabled = false;
+                    statusEl.innerText = '📍 กดปักหมุดที่อยู่ปัจจุบัน';
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            alert('กรุณาอนุญาตการเข้าถึงตำแหน่ง (Location Access) ในเบราว์เซอร์');
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            alert('ไม่สามารถระบุตำแหน่งของคุณได้ในขณะนี้');
+                            break;
+                        case error.TIMEOUT:
+                            alert('หมดเวลาเชื่อมต่อกรุณาลองใหม่อีกครั้ง');
+                            break;
+                        default:
+                            alert('เกิดข้อผิดพลาดในการดึงตำแหน่ง');
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        // ฟังก์ชันดึงข้อมูลสินค้าจากแท็บ Google Sheets
         async function loadProductsFromSheet() {
             const productGrid = document.getElementById('productGrid');
             const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
@@ -185,8 +243,6 @@
                     if (!row.c || !row.c[0] || !row.c[0].v) return;
 
                     const name = String(row.c[0].v);
-                    
-                    // ข้ามหัวตารางถ้าติดมา
                     if (name === 'ชื่อสินค้า') return;
 
                     const price = parsePrice(row.c[1]);
@@ -258,6 +314,7 @@
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const product = document.getElementById('custProduct').value.trim();
+            const mapUrl = document.getElementById('mapUrl').value;
             const note = document.getElementById('custNote').value.trim();
 
             if (calc.price <= 0) {
@@ -277,6 +334,7 @@
 💵 เงินดาวน์: ${calc.down.toLocaleString()} บาท
 📅 ระยะเวลาผ่อน: ${calc.months} เดือน
 💸 ตกเดือนละประมาณ: ${calc.monthlyPay.toLocaleString()} บาท/เดือน
+🗺️ แผนที่จัดส่ง: ${mapUrl ? mapUrl : 'ไม่ได้ระบุพิกัด'}
 📝 หมายเหตุ: ${note || '-'}
 ---------------------------`;
 
