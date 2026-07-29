@@ -22,7 +22,7 @@
         </div>
     </header>
 
-    <!-- 📢 ช่องโฆษณาและนำเสนอสินค้าด้านบน (ดึงข้อมูลอัตโนมัติจาก Google Sheets) -->
+    <!-- 📢 สินค้าโปรโมชั่น (ดึงจากชีท: คลังส่วนกลาง_สินค้าทั้งหมด) -->
     <section class="max-w-4xl mx-auto px-4 mt-6">
         <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
             <div class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold tracking-wide mb-3">
@@ -30,11 +30,9 @@
             </div>
             
             <h2 class="text-xl md:text-2xl font-bold mb-1">สินค้ารุ่นฮิตประจำเดือน</h2>
-            <p class="text-white/90 text-sm mb-4">คลิก "ผ่อนตัวนี้" เพื่อดึงข้อมูลเข้าสู่ระบบคำนวณและกรอกฟอร์มทันที</p>
+            <p class="text-white/90 text-sm mb-4">คลิก "ผ่อนตัวนี้" เพื่อดึงข้อมูลเข้าสู่ระบบคำนวณทันที</p>
 
-            <!-- คอนเทนเนอร์แสดงรายการสินค้าจาก Google Sheets -->
             <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-slate-800">
-                <!-- สถานะกำลังโหลด -->
                 <div class="col-span-full text-center py-8 text-white font-medium">
                     ⏳ กำลังดึงข้อมูลสินค้าจาก Google Sheets...
                 </div>
@@ -55,7 +53,7 @@
             <form id="calcForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-1">ราคาสินค้า (บาท)</label>
-                    <input type="number" id="productPrice" placeholder="เช่น 15000" min="0" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
+                    <input type="number" id="productPrice" placeholder="เช่น 1000" min="0" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
                 </div>
 
                 <div>
@@ -81,7 +79,6 @@
                 </div>
             </form>
 
-            <!-- สรุปผลการคำนวณ -->
             <div class="mt-6 p-4 bg-indigo-50/70 rounded-xl border border-indigo-100">
                 <div class="text-sm text-slate-600 space-y-2">
                     <div class="flex justify-between">
@@ -121,7 +118,7 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-600 mb-1">ชื่อรุ่น/สินค้าที่ต้องการผ่อน</label>
-                    <input type="text" id="custProduct" placeholder="เช่น iPhone 15 Pro, โน้ตบุ๊ก Asus" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
+                    <input type="text" id="custProduct" placeholder="เช่น โทรศัพท์" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" required>
                 </div>
 
                 <div>
@@ -130,7 +127,6 @@
                 </div>
 
                 <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-3 rounded-lg shadow-sm transition flex items-center justify-center gap-2">
-                    <!-- โลโก้ LINE -->
                     <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
                         <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.412-.105-.531-.282l-2.003-2.932v2.553c0 .346-.282.63-.63.63-.346 0-.628-.284-.628-.63V8.108c0-.27.173-.51.43-.595.061-.023.13-.033.194-.033.212 0 .415.106.533.283l2.007 2.937V8.108c0-.345.282-.63.629-.63.346 0 .628.285.628.63v4.771zm-6.136 0c0 .346-.282.63-.628.63-.347 0-.629-.284-.629-.63V8.108c0-.345.282-.63.629-.63.346 0 .628.285.628.63v4.771zM4.364 13.51c-.345 0-.628-.284-.628-.63V8.108c0-.345.283-.63.628-.63h2.386c.346 0 .628.285.628.63 0 .349-.282.63-.628.63H4.992v1.125h1.758c.346 0 .628.283.628.63 0 .344-.282.629-.628.629H4.364zM12 2C6.477 2 2 5.82 2 10.53 2 13.821 4.17 16.643 7.332 17.8c.287.106.407.382.368.679-.089.673-.326 2.083-.373 2.378-.057.362.167.355.351.233.184-.122 2.909-1.958 4.093-2.766.729.102 1.481.156 2.229.156 5.523 0 10-3.82 10-8.53C22 5.82 17.523 2 12 2z"/>
                     </svg>
@@ -141,11 +137,11 @@
 
     </main>
 
-    <!-- JavaScript Script -->
     <script>
-        // 📌 1. ตั้งค่าข้อมูล Google Sheets และ LINE ID
-        const SHEET_ID = '1G7cpIlW-C3-ruQ0rAogw5F2xB7BQFD1V_bqL4wTU2HE'; // Sheet ID ของคุณ
-        const LINE_ID = "@yourlineid"; // ⚠️ เปลี่ยนเป็น Line Official Account ID ของร้านคุณ
+        // 📌 ตั้งค่า Sheet ID และชื่อแท็บสินค้าตรงนี้
+        const SHEET_ID = '1G7cpIlW-C3-ruQ0rAogw5F2xB7BQFD1V_bqL4wTU2HE'; 
+        const SHEET_NAME = 'คลังส่วนกลาง_สินค้าทั้งหมด'; // ระบุแท็บสินค้าชัดเจน
+        const LINE_ID = "@yourlineid"; // ⚠️ เปลี่ยนเป็น Line ID ร้านคุณ
 
         const priceInput = document.getElementById('productPrice');
         const downInput = document.getElementById('downPayment');
@@ -156,38 +152,48 @@
         const totalInterestEl = document.getElementById('totalInterest');
         const monthlyPaymentEl = document.getElementById('monthlyPayment');
 
-        // 📌 2. ฟังก์ชันดึงข้อมูลจาก Google Sheets
+        // ฟังก์ชันช่วยแปลงราคาเป็นตัวเลขชัวร์ๆ
+        const parsePrice = (cell) => {
+            if (!cell) return 0;
+            const rawVal = cell.v !== undefined && cell.v !== null ? cell.v : cell.f;
+            if (rawVal === null || rawVal === undefined) return 0;
+            const cleaned = String(rawVal).replace(/[^0-9.]/g, '');
+            return parseFloat(cleaned) || 0;
+        };
+
+        // ฟังก์ชันดึงข้อมูลสินค้าจากแท็บ "คลังส่วนกลาง_สินค้าทั้งหมด"
         async function loadProductsFromSheet() {
             const productGrid = document.getElementById('productGrid');
-            const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+            const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
             try {
                 const response = await fetch(sheetUrl);
                 const text = await response.text();
                 
-                // แปลงข้อมูลจาก Google Viz Format เป็น JSON
                 const jsonText = text.substring(47, text.length - 2);
                 const data = JSON.parse(jsonText);
                 const rows = data.table.rows;
 
                 if (!rows || rows.length === 0) {
-                    productGrid.innerHTML = `<div class="col-span-full text-center py-4 text-white">ไม่พบข้อมูลสินค้าใน Google Sheets</div>`;
+                    productGrid.innerHTML = `<div class="col-span-full text-center py-4 text-white">ไม่พบข้อมูลสินค้าในชีท</div>`;
                     return;
                 }
 
-                productGrid.innerHTML = ''; // ล้างข้อความกำลังโหลด
+                productGrid.innerHTML = ''; 
 
-                // วนลูปอ่านข้อมูลสินค้าแต่ละแถว (เริ่มที่แถว 1 เพื่อข้ามหัวตาราง)
-                rows.slice(1).forEach(row => {
-                    if (!row.c || !row.c[0]) return; // ข้ามแถวที่ไม่มีชื่อสินค้า
+                rows.forEach(row => {
+                    if (!row.c || !row.c[0] || !row.c[0].v) return;
 
-                    const name = row.c[0] ? row.c[0].v : '';
-                    const price = row.c[1] ? (parseFloat(row.c[1].v) || 0) : 0;
-                    const salePrice = row.c[2] ? (parseFloat(row.c[2].v) || price) : price;
-                    const tag = row.c[3] ? row.c[3].v : 'โปรโมชั่นพิเศษ';
-                    const image = (row.c[4] && row.c[4].v) ? row.c[4].v : '';
+                    const name = String(row.c[0].v);
+                    
+                    // ข้ามหัวตารางถ้าติดมา
+                    if (name === 'ชื่อสินค้า') return;
 
-                    // สร้างการ์ดแสดงสินค้า HTML
+                    const price = parsePrice(row.c[1]);
+                    const salePrice = parsePrice(row.c[2]) || price;
+                    const tag = (row.c[3] && row.c[3].v) ? String(row.c[3].v) : '🔥 ผ่อนสบาย';
+                    const image = (row.c[4] && row.c[4].v) ? String(row.c[4].v) : '';
+
                     const productCard = document.createElement('div');
                     productCard.className = 'bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition';
                     productCard.innerHTML = `
@@ -206,34 +212,28 @@
                 });
 
             } catch (error) {
-                console.error('Error fetching sheet:', error);
+                console.error('Error:', error);
                 productGrid.innerHTML = `
                     <div class="col-span-full text-center py-4 text-white">
-                        ❌ ไม่สามารถโหลดข้อมูลได้ (อย่าลืมเปิดสิทธิ์แชร์ Google Sheets ให้เป็น "ทุกคนที่มีลิงก์")
+                        ❌ ไม่สามารถโหลดข้อมูลได้ (อย่าลืมเปิดสิทธิ์แชร์เป็น "ทุกคนที่มีลิงก์")
                     </div>`;
             }
         }
 
-        // 📌 3. ฟังก์ชันเลือกสินค้า
         function selectProduct(name, price) {
             priceInput.value = price;
             document.getElementById('custProduct').value = name;
             calculateLoan();
-            
-            // Scroll หน้าจอลงมายังฟอร์มคำนวณ
             document.getElementById('calcForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 📌 4. ฟังก์ชันคำนวณยอดผ่อน
         function calculateLoan() {
             const price = parseFloat(priceInput.value) || 0;
             let down = parseFloat(downInput.value) || 0;
             const months = parseInt(monthsInput.value) || 1;
             const rate = parseFloat(interestInput.value) || 0;
 
-            if (down > price) {
-                down = price;
-            }
+            if (down > price) down = price;
 
             const loan = Math.max(0, price - down);
             const totalInterest = loan * (rate / 100) * months;
@@ -247,12 +247,10 @@
             return { price, down, months, rate, loan, monthlyPay: Math.round(monthlyPay) };
         }
 
-        // จับ Event เมื่อมีการแก้ไขค่าในช่องคำนวณ
         [priceInput, downInput, monthsInput, interestInput].forEach(input => {
             input.addEventListener('input', calculateLoan);
         });
 
-        // 📌 5. ฟังก์ชันส่งข้อมูลเข้า LINE
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -283,15 +281,10 @@
 ---------------------------`;
 
             const lineUrl = `https://line.me/R/oaMessage/${LINE_ID}/?${encodeURIComponent(message)}`;
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(message);
-            }
-
+            if (navigator.clipboard) navigator.clipboard.writeText(message);
             window.open(lineUrl, '_blank');
         });
 
-        // เรียกทำงานทันทีเมื่อเปิดหน้าเว็บ
         window.addEventListener('DOMContentLoaded', loadProductsFromSheet);
     </script>
 </body>
