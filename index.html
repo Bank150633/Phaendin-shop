@@ -124,27 +124,32 @@
     }
 
     // ฟังก์ชั่นแสดงผลการ์ดสินค้า
+        // ฟังก์ชั่นแสดงผลการ์ดสินค้า (อัปเดตให้รองรับข้อมูลและแปลงตัวอักษรให้อัตโนมัติ)
     function renderProducts(products) {
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
 
-      if(products.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">ยังไม่มีสินค้าในหมวดหมู่นี้</div>`;
+      if (!products || products.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">ยังไม่มีสินค้าในขณะนี้</div>`;
         return;
       }
 
       products.forEach(item => {
+        // ดึงค่า platform แบบไม่สนตัวพิมพ์เล็ก-ใหญ่
+        const platformName = (item.platform || '').toString().trim();
+        const platformLower = platformName.toLowerCase();
+
         let badgeBg = 'bg-slate-800';
-        if (item.platform === 'Shopee') badgeBg = 'bg-orange-500';
-        if (item.platform === 'Lazada') badgeBg = 'bg-blue-600';
-        if (item.platform === 'TikTok') badgeBg = 'bg-black';
+        if (platformLower === 'shopee') badgeBg = 'bg-orange-500';
+        if (platformLower === 'lazada') badgeBg = 'bg-blue-600';
+        if (platformLower === 'tiktok') badgeBg = 'bg-black';
 
         const card = `
           <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col justify-between group">
             <div class="relative">
-              <img src="${item.image}" alt="${item.title}" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition duration-300">
+              <img src="${item.image}" alt="${item.title}" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
               <span class="absolute top-2 left-2 ${badgeBg} text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
-                ${item.platform}
+                ${platformName || 'General'}
               </span>
               <span class="absolute top-2 right-2 bg-[#b91c1c] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow">
                 1 แถม 1
@@ -174,6 +179,16 @@
         `;
         grid.innerHTML += card;
       });
+    }
+
+    // ฟังก์ชั่นกรองสินค้า (อัปเดตให้รองรับตัวพิมพ์เล็ก-ใหญ่)
+    function filterCategory(category) {
+      if (category === 'all') {
+        renderProducts(allProducts);
+      } else {
+        const filtered = allProducts.filter(p => (p.platform || '').toString().toLowerCase() === category.toLowerCase());
+        renderProducts(filtered);
+      }
     }
 
     // ฟังก์ชั่นกรองสินค้า
