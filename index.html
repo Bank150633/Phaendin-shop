@@ -17,7 +17,7 @@
 </head>
 <body class="min-h-screen flex flex-col text-slate-800">
 
-  <!-- Header Section (โทนสีน้ำเงินกรมท่า ตัดแดงชาด) -->
+  <!-- Header Section -->
   <header class="bg-[#0f172a] text-white shadow-md border-b-4 border-[#b91c1c] sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
       <div class="flex items-center gap-3">
@@ -66,65 +66,38 @@
 
   </main>
 
-  <!-- Footer (แถบน้ำเงินเข้ม + ขอบแดง) -->
+  <!-- Footer -->
   <footer class="bg-[#0f172a] text-slate-400 text-center py-6 border-t-2 border-[#b91c1c] mt-12 text-sm">
     <p>© 2026 ศูนย์รวมโปรโมชัน 1 แถม 1 สินค้าออนไลน์ราคาประหยัด</p>
   </footer>
 
   <!-- JavaScript -->
   <script>
-    // ⚠️ ใส่ Web App URL ที่ได้จาก Google Apps Script ตรงนี้
+    // URL Google Apps Script
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfqQzJwYt4NsnX5PeWe1aOtplZo14hZawBD0G7RuApd6U73GatL-uHjZVOKqC9Qfq7ww/exec";
-
-    // ตัวอย่างข้อมูลสำหรับทดสอบ (จะทำงานเมื่อยังไม่ได้เชื่อม Google Sheets)
-    const mockProducts = [
-      {
-        title: "[1แถม1] หูฟังบลูทูธไร้สาย เบสแน่น ตัดเสียงรบกวน",
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
-        price: "299",
-        originalPrice: "599",
-        platform: "Shopee",
-        link: "https://shopee.co.th"
-      },
-      {
-        title: "[1แถม1] เสื้อยืด Oversize ผ้าคอตตอน 100% สวมใส่สบาย",
-        image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
-        price: "199",
-        originalPrice: "390",
-        platform: "Lazada",
-        link: "https://lazada.co.th"
-      },
-      {
-        title: "[1แถม1] แก้วเก็บความเย็น 30 oz สแตนเลสอย่างดี",
-        image: "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?w=500",
-        price: "159",
-        originalPrice: "320",
-        platform: "TikTok",
-        link: "https://tiktok.com"
-      }
-    ];
 
     let allProducts = [];
 
-    // ฟังก์ชั่นดึงข้อมูล
+    // ฟังก์ชั่นดึงข้อมูล (เพิ่ม redirect: 'follow' ป้องกัน CORS)
     async function fetchProducts() {
       try {
-        if (GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_ID')) {
-          allProducts = mockProducts;
-        } else {
-          const res = await fetch(GOOGLE_SCRIPT_URL);
-          allProducts = await res.json();
-        }
+        const res = await fetch(GOOGLE_SCRIPT_URL, { redirect: 'follow' });
+        allProducts = await res.json();
+        
         document.getElementById('loading').classList.add('hidden');
         renderProducts(allProducts);
       } catch (err) {
         console.error("Error fetching products:", err);
-        document.getElementById('loading').innerHTML = '<p class="text-red-600 font-semibold">โหลดข้อมูลไม่สำเร็จ กรุณาตรวจสอบลิงก์ Google Script</p>';
+        document.getElementById('loading').innerHTML = `
+          <div class="text-center py-6">
+            <p class="text-red-600 font-semibold mb-2">โหลดข้อมูลไม่สำเร็จ</p>
+            <p class="text-xs text-slate-400">กรุณาเช็กว่า Google Apps Script ตั้งค่าเป็น "ทุกคน (Anyone)" แล้วหรือยัง</p>
+          </div>
+        `;
       }
     }
 
     // ฟังก์ชั่นแสดงผลการ์ดสินค้า
-        // ฟังก์ชั่นแสดงผลการ์ดสินค้า (อัปเดตให้รองรับข้อมูลและแปลงตัวอักษรให้อัตโนมัติ)
     function renderProducts(products) {
       const grid = document.getElementById('product-grid');
       grid.innerHTML = '';
@@ -135,7 +108,6 @@
       }
 
       products.forEach(item => {
-        // ดึงค่า platform แบบไม่สนตัวพิมพ์เล็ก-ใหญ่
         const platformName = (item.platform || '').toString().trim();
         const platformLower = platformName.toLowerCase();
 
@@ -181,22 +153,12 @@
       });
     }
 
-    // ฟังก์ชั่นกรองสินค้า (อัปเดตให้รองรับตัวพิมพ์เล็ก-ใหญ่)
+    // ฟังก์ชั่นกรองสินค้า (ลบฟังก์ชันซ้ำออกแล้ว)
     function filterCategory(category) {
       if (category === 'all') {
         renderProducts(allProducts);
       } else {
         const filtered = allProducts.filter(p => (p.platform || '').toString().toLowerCase() === category.toLowerCase());
-        renderProducts(filtered);
-      }
-    }
-
-    // ฟังก์ชั่นกรองสินค้า
-    function filterCategory(category) {
-      if (category === 'all') {
-        renderProducts(allProducts);
-      } else {
-        const filtered = allProducts.filter(p => p.platform === category);
         renderProducts(filtered);
       }
     }
