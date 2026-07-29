@@ -22,7 +22,7 @@
         </div>
     </header>
 
-    <!-- 📢 ช่องโฆษณาและนำเสนอสินค้าด้านบน (Featured Banner) -->
+    <!-- 📢 ช่องโฆษณาและนำเสนอสินค้าด้านบน (ดึงข้อมูลอัตโนมัติจาก Google Sheets) -->
     <section class="max-w-4xl mx-auto px-4 mt-6">
         <div class="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
             <div class="inline-block bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold tracking-wide mb-3">
@@ -32,44 +32,11 @@
             <h2 class="text-xl md:text-2xl font-bold mb-1">สินค้ารุ่นฮิตประจำเดือน</h2>
             <p class="text-white/90 text-sm mb-4">คลิก "ผ่อนตัวนี้" เพื่อดึงข้อมูลเข้าสู่ระบบคำนวณและกรอกฟอร์มทันที</p>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-slate-800">
-                <!-- สินค้าที่ 1 -->
-                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition">
-                    <div>
-                        <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded font-medium">Hot</span>
-                        <h3 class="font-bold text-slate-800 mt-1">iPhone 15 Pro (128GB)</h3>
-                        <p class="text-xs text-slate-400 line-through">41,900 บาท</p>
-                        <p class="text-indigo-600 font-extrabold text-lg">39,900 .-</p>
-                    </div>
-                    <button type="button" onclick="selectProduct('iPhone 15 Pro (128GB)', 39900)" class="mt-3 w-full bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold py-2 text-xs rounded-lg border border-indigo-200 transition">
-                        ผ่อนตัวนี้ ⚡
-                    </button>
-                </div>
-
-                <!-- สินค้าที่ 2 -->
-                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition">
-                    <div>
-                        <span class="bg-emerald-100 text-emerald-600 text-xs px-2 py-0.5 rounded font-medium">ผ่อนถูก</span>
-                        <h3 class="font-bold text-slate-800 mt-1">iPad Air 5 Wi-Fi</h3>
-                        <p class="text-xs text-slate-400 line-through">23,900 บาท</p>
-                        <p class="text-indigo-600 font-extrabold text-lg">21,500 .-</p>
-                    </div>
-                    <button type="button" onclick="selectProduct('iPad Air 5 Wi-Fi (64GB)', 21500)" class="mt-3 w-full bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold py-2 text-xs rounded-lg border border-indigo-200 transition">
-                        ผ่อนตัวนี้ ⚡
-                    </button>
-                </div>
-
-                <!-- สินค้าที่ 3 -->
-                <div class="bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition">
-                    <div>
-                        <span class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded font-medium">สายเกม</span>
-                        <h3 class="font-bold text-slate-800 mt-1">Notebook Asus TUF</h3>
-                        <p class="text-xs text-slate-400 line-through">28,900 บาท</p>
-                        <p class="text-indigo-600 font-extrabold text-lg">26,900 .-</p>
-                    </div>
-                    <button type="button" onclick="selectProduct('Notebook Asus TUF Gaming', 26900)" class="mt-3 w-full bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold py-2 text-xs rounded-lg border border-indigo-200 transition">
-                        ผ่อนตัวนี้ ⚡
-                    </button>
+            <!-- คอนเทนเนอร์แสดงรายการสินค้าจาก Google Sheets -->
+            <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-slate-800">
+                <!-- สถานะกำลังโหลด -->
+                <div class="col-span-full text-center py-8 text-white font-medium">
+                    ⏳ กำลังดึงข้อมูลสินค้าจาก Google Sheets...
                 </div>
             </div>
         </div>
@@ -174,10 +141,11 @@
 
     </main>
 
-    <!-- JavaScript Calculation Script -->
+    <!-- JavaScript Script -->
     <script>
-        // 📌 เปลี่ยน @yourlineid เป็น Line Official Account ID ของร้านคุณ (ต้องมี @ ด้านหน้า)
-        const LINE_ID = "@yourlineid"; 
+        // 📌 1. ตั้งค่าข้อมูล Google Sheets และ LINE ID
+        const SHEET_ID = '1G7cpIlW-C3-ruQ0rAogw5F2xB7BQFD1V_bqL4wTU2HE'; // Sheet ID ของคุณ
+        const LINE_ID = "@yourlineid"; // ⚠️ เปลี่ยนเป็น Line Official Account ID ของร้านคุณ
 
         const priceInput = document.getElementById('productPrice');
         const downInput = document.getElementById('downPayment');
@@ -188,7 +156,65 @@
         const totalInterestEl = document.getElementById('totalInterest');
         const monthlyPaymentEl = document.getElementById('monthlyPayment');
 
-        // ฟังก์ชันเลือกสินค้าจากโฆษณาด้านบน
+        // 📌 2. ฟังก์ชันดึงข้อมูลจาก Google Sheets
+        async function loadProductsFromSheet() {
+            const productGrid = document.getElementById('productGrid');
+            const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+            try {
+                const response = await fetch(sheetUrl);
+                const text = await response.text();
+                
+                // แปลงข้อมูลจาก Google Viz Format เป็น JSON
+                const jsonText = text.substring(47, text.length - 2);
+                const data = JSON.parse(jsonText);
+                const rows = data.table.rows;
+
+                if (!rows || rows.length === 0) {
+                    productGrid.innerHTML = `<div class="col-span-full text-center py-4 text-white">ไม่พบข้อมูลสินค้าใน Google Sheets</div>`;
+                    return;
+                }
+
+                productGrid.innerHTML = ''; // ล้างข้อความกำลังโหลด
+
+                // วนลูปอ่านข้อมูลสินค้าแต่ละแถว (เริ่มที่แถว 1 เพื่อข้ามหัวตาราง)
+                rows.slice(1).forEach(row => {
+                    if (!row.c || !row.c[0]) return; // ข้ามแถวที่ไม่มีชื่อสินค้า
+
+                    const name = row.c[0] ? row.c[0].v : '';
+                    const price = row.c[1] ? (parseFloat(row.c[1].v) || 0) : 0;
+                    const salePrice = row.c[2] ? (parseFloat(row.c[2].v) || price) : price;
+                    const tag = row.c[3] ? row.c[3].v : 'โปรโมชั่นพิเศษ';
+                    const image = (row.c[4] && row.c[4].v) ? row.c[4].v : '';
+
+                    // สร้างการ์ดแสดงสินค้า HTML
+                    const productCard = document.createElement('div');
+                    productCard.className = 'bg-white p-4 rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition';
+                    productCard.innerHTML = `
+                        <div>
+                            ${image ? `<img src="${image}" alt="${name}" class="w-full h-32 object-contain mb-3 rounded-lg">` : ''}
+                            <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded font-medium">${tag}</span>
+                            <h3 class="font-bold text-slate-800 mt-1 line-clamp-1">${name}</h3>
+                            ${price > salePrice ? `<p class="text-xs text-slate-400 line-through">${price.toLocaleString('th-TH')} บาท</p>` : ''}
+                            <p class="text-indigo-600 font-extrabold text-lg">${salePrice.toLocaleString('th-TH')} .-</p>
+                        </div>
+                        <button type="button" onclick="selectProduct('${name.replace(/'/g, "\\'")}', ${salePrice})" class="mt-3 w-full bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold py-2 text-xs rounded-lg border border-indigo-200 transition">
+                            ผ่อนตัวนี้ ⚡
+                        </button>
+                    `;
+                    productGrid.appendChild(productCard);
+                });
+
+            } catch (error) {
+                console.error('Error fetching sheet:', error);
+                productGrid.innerHTML = `
+                    <div class="col-span-full text-center py-4 text-white">
+                        ❌ ไม่สามารถโหลดข้อมูลได้ (อย่าลืมเปิดสิทธิ์แชร์ Google Sheets ให้เป็น "ทุกคนที่มีลิงก์")
+                    </div>`;
+            }
+        }
+
+        // 📌 3. ฟังก์ชันเลือกสินค้า
         function selectProduct(name, price) {
             priceInput.value = price;
             document.getElementById('custProduct').value = name;
@@ -198,14 +224,13 @@
             document.getElementById('calcForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // ฟังก์ชันคำนวณยอดผ่อน
+        // 📌 4. ฟังก์ชันคำนวณยอดผ่อน
         function calculateLoan() {
             const price = parseFloat(priceInput.value) || 0;
             let down = parseFloat(downInput.value) || 0;
             const months = parseInt(monthsInput.value) || 1;
             const rate = parseFloat(interestInput.value) || 0;
 
-            // ป้องกันเงินดาวน์เกินราคาสินค้า
             if (down > price) {
                 down = price;
             }
@@ -215,7 +240,6 @@
             const totalPay = loan + totalInterest;
             const monthlyPay = months > 0 ? (totalPay / months) : 0;
 
-            // อัปเดตการแสดงผล
             loanAmountEl.innerText = loan.toLocaleString('th-TH') + ' บาท';
             totalInterestEl.innerText = Math.round(totalInterest).toLocaleString('th-TH') + ' บาท';
             monthlyPaymentEl.innerText = Math.round(monthlyPay).toLocaleString('th-TH') + ' บาท/เดือน';
@@ -228,7 +252,7 @@
             input.addEventListener('input', calculateLoan);
         });
 
-        // ฟังก์ชันส่งข้อมูลเข้า LINE
+        // 📌 5. ฟังก์ชันส่งข้อมูลเข้า LINE
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -244,7 +268,6 @@
                 return;
             }
 
-            // จัดรูปแบบข้อความที่จะส่ง
             const message = 
 `📌 *สนใจขอผ่อนสินค้า*
 ---------------------------
@@ -259,16 +282,17 @@
 📝 หมายเหตุ: ${note || '-'}
 ---------------------------`;
 
-            // เปิด LINE พร้อมส่งข้อความ
             const lineUrl = `https://line.me/R/oaMessage/${LINE_ID}/?${encodeURIComponent(message)}`;
             
-            // ทำการสำรองคัดลอกข้อความเข้า Clipboard เผื่อกรณีแอป LINE ไม่เปิดอัตโนมัติ
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(message);
             }
 
             window.open(lineUrl, '_blank');
         });
+
+        // เรียกทำงานทันทีเมื่อเปิดหน้าเว็บ
+        window.addEventListener('DOMContentLoaded', loadProductsFromSheet);
     </script>
 </body>
 </html>
