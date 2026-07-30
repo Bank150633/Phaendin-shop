@@ -1,170 +1,290 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>รวมโปร 1 แถม 1 - Shopee | Lazada | TikTok</title>
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts Prompt -->
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body { 
-      font-family: 'Prompt', sans-serif; 
-      background-color: #f8fafc;
-    }
-  </style>
-</head>
-<body class="min-h-screen flex flex-col text-slate-800">
-
-  <!-- Header Section -->
-  <header class="bg-[#0f172a] text-white shadow-md border-b-4 border-[#b91c1c] sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
-      <div class="flex items-center gap-3">
-        <span class="bg-[#b91c1c] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider animate-pulse shadow">
-          ดีลเด็ดประจำวัน
-        </span>
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-          รวมโปร <span class="text-[#ef4444]">1 แถม 1</span>
-        </h1>
-      </div>
-      <p class="text-xs sm:text-sm text-slate-300 font-light">
-        ช้อปสุดคุ้มจาก Shopee / Lazada / TikTok
-      </p>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รวมดีลเด็ด สินค้าลดราคาพิเศษ | Thai Deals</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Filter Buttons (แถบเลือกแพลตฟอร์ม) -->
-    <div class="flex flex-wrap justify-center gap-2 mb-8">
-      <button onclick="filterCategory('all')" class="filter-btn active bg-[#1e293b] text-white hover:bg-[#0f172a] px-5 py-2 rounded-full text-sm font-semibold shadow transition">
-        🇹🇭 ทั้งหมด
-      </button>
-      <button onclick="filterCategory('Shopee')" class="filter-btn bg-white text-orange-600 hover:bg-orange-50 border border-slate-200 px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition">
-        🧡 Shopee
-      </button>
-      <button onclick="filterCategory('Lazada')" class="filter-btn bg-white text-blue-600 hover:bg-blue-50 border border-slate-200 px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition">
-        💙 Lazada
-      </button>
-      <button onclick="filterCategory('TikTok')" class="filter-btn bg-white text-slate-900 hover:bg-slate-100 border border-slate-200 px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition">
-        🖤 TikTok
-      </button>
-    </div>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'thai-red': '#EF3340',     /* สีแดง ชาติ/ความร้อนแรงของโปรโมชัน */
+                        'thai-blue': '#00247D',    /* สีน้ำเงิน พระมหากษัตริย์/ความน่าเชื่อถือ */
+                        'thai-white': '#FFFFFF',   /* สีขาว ศาสนา/ความสะอาดตา */
+                        'thai-bg': '#F8FAFC'
+                    },
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Kanit', sans-serif; }
+        .stripe-banner {
+            background: linear-gradient(135deg, #EF3340 0%, #EF3340 40%, #FFFFFF 40%, #FFFFFF 60%, #00247D 60%, #00247D 100%);
+        }
+    </style>
+</head>
+<body class="bg-thai-bg text-gray-800 min-h-screen flex flex-col">
 
-    <!-- Product Grid Container -->
-    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
-      <!-- ข้อมูลสินค้าจะถูกโหลดมาแสดงตรงนี้ -->
-    </div>
-
-    <!-- Loading State -->
-    <div id="loading" class="text-center py-16">
-      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-[#b91c1c] border-t-transparent"></div>
-      <p class="mt-3 text-slate-500 text-sm font-medium">กำลังโหลดโปรโมชัน 1 แถม 1...</p>
-    </div>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-[#0f172a] text-slate-400 text-center py-6 border-t-2 border-[#b91c1c] mt-12 text-sm">
-    <p>© 2026 ศูนย์รวมโปรโมชัน 1 แถม 1 สินค้าออนไลน์ราคาประหยัด</p>
-  </footer>
-
-  <!-- JavaScript -->
-  <script>
-    // URL Google Apps Script
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrsMpZ4dRh_urwOuorKqfc0N5hI4FWe3uRxeygx0NyOa71qIVyqv-DgjjWoayYpqkwFg/exec";
-
-    let allProducts = [];
-
-    // ฟังก์ชั่นดึงข้อมูล (เพิ่ม redirect: 'follow' ป้องกัน CORS)
-    async function fetchProducts() {
-      try {
-        const res = await fetch(GOOGLE_SCRIPT_URL, { redirect: 'follow' });
-        allProducts = await res.json();
+    <!-- 1. Header & Navigation (โทนสีน้ำเงินไทย ตัดแถบแดง) -->
+    <header class="bg-thai-blue text-white shadow-lg sticky top-0 z-50">
+        <!-- แถบเส้นสีแดง Top Bar -->
+        <div class="h-2 bg-thai-red w-full"></div>
         
-        document.getElementById('loading').classList.add('hidden');
-        renderProducts(allProducts);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        document.getElementById('loading').innerHTML = `
-          <div class="text-center py-6">
-            <p class="text-red-600 font-semibold mb-2">โหลดข้อมูลไม่สำเร็จ</p>
-            <p class="text-xs text-slate-400">กรุณาเช็กว่า Google Apps Script ตั้งค่าเป็น "ทุกคน (Anyone)" แล้วหรือยัง</p>
-          </div>
-        `;
-      }
-    }
-
-    // ฟังก์ชั่นแสดงผลการ์ดสินค้า
-    function renderProducts(products) {
-      const grid = document.getElementById('product-grid');
-      grid.innerHTML = '';
-
-      if (!products || products.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400">ยังไม่มีสินค้าในขณะนี้</div>`;
-        return;
-      }
-
-      products.forEach(item => {
-        const platformName = (item.platform || '').toString().trim();
-        const platformLower = platformName.toLowerCase();
-
-        let badgeBg = 'bg-slate-800';
-        if (platformLower === 'shopee') badgeBg = 'bg-orange-500';
-        if (platformLower === 'lazada') badgeBg = 'bg-blue-600';
-        if (platformLower === 'tiktok') badgeBg = 'bg-black';
-
-        const card = `
-          <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition flex flex-col justify-between group">
-            <div class="relative">
-              <img src="${item.image}" alt="${item.title}" class="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://via.placeholder.com/300x300?text=No+Image'">
-              <span class="absolute top-2 left-2 ${badgeBg} text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
-                ${platformName || 'General'}
-              </span>
-              <span class="absolute top-2 right-2 bg-[#b91c1c] text-white text-[10px] font-extrabold px-2 py-0.5 rounded shadow">
-                1 แถม 1
-              </span>
-            </div>
-            
-            <div class="p-3 flex-grow flex flex-col justify-between">
-              <div>
-                <h3 class="text-xs sm:text-sm font-semibold text-slate-800 line-clamp-2 mb-2 leading-snug">
-                  ${item.title}
-                </h3>
-              </div>
-              
-              <div>
-                <div class="flex items-baseline gap-1.5 my-1">
-                  <span class="text-[#b91c1c] font-extrabold text-base sm:text-xl">฿${item.price}</span>
-                  ${item.originalPrice ? `<span class="text-slate-400 text-xs line-through">฿${item.originalPrice}</span>` : ''}
+        <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <!-- โลโก้ & ชื่อเว็บ -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilter()">
+                <div class="bg-white text-thai-blue p-2 rounded-lg font-black text-2xl shadow">
+                    🇹🇭
                 </div>
-                
-                <a href="${item.link}" target="_blank" rel="noopener noreferrer" 
-                   class="block w-full text-center bg-[#b91c1c] hover:bg-[#991b1b] text-white text-xs font-bold py-2 rounded transition shadow-sm mt-2">
-                  กดรับโปร 1 แถม 1
-                </a>
-              </div>
+                <div>
+                    <h1 class="text-2xl font-bold tracking-wide text-white leading-tight">DEAL<span class="text-thai-red bg-white px-1.5 py-0.5 rounded ml-1 text-xl">THAI</span></h1>
+                    <p class="text-xs text-blue-200">รวมดีลเด็ด สินค้าลดแรง คัดมาให้แล้ว</p>
+                </div>
             </div>
-          </div>
-        `;
-        grid.innerHTML += card;
-      });
-    }
 
-    // ฟังก์ชั่นกรองสินค้า (ลบฟังก์ชันซ้ำออกแล้ว)
-    function filterCategory(category) {
-      if (category === 'all') {
-        renderProducts(allProducts);
-      } else {
-        const filtered = allProducts.filter(p => (p.platform || '').toString().toLowerCase() === category.toLowerCase());
-        renderProducts(filtered);
-      }
-    }
+            <!-- ช่องค้นหา (Search Bar) -->
+            <div class="relative w-full md:w-1/2">
+                <input type="text" id="searchInput" onkeyup="filterProducts()" 
+                       placeholder="ค้นหาสินค้าลดราคา, ของใช้, IT..." 
+                       class="w-full pl-10 pr-4 py-2 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-thai-red border-2 border-white/20 shadow-inner">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400"></i>
+            </div>
+        </div>
+    </header>
 
-    // เรียกทำงานเมื่อเปิดหน้า
-    fetchProducts();
-  </script>
+    <!-- 2. Hero Banner (ส่วนหัวโปรโมชัน สไตล์ไทยสดใส) -->
+    <section class="bg-gradient-to-r from-thai-blue via-blue-900 to-thai-blue text-white py-8 px-4 border-b-4 border-thai-red">
+        <div class="container mx-auto text-center">
+            <span class="bg-thai-red text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full uppercase tracking-wider animate-pulse inline-block mb-3">
+                🔥 Flash Sale อัปเดตรายวัน
+            </span>
+            <h2 class="text-3xl md:text-5xl font-extrabold mb-2 text-white">มหกรรมสินค้าลดราคาแรง</h2>
+            <p class="text-blue-100 text-sm md:text-base max-w-2xl mx-auto">
+                ชี้เป้าของถูก คูปองส่วนลด ส่งตรงจากร้านค้าชั้นนำ ซื้อปลอดภัย ได้ของชัวร์
+            </p>
+        </div>
+    </section>
+
+    <!-- 3. Main Content (พื้นที่หลัก) -->
+    <main class="container mx-auto px-4 py-6 flex-grow">
+        
+        <!-- หมวดหมู่สินค้า (Category Filter Button) -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-8" id="categoryContainer">
+            <!-- Buttons will be generated by JS -->
+        </div>
+
+        <!-- รายการสินค้า (Product Grid) -->
+        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            <!-- Data will be populated by JavaScript -->
+        </div>
+
+        <!-- แสดงเมื่อไม่พบสินค้า -->
+        <div id="notFound" class="hidden text-center py-12">
+            <i class="fa-solid fa-box-open text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-600">ไม่พบสินค้าที่คุณค้นหา</h3>
+            <p class="text-gray-400">ลองค้นหาด้วยคำอื่น หรือเลือกหมวดหมู่ใหม่</p>
+        </div>
+
+    </main>
+
+    <!-- 4. Footer (ส่วนท้ายเว็บ โทนน้ำเงิน-ขาว-แดง) -->
+    <footer class="bg-thai-blue text-white border-t-4 border-thai-red mt-12">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+                <div>
+                    <h3 class="text-lg font-bold mb-2">เกี่ยวกับ DealThai</h3>
+                    <p class="text-sm text-blue-200">
+                        เรารวบรวมโปรโมชันและดีลส่วนลดราคาสุดพิเศษ เพื่อให้คนไทยได้ซื้อสินค้าในราคาที่คุ้มค่าที่สุด
+                    </p>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-lg font-bold mb-2">รับประกันความปลอดภัย</h3>
+                    <p class="text-sm text-blue-200">
+                        <i class="fa-solid fa-shield-halved text-thai-red mr-1"></i> 
+                        ระบบจะนำท่านไปยังแอปพลิเคชันปลายทางอย่างเป็นทางการ (Shopee / Lazada)
+                    </p>
+                </div>
+                <div class="text-center md:text-right">
+                    <h3 class="text-lg font-bold mb-2">ติดตามเรา</h3>
+                    <div class="flex justify-center md:justify-end space-x-4">
+                        <a href="#" class="w-9 h-9 bg-white/10 hover:bg-thai-red rounded-full flex items-center justify-center transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 bg-white/10 hover:bg-thai-red rounded-full flex items-center justify-center transition"><i class="fa-brands fa-line"></i></a>
+                        <a href="#" class="w-9 h-9 bg-white/10 hover:bg-thai-red rounded-full flex items-center justify-center transition"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-6 pt-4 text-center text-xs text-blue-300">
+                &copy; 2026 DealThai. All rights reserved. | ออกแบบด้วยสีสันแห่งความมั่นคงและโชคดี 🇹🇭
+            </div>
+        </div>
+    </footer>
+
+    <!-- 5. JavaScript Logic (จัดการข้อมูลและการแสดงผล) -->
+    <script>
+        // ข้อมูลตัวอย่างสินค้า (สามารถแก้ราคา ลิงก์ และรูปภาพได้ง่ายๆ ตรงนี้)
+        const products = [
+            {
+                id: 1,
+                title: "หูฟังบลูทูธไร้สาย เสียงเบสแน่น แบตอึด 24 ชม.",
+                category: "IT / ไอที",
+                originalPrice: 1290,
+                salePrice: 399,
+                discount: 69,
+                image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80",
+                affiliateUrl: "https://shopee.co.th", // ใส่ลิงก์ Affiliate ของคุณตรงนี้
+                isFlashSale: true
+            },
+            {
+                id: 2,
+                title: "พัดลมพกพาชาร์จ USB ปรับแรงลมได้ 5 ระดับ",
+                category: "ของใช้ในบ้าน",
+                originalPrice: 350,
+                salePrice: 119,
+                discount: 66,
+                image: "https://images.unsplash.com/photo-1618958222883-79a0e68d1891?w=500&q=80",
+                affiliateUrl: "https://shopee.co.th",
+                isFlashSale: false
+            },
+            {
+                id: 3,
+                title: "หม้อทอดไร้น้ำมัน ขนาดใหญ่ 5.5 ลิตร สแตนเลสอย่างดี",
+                category: "เครื่องใช้ไฟฟ้า",
+                originalPrice: 2590,
+                salePrice: 890,
+                discount: 65,
+                image: "https://images.unsplash.com/photo-1585515320310-259814833e62?w=500&q=80",
+                affiliateUrl: "https://shopee.co.th",
+                isFlashSale: true
+            },
+            {
+                id: 4,
+                title: "แก้วน้ำเก็บความเย็น-ร้อน 900ml สแตนเลส 304",
+                category: "ของใช้ในบ้าน",
+                originalPrice: 390,
+                salePrice: 149,
+                discount: 61,
+                image: "https://images.unsplash.com/photo-1577937927133-66ef06acdf18?w=500&q=80",
+                affiliateUrl: "https://shopee.co.th",
+                isFlashSale: false
+            }
+        ];
+
+        const categories = ["ทั้งหมด", "IT / ไอที", "ของใช้ในบ้าน", "เครื่องใช้ไฟฟ้า"];
+        let currentCategory = "ทั้งหมด";
+
+        // ฟังก์ชันเริ่มทำงานเมื่อโหลดหน้า
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCategories();
+            renderProducts(products);
+        });
+
+        // สร้างปุ่มหมวดหมู่
+        function renderCategories() {
+            const container = document.getElementById("categoryContainer");
+            container.innerHTML = categories.map(cat => `
+                <button onclick="setCategory('${cat}')" 
+                        class="px-4 py-1.5 rounded-full text-sm font-medium transition shadow-sm ${
+                            currentCategory === cat 
+                            ? 'bg-thai-red text-white font-bold ring-2 ring-offset-1 ring-thai-red' 
+                            : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+                        }">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        // แสดงการ์ดสินค้า
+        function renderProducts(items) {
+            const grid = document.getElementById("productGrid");
+            const notFound = document.getElementById("notFound");
+
+            if (items.length === 0) {
+                grid.innerHTML = "";
+                notFound.classList.remove("hidden");
+                return;
+            }
+
+            notFound.classList.add("hidden");
+            grid.innerHTML = items.map(item => `
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col justify-between group">
+                    <div class="relative overflow-hidden">
+                        <!-- รูปสินค้า -->
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-44 sm:h-52 object-cover group-hover:scale-105 transition duration-300">
+                        
+                        <!-- ป้ายลดราคา % (สีแดงไทย) -->
+                        <span class="absolute top-2 left-2 bg-thai-red text-white font-bold text-xs px-2 py-1 rounded shadow">
+                            ลด ${item.discount}%
+                        </span>
+
+                        ${item.isFlashSale ? `
+                        <span class="absolute top-2 right-2 bg-yellow-400 text-thai-blue font-bold text-[10px] px-2 py-0.5 rounded-full shadow flex items-center gap-1">
+                            <i class="fa-solid fa-bolt"></i> ดีลเด็ด
+                        </span>` : ''}
+                    </div>
+
+                    <!-- รายละเอียด -->
+                    <div class="p-3 sm:p-4 flex-grow flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] sm:text-xs text-gray-400 block mb-1">${item.category}</span>
+                            <h3 class="text-sm font-semibold text-gray-800 line-clamp-2 mb-2 group-hover:text-thai-blue transition">
+                                ${item.title}
+                            </h3>
+                        </div>
+
+                        <div class="mt-2">
+                            <!-- ราคา -->
+                            <div class="flex items-baseline space-x-2">
+                                <span class="text-lg sm:text-xl font-black text-thai-red">฿${item.salePrice.toLocaleString()}</span>
+                                <span class="text-xs text-gray-400 line-through">฿${item.originalPrice.toLocaleString()}</span>
+                            </div>
+
+                            <!-- ปุ่มกดซื้อ (สีน้ำเงินไทย) -->
+                            <a href="${item.affiliateUrl}" target="_blank" rel="noopener noreferrer" 
+                               class="mt-3 w-full bg-thai-blue hover:bg-blue-900 text-white text-center py-2 rounded-lg font-medium text-xs sm:text-sm block shadow transition flex items-center justify-center gap-1">
+                                <span>เช็กราคา / สั่งซื้อ</span>
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // กรองหมวดหมู่
+        function setCategory(cat) {
+            currentCategory = cat;
+            renderCategories();
+            filterProducts();
+        }
+
+        // ค้นหาและกรองสินค้า
+        function filterProducts() {
+            const searchText = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = products.filter(p => {
+                const matchesCat = currentCategory === "ทั้งหมด" || p.category === currentCategory;
+                const matchesSearch = p.title.toLowerCase().includes(searchText) || p.category.toLowerCase().includes(searchText);
+                return matchesCat && matchesSearch;
+            });
+            renderProducts(filtered);
+        }
+
+        // รีเซ็ตการกรอง
+        function resetFilter() {
+            document.getElementById("searchInput").value = "";
+            setCategory("ทั้งหมด");
+        }
+    </script>
 </body>
 </html>
