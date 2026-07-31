@@ -139,17 +139,22 @@
                 <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col justify-between group">
                     <div class="relative overflow-hidden">
                         <img src="${item.image}" alt="${item.title}" class="w-full h-44 sm:h-52 object-cover group-hover:scale-105 transition duration-300">
-    <div class="flex flex-wrap gap-1 mt-2">
-    ${
-        item.tags
-            ? item.tags.split(",").map(tag => `
-                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                    ${tag.trim()}
-                </span>
-            `).join("")
-            : ""
-    }
-</div>                
+     <div class="flex flex-wrap gap-1 mt-2">
+${item.tags ? item.tags.split(",").map(tag => {
+tag = tag.trim();
+
+let color = "bg-gray-500 text-white";
+
+if (tag == "Flash Sale") color = "bg-yellow-400 text-black";
+else if (tag == "ส่งฟรี") color = "bg-blue-500 text-white";
+else if (tag == "ขายดี") color = "bg-orange-500 text-white";
+else if (tag == "1 แถม 1") color = "bg-green-600 text-white";
+else if (tag == "Official Store") color = "bg-purple-600 text-white";
+else if (tag.includes("ลด")) color = "bg-red-500 text-white";
+
+return `<span class="${color} text-xs px-2 py-1 rounded-full">${tag}</span>`;
+}).join("") : ""}
+</div>               
                     </div>
                     <div class="p-3 sm:p-4 flex-grow flex flex-col justify-between">
                         <div>
