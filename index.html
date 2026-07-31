@@ -140,21 +140,16 @@
                     <div class="relative overflow-hidden">
                         <img src="${item.image}" alt="${item.title}" class="w-full h-44 sm:h-52 object-cover group-hover:scale-105 transition duration-300">
     <div class="flex flex-wrap gap-1 mt-2">
-    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded">
-        ลด ${item.discount}%
-    </span>
-
-    ${item.isFlashSale ? `
-    <span class="bg-yellow-400 text-black text-xs px-2 py-1 rounded">
-        ⚡ Flash Sale
-    </span>` : ""}
-
-    ${item.buy1get1 ? `
-    <span class="bg-green-600 text-white text-xs px-2 py-1 rounded">
-        🎁 1 แถม 1
-    </span>` : ""}
-</div>
-                        
+    ${
+        item.tags
+            ? item.tags.split(",").map(tag => `
+                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                    ${tag.trim()}
+                </span>
+            `).join("")
+            : ""
+    }
+</div>                
                     </div>
                     <div class="p-3 sm:p-4 flex-grow flex flex-col justify-between">
                         <div>
