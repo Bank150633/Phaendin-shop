@@ -3,202 +3,821 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEALTHAI - รวมดีลเด็ด สินค้าลดราคาพิเศษ</title>
-    <!-- Tailwind CSS & Icons -->
+
+    <title>PHAENDIN PICKS - ของน่าซื้อ คัดมาให้แล้ว</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'thai-red': '#EF3340',
-                        'thai-blue': '#00247D',
-                        'thai-bg': '#F8FAFC'
+                        'main': '#111827',
+                        'accent': '#ef4444',
+                        'gold': '#f59e0b',
+                        'soft': '#f8fafc'
                     },
-                    fontFamily: { kanit: ['Kanit', 'sans-serif'] }
+
+                    fontFamily: {
+                        kanit: ['Kanit', 'sans-serif']
+                    }
                 }
             }
         }
     </script>
-    <style> body { font-family: 'Kanit', sans-serif; } </style>
+
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body class="bg-thai-bg text-gray-800 min-h-screen flex flex-col">
 
-    <!-- Header -->
-    <header class="bg-thai-blue text-white shadow-lg sticky top-0 z-50">
-        <div class="h-2 bg-thai-red w-full"></div>
-        <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilter()">
-                <div class="bg-white text-thai-blue p-2 rounded-lg font-black text-2xl shadow">🇹🇭</div>
+
+<body class="bg-soft text-gray-800 min-h-screen flex flex-col">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="bg-white sticky top-0 z-50 shadow-sm">
+
+    <div class="container mx-auto px-4">
+
+        <div class="flex items-center justify-between gap-3 py-3">
+
+            <!-- LOGO -->
+            <div onclick="resetFilter()"
+                 class="flex items-center gap-2 cursor-pointer min-w-fit">
+
+                <div class="w-10 h-10 rounded-xl bg-gray-900
+                            flex items-center justify-center
+                            text-white font-black text-lg shadow">
+
+                    P
+                </div>
+
                 <div>
-                    <h1 class="text-2xl font-bold tracking-wide text-white leading-tight">DEAL<span class="text-thai-red bg-white px-1.5 py-0.5 rounded ml-1 text-xl">THAI</span></h1>
-                    <p class="text-xs text-blue-200">รวมดีลเด็ด สินค้าลดแรง คัดมาให้แล้ว</p>
-                </div>
-            </div>
-            <div class="relative w-full md:w-1/2">
-                <input type="text" id="searchInput" onkeyup="filterProducts()" 
-                       placeholder="ค้นหาสินค้าลดราคา..." 
-                       class="w-full pl-10 pr-4 py-2 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-thai-red border-2 border-white/20 shadow-inner">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400"></i>
-            </div>
-        </div>
-    </header>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-tight">
+                        PHAENDIN
+                        <span class="text-red-500">PICKS</span>
+                    </h1>
 
-    <!-- Banner -->
-    <section class="bg-gradient-to-r from-thai-blue via-blue-900 to-thai-blue text-white py-8 px-4 border-b-4 border-thai-red">
-        <div class="container mx-auto text-center">
-            <span class="bg-thai-red text-white text-xs md:text-sm font-bold px-3 py-1 rounded-full uppercase tracking-wider animate-pulse inline-block mb-3">
-                🔥 Flash Sale อัปเดตสดใหม่
+                    <p class="text-[10px] sm:text-xs text-gray-400">
+                        ของน่าซื้อ คัดมาให้แล้ว
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH -->
+            <div class="relative flex-1 max-w-xl">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    onkeyup="filterProducts()"
+                    placeholder="ค้นหาสินค้า..."
+                    class="w-full pl-10 pr-4 py-2.5
+                           rounded-full
+                           bg-gray-100
+                           border border-gray-200
+                           focus:outline-none
+                           focus:ring-2
+                           focus:ring-red-400
+                           text-sm">
+
+                <i class="fa-solid fa-magnifying-glass
+                          absolute left-4 top-3.5
+                          text-gray-400">
+                </i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="bg-gray-900 text-white">
+
+    <div class="container mx-auto px-4 py-10 sm:py-14">
+
+        <div class="max-w-3xl mx-auto text-center">
+
+            <span class="inline-block
+                         bg-red-500
+                         text-white
+                         px-4 py-1.5
+                         rounded-full
+                         text-xs sm:text-sm
+                         font-medium
+                         mb-4">
+
+                🔥 PICKS OF THE DAY
+
             </span>
-            <h2 class="text-3xl md:text-5xl font-extrabold mb-2 text-white">มหกรรมสินค้าลดราคาแรง</h2>
-            <p class="text-blue-100 text-sm md:text-base max-w-2xl mx-auto">ชี้เป้าของถูก คูปองส่วนลด ส่งตรงจากร้านค้าชั้นนำ</p>
+
+
+            <h2 class="text-3xl sm:text-5xl
+                       font-black
+                       leading-tight
+                       mb-3">
+
+                ของน่าซื้อ
+                <br class="sm:hidden">
+
+                <span class="text-red-400">
+                    คัดมาให้แล้ว
+                </span>
+
+            </h2>
+
+
+            <p class="text-gray-300
+                      text-sm sm:text-base
+                      max-w-xl
+                      mx-auto">
+
+                รวมของกิน ของใช้ และของน่าสนใจ
+                ที่เราเจอแล้วอยากบอกต่อ
+
+            </p>
+
         </div>
-    </section>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-6 flex-grow">
-        <!-- Categories -->
-        <div class="flex flex-wrap items-center justify-center gap-2 mb-8" id="categoryContainer"></div>
+    </div>
 
-        <!-- Product Grid -->
-        <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"></div>
+</section>
 
-        <!-- Not Found -->
-        <div id="notFound" class="hidden text-center py-12">
-            <i class="fa-solid fa-box-open text-6xl text-gray-300 mb-4"></i>
-            <h3 class="text-xl font-bold text-gray-600">ไม่พบสินค้าที่คุณค้นหา</h3>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="container mx-auto px-4 py-6 flex-grow">
+
+
+    <!-- CATEGORY -->
+
+    <div class="mb-6">
+
+        <div id="categoryContainer"
+             class="flex gap-2 overflow-x-auto
+                    hide-scrollbar pb-2">
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="bg-thai-blue text-white border-t-4 border-thai-red mt-12">
-        <div class="container mx-auto px-4 py-6 text-center text-xs text-blue-300">
-            &copy; 2026 DealThai. All rights reserved. 🇹🇭
+    </div>
+
+
+
+    <!-- PRODUCT COUNT -->
+
+    <div class="flex items-center justify-between mb-4">
+
+        <h2 class="font-bold text-lg">
+            🛍️ สินค้าน่าสนใจ
+        </h2>
+
+        <span id="productCount"
+              class="text-xs text-gray-400">
+        </span>
+
+    </div>
+
+
+
+    <!-- PRODUCT GRID -->
+
+    <div id="productGrid"
+         class="grid
+                grid-cols-2
+                md:grid-cols-3
+                lg:grid-cols-4
+                gap-3
+                sm:gap-5">
+    </div>
+
+
+
+    <!-- NOT FOUND -->
+
+    <div id="notFound"
+         class="hidden text-center py-16">
+
+        <div class="text-6xl mb-4">
+            🔍
         </div>
-    </footer>
 
-    <!-- Logic -->
-    <script>
-        // ⚠️ นำ URL Web App จาก Step 2 มาวางในอัญประกาศคู่ด้านล่างนี้
-        const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxqXpc-Q_2TPzyVnfFaInoGldXl-s8Du6XKfcic3lYKUBXy-FkyQaXGtNcbjTSWOUJI/exec";
+        <h3 class="text-xl font-bold text-gray-600">
+            ไม่พบสินค้าที่ค้นหา
+        </h3>
 
-        let products = [];
-        const categories = ["ทั้งหมด", "IT / ไอที", "ของใช้ในบ้าน", "เครื่องใช้ไฟฟ้า"];
-        let currentCategory = "ทั้งหมด";
+        <p class="text-sm text-gray-400 mt-1">
+            ลองค้นหาด้วยคำอื่น
+        </p>
 
-        document.addEventListener("DOMContentLoaded", () => {
-            renderCategories();
-            fetchProductsFromSheet();
-        });
+    </div>
 
-        function fetchProductsFromSheet() {
-            const grid = document.getElementById("productGrid");
-            grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-3xl mb-2"></i><p>กำลังโหลดสินค้าล่าสุด...</p></div>`;
+</main>
 
-            fetch(SHEET_API_URL)
-                .then(response => response.json())
-                .then(data => {
-                    products = data;
-                    renderProducts(products);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    grid.innerHTML = `<div class="col-span-full text-center py-12 text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูล (โปรดตรวจสอบ Web App URL)</div>`;
-                });
-        }
 
-        function renderCategories() {
-            const container = document.getElementById("categoryContainer");
-            container.innerHTML = categories.map(cat => `
-                <button onclick="setCategory('${cat}')" 
-                        class="px-4 py-1.5 rounded-full text-sm font-medium transition shadow-sm ${
-                            currentCategory === cat 
-                            ? 'bg-thai-red text-white font-bold ring-2 ring-offset-1 ring-thai-red' 
-                            : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                        }">
-                    ${cat}
-                </button>
-            `).join('');
-        }
 
-        function renderProducts(items) {
-            const grid = document.getElementById("productGrid");
-            const notFound = document.getElementById("notFound");
+<!-- =====================================================
+     FOOTER
+===================================================== -->
 
-            if (!items || items.length === 0) {
-                grid.innerHTML = "";
-                notFound.classList.remove("hidden");
-                return;
-            }
+<footer class="bg-gray-900 text-white mt-10">
 
-            notFound.classList.add("hidden");
-            grid.innerHTML = items.map(item => `
-                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col justify-between group">
-                    <div class="relative overflow-hidden">
-                        <img src="${item.image}" alt="${item.title}" class="w-full h-44 sm:h-52 object-cover group-hover:scale-105 transition duration-300">
-     <div class="flex flex-wrap gap-1 mt-2">
-${item.tags ? item.tags.split(",").map(tag => {
-tag = tag.trim();
+    <div class="container mx-auto px-4 py-8">
 
-let color = "bg-gray-500 text-white";
+        <div class="text-center">
 
-if (tag == "Flash Sale") color = "bg-yellow-400 text-black";
-else if (tag == "ส่งฟรี") color = "bg-blue-500 text-white";
-else if (tag == "ขายดี") color = "bg-orange-500 text-white";
-else if (tag == "1 แถม 1") color = "bg-green-600 text-white";
-else if (tag == "Official Store") color = "bg-purple-600 text-white";
-else if (tag.includes("ลด")) color = "bg-red-500 text-white";
+            <div class="text-xl font-black mb-2">
+                PHAENDIN
+                <span class="text-red-400">PICKS</span>
+            </div>
 
-return `<span class="${color} text-xs px-2 py-1 rounded-full">${tag}</span>`;
-}).join("") : ""}
-</div>               
+            <p class="text-gray-400 text-xs">
+                ของน่าซื้อ คัดมาให้แล้ว
+            </p>
+
+            <p class="text-gray-600 text-[10px] mt-4">
+                © 2026 PHAENDIN PICKS
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     SCRIPT เดิม
+===================================================== -->
+
+<script>
+
+    /*
+    =====================================================
+    Google Sheets Web App URL
+    ใช้ตัวเดิมของคุณ
+    =====================================================
+    */
+
+    const SHEET_API_URL =
+        "https://script.google.com/macros/s/AKfycbxqXpc-Q_2TPzyVnfFaInoGldXl-s8Du6XKfcic3lYKUBXy-FkyQaXGtNcbjTSWOUJI/exec";
+
+
+    let products = [];
+
+    /*
+    =====================================================
+    หมวดสินค้า
+    =====================================================
+    */
+
+    const categories = [
+        "ทั้งหมด",
+        "อาหาร",
+        "น้ำพริก",
+        "ของใช้ในบ้าน",
+        "เครื่องใช้ไฟฟ้า",
+        "แฟชั่น",
+        "สัตว์เลี้ยง",
+        "อื่นๆ"
+    ];
+
+
+    let currentCategory = "ทั้งหมด";
+
+
+
+    /*
+    =====================================================
+    START
+    =====================================================
+    */
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        renderCategories();
+
+        fetchProductsFromSheet();
+
+    });
+
+
+
+    /*
+    =====================================================
+    ดึงข้อมูลจาก Google Sheets
+    =====================================================
+    */
+
+    function fetchProductsFromSheet() {
+
+        const grid =
+            document.getElementById("productGrid");
+
+
+        grid.innerHTML = `
+
+            <div class="col-span-full
+                        text-center
+                        py-16
+                        text-gray-400">
+
+                <i class="fa-solid fa-spinner fa-spin text-3xl mb-3"></i>
+
+                <p class="text-sm">
+                    กำลังโหลดสินค้า...
+                </p>
+
+            </div>
+
+        `;
+
+
+        fetch(SHEET_API_URL)
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                products = data;
+
+                renderProducts(products);
+
+            })
+
+            .catch(error => {
+
+                console.error("Error:", error);
+
+                grid.innerHTML = `
+
+                    <div class="col-span-full
+                                text-center
+                                py-16
+                                text-red-500">
+
+                        <i class="fa-solid
+                                  fa-triangle-exclamation
+                                  text-3xl
+                                  mb-3">
+                        </i>
+
+                        <p>
+                            ไม่สามารถโหลดสินค้าได้
+                        </p>
+
                     </div>
-                    <div class="p-3 sm:p-4 flex-grow flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-sm font-semibold text-gray-800 line-clamp-2 mb-2 group-hover:text-thai-blue transition">
-    ${item.title}
-</h3>
 
-                        </div>
-                        <div class="mt-2">
-                            <div class="flex items-baseline space-x-2">
-                                <span class="text-lg sm:text-xl font-black text-thai-red">฿${Number(item.salePrice).toLocaleString()}</span>
-                                <span class="text-xs text-gray-400 line-through">฿${Number(item.originalPrice).toLocaleString()}</span>
-                            </div>
-                            <a href="${item.affiliateUrl}" target="_blank" rel="noopener noreferrer" 
-                               class="mt-3 w-full bg-thai-blue hover:bg-blue-900 text-white text-center py-2 rounded-lg font-medium text-xs sm:text-sm block shadow transition flex items-center justify-center gap-1">
-                                <span>เช็กราคา / สั่งซื้อ</span>
-                                <i class="fa-solid fa-chevron-right text-xs"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+                `;
 
-        function setCategory(cat) {
-            currentCategory = cat;
-            renderCategories();
-            filterProducts();
-        }
-
-        function filterProducts() {
-            const searchText = document.getElementById("searchInput").value.toLowerCase();
-            const filtered = products.filter(p => {
-                const matchesCat = currentCategory === "ทั้งหมด" || p.category === currentCategory;
-                const matchesSearch = p.title.toLowerCase().includes(searchText) || p.category.toLowerCase().includes(searchText);
-                return matchesCat && matchesSearch;
             });
-            renderProducts(filtered);
+
+    }
+
+
+
+    /*
+    =====================================================
+    CATEGORY
+    =====================================================
+    */
+
+    function renderCategories() {
+
+        const container =
+            document.getElementById("categoryContainer");
+
+
+        container.innerHTML =
+            categories.map(cat => `
+
+                <button
+                    onclick="setCategory('${cat}')"
+
+                    class="whitespace-nowrap
+                           px-4 py-2
+                           rounded-full
+                           text-sm
+                           font-medium
+                           transition
+
+                           ${
+                               currentCategory === cat
+
+                               ? "bg-gray-900 text-white shadow"
+
+                               : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-100"
+                           }">
+
+                    ${cat}
+
+                </button>
+
+            `).join("");
+
+    }
+
+
+
+    /*
+    =====================================================
+    PRODUCT
+    =====================================================
+    */
+
+    function renderProducts(items) {
+
+        const grid =
+            document.getElementById("productGrid");
+
+        const notFound =
+            document.getElementById("notFound");
+
+        const count =
+            document.getElementById("productCount");
+
+
+        if (!items || items.length === 0) {
+
+            grid.innerHTML = "";
+
+            notFound.classList.remove("hidden");
+
+            count.innerText = "";
+
+            return;
+
         }
 
-        function resetFilter() {
-            document.getElementById("searchInput").value = "";
-            setCategory("ทั้งหมด");
-        }
-    </script>
+
+        notFound.classList.add("hidden");
+
+
+        count.innerText =
+            `${items.length} รายการ`;
+
+
+        grid.innerHTML = items.map(item => {
+
+
+            /*
+            ===============================
+            TAGS
+            ===============================
+            */
+
+            const tags = item.tags
+                ? item.tags
+                    .split(",")
+                    .map(tag => {
+
+                        tag = tag.trim();
+
+
+                        let color =
+                            "bg-gray-700 text-white";
+
+
+                        if (tag === "Flash Sale")
+                            color =
+                                "bg-yellow-400 text-black";
+
+
+                        else if (tag === "ส่งฟรี")
+                            color =
+                                "bg-blue-500 text-white";
+
+
+                        else if (tag === "ขายดี")
+                            color =
+                                "bg-orange-500 text-white";
+
+
+                        else if (tag === "1 แถม 1")
+                            color =
+                                "bg-green-600 text-white";
+
+
+                        else if (tag === "Official Store")
+                            color =
+                                "bg-purple-600 text-white";
+
+
+                        else if (tag.includes("ลด"))
+                            color =
+                                "bg-red-500 text-white";
+
+
+                        return `
+
+                            <span class="${color}
+                                         text-[10px]
+                                         px-2
+                                         py-1
+                                         rounded-full">
+
+                                ${tag}
+
+                            </span>
+
+                        `;
+
+                    })
+                    .join("")
+                : "";
+
+
+            /*
+            ===============================
+            PRODUCT CARD
+            ===============================
+            */
+
+            return `
+
+                <div class="bg-white
+                            rounded-2xl
+                            overflow-hidden
+                            border border-gray-100
+                            shadow-sm
+                            hover:shadow-lg
+                            transition
+                            group">
+
+
+                    <!-- IMAGE -->
+
+                    <div class="relative
+                                overflow-hidden
+                                bg-gray-100">
+
+                        <img
+                            src="${item.image}"
+                            alt="${item.title}"
+
+                            class="w-full
+                                   h-40
+                                   sm:h-52
+                                   object-cover
+                                   group-hover:scale-105
+                                   transition
+                                   duration-500">
+
+
+                        <!-- TAG -->
+
+                        <div class="absolute
+                                    top-2
+                                    left-2
+                                    flex
+                                    flex-wrap
+                                    gap-1">
+
+                            ${tags}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CONTENT -->
+
+                    <div class="p-3 sm:p-4">
+
+
+                        <!-- TITLE -->
+
+                        <h3 class="text-sm
+                                   font-medium
+                                   text-gray-800
+                                   line-clamp-2
+                                   min-h-[40px]
+                                   group-hover:text-red-500
+                                   transition">
+
+                            ${item.title}
+
+                        </h3>
+
+
+
+                        <!-- PRICE -->
+
+                        <div class="mt-3">
+
+                            <div class="flex
+                                        items-baseline
+                                        gap-2">
+
+                                <span class="text-xl
+                                             sm:text-2xl
+                                             font-black
+                                             text-red-500">
+
+                                    ฿${Number(item.salePrice)
+                                        .toLocaleString()}
+
+                                </span>
+
+
+                                ${
+                                    item.originalPrice
+
+                                    ? `
+
+                                    <span class="text-xs
+                                                 text-gray-400
+                                                 line-through">
+
+                                        ฿${Number(item.originalPrice)
+                                            .toLocaleString()}
+
+                                    </span>
+
+                                    `
+
+                                    : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- BUY BUTTON -->
+
+                        <a
+                            href="${item.affiliateUrl}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+
+                            class="mt-3
+                                   w-full
+                                   bg-gray-900
+                                   hover:bg-red-500
+                                   text-white
+                                   py-2.5
+                                   rounded-xl
+                                   font-medium
+                                   text-xs
+                                   sm:text-sm
+                                   flex
+                                   items-center
+                                   justify-center
+                                   gap-2
+                                   transition">
+
+                            <i class="fa-solid fa-cart-shopping"></i>
+
+                            ดูสินค้า / สั่งซื้อ
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+    }
+
+
+
+    /*
+    =====================================================
+    CATEGORY FILTER
+    =====================================================
+    */
+
+    function setCategory(cat) {
+
+        currentCategory = cat;
+
+        renderCategories();
+
+        filterProducts();
+
+    }
+
+
+
+    /*
+    =====================================================
+    SEARCH
+    =====================================================
+    */
+
+    function filterProducts() {
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+
+        const searchText =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+
+        const filtered =
+            products.filter(p => {
+
+
+                const title =
+                    String(p.title || "")
+                        .toLowerCase();
+
+
+                const category =
+                    String(p.category || "")
+                        .toLowerCase();
+
+
+                const matchesCat =
+                    currentCategory === "ทั้งหมด" ||
+                    p.category === currentCategory;
+
+
+                const matchesSearch =
+                    title.includes(searchText) ||
+                    category.includes(searchText);
+
+
+                return matchesCat && matchesSearch;
+
+            });
+
+
+        renderProducts(filtered);
+
+    }
+
+
+
+    /*
+    =====================================================
+    RESET
+    =====================================================
+    */
+
+    function resetFilter() {
+
+        document.getElementById("searchInput").value = "";
+
+        setCategory("ทั้งหมด");
+
+    }
+
+</script>
+
+
 </body>
 </html>
