@@ -8,12 +8,21 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>PHAENDIN FOOD - ของอร่อยจากทั่วไทย</title>
+<title>PHAENDIN FOOD | ของอร่อยจากทั่วไทย</title>
+
+
+<!-- TAILWIND -->
 
 <script src="https://cdn.tailwindcss.com"></script>
 
+
+<!-- FONT AWESOME -->
+
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+<!-- KANIT -->
 
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet">
@@ -30,7 +39,9 @@ tailwind.config = {
             colors: {
 
                 thaiRed: '#D71920',
+
                 thaiBlue: '#003DA5',
+
                 soft: '#F5F7FA'
 
             },
@@ -64,7 +75,7 @@ body {
 
 
 /* =========================
-   HIDE SCROLLBAR
+   SCROLLBAR
 ========================= */
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -76,13 +87,14 @@ body {
 .hide-scrollbar {
 
     -ms-overflow-style: none;
+
     scrollbar-width: none;
 
 }
 
 
 /* =========================
-   TEXT 2 LINES
+   CLAMP
 ========================= */
 
 .line-clamp-2 {
@@ -140,19 +152,15 @@ body {
 
     background:
 
-        radial-gradient(
-            circle at 10% 20%,
-            rgba(255,255,255,.15),
-            transparent 30%
-        ),
+        linear-gradient(
 
-        radial-gradient(
-            circle at 90% 80%,
-            rgba(215,25,32,.35),
-            transparent 35%
-        ),
+            135deg,
 
-        #003DA5;
+            #003DA5,
+
+            #002D7A
+
+        );
 
 }
 
@@ -174,11 +182,11 @@ body {
 
 .product-card:hover {
 
-    transform: translateY(-4px);
+    transform: translateY(-3px);
 
     box-shadow:
 
-        0 15px 35px rgba(0,0,0,.12);
+        0 12px 28px rgba(0,0,0,.12);
 
 }
 
@@ -189,7 +197,7 @@ body {
 
 .product-image {
 
-    transition: transform .5s ease;
+    transition: transform .4s ease;
 
 }
 
@@ -202,7 +210,7 @@ body {
 
 
 /* =========================
-   BUY BUTTON
+   BUY
 ========================= */
 
 .buy-button {
@@ -234,9 +242,11 @@ body {
             135deg,
 
             #D71920 0%,
-            #D71920 45%,
 
-            #003DA5 45%,
+            #D71920 50%,
+
+            #003DA5 50%,
+
             #003DA5 100%
 
         );
@@ -266,11 +276,12 @@ body {
 </head>
 
 
+
 <body class="bg-soft text-gray-800 min-h-screen flex flex-col">
 
 
 <!-- ==================================================
-     THAI FLAG
+     FLAG
 ================================================== -->
 
 <div class="thai-line"></div>
@@ -287,28 +298,35 @@ body {
 <div class="container mx-auto px-4">
 
 
-<div class="flex items-center justify-between gap-3 py-3">
+<div class="flex items-center
+            justify-between
+            gap-3
+            py-2.5">
 
 
-<!-- LOGO -->
+<!-- =========================
+     LOGO
+========================= -->
 
 <div
     onclick="resetAndRandom()"
-    class="flex items-center gap-2 cursor-pointer min-w-fit"
+    class="flex items-center
+           gap-2
+           cursor-pointer
+           min-w-fit"
 >
 
 
 <div class="logo
-            w-10
-            h-10
-            rounded-xl
+            w-9
+            h-9
+            rounded-lg
             flex
             items-center
             justify-center
             text-white
             font-black
-            text-lg
-            shadow-md">
+            shadow">
 
 P
 
@@ -317,7 +335,11 @@ P
 
 <div>
 
-<h1 class="text-xl sm:text-2xl font-black text-thaiBlue">
+<h1 class="text-lg
+           sm:text-xl
+           font-black
+           leading-none
+           text-thaiBlue">
 
 PHAENDIN
 
@@ -330,9 +352,11 @@ FOOD
 </h1>
 
 
-<p class="text-[10px] sm:text-xs text-gray-400">
+<p class="text-[9px]
+          text-gray-400
+          mt-0.5">
 
-🇹🇭 ของอร่อยจากทั่วไทย
+ของอร่อยจากทั่วไทย 🇹🇭
 
 </p>
 
@@ -343,25 +367,29 @@ FOOD
 
 
 
-<!-- SEARCH -->
+<!-- =========================
+     SEARCH
+========================= -->
 
-<div class="relative flex-1 max-w-xl">
+<div class="relative
+            flex-1
+            max-w-lg">
 
 
 <input
 
-type="text"
-
 id="searchInput"
+
+type="text"
 
 onkeyup="filterProducts()"
 
-placeholder="ค้นหาของกิน ขนม น้ำพริก..."
+placeholder="ค้นหาของกิน..."
 
 class="w-full
-       pl-10
-       pr-4
-       py-2.5
+       pl-9
+       pr-3
+       py-2
        rounded-full
        bg-gray-50
        border
@@ -369,7 +397,8 @@ class="w-full
        focus:outline-none
        focus:ring-2
        focus:ring-thaiBlue
-       text-sm"
+       text-xs
+       sm:text-sm"
 
 
 >
@@ -378,12 +407,12 @@ class="w-full
 <i class="fa-solid
           fa-magnifying-glass
           absolute
-          left-4
-          top-3.5
-          text-thaiBlue">
+          left-3
+          top-2.5
+          text-thaiBlue
+          text-xs">
 
 </i>
-
 
 </div>
 
@@ -403,31 +432,41 @@ class="w-full
 <section class="hero text-white">
 
 
-<div class="container mx-auto px-4 py-10 sm:py-14">
+<div class="container
+            mx-auto
+            px-4
+            py-8
+            sm:py-11">
 
 
-<div class="max-w-3xl mx-auto text-center">
+<div class="max-w-2xl
+            mx-auto
+            text-center">
 
+
+<!-- BADGE -->
 
 <span class="inline-flex
              items-center
-             gap-2
+             gap-1.5
              bg-thaiRed
-             px-4
-             py-1.5
+             px-3
+             py-1
              rounded-full
-             text-xs
-             sm:text-sm
-             mb-4
-             shadow">
+             text-[11px]
+             sm:text-xs
+             mb-3">
 
-🇹🇭 ของอร่อยจากทั่วไทย
+🇹🇭 ของกินไทย
 
 </span>
 
 
-<h2 class="text-3xl
-           sm:text-5xl
+
+<!-- TITLE -->
+
+<h2 class="text-2xl
+           sm:text-4xl
            font-black
            leading-tight">
 
@@ -436,41 +475,41 @@ class="w-full
 </h2>
 
 
-<p class="text-blue-100
-          text-sm
-          sm:text-base
-          mt-3
-          max-w-xl
-          mx-auto">
 
-รวมของกินเด็ด น้ำพริก ขนม
-ของฝาก และอาหารท้องถิ่น
-จากทั่วประเทศไทย
+<p class="text-blue-100
+          text-xs
+          sm:text-sm
+          mt-2">
+
+รวมของกินเด็ดจากทั่วไทย
+คัดมาให้เลือกในที่เดียว
 
 </p>
 
+
+
+<!-- RANDOM -->
 
 <button
 
 onclick="resetAndRandom()"
 
 class="random-button
-       mt-6
-       inline-flex
-       items-center
-       gap-2
+       mt-4
        bg-white
        text-thaiBlue
-       px-6
-       py-3
+       px-5
+       py-2
        rounded-full
+       text-xs
+       sm:text-sm
        font-bold
-       shadow-xl">
+       shadow-lg">
 
 
-<i class="fa-solid fa-shuffle"></i>
+<i class="fa-solid fa-shuffle mr-1"></i>
 
-วันนี้กินอะไรดี?
+สุ่มของกินให้ฉัน
 
 </button>
 
@@ -487,23 +526,39 @@ class="random-button
      MAIN
 ================================================== -->
 
-<main class="container mx-auto px-4 py-6 flex-grow">
+<main class="container
+             mx-auto
+             px-4
+             py-5
+             flex-grow">
 
 
-<!-- CATEGORY -->
+<!-- ==================================================
+     CATEGORY
+================================================== -->
 
-<div class="mb-6">
-
-
-<div class="flex items-center gap-2 mb-3">
-
-
-<div class="w-1 h-5 bg-thaiRed rounded-full"></div>
+<div class="mb-5">
 
 
-<h2 class="font-bold text-thaiBlue">
+<div class="flex
+            items-center
+            gap-2
+            mb-2.5">
 
-เลือกประเภทของกิน
+
+<div class="w-1
+            h-4
+            bg-thaiRed
+            rounded-full">
+
+</div>
+
+
+<h2 class="font-bold
+           text-sm
+           text-thaiBlue">
+
+ประเภทของกิน
 
 </h2>
 
@@ -511,10 +566,14 @@ class="random-button
 </div>
 
 
-<div
-    id="categoryContainer"
-    class="flex gap-2 overflow-x-auto hide-scrollbar pb-2"
->
+<div id="categoryContainer"
+
+     class="flex
+            gap-1.5
+            overflow-x-auto
+            hide-scrollbar
+            pb-1">
+
 </div>
 
 
@@ -522,12 +581,20 @@ class="random-button
 
 
 
-<!-- PRODUCT HEADER -->
+<!-- ==================================================
+     TITLE
+================================================== -->
 
-<div class="flex items-center justify-between mb-4">
+<div class="flex
+            items-center
+            justify-between
+            mb-3">
 
 
-<h2 class="font-bold text-lg text-thaiBlue">
+<h2 class="font-bold
+           text-base
+           sm:text-lg
+           text-thaiBlue">
 
 🍜 ของกินน่าลอง
 
@@ -536,7 +603,9 @@ class="random-button
 
 <span
     id="productCount"
-    class="text-xs text-gray-400"
+    class="text-[10px]
+           sm:text-xs
+           text-gray-400"
 >
 </span>
 
@@ -545,7 +614,9 @@ class="random-button
 
 
 
-<!-- PRODUCT GRID -->
+<!-- ==================================================
+     PRODUCT GRID
+================================================== -->
 
 <div
     id="productGrid"
@@ -553,38 +624,45 @@ class="random-button
            grid-cols-2
            md:grid-cols-3
            lg:grid-cols-4
-           gap-3
-           sm:gap-5"
+           gap-2.5
+           sm:gap-4"
 >
 </div>
 
 
 
-<!-- NOT FOUND -->
+<!-- ==================================================
+     NOT FOUND
+================================================== -->
 
 <div
     id="notFound"
-    class="hidden text-center py-16"
+    class="hidden
+           text-center
+           py-14"
 >
 
 
-<div class="text-6xl mb-4">
+<div class="text-5xl mb-3">
 
 🍜
 
 </div>
 
 
-<h3 class="text-xl font-bold text-gray-600">
+<h3 class="font-bold
+           text-gray-600">
 
 ไม่พบของกิน
 
 </h3>
 
 
-<p class="text-sm text-gray-400 mt-1">
+<p class="text-xs
+          text-gray-400
+          mt-1">
 
-ลองค้นหาคำอื่นดูครับ
+ลองค้นหาคำอื่น
 
 </p>
 
@@ -600,13 +678,20 @@ class="random-button
      FOOTER
 ================================================== -->
 
-<footer class="bg-thaiBlue text-white mt-10">
+<footer class="bg-thaiBlue
+               text-white
+               mt-8">
 
 
-<div class="container mx-auto px-4 py-8 text-center">
+<div class="container
+            mx-auto
+            px-4
+            py-6
+            text-center">
 
 
-<div class="text-xl font-black">
+<div class="font-black
+            text-lg">
 
 PHAENDIN
 
@@ -619,14 +704,18 @@ FOOD
 </div>
 
 
-<p class="text-blue-100 text-xs mt-2">
+<p class="text-blue-100
+          text-[10px]
+          mt-1">
 
-🇹🇭 รวมของอร่อยจากทั่วไทย
+🇹🇭 ของอร่อยจากทั่วไทย
 
 </p>
 
 
-<p class="text-blue-200/60 text-[10px] mt-5">
+<p class="text-blue-200/50
+          text-[9px]
+          mt-3">
 
 © 2026 PHAENDIN FOOD
 
@@ -648,7 +737,7 @@ FOOD
 
 /*
 ==================================================
-GOOGLE SHEETS
+GOOGLE SHEETS API
 ==================================================
 */
 
@@ -660,7 +749,7 @@ const SHEET_API_URL =
 
 /*
 ==================================================
-ตัวแปร
+DATA
 ==================================================
 */
 
@@ -672,7 +761,7 @@ let currentCategory = "ทั้งหมด";
 
 /*
 ==================================================
-หมวดสินค้า
+CATEGORY
 ==================================================
 */
 
@@ -746,19 +835,19 @@ grid.innerHTML = `
 
 <div class="col-span-full
             text-center
-            py-16
+            py-14
             text-gray-400">
 
 <i class="fa-solid
           fa-spinner
           fa-spin
           text-thaiBlue
-          text-3xl
-          mb-3">
+          text-2xl
+          mb-2">
 
 </i>
 
-<p>
+<p class="text-xs">
 
 กำลังโหลดของกิน...
 
@@ -772,9 +861,7 @@ grid.innerHTML = `
 fetch(SHEET_API_URL)
 
 
-.then(
-
-response => {
+.then(response => {
 
 
 if (!response.ok) {
@@ -788,14 +875,10 @@ throw new Error(
 
 return response.json();
 
-}
-
-)
+})
 
 
-.then(
-
-data => {
+.then(data => {
 
 
 products =
@@ -807,21 +890,19 @@ Array.isArray(data)
 : [];
 
 
-products =
+/* สุ่มลำดับครั้งแรก */
 
-shuffleProducts(products);
+products = shuffleProducts(products);
 
+
+/* แสดง */
 
 renderProducts(products);
 
-}
-
-)
+})
 
 
-.catch(
-
-error => {
+.catch(error => {
 
 
 console.error(error);
@@ -831,25 +912,28 @@ grid.innerHTML = `
 
 <div class="col-span-full
             text-center
-            py-16
+            py-14
             text-thaiRed">
 
 <i class="fa-solid
           fa-triangle-exclamation
-          text-3xl
-          mb-3">
+          text-2xl
+          mb-2">
 
 </i>
 
-<p class="font-bold">
+<p class="font-bold
+          text-sm">
 
-ไม่สามารถโหลดข้อมูลได้
+โหลดข้อมูลไม่สำเร็จ
 
 </p>
 
-<p class="text-xs text-gray-400 mt-2">
+<p class="text-[10px]
+          text-gray-400
+          mt-1">
 
-กรุณาตรวจสอบ Google Sheets Web App
+ตรวจสอบ Google Sheets Web App
 
 </p>
 
@@ -857,9 +941,7 @@ grid.innerHTML = `
 
 `;
 
-}
-
-);
+});
 
 }
 
@@ -922,7 +1004,7 @@ return shuffled;
 
 /*
 ==================================================
-CATEGORY
+CATEGORY BUTTONS
 ==================================================
 */
 
@@ -949,11 +1031,10 @@ cat => `
 onclick="setCategory('${cat}')"
 
 class="whitespace-nowrap
-       px-4
-       py-2
+       px-3
+       py-1.5
        rounded-full
-       text-sm
-       font-medium
+       text-[11px]
        border
        transition
 
@@ -962,7 +1043,7 @@ class="whitespace-nowrap
 
            ?
 
-           "bg-thaiRed text-white border-thaiRed shadow"
+           "bg-thaiRed text-white border-thaiRed"
 
            :
 
@@ -984,7 +1065,7 @@ ${cat}
 
 /*
 ==================================================
-PRODUCTS
+RENDER PRODUCTS
 ==================================================
 */
 
@@ -1019,6 +1100,8 @@ document.getElementById(
 
 
 
+/* ไม่มีสินค้า */
+
 if (
 
 !items ||
@@ -1048,17 +1131,21 @@ count.innerText =
 
 
 
+/*
+==================================================
+สร้างการ์ด
+==================================================
+*/
+
 grid.innerHTML =
 
-items.map(
-
-item => {
+items.map(item => {
 
 
 /*
-========================================
+=========================
 DATA
-========================================
+=========================
 */
 
 const title =
@@ -1068,13 +1155,6 @@ item.title ||
 "ของกินอร่อย";
 
 
-const category =
-
-item.category ||
-
-"อาหาร";
-
-
 const province =
 
 item.province ||
@@ -1082,18 +1162,11 @@ item.province ||
 "ทั่วไทย";
 
 
-const description =
-
-item.description ||
-
-"ของอร่อยคัดสรรจากทั่วไทย";
-
-
 const image =
 
 item.image ||
 
-"https://placehold.co/600x600?text=PHAENDIN+FOOD";
+"https://placehold.co/600x600?text=FOOD";
 
 
 const affiliateUrl =
@@ -1105,9 +1178,9 @@ item.affiliateUrl ||
 
 
 /*
-========================================
+=========================
 PRICE
-========================================
+=========================
 */
 
 const salePrice =
@@ -1130,9 +1203,9 @@ item.originalPrice || 0
 
 
 /*
-========================================
+=========================
 TAGS
-========================================
+=========================
 */
 
 const tags =
@@ -1145,9 +1218,7 @@ String(item.tags)
 
 .split(",")
 
-.map(
-
-tag => {
+.map(tag => {
 
 
 tag = tag.trim();
@@ -1204,10 +1275,12 @@ else if (tag === "Official Store") {
 return `
 
 <span class="${color}
-             text-[10px]
-             px-2
-             py-1
-             rounded-full">
+             px-1.5
+             py-0.5
+             rounded-full
+             text-[8px]
+             sm:text-[9px]
+             whitespace-nowrap">
 
 ${tag}
 
@@ -1215,9 +1288,7 @@ ${tag}
 
 `;
 
-}
-
-).join("")
+}).join("")
 
 :
 
@@ -1226,27 +1297,28 @@ ${tag}
 
 
 /*
-========================================
+=========================
 CARD
-========================================
+=========================
 */
 
 return `
 
 <div class="product-card
             bg-white
-            rounded-2xl
+            rounded-xl
             overflow-hidden
             border
             border-gray-100
             shadow-sm">
 
 
-<!-- =========================
+<!-- =====================
      IMAGE
-========================= -->
+===================== -->
 
-<div class="overflow-hidden bg-gray-100">
+<div class="bg-gray-100
+            overflow-hidden">
 
 
 <img
@@ -1257,24 +1329,23 @@ alt="${title}"
 
 loading="lazy"
 
+onerror="this.src='https://placehold.co/600x600?text=FOOD'"
+
 class="product-image
        w-full
-       h-36
-       sm:h-48
+       h-28
+       sm:h-40
        object-cover"
 
-onerror="this.src='https://placehold.co/600x600?text=PHAENDIN+FOOD'"
-
 >
-
 
 </div>
 
 
 
-<!-- =========================
+<!-- =====================
      TAGS
-========================= -->
+===================== -->
 
 ${
     tags
@@ -1283,7 +1354,11 @@ ${
 
     `
 
-    <div class="px-3 pt-2 flex flex-wrap gap-1">
+    <div class="px-2
+                pt-1.5
+                flex
+                flex-wrap
+                gap-1">
 
         ${tags}
 
@@ -1299,21 +1374,23 @@ ${
 
 
 
-<!-- =========================
+<!-- =====================
      CONTENT
-========================= -->
+===================== -->
 
-<div class="p-3">
+<div class="p-2">
 
 
 <!-- TITLE -->
 
-<h3 class="text-sm
-           sm:text-base
+<h3 class="text-xs
+           sm:text-sm
            font-semibold
            text-gray-800
            line-clamp-2
-           leading-snug">
+           leading-snug
+           min-h-[30px]
+           sm:min-h-[36px]">
 
 ${title}
 
@@ -1326,11 +1403,15 @@ ${title}
 <div class="flex
             items-center
             gap-1
-            mt-1.5
-            text-xs
+            mt-1
+            text-[9px]
+            sm:text-[10px]
             text-thaiBlue">
 
-<i class="fa-solid fa-location-dot"></i>
+<i class="fa-solid
+          fa-location-dot">
+
+</i>
 
 <span>
 
@@ -1342,34 +1423,19 @@ ${province}
 
 
 
-<!-- DESCRIPTION -->
-
-<p class="text-[11px]
-          sm:text-xs
-          text-gray-500
-          line-clamp-2
-          mt-1.5
-          leading-relaxed">
-
-${description}
-
-</p>
-
-
-
 <!-- PRICE -->
 
-<div class="mt-2">
+<div class="mt-1">
 
 
 <div class="flex
             items-baseline
-            gap-2
+            gap-1.5
             flex-wrap">
 
 
-<span class="text-lg
-             sm:text-xl
+<span class="text-base
+             sm:text-lg
              font-black
              text-thaiRed">
 
@@ -1385,11 +1451,12 @@ ${
 
     `
 
-    <span class="text-[11px]
+    <span class="text-[9px]
+                 sm:text-[10px]
                  text-gray-400
                  line-through">
 
-    ฿${originalPrice.toLocaleString()}
+        ฿${originalPrice.toLocaleString()}
 
     </span>
 
@@ -1403,6 +1470,7 @@ ${
 
 
 </div>
+
 
 </div>
 
@@ -1419,22 +1487,23 @@ target="_blank"
 rel="noopener noreferrer"
 
 class="buy-button
-       mt-2.5
+       mt-1.5
        w-full
        text-white
-       py-2
-       rounded-xl
+       py-1.5
+       rounded-lg
+       text-[10px]
+       sm:text-xs
        font-medium
-       text-xs
-       sm:text-sm
        flex
        items-center
        justify-center
-       gap-2">
+       gap-1">
+
 
 <i class="fa-solid fa-cart-shopping"></i>
 
-ดูของกิน / สั่งซื้อ
+ดูสินค้า
 
 </a>
 
@@ -1446,9 +1515,7 @@ class="buy-button
 
 `;
 
-}
-
-).join("");
+}).join("");
 
 }
 
@@ -1505,9 +1572,7 @@ input.value
 
 const filtered =
 
-products.filter(
-
-p => {
+products.filter(p => {
 
 
 const title =
@@ -1575,9 +1640,7 @@ matchesSearch
 
 );
 
-}
-
-);
+});
 
 
 renderProducts(filtered);
@@ -1595,7 +1658,7 @@ RESET + RANDOM
 function resetAndRandom() {
 
 
-/* ล้างช่องค้นหา */
+/* ล้างค้นหา */
 
 document.getElementById(
 
@@ -1613,7 +1676,7 @@ renderCategories();
 
 
 
-/* สุ่มลำดับใหม่ */
+/* สุ่มใหม่ */
 
 products =
 
@@ -1621,7 +1684,7 @@ shuffleProducts(products);
 
 
 
-/* แสดงใหม่ */
+/* แสดง */
 
 renderProducts(products);
 
@@ -1641,7 +1704,6 @@ behavior: "smooth"
 
 
 </script>
-
 
 </body>
 
