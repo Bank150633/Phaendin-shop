@@ -94,23 +94,6 @@ body {
 
 
 /* =========================
-   CLAMP
-========================= */
-
-.line-clamp-2 {
-
-    display: -webkit-box;
-
-    -webkit-line-clamp: 2;
-
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
-
-}
-
-
-/* =========================
    THAI FLAG
 ========================= */
 
@@ -197,6 +180,12 @@ body {
 
 .product-image {
 
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+
     transition: transform .4s ease;
 
 }
@@ -204,7 +193,122 @@ body {
 
 .product-card:hover .product-image {
 
-    transform: scale(1.05);
+    transform: scale(1.04);
+
+}
+
+
+/* =========================
+   IMAGE BOX
+========================= */
+
+.image-box {
+
+    height: 130px;
+
+    background: #F3F4F6;
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .image-box {
+
+        height: 175px;
+
+    }
+
+}
+
+
+/* =========================
+   TAG AREA
+========================= */
+
+.tag-area {
+
+    position: absolute;
+
+    top: 7px;
+
+    left: 7px;
+
+    right: 7px;
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 4px;
+
+    z-index: 5;
+
+}
+
+
+/* =========================
+   TAG
+========================= */
+
+.product-tag {
+
+    padding: 2px 7px;
+
+    border-radius: 999px;
+
+    font-size: 8px;
+
+    line-height: 1.3;
+
+    font-weight: 500;
+
+    white-space: nowrap;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,.12);
+
+}
+
+
+@media (min-width: 640px) {
+
+    .product-tag {
+
+        font-size: 9px;
+
+    }
+
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.product-title {
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    line-height: 1.2;
+
+}
+
+
+/* =========================
+   PROVINCE
+========================= */
+
+.product-province {
+
+    line-height: 1;
 
 }
 
@@ -281,7 +385,7 @@ body {
 
 
 <!-- ==================================================
-     FLAG
+     THAI FLAG
 ================================================== -->
 
 <div class="thai-line"></div>
@@ -304,9 +408,7 @@ body {
             py-2.5">
 
 
-<!-- =========================
-     LOGO
-========================= -->
+<!-- LOGO -->
 
 <div
     onclick="resetAndRandom()"
@@ -367,9 +469,7 @@ FOOD
 
 
 
-<!-- =========================
-     SEARCH
-========================= -->
+<!-- SEARCH -->
 
 <div class="relative
             flex-1
@@ -399,7 +499,6 @@ class="w-full
        focus:ring-thaiBlue
        text-xs
        sm:text-sm"
-
 
 >
 
@@ -444,8 +543,6 @@ class="w-full
             text-center">
 
 
-<!-- BADGE -->
-
 <span class="inline-flex
              items-center
              gap-1.5
@@ -462,8 +559,6 @@ class="w-full
 </span>
 
 
-
-<!-- TITLE -->
 
 <h2 class="text-2xl
            sm:text-4xl
@@ -487,8 +582,6 @@ class="w-full
 </p>
 
 
-
-<!-- RANDOM -->
 
 <button
 
@@ -533,9 +626,7 @@ class="random-button
              flex-grow">
 
 
-<!-- ==================================================
-     CATEGORY
-================================================== -->
+<!-- CATEGORY -->
 
 <div class="mb-5">
 
@@ -581,9 +672,7 @@ class="random-button
 
 
 
-<!-- ==================================================
-     TITLE
-================================================== -->
+<!-- TITLE -->
 
 <div class="flex
             items-center
@@ -614,9 +703,7 @@ class="random-button
 
 
 
-<!-- ==================================================
-     PRODUCT GRID
-================================================== -->
+<!-- PRODUCT GRID -->
 
 <div
     id="productGrid"
@@ -631,9 +718,7 @@ class="random-button
 
 
 
-<!-- ==================================================
-     NOT FOUND
-================================================== -->
+<!-- NOT FOUND -->
 
 <div
     id="notFound"
@@ -735,11 +820,9 @@ FOOD
 <script>
 
 
-/*
-==================================================
-GOOGLE SHEETS API
-==================================================
-*/
+/* ==================================================
+   GOOGLE SHEETS API
+================================================== */
 
 const SHEET_API_URL =
 
@@ -747,11 +830,9 @@ const SHEET_API_URL =
 
 
 
-/*
-==================================================
-DATA
-==================================================
-*/
+/* ==================================================
+   DATA
+================================================== */
 
 let products = [];
 
@@ -759,11 +840,9 @@ let currentCategory = "ทั้งหมด";
 
 
 
-/*
-==================================================
-CATEGORY
-==================================================
-*/
+/* ==================================================
+   CATEGORY
+================================================== */
 
 const categories = [
 
@@ -791,11 +870,9 @@ const categories = [
 
 
 
-/*
-==================================================
-START
-==================================================
-*/
+/* ==================================================
+   START
+================================================== */
 
 document.addEventListener(
 
@@ -813,11 +890,9 @@ function() {
 
 
 
-/*
-==================================================
-LOAD SHEET
-==================================================
-*/
+/* ==================================================
+   LOAD SHEET
+================================================== */
 
 function fetchProductsFromSheet() {
 
@@ -890,12 +965,8 @@ Array.isArray(data)
 : [];
 
 
-/* สุ่มลำดับครั้งแรก */
-
 products = shuffleProducts(products);
 
-
-/* แสดง */
 
 renderProducts(products);
 
@@ -947,11 +1018,9 @@ grid.innerHTML = `
 
 
 
-/*
-==================================================
-SHUFFLE
-==================================================
-*/
+/* ==================================================
+   SHUFFLE
+================================================== */
 
 function shuffleProducts(items) {
 
@@ -1002,11 +1071,9 @@ return shuffled;
 
 
 
-/*
-==================================================
-CATEGORY BUTTONS
-==================================================
-*/
+/* ==================================================
+   CATEGORY BUTTONS
+================================================== */
 
 function renderCategories() {
 
@@ -1063,11 +1130,9 @@ ${cat}
 
 
 
-/*
-==================================================
-RENDER PRODUCTS
-==================================================
-*/
+/* ==================================================
+   RENDER PRODUCTS
+================================================== */
 
 function renderProducts(items) {
 
@@ -1100,8 +1165,6 @@ document.getElementById(
 
 
 
-/* ไม่มีสินค้า */
-
 if (
 
 !items ||
@@ -1131,22 +1194,14 @@ count.innerText =
 
 
 
-/*
-==================================================
-สร้างการ์ด
-==================================================
-*/
-
 grid.innerHTML =
 
 items.map(item => {
 
 
-/*
-=========================
-DATA
-=========================
-*/
+/* =========================
+   DATA
+========================= */
 
 const title =
 
@@ -1177,11 +1232,9 @@ item.affiliateUrl ||
 
 
 
-/*
-=========================
-PRICE
-=========================
-*/
+/* =========================
+   PRICE
+========================= */
 
 const salePrice =
 
@@ -1202,11 +1255,9 @@ item.originalPrice || 0
 
 
 
-/*
-=========================
-TAGS
-=========================
-*/
+/* =========================
+   TAGS
+========================= */
 
 const tags =
 
@@ -1274,13 +1325,7 @@ else if (tag === "Official Store") {
 
 return `
 
-<span class="${color}
-             px-1.5
-             py-0.5
-             rounded-full
-             text-[8px]
-             sm:text-[9px]
-             whitespace-nowrap">
+<span class="product-tag ${color}">
 
 ${tag}
 
@@ -1288,7 +1333,13 @@ ${tag}
 
 `;
 
-}).join("")
+})
+
+.filter(tag => tag !== "")
+
+.slice(0, 3)
+
+.join("")
 
 :
 
@@ -1296,11 +1347,9 @@ ${tag}
 
 
 
-/*
-=========================
-CARD
-=========================
-*/
+/* =========================
+   CARD
+========================= */
 
 return `
 
@@ -1317,8 +1366,7 @@ return `
      IMAGE
 ===================== -->
 
-<div class="bg-gray-100
-            overflow-hidden">
+<div class="image-box">
 
 
 <img
@@ -1331,21 +1379,13 @@ loading="lazy"
 
 onerror="this.src='https://placehold.co/600x600?text=FOOD'"
 
-class="product-image
-       w-full
-       h-28
-       sm:h-40
-       object-cover"
+class="product-image"
 
 >
 
-</div>
 
 
-
-<!-- =====================
-     TAGS
-===================== -->
+<!-- TAGS ON IMAGE -->
 
 ${
     tags
@@ -1354,11 +1394,7 @@ ${
 
     `
 
-    <div class="px-2
-                pt-1.5
-                flex
-                flex-wrap
-                gap-1">
+    <div class="tag-area">
 
         ${tags}
 
@@ -1373,6 +1409,9 @@ ${
 }
 
 
+</div>
+
+
 
 <!-- =====================
      CONTENT
@@ -1383,14 +1422,11 @@ ${
 
 <!-- TITLE -->
 
-<h3 class="text-xs
+<h3 class="product-title
+           text-xs
            sm:text-sm
            font-semibold
-           text-gray-800
-           line-clamp-2
-           leading-snug
-           min-h-[30px]
-           sm:min-h-[36px]">
+           text-gray-800">
 
 ${title}
 
@@ -1400,24 +1436,28 @@ ${title}
 
 <!-- PROVINCE -->
 
-<div class="flex
+<div class="product-province
+            flex
             items-center
             gap-1
-            mt-1
+            mt-0.5
             text-[9px]
             sm:text-[10px]
             text-thaiBlue">
+
 
 <i class="fa-solid
           fa-location-dot">
 
 </i>
 
-<span>
+
+<span class="truncate">
 
 ${province}
 
 </span>
+
 
 </div>
 
@@ -1476,7 +1516,7 @@ ${
 
 
 
-<!-- BUY -->
+<!-- BUY BUTTON -->
 
 <a
 
@@ -1521,11 +1561,9 @@ class="buy-button
 
 
 
-/*
-==================================================
-CATEGORY FILTER
-==================================================
-*/
+/* ==================================================
+   CATEGORY FILTER
+================================================== */
 
 function setCategory(cat) {
 
@@ -1542,11 +1580,9 @@ filterProducts();
 
 
 
-/*
-==================================================
-SEARCH
-==================================================
-*/
+/* ==================================================
+   SEARCH
+================================================== */
 
 function filterProducts() {
 
@@ -1649,16 +1685,12 @@ renderProducts(filtered);
 
 
 
-/*
-==================================================
-RESET + RANDOM
-==================================================
-*/
+/* ==================================================
+   RESET + RANDOM
+================================================== */
 
 function resetAndRandom() {
 
-
-/* ล้างค้นหา */
 
 document.getElementById(
 
@@ -1667,30 +1699,19 @@ document.getElementById(
 ).value = "";
 
 
-
-/* กลับทั้งหมด */
-
 currentCategory = "ทั้งหมด";
+
 
 renderCategories();
 
-
-
-/* สุ่มใหม่ */
 
 products =
 
 shuffleProducts(products);
 
 
-
-/* แสดง */
-
 renderProducts(products);
 
-
-
-/* กลับด้านบน */
 
 window.scrollTo({
 
