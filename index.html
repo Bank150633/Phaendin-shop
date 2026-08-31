@@ -77,7 +77,6 @@ tailwind.config = {
 
 <style>
 
-
 /* ==================================================
    BODY
 ================================================== */
@@ -402,19 +401,53 @@ body {
 
 
 /* ==================================================
-   RANDOM RESULT
+   RANDOM TITLE
+================================================== */
+
+.random-title {
+
+    animation:
+
+        randomTitle .45s ease both;
+
+}
+
+
+@keyframes randomTitle {
+
+    0% {
+
+        opacity: 0;
+
+        transform: translateY(-8px);
+
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM RESULT CARD
 ================================================== */
 
 .random-result {
 
     animation:
 
-        randomResult .45s ease both;
+        randomCard .45s ease both;
 
 }
 
 
-@keyframes randomResult {
+@keyframes randomCard {
 
     0% {
 
@@ -422,7 +455,7 @@ body {
 
         transform:
 
-            translateY(18px)
+            translateY(15px)
 
             scale(.96);
 
@@ -442,10 +475,6 @@ body {
 
 }
 
-
-/* ==================================================
-   RANDOM CARD DELAY
-================================================== */
 
 .random-result:nth-child(2) {
 
@@ -476,7 +505,7 @@ body {
 
     animation:
 
-        randomShake .18s
+        randomShake .16s
 
         infinite alternate;
 
@@ -489,7 +518,7 @@ body {
 
         transform:
 
-            rotate(-4deg)
+            rotate(-5deg)
 
             scale(1);
 
@@ -499,47 +528,9 @@ body {
 
         transform:
 
-            rotate(4deg)
+            rotate(5deg)
 
-            scale(1.05);
-
-    }
-
-}
-
-
-/* ==================================================
-   RANDOM TITLE
-================================================== */
-
-.random-title {
-
-    animation:
-
-        randomTitle .45s ease both;
-
-}
-
-
-@keyframes randomTitle {
-
-    0% {
-
-        opacity: 0;
-
-        transform:
-
-            translateY(-10px);
-
-    }
-
-    100% {
-
-        opacity: 1;
-
-        transform:
-
-            translateY(0);
+            scale(1.08);
 
     }
 
@@ -547,7 +538,7 @@ body {
 
 
 /* ==================================================
-   RANDOM AGAIN BUTTON
+   RANDOM AGAIN
 ================================================== */
 
 .random-again {
@@ -578,25 +569,211 @@ body {
 
     align-items: center;
 
-    gap: 5px;
+    gap: 4px;
 
-    background:
+    background: #FFF7ED;
 
-        linear-gradient(
+    border: 1px solid #FED7AA;
 
-            135deg,
+    color: #EA580C;
 
-            #fff7ed,
+}
 
-            #ffffff
 
-        );
+/* ==================================================
+   RANDOM MODE
+   ทำให้ 3 การ์ดอยู่แถวเดียว
+================================================== */
 
-    border:
+.random-grid {
 
-        1px solid #fed7aa;
+    display: grid;
 
-    color: #ea580c;
+    grid-template-columns:
+
+        repeat(3, minmax(0, 1fr));
+
+    gap: 6px;
+
+}
+
+
+/* ==================================================
+   RANDOM CARD CONTENT
+================================================== */
+
+.random-grid .product-card {
+
+    min-width: 0;
+
+    border-radius: 10px;
+
+}
+
+
+/* ==================================================
+   RANDOM IMAGE
+================================================== */
+
+.random-grid .image-box {
+
+    height: 105px;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .random-grid .image-box {
+
+        height: 160px;
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM CONTENT
+================================================== */
+
+.random-grid .product-content {
+
+    padding: 5px;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .random-grid .product-content {
+
+        padding: 7px;
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM TITLE
+================================================== */
+
+.random-grid .product-title {
+
+    font-size: 10px;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .random-grid .product-title {
+
+        font-size: 14px;
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM TAG
+================================================== */
+
+.random-grid .tag-area {
+
+    height: 14px;
+
+}
+
+
+.random-grid .product-tag {
+
+    font-size: 6px;
+
+    padding: 1px 4px;
+
+}
+
+
+/* ==================================================
+   RANDOM PROVINCE
+================================================== */
+
+.random-grid .product-province {
+
+    font-size: 8px;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .random-grid .product-province {
+
+        font-size: 10px;
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM PRICE
+================================================== */
+
+.random-grid .text-base {
+
+    font-size: 13px;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .random-grid .text-base {
+
+        font-size: 17px;
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM OLD PRICE
+================================================== */
+
+.random-grid .text-\[9px\] {
+
+    font-size: 7px;
+
+}
+
+
+/* ==================================================
+   RANDOM BUY BUTTON
+================================================== */
+
+.random-grid .buy-button {
+
+    padding-top: 4px;
+
+    padding-bottom: 4px;
+
+    font-size: 8px;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .random-grid .buy-button {
+
+        font-size: 11px;
+
+    }
 
 }
 
@@ -658,36 +835,6 @@ body {
 .random-section {
 
     scroll-margin-top: 80px;
-
-}
-
-
-/* ==================================================
-   FADE
-================================================== */
-
-.fade-in {
-
-    animation:
-
-        fadeIn .35s ease both;
-
-}
-
-
-@keyframes fadeIn {
-
-    from {
-
-        opacity: 0;
-
-    }
-
-    to {
-
-        opacity: 1;
-
-    }
 
 }
 
@@ -1017,7 +1164,7 @@ FOOD
 
 
 <!-- ==================================================
-     PRODUCT HEADER
+     NORMAL PRODUCT HEADER
 ================================================== -->
 
 <div
@@ -1033,8 +1180,6 @@ FOOD
 
 
 <h2
-
-    id="productSectionTitle"
 
     class="font-bold
            text-base
@@ -1088,24 +1233,22 @@ FOOD
 <div>
 
 
-<div class="flex
-            items-center
-            gap-2">
-
 <span class="random-badge
              px-2.5
              py-1
              rounded-full
-             text-[10px]
+             text-[9px]
+             sm:text-[10px]
              font-bold">
 
-<i class="fa-solid fa-wand-magic-sparkles"></i>
+<i class="fa-solid
+          fa-wand-magic-sparkles">
+
+</i>
 
 สุ่มให้แล้ว
 
 </span>
-
-</div>
 
 
 <h2 class="random-title
@@ -1120,11 +1263,11 @@ FOOD
 </h2>
 
 
-<p class="text-[10px]
+<p class="text-[9px]
           sm:text-xs
           text-gray-400">
 
-ลองดูสักชิ้นไหม?
+3 ตัวเลือกจาก PHAENDIN
 
 </p>
 
@@ -1143,7 +1286,7 @@ FOOD
            px-3
            py-1.5
            rounded-full
-           text-[10px]
+           text-[9px]
            sm:text-xs
            font-bold
            shadow-sm"
@@ -1398,7 +1541,9 @@ function fetchProductsFromSheet() {
                       text-thaiBlue
                       text-2xl
                       mb-2">
+
             </i>
+
 
             <p class="text-xs">
 
@@ -1414,86 +1559,97 @@ function fetchProductsFromSheet() {
     fetch(SHEET_API_URL)
 
 
-    .then(response => {
+        .then(response => {
 
 
-        if (!response.ok) {
+            if (!response.ok) {
 
-            throw new Error(
+                throw new Error(
 
-                "โหลดข้อมูลไม่สำเร็จ"
+                    "โหลดข้อมูลไม่สำเร็จ"
+
+                );
+
+            }
+
+
+            return response.json();
+
+        })
+
+
+        .then(data => {
+
+
+            products =
+
+                Array.isArray(data)
+
+                ? data
+
+                : [];
+
+
+            products =
+
+                shuffleProducts(
+
+                    products
+
+                );
+
+
+            renderProducts(
+
+                products
 
             );
 
-        }
+        })
 
 
-        return response.json();
-
-    })
+        .catch(error => {
 
 
-    .then(data => {
+            console.error(error);
 
 
-        products =
+            grid.innerHTML = `
 
-            Array.isArray(data)
+                <div class="col-span-full
+                            text-center
+                            py-14
+                            text-thaiRed">
 
-            ? data
+                    <i class="fa-solid
+                              fa-triangle-exclamation
+                              text-2xl
+                              mb-2">
 
-            : [];
-
-
-        products =
-
-            shuffleProducts(products);
-
-
-        renderProducts(products);
-
-    })
+                    </i>
 
 
-    .catch(error => {
+                    <p class="font-bold
+                              text-sm">
+
+                        โหลดข้อมูลไม่สำเร็จ
+
+                    </p>
 
 
-        console.error(error);
+                    <p class="text-[10px]
+                              text-gray-400
+                              mt-1">
 
+                        ตรวจสอบ Google Sheets Web App
 
-        grid.innerHTML = `
+                    </p>
 
-            <div class="col-span-full
-                        text-center
-                        py-14
-                        text-thaiRed">
+                </div>
 
-                <i class="fa-solid
-                          fa-triangle-exclamation
-                          text-2xl
-                          mb-2">
-                </i>
+            `;
 
-                <p class="font-bold
-                          text-sm">
-
-                    โหลดข้อมูลไม่สำเร็จ
-
-                </p>
-
-                <p class="text-[10px]
-                          text-gray-400
-                          mt-1">
-
-                    ตรวจสอบ Google Sheets Web App
-
-                </p>
-
-            </div>
-
-        `;
-
-    });
+        });
 
 }
 
@@ -1578,8 +1734,7 @@ function renderCategories() {
 
                     onclick="setCategory('${cat}')"
 
-                    class="category-button
-                           whitespace-nowrap
+                    class="whitespace-nowrap
                            px-3
                            py-1.5
                            rounded-full
@@ -1614,10 +1769,39 @@ function renderCategories() {
 
 
 /* ==================================================
-   PRODUCT CARD
+   PRODUCT ID
 ================================================== */
 
-function createProductCard(item, index = 0) {
+function getProductId(item) {
+
+
+    return (
+
+        item.id ||
+
+        item.title ||
+
+        item.affiliateUrl ||
+
+        JSON.stringify(item)
+
+    );
+
+}
+
+
+
+/* ==================================================
+   CREATE PRODUCT CARD
+================================================== */
+
+function createProductCard(
+
+    item,
+
+    randomMode = false
+
+) {
 
 
     const title =
@@ -1793,20 +1977,20 @@ function createProductCard(item, index = 0) {
 
 
     /* ==================================================
-       RANDOM CLASS
+       CARD CLASS
     ================================================== */
 
-    const randomClass =
+    const cardClass =
 
-        index !== undefined
+        randomMode
 
         ?
 
-        "random-result"
+        "product-card random-result"
 
         :
 
-        "";
+        "product-card";
 
 
 
@@ -1814,8 +1998,7 @@ function createProductCard(item, index = 0) {
 
         <div
 
-            class="product-card
-                   ${randomClass}
+            class="${cardClass}
                    bg-white
                    rounded-xl
                    overflow-hidden
@@ -1875,7 +2058,7 @@ function createProductCard(item, index = 0) {
 
 
 
-                <!-- TAGS -->
+                <!-- TAG -->
 
                 <div class="tag-area">
 
@@ -1911,7 +2094,6 @@ function createProductCard(item, index = 0) {
                         ${province}
 
                     </span>
-
 
                 </div>
 
@@ -1979,7 +2161,7 @@ function createProductCard(item, index = 0) {
 
 
 
-                <!-- BUY BUTTON -->
+                <!-- BUY -->
 
                 <a
 
@@ -2005,15 +2187,12 @@ function createProductCard(item, index = 0) {
 
                 >
 
-
                     <i class="fa-solid
                               fa-cart-shopping">
 
                     </i>
 
-
                     ดูสินค้า
-
 
                 </a>
 
@@ -2030,7 +2209,7 @@ function createProductCard(item, index = 0) {
 
 
 /* ==================================================
-   RENDER PRODUCTS
+   RENDER NORMAL PRODUCTS
 ================================================== */
 
 function renderProducts(items) {
@@ -2081,7 +2260,30 @@ function renderProducts(items) {
         );
 
 
-    /* ปิดโหมดสุ่ม */
+    /* ==================================================
+       NORMAL GRID
+    ================================================== */
+
+    grid.className = `
+
+        grid
+
+        grid-cols-2
+
+        md:grid-cols-3
+
+        lg:grid-cols-4
+
+        gap-2.5
+
+        sm:gap-4
+
+    `;
+
+
+    /* ==================================================
+       HIDE RANDOM HEADER
+    ================================================== */
 
     randomHeader.classList.add(
 
@@ -2097,8 +2299,9 @@ function renderProducts(items) {
     );
 
 
-
-    /* EMPTY */
+    /* ==================================================
+       EMPTY
+    ================================================== */
 
     if (
 
@@ -2111,13 +2314,16 @@ function renderProducts(items) {
 
         grid.innerHTML = "";
 
+
         notFound.classList.remove(
 
             "hidden"
 
         );
 
+
         count.innerText = "";
+
 
         return;
 
@@ -2136,18 +2342,21 @@ function renderProducts(items) {
         `${items.length} รายการ`;
 
 
+    /* ==================================================
+       RENDER
+    ================================================== */
 
     grid.innerHTML =
 
         items.map(
 
-            (item, index) =>
+            item =>
 
                 createProductCard(
 
                     item,
 
-                    undefined
+                    false
 
                 )
 
@@ -2234,7 +2443,7 @@ function randomFood() {
 
 
     /* ==================================================
-       CHECK PRODUCTS
+       CHECK
     ================================================== */
 
     if (
@@ -2248,11 +2457,16 @@ function randomFood() {
 
         grid.innerHTML = "";
 
+
         notFound.classList.remove(
 
             "hidden"
 
         );
+
+
+        count.innerText = "";
+
 
         return;
 
@@ -2283,15 +2497,22 @@ function randomFood() {
     count.innerText = "";
 
 
-
     /* ==================================================
        LOADING
     ================================================== */
 
+    grid.className = `
+
+        grid
+
+        grid-cols-1
+
+    `;
+
+
     grid.innerHTML = `
 
-        <div class="col-span-full
-                    loading-box
+        <div class="loading-box
                     flex
                     flex-col
                     items-center
@@ -2306,12 +2527,14 @@ function randomFood() {
 
             </div>
 
+
             <p class="font-bold
                       text-sm">
 
                 กำลังสุ่มของกินให้คุณ...
 
             </p>
+
 
             <p class="text-[10px]
                       text-gray-400
@@ -2328,14 +2551,14 @@ function randomFood() {
 
 
     /* ==================================================
-       DELAY
+       RANDOM DELAY
     ================================================== */
 
     setTimeout(function() {
 
 
         /* ==================================================
-           GET RANDOM PRODUCTS
+           GET RANDOM
         ================================================== */
 
         const randomProducts =
@@ -2350,14 +2573,16 @@ function randomFood() {
 
 
         /* ==================================================
-           SAVE LAST RANDOM
+           SAVE LAST
         ================================================== */
 
         lastRandomIds =
 
             randomProducts.map(
 
-                item => getProductId(item)
+                item =>
+
+                    getProductId(item)
 
             );
 
@@ -2375,6 +2600,17 @@ function randomFood() {
 
 
         /* ==================================================
+           RANDOM GRID
+        ================================================== */
+
+        grid.className = `
+
+            random-grid
+
+        `;
+
+
+        /* ==================================================
            RENDER
         ================================================== */
 
@@ -2382,13 +2618,13 @@ function randomFood() {
 
             randomProducts.map(
 
-                (item, index) =>
+                item =>
 
                     createProductCard(
 
                         item,
 
-                        index
+                        true
 
                     )
 
@@ -2433,7 +2669,13 @@ function randomFood() {
    GET RANDOM PRODUCTS
 ================================================== */
 
-function getRandomProducts(items, amount) {
+function getRandomProducts(
+
+    items,
+
+    amount
+
+) {
 
 
     if (
@@ -2455,13 +2697,14 @@ function getRandomProducts(items, amount) {
 
 
     /* ==================================================
-       REMOVE LAST RANDOM
-       ถ้ามีสินค้าเพียงพอ
+       AVOID PREVIOUS RESULTS
     ================================================== */
 
     if (
 
-        items.length > amount
+        items.length > amount &&
+
+        lastRandomIds.length > 0
 
     ) {
 
@@ -2487,7 +2730,9 @@ function getRandomProducts(items, amount) {
 
         ) {
 
-            available = filtered;
+            available =
+
+                filtered;
 
         }
 
@@ -2508,7 +2753,7 @@ function getRandomProducts(items, amount) {
 
 
     /* ==================================================
-       RETURN 3 OR LESS
+       RETURN
     ================================================== */
 
     return available.slice(
@@ -2530,30 +2775,7 @@ function getRandomProducts(items, amount) {
 
 
 /* ==================================================
-   PRODUCT ID
-================================================== */
-
-function getProductId(item) {
-
-
-    return (
-
-        item.id ||
-
-        item.title ||
-
-        item.affiliateUrl ||
-
-        Math.random().toString(36)
-
-    );
-
-}
-
-
-
-/* ==================================================
-   CATEGORY FILTER
+   CATEGORY
 ================================================== */
 
 function setCategory(cat) {
@@ -2566,7 +2788,6 @@ function setCategory(cat) {
 
 
     filterProducts();
-
 
 }
 
@@ -2600,91 +2821,115 @@ function filterProducts() {
 
     const filtered =
 
-        products.filter(p => {
+        products.filter(
+
+            p => {
 
 
-            const title =
+                const title =
 
-                String(
+                    String(
 
-                    p.title || ""
+                        p.title || ""
 
-                ).toLowerCase();
-
-
-            const category =
-
-                String(
-
-                    p.category || ""
-
-                ).toLowerCase();
+                    ).toLowerCase();
 
 
-            const province =
+                const category =
 
-                String(
+                    String(
 
-                    p.province || ""
+                        p.category || ""
 
-                ).toLowerCase();
-
-
-            const description =
-
-                String(
-
-                    p.description || ""
-
-                ).toLowerCase();
+                    ).toLowerCase();
 
 
+                const province =
 
-            const matchesCategory =
+                    String(
 
-                currentCategory === "ทั้งหมด"
+                        p.province || ""
 
-                ||
+                    ).toLowerCase();
 
-                String(
 
-                    p.category || ""
+                const description =
 
-                ) === currentCategory;
+                    String(
+
+                        p.description || ""
+
+                    ).toLowerCase();
 
 
 
-            const matchesSearch =
+                const matchesCategory =
 
-                title.includes(searchText)
+                    currentCategory === "ทั้งหมด"
 
-                ||
+                    ||
 
-                category.includes(searchText)
+                    String(
 
-                ||
+                        p.category || ""
 
-                province.includes(searchText)
-
-                ||
-
-                description.includes(searchText);
+                    ) === currentCategory;
 
 
 
-            return (
+                const matchesSearch =
 
-                matchesCategory &&
+                    title.includes(
 
-                matchesSearch
+                        searchText
 
-            );
+                    )
 
-        });
+                    ||
+
+                    category.includes(
+
+                        searchText
+
+                    )
+
+                    ||
+
+                    province.includes(
+
+                        searchText
+
+                    )
+
+                    ||
+
+                    description.includes(
+
+                        searchText
+
+                    );
 
 
 
-    renderProducts(filtered);
+                return (
+
+                    matchesCategory &&
+
+                    matchesSearch
+
+                );
+
+            }
+
+        );
+
+
+
+    renderProducts(
+
+        filtered
+
+    );
 
 }
 
@@ -2720,7 +2965,11 @@ function goHome() {
     renderCategories();
 
 
-    renderProducts(products);
+    renderProducts(
+
+        products
+
+    );
 
 
     window.scrollTo({
@@ -2733,17 +2982,6 @@ function goHome() {
 
 }
 
-
-
-/* ==================================================
-   LOGO CLICK
-================================================== */
-
-function resetAndRandom() {
-
-    randomFood();
-
-}
 
 </script>
 
