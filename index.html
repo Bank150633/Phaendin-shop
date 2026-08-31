@@ -77,6 +77,7 @@ tailwind.config = {
 
 <style>
 
+
 /* ==================================================
    BODY
 ================================================== */
@@ -230,7 +231,9 @@ body {
 
     display: block;
 
-    transition: transform .4s ease;
+    transition:
+
+        transform .4s ease;
 
 }
 
@@ -261,7 +264,6 @@ body {
 
 /* ==================================================
    TAG AREA
-   ไม่ทับรูป
 ================================================== */
 
 .tag-area {
@@ -383,7 +385,11 @@ body {
 
 .random-button {
 
-    transition: .2s;
+    transition:
+
+        transform .2s ease,
+
+        box-shadow .2s ease;
 
 }
 
@@ -396,27 +402,41 @@ body {
 
 
 /* ==================================================
-   CATEGORY BUTTON
+   RANDOM RESULT
 ================================================== */
 
-.category-button {
+.random-result {
 
-    transition: .2s;
+    animation:
+
+        randomResult .45s ease both;
 
 }
 
 
-/* ==================================================
-   MOBILE HEADER
-================================================== */
+@keyframes randomResult {
 
-@media (max-width: 639px) {
+    0% {
 
-    .header-container {
+        opacity: 0;
 
-        padding-top: 8px;
+        transform:
 
-        padding-bottom: 8px;
+            translateY(18px)
+
+            scale(.96);
+
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform:
+
+            translateY(0)
+
+            scale(1);
 
     }
 
@@ -424,7 +444,165 @@ body {
 
 
 /* ==================================================
-   EMPTY / LOADING
+   RANDOM CARD DELAY
+================================================== */
+
+.random-result:nth-child(2) {
+
+    animation-delay: .08s;
+
+}
+
+
+.random-result:nth-child(3) {
+
+    animation-delay: .16s;
+
+}
+
+
+.random-result:nth-child(4) {
+
+    animation-delay: .24s;
+
+}
+
+
+/* ==================================================
+   RANDOM LOADING
+================================================== */
+
+.random-loading {
+
+    animation:
+
+        randomShake .18s
+
+        infinite alternate;
+
+}
+
+
+@keyframes randomShake {
+
+    from {
+
+        transform:
+
+            rotate(-4deg)
+
+            scale(1);
+
+    }
+
+    to {
+
+        transform:
+
+            rotate(4deg)
+
+            scale(1.05);
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM TITLE
+================================================== */
+
+.random-title {
+
+    animation:
+
+        randomTitle .45s ease both;
+
+}
+
+
+@keyframes randomTitle {
+
+    0% {
+
+        opacity: 0;
+
+        transform:
+
+            translateY(-10px);
+
+    }
+
+    100% {
+
+        opacity: 1;
+
+        transform:
+
+            translateY(0);
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM AGAIN BUTTON
+================================================== */
+
+.random-again {
+
+    transition:
+
+        transform .2s ease,
+
+        box-shadow .2s ease;
+
+}
+
+
+.random-again:hover {
+
+    transform: scale(1.04);
+
+}
+
+
+/* ==================================================
+   RANDOM BADGE
+================================================== */
+
+.random-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    background:
+
+        linear-gradient(
+
+            135deg,
+
+            #fff7ed,
+
+            #ffffff
+
+        );
+
+    border:
+
+        1px solid #fed7aa;
+
+    color: #ea580c;
+
+}
+
+
+/* ==================================================
+   LOADING
 ================================================== */
 
 .loading-box {
@@ -450,6 +628,64 @@ body {
     .product-content {
 
         padding: 7px;
+
+    }
+
+}
+
+
+/* ==================================================
+   MOBILE HEADER
+================================================== */
+
+@media (max-width: 639px) {
+
+    .header-container {
+
+        padding-top: 8px;
+
+        padding-bottom: 8px;
+
+    }
+
+}
+
+
+/* ==================================================
+   RANDOM SECTION
+================================================== */
+
+.random-section {
+
+    scroll-margin-top: 80px;
+
+}
+
+
+/* ==================================================
+   FADE
+================================================== */
+
+.fade-in {
+
+    animation:
+
+        fadeIn .35s ease both;
+
+}
+
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
 
     }
 
@@ -496,7 +732,7 @@ body {
 
 <div
 
-    onclick="resetAndRandom()"
+    onclick="goHome()"
 
     class="flex
            items-center
@@ -571,7 +807,7 @@ FOOD
 
     type="text"
 
-    onkeyup="filterProducts()"
+    oninput="filterProducts()"
 
     placeholder="ค้นหาของกิน..."
 
@@ -678,18 +914,18 @@ FOOD
 
 
 
-<!-- RANDOM -->
+<!-- RANDOM BUTTON -->
 
 <button
 
-    onclick="resetAndRandom()"
+    onclick="randomFood()"
 
     class="random-button
            mt-4
            bg-white
            text-thaiBlue
            px-5
-           py-2
+           py-2.5
            rounded-full
            text-xs
            sm:text-sm
@@ -698,8 +934,11 @@ FOOD
 
 >
 
+<i class="fa-solid
+          fa-shuffle
+          mr-1">
 
-<i class="fa-solid fa-shuffle mr-1"></i>
+</i>
 
 สุ่มของกินให้ฉัน
 
@@ -781,16 +1020,28 @@ FOOD
      PRODUCT HEADER
 ================================================== -->
 
-<div class="flex
-            items-center
-            justify-between
-            mb-3">
+<div
+
+    id="productSectionHeader"
+
+    class="flex
+           items-center
+           justify-between
+           mb-3"
+
+>
 
 
-<h2 class="font-bold
+<h2
+
+    id="productSectionTitle"
+
+    class="font-bold
            text-base
            sm:text-lg
-           text-thaiBlue">
+           text-thaiBlue"
+
+>
 
 🍜 ของกินน่าลอง
 
@@ -808,6 +1059,109 @@ FOOD
 >
 </span>
 
+
+</div>
+
+
+
+<!-- ==================================================
+     RANDOM HEADER
+================================================== -->
+
+<div
+
+    id="randomHeader"
+
+    class="hidden
+           random-section
+           mb-3"
+
+>
+
+
+<div class="flex
+            items-center
+            justify-between
+            gap-2">
+
+
+<div>
+
+
+<div class="flex
+            items-center
+            gap-2">
+
+<span class="random-badge
+             px-2.5
+             py-1
+             rounded-full
+             text-[10px]
+             font-bold">
+
+<i class="fa-solid fa-wand-magic-sparkles"></i>
+
+สุ่มให้แล้ว
+
+</span>
+
+</div>
+
+
+<h2 class="random-title
+           font-black
+           text-base
+           sm:text-lg
+           text-thaiBlue
+           mt-1">
+
+✨ วันนี้เราเลือกให้คุณ
+
+</h2>
+
+
+<p class="text-[10px]
+          sm:text-xs
+          text-gray-400">
+
+ลองดูสักชิ้นไหม?
+
+</p>
+
+</div>
+
+
+
+<button
+
+    onclick="randomFood()"
+
+    class="random-again
+           whitespace-nowrap
+           bg-thaiBlue
+           text-white
+           px-3
+           py-1.5
+           rounded-full
+           text-[10px]
+           sm:text-xs
+           font-bold
+           shadow-sm"
+
+>
+
+<i class="fa-solid
+          fa-shuffle
+          mr-1">
+
+</i>
+
+สุ่มใหม่
+
+</button>
+
+
+</div>
 
 </div>
 
@@ -958,10 +1312,12 @@ let products = [];
 
 let currentCategory = "ทั้งหมด";
 
+let lastRandomIds = [];
+
 
 
 /* ==================================================
-   CATEGORY
+   CATEGORIES
 ================================================== */
 
 const categories = [
@@ -1258,6 +1614,422 @@ function renderCategories() {
 
 
 /* ==================================================
+   PRODUCT CARD
+================================================== */
+
+function createProductCard(item, index = 0) {
+
+
+    const title =
+
+        item.title ||
+
+        "ของกินอร่อย";
+
+
+    const province =
+
+        item.province ||
+
+        "ประเทศไทย";
+
+
+    const image =
+
+        item.image ||
+
+        "https://placehold.co/600x600?text=FOOD";
+
+
+    const affiliateUrl =
+
+        item.affiliateUrl ||
+
+        "#";
+
+
+    const salePrice =
+
+        Number(
+
+            item.salePrice || 0
+
+        );
+
+
+    const originalPrice =
+
+        Number(
+
+            item.originalPrice || 0
+
+        );
+
+
+
+    /* ==================================================
+       TAGS
+    ================================================== */
+
+    const tags =
+
+        item.tags
+
+        ?
+
+        String(item.tags)
+
+            .split(",")
+
+            .map(tag => {
+
+
+                tag = tag.trim();
+
+
+                if (!tag) {
+
+                    return "";
+
+                }
+
+
+                let color =
+
+                    "bg-gray-700 text-white";
+
+
+                if (
+
+                    tag === "ส่งฟรี"
+
+                ) {
+
+                    color =
+
+                        "bg-thaiBlue text-white";
+
+                }
+
+
+                else if (
+
+                    tag === "ขายดี"
+
+                ) {
+
+                    color =
+
+                        "bg-orange-500 text-white";
+
+                }
+
+
+                else if (
+
+                    tag === "Flash Sale"
+
+                ) {
+
+                    color =
+
+                        "bg-yellow-400 text-black";
+
+                }
+
+
+                else if (
+
+                    tag.includes("ลด")
+
+                ) {
+
+                    color =
+
+                        "bg-thaiRed text-white";
+
+                }
+
+
+                else if (
+
+                    tag === "Official Store"
+
+                ) {
+
+                    color =
+
+                        "bg-purple-600 text-white";
+
+                }
+
+
+                return `
+
+                    <span class="product-tag ${color}">
+
+                        ${tag}
+
+                    </span>
+
+                `;
+
+            })
+
+            .filter(
+
+                tag => tag !== ""
+
+            )
+
+            .slice(0, 2)
+
+            .join("")
+
+        :
+
+        "";
+
+
+
+    /* ==================================================
+       RANDOM CLASS
+    ================================================== */
+
+    const randomClass =
+
+        index !== undefined
+
+        ?
+
+        "random-result"
+
+        :
+
+        "";
+
+
+
+    return `
+
+        <div
+
+            class="product-card
+                   ${randomClass}
+                   bg-white
+                   rounded-xl
+                   overflow-hidden
+                   border
+                   border-gray-100
+                   shadow-sm"
+
+        >
+
+
+            <!-- IMAGE -->
+
+            <div class="image-box">
+
+
+                <img
+
+                    src="${image}"
+
+                    alt="${title}"
+
+                    loading="lazy"
+
+                    onerror="this.src='https://placehold.co/600x600?text=FOOD'"
+
+                    class="product-image"
+
+                >
+
+
+            </div>
+
+
+
+            <!-- CONTENT -->
+
+            <div class="product-content">
+
+
+                <!-- TITLE -->
+
+                <h3
+
+                    class="product-title
+                           text-xs
+                           sm:text-sm
+                           font-semibold
+                           text-gray-800"
+
+                    title="${title}"
+
+                >
+
+                    ${title}
+
+                </h3>
+
+
+
+                <!-- TAGS -->
+
+                <div class="tag-area">
+
+                    ${tags}
+
+                </div>
+
+
+
+                <!-- PROVINCE -->
+
+                <div
+
+                    class="product-province
+                           flex
+                           items-center
+                           gap-1
+                           mt-0.5
+                           text-[9px]
+                           sm:text-[10px]
+                           text-thaiBlue"
+
+                >
+
+                    <i class="fa-solid
+                              fa-location-dot">
+
+                    </i>
+
+
+                    <span class="truncate">
+
+                        ${province}
+
+                    </span>
+
+
+                </div>
+
+
+
+                <!-- PRICE -->
+
+                <div class="mt-0.5">
+
+
+                    <div class="flex
+                                items-baseline
+                                gap-1.5
+                                flex-wrap">
+
+
+                        <span
+
+                            class="text-base
+                                   sm:text-lg
+                                   font-black
+                                   text-thaiRed"
+
+                        >
+
+                            ฿${salePrice.toLocaleString()}
+
+                        </span>
+
+
+
+                        ${
+                            originalPrice > 0
+
+                            ?
+
+                            `
+
+                            <span
+
+                                class="text-[9px]
+                                       sm:text-[10px]
+                                       text-gray-400
+                                       line-through"
+
+                            >
+
+                                ฿${originalPrice.toLocaleString()}
+
+                            </span>
+
+                            `
+
+                            :
+
+                            ""
+
+                        }
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- BUY BUTTON -->
+
+                <a
+
+                    href="${affiliateUrl}"
+
+                    target="_blank"
+
+                    rel="noopener noreferrer"
+
+                    class="buy-button
+                           mt-1
+                           w-full
+                           text-white
+                           py-1
+                           rounded-lg
+                           text-[10px]
+                           sm:text-xs
+                           font-medium
+                           flex
+                           items-center
+                           justify-center
+                           gap-1"
+
+                >
+
+
+                    <i class="fa-solid
+                              fa-cart-shopping">
+
+                    </i>
+
+
+                    ดูสินค้า
+
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* ==================================================
    RENDER PRODUCTS
 ================================================== */
 
@@ -1289,6 +2061,40 @@ function renderProducts(items) {
             "productCount"
 
         );
+
+
+    const randomHeader =
+
+        document.getElementById(
+
+            "randomHeader"
+
+        );
+
+
+    const normalHeader =
+
+        document.getElementById(
+
+            "productSectionHeader"
+
+        );
+
+
+    /* ปิดโหมดสุ่ม */
+
+    randomHeader.classList.add(
+
+        "hidden"
+
+    );
+
+
+    normalHeader.classList.remove(
+
+        "hidden"
+
+    );
 
 
 
@@ -1331,441 +2137,416 @@ function renderProducts(items) {
 
 
 
-    /* ==================================================
-       CARDS
-    ================================================== */
-
     grid.innerHTML =
 
-        items.map(item => {
+        items.map(
 
+            (item, index) =>
 
-            /* ==================================================
-               DATA
-            ================================================== */
+                createProductCard(
 
-            const title =
+                    item,
 
-                item.title ||
+                    undefined
 
-                "ของกินอร่อย";
+                )
 
+        ).join("");
 
-            const province =
+}
 
-                item.province ||
 
-                "ประเทศไทย";
 
+/* ==================================================
+   RANDOM FOOD
+================================================== */
 
-            const image =
+function randomFood() {
 
-                item.image ||
 
-                "https://placehold.co/600x600?text=FOOD";
+    const grid =
 
+        document.getElementById(
 
-            const affiliateUrl =
+            "productGrid"
 
-                item.affiliateUrl ||
+        );
 
-                "#";
 
+    const notFound =
 
+        document.getElementById(
 
-            /* ==================================================
-               PRICE
-            ================================================== */
+            "notFound"
 
-            const salePrice =
+        );
 
-                Number(
 
-                    item.salePrice || 0
+    const count =
 
-                );
+        document.getElementById(
 
+            "productCount"
 
-            const originalPrice =
+        );
 
-                Number(
 
-                    item.originalPrice || 0
+    const randomHeader =
 
-                );
+        document.getElementById(
 
+            "randomHeader"
 
+        );
 
-            /* ==================================================
-               TAGS
-            ================================================== */
 
-            const tags =
+    const normalHeader =
 
-                item.tags
+        document.getElementById(
 
-                ?
+            "productSectionHeader"
 
-                String(item.tags)
+        );
 
-                    .split(",")
 
-                    .map(tag => {
+    const searchInput =
 
+        document.getElementById(
 
-                        tag = tag.trim();
+            "searchInput"
 
+        );
 
-                        if (!tag) {
 
-                            return "";
+    /* ==================================================
+       CLEAR SEARCH
+    ================================================== */
 
-                        }
+    searchInput.value = "";
 
 
-                        let color =
+    currentCategory =
 
-                            "bg-gray-700 text-white";
+        "ทั้งหมด";
 
 
-                        if (
+    renderCategories();
 
-                            tag === "ส่งฟรี"
 
-                        ) {
+    /* ==================================================
+       CHECK PRODUCTS
+    ================================================== */
 
-                            color =
+    if (
 
-                                "bg-thaiBlue text-white";
+        !products ||
 
-                        }
+        products.length === 0
 
+    ) {
 
-                        else if (
 
-                            tag === "ขายดี"
+        grid.innerHTML = "";
 
-                        ) {
+        notFound.classList.remove(
 
-                            color =
+            "hidden"
 
-                                "bg-orange-500 text-white";
+        );
 
-                        }
+        return;
 
+    }
 
-                        else if (
 
-                            tag === "Flash Sale"
+    notFound.classList.add(
 
-                        ) {
+        "hidden"
 
-                            color =
+    );
 
-                                "bg-yellow-400 text-black";
 
-                        }
+    normalHeader.classList.add(
 
+        "hidden"
 
-                        else if (
+    );
 
-                            tag.includes("ลด")
 
-                        ) {
+    randomHeader.classList.add(
 
-                            color =
+        "hidden"
 
-                                "bg-thaiRed text-white";
+    );
 
-                        }
 
+    count.innerText = "";
 
-                        else if (
 
-                            tag === "Official Store"
 
-                        ) {
+    /* ==================================================
+       LOADING
+    ================================================== */
 
-                            color =
+    grid.innerHTML = `
 
-                                "bg-purple-600 text-white";
+        <div class="col-span-full
+                    loading-box
+                    flex
+                    flex-col
+                    items-center
+                    justify-center
+                    text-thaiBlue">
 
-                        }
+            <div class="random-loading
+                        text-5xl
+                        mb-3">
 
+                🎲
 
-                        return `
+            </div>
 
-                            <span class="product-tag ${color}">
+            <p class="font-bold
+                      text-sm">
 
-                                ${tag}
+                กำลังสุ่มของกินให้คุณ...
 
-                            </span>
+            </p>
 
-                        `;
+            <p class="text-[10px]
+                      text-gray-400
+                      mt-1">
 
-                    })
+                PHAENDIN กำลังเลือกให้ 🍜
 
-                    .filter(
+            </p>
 
-                        tag => tag !== ""
+        </div>
+
+    `;
+
+
+
+    /* ==================================================
+       DELAY
+    ================================================== */
+
+    setTimeout(function() {
+
+
+        /* ==================================================
+           GET RANDOM PRODUCTS
+        ================================================== */
+
+        const randomProducts =
+
+            getRandomProducts(
+
+                products,
+
+                3
+
+            );
+
+
+        /* ==================================================
+           SAVE LAST RANDOM
+        ================================================== */
+
+        lastRandomIds =
+
+            randomProducts.map(
+
+                item => getProductId(item)
+
+            );
+
+
+
+        /* ==================================================
+           RANDOM HEADER
+        ================================================== */
+
+        randomHeader.classList.remove(
+
+            "hidden"
+
+        );
+
+
+        /* ==================================================
+           RENDER
+        ================================================== */
+
+        grid.innerHTML =
+
+            randomProducts.map(
+
+                (item, index) =>
+
+                    createProductCard(
+
+                        item,
+
+                        index
 
                     )
 
-                    .slice(0, 2)
+            ).join("");
 
-                    .join("")
 
-                :
+        /* ==================================================
+           COUNT
+        ================================================== */
 
-                "";
+        count.innerText =
 
+            `${randomProducts.length} รายการที่สุ่มได้`;
 
 
-            /* ==================================================
-               CARD
-            ================================================== */
+        /* ==================================================
+           SCROLL
+        ================================================== */
 
-            return `
+        setTimeout(function() {
 
-                <div class="product-card
-                            bg-white
-                            rounded-xl
-                            overflow-hidden
-                            border
-                            border-gray-100
-                            shadow-sm">
 
+            randomHeader.scrollIntoView({
 
-                    <!-- =========================
-                         IMAGE
-                    ========================= -->
+                behavior: "smooth",
 
-                    <div class="image-box">
+                block: "start"
 
+            });
 
-                        <img
 
-                            src="${image}"
+        }, 80);
 
-                            alt="${title}"
 
-                            loading="lazy"
+    }, 700);
 
-                            onerror="this.src='https://placehold.co/600x600?text=FOOD'"
+}
 
-                            class="product-image"
 
-                        >
 
+/* ==================================================
+   GET RANDOM PRODUCTS
+================================================== */
 
-                    </div>
+function getRandomProducts(items, amount) {
 
 
+    if (
 
-                    <!-- =========================
-                         CONTENT
-                    ========================= -->
+        !items ||
 
-                    <div class="product-content">
+        items.length === 0
 
+    ) {
 
-                        <!-- TITLE -->
+        return [];
 
-                        <h3
+    }
 
-                            class="product-title
-                                   text-xs
-                                   sm:text-sm
-                                   font-semibold
-                                   text-gray-800"
 
-                            title="${title}"
+    let available =
 
-                        >
+        [...items];
 
-                            ${title}
 
-                        </h3>
+    /* ==================================================
+       REMOVE LAST RANDOM
+       ถ้ามีสินค้าเพียงพอ
+    ================================================== */
 
+    if (
 
+        items.length > amount
 
-                        <!-- =========================
-                             TAGS
-                        ========================= -->
+    ) {
 
-                        ${
-                            tags
 
-                            ?
+        const filtered =
 
-                            `
+            available.filter(
 
-                            <div class="tag-area">
+                item =>
 
-                                ${tags}
+                    !lastRandomIds.includes(
 
-                            </div>
+                        getProductId(item)
 
-                            `
+                    )
 
-                            :
+            );
 
-                            `
 
-                            <div class="tag-area"></div>
+        if (
 
-                            `
+            filtered.length >= amount
 
-                        }
+        ) {
 
+            available = filtered;
 
+        }
 
-                        <!-- =========================
-                             PROVINCE
-                        ========================= -->
+    }
 
-                        <div
 
-                            class="product-province
-                                   flex
-                                   items-center
-                                   gap-1
-                                   mt-0.5
-                                   text-[9px]
-                                   sm:text-[10px]
-                                   text-thaiBlue"
+    /* ==================================================
+       SHUFFLE
+    ================================================== */
 
-                        >
+    available =
 
+        shuffleProducts(
 
-                            <i class="fa-solid
-                                      fa-location-dot">
-                            </i>
+            available
 
+        );
 
-                            <span class="truncate">
 
-                                ${province}
+    /* ==================================================
+       RETURN 3 OR LESS
+    ================================================== */
 
-                            </span>
+    return available.slice(
 
+        0,
 
-                        </div>
+        Math.min(
 
+            amount,
 
+            available.length
 
-                        <!-- =========================
-                             PRICE
-                        ========================= -->
+        )
 
-                        <div class="mt-0.5">
+    );
 
+}
 
-                            <div class="flex
-                                        items-baseline
-                                        gap-1.5
-                                        flex-wrap">
 
 
-                                <span
+/* ==================================================
+   PRODUCT ID
+================================================== */
 
-                                    class="text-base
-                                           sm:text-lg
-                                           font-black
-                                           text-thaiRed"
+function getProductId(item) {
 
-                                >
 
-                                    ฿${salePrice.toLocaleString()}
+    return (
 
-                                </span>
+        item.id ||
 
+        item.title ||
 
+        item.affiliateUrl ||
 
-                                ${
-                                    originalPrice > 0
+        Math.random().toString(36)
 
-                                    ?
-
-                                    `
-
-                                    <span
-
-                                        class="text-[9px]
-                                               sm:text-[10px]
-                                               text-gray-400
-                                               line-through"
-
-                                    >
-
-                                        ฿${originalPrice.toLocaleString()}
-
-                                    </span>
-
-                                    `
-
-                                    :
-
-                                    ""
-
-                                }
-
-
-                            </div>
-
-
-                        </div>
-
-
-
-                        <!-- =========================
-                             BUY BUTTON
-                        ========================= -->
-
-                        <a
-
-                            href="${affiliateUrl}"
-
-                            target="_blank"
-
-                            rel="noopener noreferrer"
-
-                            class="buy-button
-                                   mt-1
-                                   w-full
-                                   text-white
-                                   py-1
-                                   rounded-lg
-                                   text-[10px]
-                                   sm:text-xs
-                                   font-medium
-                                   flex
-                                   items-center
-                                   justify-center
-                                   gap-1"
-
-                        >
-
-
-                            <i class="fa-solid
-                                      fa-cart-shopping">
-                            </i>
-
-
-                            ดูสินค้า
-
-
-                        </a>
-
-
-                    </div>
-
-
-                </div>
-
-            `;
-
-        }).join("");
+    );
 
 }
 
@@ -1785,6 +2566,7 @@ function setCategory(cat) {
 
 
     filterProducts();
+
 
 }
 
@@ -1864,7 +2646,11 @@ function filterProducts() {
 
                 ||
 
-                p.category === currentCategory;
+                String(
+
+                    p.category || ""
+
+                ) === currentCategory;
 
 
 
@@ -1905,10 +2691,10 @@ function filterProducts() {
 
 
 /* ==================================================
-   RESET + RANDOM
+   GO HOME
 ================================================== */
 
-function resetAndRandom() {
+function goHome() {
 
 
     const searchInput =
@@ -1928,12 +2714,10 @@ function resetAndRandom() {
         "ทั้งหมด";
 
 
+    lastRandomIds = [];
+
+
     renderCategories();
-
-
-    products =
-
-        shuffleProducts(products);
 
 
     renderProducts(products);
@@ -1949,6 +2733,17 @@ function resetAndRandom() {
 
 }
 
+
+
+/* ==================================================
+   LOGO CLICK
+================================================== */
+
+function resetAndRandom() {
+
+    randomFood();
+
+}
 
 </script>
 
