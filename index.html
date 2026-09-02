@@ -10,6 +10,8 @@
 
 <title>PHAENDIN FOOD | ของอร่อยจากทั่วไทย</title>
 
+<meta name="description"
+      content="รวมของอร่อย ของดี และอาหารเด็ดจากทั่วประเทศไทย">
 
 <!-- ==================================================
      TAILWIND
@@ -19,124 +21,271 @@
 
 
 <!-- ==================================================
-     FONT AWESOME
+     FONT
 ================================================== -->
 
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
 
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
 
-<!-- ==================================================
-     KANIT
-================================================== -->
-
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap"
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet">
 
 
 <!-- ==================================================
-     TAILWIND CONFIG
+     FONT AWESOME
 ================================================== -->
 
-<script>
-
-tailwind.config = {
-
-    theme: {
-
-        extend: {
-
-            colors: {
-
-                thaiRed: '#D71920',
-
-                thaiBlue: '#003DA5',
-
-                soft: '#F5F7FA'
-
-            },
-
-            fontFamily: {
-
-                kanit: ['Kanit', 'sans-serif']
-
-            }
-
-        }
-
-    }
-
-};
-
-</script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 
 <!-- ==================================================
-     CUSTOM CSS
+     STYLE
 ================================================== -->
 
 <style>
 
-/* ==================================================
-   BODY
-================================================== */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
 
 body {
 
-    font-family: 'Kanit', sans-serif;
+    margin: 0;
+
+    font-family: "Kanit", sans-serif;
+
+    background: #f8fafc;
+
+    color: #111827;
 
 }
 
 
 /* ==================================================
-   SCROLLBAR
+   TOP THAI STRIPE
 ================================================== */
 
-.hide-scrollbar::-webkit-scrollbar {
-
-    display: none;
-
-}
-
-.hide-scrollbar {
-
-    -ms-overflow-style: none;
-
-    scrollbar-width: none;
-
-}
-
-
-/* ==================================================
-   THAI FLAG
-================================================== */
-
-.thai-line {
+.thai-stripe {
 
     height: 5px;
 
     background:
-
         linear-gradient(
-
-            to right,
-
-            #D71920 0%,
-            #D71920 20%,
-
-            #FFFFFF 20%,
-            #FFFFFF 40%,
-
-            #003DA5 40%,
-            #003DA5 60%,
-
-            #FFFFFF 60%,
-            #FFFFFF 80%,
-
-            #D71920 80%,
-            #D71920 100%
-
+            to bottom,
+            #ef3340 0%,
+            #ef3340 20%,
+            #ffffff 20%,
+            #ffffff 35%,
+            #00247d 35%,
+            #00247d 65%,
+            #ffffff 65%,
+            #ffffff 80%,
+            #ef3340 80%,
+            #ef3340 100%
         );
+
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.header {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 50;
+
+    background: rgba(255,255,255,.95);
+
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid #e5e7eb;
+
+}
+
+
+.header-inner {
+
+    max-width: 1180px;
+
+    margin: auto;
+
+    padding: 12px 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    flex-shrink: 0;
+
+}
+
+
+.logo-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ef3340,
+            #c81e2b
+        );
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+
+    box-shadow:
+        0 5px 15px rgba(239,51,64,.22);
+
+}
+
+
+.logo-text {
+
+    line-height: 1.05;
+
+}
+
+
+.logo-title {
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #111827;
+
+}
+
+
+.logo-sub {
+
+    font-size: 9px;
+
+    color: #6b7280;
+
+}
+
+
+.search-box {
+
+    flex: 1;
+
+    position: relative;
+
+}
+
+
+.search-box input {
+
+    width: 100%;
+
+    height: 40px;
+
+    border: 1px solid #e5e7eb;
+
+    background: #f8fafc;
+
+    border-radius: 12px;
+
+    outline: none;
+
+    padding:
+        0 40px 0 40px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition: .2s;
+
+}
+
+
+.search-box input:focus {
+
+    background: white;
+
+    border-color: #ef3340;
+
+    box-shadow:
+        0 0 0 3px rgba(239,51,64,.08);
+
+}
+
+
+.search-icon {
+
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #9ca3af;
+
+}
+
+
+.clear-search {
+
+    position: absolute;
+
+    right: 12px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: 0;
+
+    background: transparent;
+
+    color: #9ca3af;
+
+    cursor: pointer;
+
+    display: none;
 
 }
 
@@ -147,56 +296,31 @@ body {
 
 .hero {
 
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding:
+        18px 15px 8px;
+
+}
+
+
+.hero-box {
+
+    border-radius: 22px;
+
+    padding: 25px 20px;
+
     background:
-
         linear-gradient(
-
             135deg,
-
-            #003DA5,
-
-            #002D7A
-
+            #fff1f2,
+            #ffffff 50%,
+            #eff6ff
         );
 
-}
-
-
-/* ==================================================
-   PRODUCT CARD
-================================================== */
-
-.product-card {
-
-    transition:
-
-        transform .2s ease,
-
-        box-shadow .2s ease;
-
-}
-
-
-.product-card:hover {
-
-    transform: translateY(-3px);
-
-    box-shadow:
-
-        0 12px 28px rgba(0,0,0,.12);
-
-}
-
-
-/* ==================================================
-   IMAGE BOX
-================================================== */
-
-.image-box {
-
-    height: 135px;
-
-    background: #F3F4F6;
+    border: 1px solid #fee2e2;
 
     position: relative;
 
@@ -205,625 +329,205 @@ body {
 }
 
 
-@media (min-width: 640px) {
+.hero-box::after {
 
-    .image-box {
+    content: "";
 
-        height: 180px;
+    position: absolute;
 
-    }
+    width: 160px;
 
-}
+    height: 160px;
 
+    right: -50px;
 
-/* ==================================================
-   PRODUCT IMAGE
-================================================== */
+    top: -50px;
 
-.product-image {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: contain;
-
-    display: block;
-
-    transition:
-
-        transform .4s ease;
-
-}
-
-
-.product-card:hover .product-image {
-
-    transform: scale(1.04);
-
-}
-
-
-/* ==================================================
-   TITLE
-================================================== */
-
-.product-title {
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    line-height: 1.25;
-
-}
-
-
-/* ==================================================
-   TAG AREA
-================================================== */
-
-.tag-area {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 3px;
-
-    margin-top: 2px;
-
-    height: 15px;
-
-    overflow: hidden;
-
-    white-space: nowrap;
-
-}
-
-
-/* ==================================================
-   TAG
-================================================== */
-
-.product-tag {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    padding: 2px 6px;
-
-    border-radius: 999px;
-
-    font-size: 7px;
-
-    line-height: 1.2;
-
-    font-weight: 500;
-
-    white-space: nowrap;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .product-tag {
-
-        font-size: 9px;
-
-        padding: 2px 7px;
-
-    }
-
-}
-
-
-/* ==================================================
-   PROVINCE
-================================================== */
-
-.product-province {
-
-    line-height: 1;
-
-}
-
-
-/* ==================================================
-   BUY BUTTON
-================================================== */
-
-.buy-button {
-
-    background: #D71920;
-
-    transition: .2s;
-
-}
-
-
-.buy-button:hover {
-
-    background: #B51218;
-
-}
-
-
-/* ==================================================
-   LOGO
-================================================== */
-
-.logo {
+    border-radius: 50%;
 
     background:
-
-        linear-gradient(
-
-            135deg,
-
-            #D71920 0%,
-
-            #D71920 50%,
-
-            #003DA5 50%,
-
-            #003DA5 100%
-
-        );
+        rgba(239,51,64,.08);
 
 }
 
 
-/* ==================================================
-   RANDOM BUTTON
-================================================== */
+.hero-title {
+
+    font-size: 27px;
+
+    font-weight: 700;
+
+    margin: 0;
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+.hero-title span {
+
+    color: #ef3340;
+
+}
+
+
+.hero-text {
+
+    color: #6b7280;
+
+    margin:
+        5px 0 15px;
+
+    font-size: 14px;
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
 
 .random-button {
 
-    transition:
+    border: 0;
 
-        transform .2s ease,
+    cursor: pointer;
 
-        box-shadow .2s ease;
+    font-family: inherit;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ef3340,
+            #c81e2b
+        );
+
+    padding:
+        11px 18px;
+
+    border-radius: 12px;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    box-shadow:
+        0 7px 18px rgba(239,51,64,.25);
+
+    transition: .2s;
+
+    position: relative;
+
+    z-index: 2;
 
 }
 
 
 .random-button:hover {
 
-    transform: scale(1.03);
+    transform: translateY(-2px);
+
+}
+
+
+.random-button:active {
+
+    transform: scale(.97);
+
+}
+
+
+.random-button i {
+
+    margin-right: 6px;
 
 }
 
 
 /* ==================================================
-   RANDOM TITLE
+   CATEGORY
 ================================================== */
 
-.random-title {
+.category-wrapper {
 
-    animation:
+    max-width: 1180px;
 
-        randomTitle .45s ease both;
+    margin: auto;
 
-}
-
-
-@keyframes randomTitle {
-
-    0% {
-
-        opacity: 0;
-
-        transform: translateY(-8px);
-
-    }
-
-    100% {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-    }
+    padding:
+        10px 15px 5px;
 
 }
 
 
-/* ==================================================
-   RANDOM RESULT CARD
-================================================== */
+.category-scroll {
 
-.random-result {
+    display: flex;
 
-    animation:
+    gap: 7px;
 
-        randomCard .45s ease both;
+    overflow-x: auto;
 
-}
+    padding-bottom: 5px;
 
-
-@keyframes randomCard {
-
-    0% {
-
-        opacity: 0;
-
-        transform:
-
-            translateY(15px)
-
-            scale(.96);
-
-    }
-
-    100% {
-
-        opacity: 1;
-
-        transform:
-
-            translateY(0)
-
-            scale(1);
-
-    }
+    scrollbar-width: none;
 
 }
 
 
-.random-result:nth-child(2) {
+.category-scroll::-webkit-scrollbar {
 
-    animation-delay: .08s;
-
-}
-
-
-.random-result:nth-child(3) {
-
-    animation-delay: .16s;
+    display: none;
 
 }
 
 
-.random-result:nth-child(4) {
+.category-button {
 
-    animation-delay: .24s;
+    flex-shrink: 0;
 
-}
+    border: 1px solid #e5e7eb;
 
+    background: white;
 
-/* ==================================================
-   RANDOM LOADING
-================================================== */
+    color: #4b5563;
 
-.random-loading {
+    border-radius: 999px;
 
-    animation:
+    padding:
+        7px 13px;
 
-        randomShake .16s
-
-        infinite alternate;
-
-}
-
-
-@keyframes randomShake {
-
-    from {
-
-        transform:
-
-            rotate(-5deg)
-
-            scale(1);
-
-    }
-
-    to {
-
-        transform:
-
-            rotate(5deg)
-
-            scale(1.08);
-
-    }
-
-}
-
-
-/* ==================================================
-   RANDOM AGAIN
-================================================== */
-
-.random-again {
-
-    transition:
-
-        transform .2s ease,
-
-        box-shadow .2s ease;
-
-}
-
-
-.random-again:hover {
-
-    transform: scale(1.04);
-
-}
-
-
-/* ==================================================
-   RANDOM BADGE
-================================================== */
-
-.random-badge {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 4px;
-
-    background: #FFF7ED;
-
-    border: 1px solid #FED7AA;
-
-    color: #EA580C;
-
-}
-
-
-/* ==================================================
-   RANDOM MODE
-   ทำให้ 3 การ์ดอยู่แถวเดียว
-================================================== */
-
-.random-grid {
-
-    display: grid;
-
-    grid-template-columns:
-
-        repeat(3, minmax(0, 1fr));
-
-    gap: 6px;
-
-}
-
-
-/* ==================================================
-   RANDOM CARD CONTENT
-================================================== */
-
-.random-grid .product-card {
-
-    min-width: 0;
-
-    border-radius: 10px;
-
-}
-
-
-/* ==================================================
-   RANDOM IMAGE
-================================================== */
-
-.random-grid .image-box {
-
-    height: 105px;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .random-grid .image-box {
-
-        height: 160px;
-
-    }
-
-}
-
-
-/* ==================================================
-   RANDOM CONTENT
-================================================== */
-
-.random-grid .product-content {
-
-    padding: 5px;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .random-grid .product-content {
-
-        padding: 7px;
-
-    }
-
-}
-
-
-/* ==================================================
-   RANDOM TITLE
-================================================== */
-
-.random-grid .product-title {
-
-    font-size: 10px;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .random-grid .product-title {
-
-        font-size: 14px;
-
-    }
-
-}
-
-
-/* ==================================================
-   RANDOM TAG
-================================================== */
-
-.random-grid .tag-area {
-
-    height: 14px;
-
-}
-
-
-.random-grid .product-tag {
-
-    font-size: 6px;
-
-    padding: 1px 4px;
-
-}
-
-
-/* ==================================================
-   RANDOM PROVINCE
-================================================== */
-
-.random-grid .product-province {
-
-    font-size: 8px;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .random-grid .product-province {
-
-        font-size: 10px;
-
-    }
-
-}
-
-
-/* ==================================================
-   RANDOM PRICE
-================================================== */
-
-.random-grid .text-base {
+    font-family: inherit;
 
     font-size: 13px;
 
-}
+    cursor: pointer;
 
-
-@media (min-width: 640px) {
-
-    .random-grid .text-base {
-
-        font-size: 17px;
-
-    }
+    transition: .2s;
 
 }
 
 
-/* ==================================================
-   RANDOM OLD PRICE
-================================================== */
+.category-button:hover {
 
-.random-grid .text-\[9px\] {
+    border-color: #ef3340;
 
-    font-size: 7px;
+    color: #ef3340;
 
 }
 
 
-/* ==================================================
-   RANDOM BUY BUTTON
-================================================== */
+.category-button.active {
 
-.random-grid .buy-button {
+    background: #ef3340;
 
-    padding-top: 4px;
+    border-color: #ef3340;
 
-    padding-bottom: 4px;
-
-    font-size: 8px;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .random-grid .buy-button {
-
-        font-size: 11px;
-
-    }
-
-}
-
-
-/* ==================================================
-   LOADING
-================================================== */
-
-.loading-box {
-
-    min-height: 220px;
-
-}
-
-
-/* ==================================================
-   PRODUCT CONTENT
-================================================== */
-
-.product-content {
-
-    padding: 6px;
-
-}
-
-
-@media (min-width: 640px) {
-
-    .product-content {
-
-        padding: 7px;
-
-    }
-
-}
-
-
-/* ==================================================
-   MOBILE HEADER
-================================================== */
-
-@media (max-width: 639px) {
-
-    .header-container {
-
-        padding-top: 8px;
-
-        padding-bottom: 8px;
-
-    }
+    color: white;
 
 }
 
@@ -834,7 +538,901 @@ body {
 
 .random-section {
 
-    scroll-margin-top: 80px;
+    max-width: 1180px;
+
+    margin: auto;
+
+    padding:
+        12px 15px 5px;
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 9px;
+
+}
+
+
+.section-title {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+
+.section-title i {
+
+    color: #ef3340;
+
+    margin-right: 5px;
+
+}
+
+
+.random-status {
+
+    color: #9ca3af;
+
+    font-size: 12px;
+
+}
+
+
+/* ==================================================
+   RANDOM GRID
+================================================== */
+
+.random-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 8px;
+
+}
+
+
+/* ==================================================
+   PRODUCTS
+================================================== */
+
+.products-section {
+
+    max-width: 1180px;
+
+    margin: auto;
+
+    padding:
+        12px 15px 35px;
+
+}
+
+
+.products-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 9px;
+
+}
+
+
+/* ==================================================
+   CARD
+================================================== */
+
+.product-card {
+
+    background: white;
+
+    border-radius: 15px;
+
+    overflow: hidden;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 2px 8px rgba(15,23,42,.04);
+
+    transition: .2s;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.product-card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(15,23,42,.08);
+
+}
+
+
+/* ==================================================
+   IMAGE
+================================================== */
+
+.product-image {
+
+    width: 100%;
+
+    height: 135px;
+
+    background: #f3f4f6;
+
+    overflow: hidden;
+
+    position: relative;
+
+}
+
+
+.product-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    transition: .3s;
+
+}
+
+
+.product-card:hover .product-image img {
+
+    transform: scale(1.03);
+
+}
+
+
+.image-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #9ca3af;
+
+    font-size: 30px;
+
+}
+
+
+/* ==================================================
+   CARD CONTENT
+================================================== */
+
+.product-content {
+
+    padding:
+        9px 9px 10px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    flex: 1;
+
+}
+
+
+.product-title {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #111827;
+
+    line-height: 1.35;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 1;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+}
+
+
+.product-province {
+
+    font-size: 11px;
+
+    color: #6b7280;
+
+    margin-top: 3px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+
+.product-province i {
+
+    color: #ef3340;
+
+    margin-right: 3px;
+
+}
+
+
+.tags {
+
+    display: flex;
+
+    gap: 4px;
+
+    margin-top: 5px;
+
+    overflow: hidden;
+
+}
+
+
+.tag {
+
+    flex-shrink: 0;
+
+    background: #fff1f2;
+
+    color: #dc2626;
+
+    border-radius: 5px;
+
+    padding:
+        2px 5px;
+
+    font-size: 9px;
+
+    white-space: nowrap;
+
+}
+
+
+/* ==================================================
+   PRICE
+================================================== */
+
+.price-row {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 5px;
+
+    margin-top: 6px;
+
+}
+
+
+.sale-price {
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #ef3340;
+
+}
+
+
+.sale-price small {
+
+    font-size: 10px;
+
+    font-weight: 400;
+
+}
+
+
+.original-price {
+
+    font-size: 10px;
+
+    color: #9ca3af;
+
+    text-decoration: line-through;
+
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.buy-button {
+
+    width: 100%;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    padding:
+        8px 5px;
+
+    margin-top: 7px;
+
+    font-family: inherit;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    display: block;
+
+    transition: .2s;
+
+}
+
+
+.buy-button:hover {
+
+    transform: translateY(-1px);
+
+}
+
+
+/* ปุ่มดูสินค้าภายนอก */
+
+.external-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ef4444,
+            #dc2626
+        );
+
+    color: white;
+
+}
+
+
+/* ปุ่มซื้อกับเรา */
+
+.own-button {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    color: white;
+
+}
+
+
+.buy-button i {
+
+    margin-right: 3px;
+
+}
+
+
+/* 2 ปุ่ม */
+
+.product-buttons {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 5px;
+
+    margin-top: 7px;
+
+}
+
+
+.product-buttons .buy-button {
+
+    margin-top: 0;
+
+}
+
+
+/* ==================================================
+   RANDOM CARD
+================================================== */
+
+.random-card .product-image {
+
+    height: 105px;
+
+}
+
+
+.random-card .product-content {
+
+    padding:
+        7px;
+
+}
+
+
+.random-card .product-title {
+
+    font-size: 12px;
+
+}
+
+
+.random-card .product-province {
+
+    font-size: 9px;
+
+}
+
+
+.random-card .sale-price {
+
+    font-size: 14px;
+
+}
+
+
+.random-card .original-price {
+
+    font-size: 8px;
+
+}
+
+
+.random-card .buy-button {
+
+    font-size: 10px;
+
+    padding:
+        7px 3px;
+
+}
+
+
+.random-card .product-buttons {
+
+    gap: 3px;
+
+}
+
+
+/* ==================================================
+   EMPTY
+================================================== */
+
+.empty-box {
+
+    text-align: center;
+
+    padding:
+        50px 20px;
+
+    color: #9ca3af;
+
+}
+
+
+.empty-box i {
+
+    font-size: 40px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.empty-box p {
+
+    margin: 0;
+
+}
+
+
+/* ==================================================
+   LOADING
+================================================== */
+
+.loading {
+
+    text-align: center;
+
+    padding:
+        35px 15px;
+
+    color: #6b7280;
+
+}
+
+
+.loading i {
+
+    margin-right: 5px;
+
+}
+
+
+/* ==================================================
+   FOOTER
+================================================== */
+
+.footer {
+
+    border-top: 1px solid #e5e7eb;
+
+    background: white;
+
+    padding:
+        25px 15px;
+
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: 12px;
+
+}
+
+
+.footer strong {
+
+    color: #111827;
+
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media (min-width: 640px) {
+
+    .products-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 12px;
+
+    }
+
+
+    .product-image {
+
+        height: 170px;
+
+    }
+
+
+    .random-card .product-image {
+
+        height: 150px;
+
+    }
+
+}
+
+
+@media (min-width: 900px) {
+
+    .header-inner {
+
+        padding:
+            13px 20px;
+
+    }
+
+
+    .hero {
+
+        padding-top: 25px;
+
+    }
+
+
+    .hero-box {
+
+        padding:
+            35px 35px;
+
+    }
+
+
+    .hero-title {
+
+        font-size: 34px;
+
+    }
+
+
+    .products-grid {
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+    }
+
+
+    .product-image {
+
+        height: 190px;
+
+    }
+
+
+    .random-card .product-image {
+
+        height: 165px;
+
+    }
+
+}
+
+
+/* ==================================================
+   MOBILE SMALL
+================================================== */
+
+@media (max-width: 420px) {
+
+    .header-inner {
+
+        padding:
+            9px 10px;
+
+        gap: 8px;
+
+    }
+
+
+    .logo-icon {
+
+        width: 34px;
+
+        height: 34px;
+
+        border-radius: 10px;
+
+        font-size: 15px;
+
+    }
+
+
+    .logo-title {
+
+        font-size: 15px;
+
+    }
+
+
+    .logo-sub {
+
+        font-size: 8px;
+
+    }
+
+
+    .search-box input {
+
+        height: 36px;
+
+        font-size: 12px;
+
+        padding-left: 34px;
+
+    }
+
+
+    .search-icon {
+
+        left: 11px;
+
+    }
+
+
+    .hero {
+
+        padding:
+            12px 10px 6px;
+
+    }
+
+
+    .hero-box {
+
+        border-radius: 17px;
+
+        padding:
+            20px 15px;
+
+    }
+
+
+    .hero-title {
+
+        font-size: 23px;
+
+    }
+
+
+    .hero-text {
+
+        font-size: 12px;
+
+    }
+
+
+    .category-wrapper,
+    .random-section,
+    .products-section {
+
+        padding-left: 10px;
+
+        padding-right: 10px;
+
+    }
+
+
+    .products-grid {
+
+        gap: 7px;
+
+    }
+
+
+    .product-image {
+
+        height: 120px;
+
+    }
+
+
+    .product-content {
+
+        padding:
+            7px;
+
+    }
+
+
+    .product-title {
+
+        font-size: 12px;
+
+    }
+
+
+    .product-province {
+
+        font-size: 9px;
+
+    }
+
+
+    .sale-price {
+
+        font-size: 16px;
+
+    }
+
+
+    .buy-button {
+
+        font-size: 10px;
+
+        padding:
+            7px 3px;
+
+    }
+
+
+    .random-grid {
+
+        gap: 5px;
+
+    }
+
+
+    .random-card .product-image {
+
+        height: 90px;
+
+    }
+
+
+    .random-card .product-content {
+
+        padding: 5px;
+
+    }
+
+
+    .random-card .product-title {
+
+        font-size: 10px;
+
+    }
+
+
+    .random-card .product-province {
+
+        font-size: 8px;
+
+    }
+
+
+    .random-card .sale-price {
+
+        font-size: 12px;
+
+    }
+
+
+    .random-card .buy-button {
+
+        font-size: 8px;
+
+        padding:
+            6px 2px;
+
+    }
+
+
+    .product-buttons {
+
+        gap: 3px;
+
+    }
 
 }
 
@@ -843,154 +1441,77 @@ body {
 </head>
 
 
-
-<body class="bg-soft text-gray-800 min-h-screen flex flex-col">
+<body>
 
 
 <!-- ==================================================
-     THAI FLAG
+     THAI STRIPE
 ================================================== -->
 
-<div class="thai-line"></div>
-
+<div class="thai-stripe"></div>
 
 
 <!-- ==================================================
      HEADER
 ================================================== -->
 
-<header class="bg-white sticky top-0 z-50 shadow-sm">
+<header class="header">
+
+    <div class="header-inner">
 
 
-<div class="container mx-auto px-4">
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <div class="logo-icon">
+
+                <i class="fas fa-utensils"></i>
+
+            </div>
+
+            <div class="logo-text">
+
+                <div class="logo-title">
+                    PHAENDIN
+                </div>
+
+                <div class="logo-sub">
+                    FOOD • ของอร่อยจากทั่วไทย
+                </div>
+
+            </div>
+
+        </div>
 
 
-<div class="header-container
-            flex
-            items-center
-            justify-between
-            gap-3
-            py-2.5">
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <i class="fas fa-search search-icon"></i>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="ค้นหาของกิน..."
+                autocomplete="off"
+            >
+
+            <button
+                class="clear-search"
+                id="clearSearch"
+                type="button"
+            >
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
 
 
-<!-- ==================================================
-     LOGO
-================================================== -->
-
-<div
-
-    onclick="goHome()"
-
-    class="flex
-           items-center
-           gap-2
-           cursor-pointer
-           min-w-fit"
-
->
-
-
-<div class="logo
-            w-9
-            h-9
-            rounded-lg
-            flex
-            items-center
-            justify-center
-            text-white
-            font-black
-            shadow">
-
-P
-
-</div>
-
-
-<div>
-
-<h1 class="text-lg
-           sm:text-xl
-           font-black
-           leading-none
-           text-thaiBlue">
-
-PHAENDIN
-
-<span class="text-thaiRed">
-
-FOOD
-
-</span>
-
-</h1>
-
-
-<p class="text-[9px]
-          text-gray-400
-          mt-0.5">
-
-ของอร่อยจากทั่วไทย 🇹🇭
-
-</p>
-
-</div>
-
-</div>
-
-
-
-<!-- ==================================================
-     SEARCH
-================================================== -->
-
-<div class="relative
-            flex-1
-            max-w-lg">
-
-
-<input
-
-    id="searchInput"
-
-    type="text"
-
-    oninput="filterProducts()"
-
-    placeholder="ค้นหาของกิน..."
-
-    class="w-full
-           pl-9
-           pr-3
-           py-2
-           rounded-full
-           bg-gray-50
-           border
-           border-gray-200
-           focus:outline-none
-           focus:ring-2
-           focus:ring-thaiBlue
-           text-xs
-           sm:text-sm"
-
->
-
-
-<i class="fa-solid
-          fa-magnifying-glass
-          absolute
-          left-3
-          top-2.5
-          text-thaiBlue
-          text-xs">
-
-</i>
-
-</div>
-
-
-</div>
-
-</div>
+    </div>
 
 </header>
 
@@ -1000,379 +1521,233 @@ FOOD
      HERO
 ================================================== -->
 
-<section class="hero text-white">
+<section class="hero">
+
+    <div class="hero-box">
+
+        <h1 class="hero-title">
+
+            วันนี้ <span>กินอะไรดี?</span>
+
+        </h1>
 
 
-<div class="container
-            mx-auto
-            px-4
-            py-8
-            sm:py-11">
+        <p class="hero-text">
+
+            ให้ PHAENDIN FOOD สุ่มของอร่อยจากทั่วไทยให้คุณ
+
+        </p>
 
 
-<div class="max-w-2xl
-            mx-auto
-            text-center">
+        <button
+            class="random-button"
+            id="randomButton"
+            type="button"
+        >
 
+            <i class="fas fa-dice"></i>
 
-<!-- BADGE -->
+            สุ่มของกินให้ฉัน
 
-<span class="inline-flex
-             items-center
-             gap-1.5
-             bg-thaiRed
-             px-3
-             py-1
-             rounded-full
-             text-[11px]
-             sm:text-xs
-             mb-3">
+        </button>
 
-🇹🇭 ของกินไทย
-
-</span>
-
-
-
-<!-- TITLE -->
-
-<h2 class="text-2xl
-           sm:text-4xl
-           font-black
-           leading-tight">
-
-วันนี้กินอะไรดี?
-
-</h2>
-
-
-
-<!-- DESCRIPTION -->
-
-<p class="text-blue-100
-          text-xs
-          sm:text-sm
-          mt-2">
-
-รวมของกินเด็ดจากทั่วไทย
-คัดมาให้เลือกในที่เดียว
-
-</p>
-
-
-
-<!-- RANDOM BUTTON -->
-
-<button
-
-    onclick="randomFood()"
-
-    class="random-button
-           mt-4
-           bg-white
-           text-thaiBlue
-           px-5
-           py-2.5
-           rounded-full
-           text-xs
-           sm:text-sm
-           font-bold
-           shadow-lg"
-
->
-
-<i class="fa-solid
-          fa-shuffle
-          mr-1">
-
-</i>
-
-สุ่มของกินให้ฉัน
-
-</button>
-
-
-</div>
-
-</div>
+    </div>
 
 </section>
 
 
 
 <!-- ==================================================
-     MAIN
-================================================== -->
-
-<main class="container
-             mx-auto
-             px-4
-             py-5
-             flex-grow">
-
-
-<!-- ==================================================
      CATEGORY
 ================================================== -->
 
-<div class="mb-5">
+<section class="category-wrapper">
 
+    <div
+        class="category-scroll"
+        id="categoryContainer"
+    >
 
-<div class="flex
-            items-center
-            gap-2
-            mb-2.5">
+        <button
+            class="category-button active"
+            data-category="ทั้งหมด"
+        >
+            ทั้งหมด
+        </button>
 
+        <button
+            class="category-button"
+            data-category="น้ำพริก"
+        >
+            น้ำพริก
+        </button>
 
-<div class="w-1
-            h-4
-            bg-thaiRed
-            rounded-full">
+        <button
+            class="category-button"
+            data-category="ขนม"
+        >
+            ขนม
+        </button>
 
-</div>
+        <button
+            class="category-button"
+            data-category="ของฝาก"
+        >
+            ของฝาก
+        </button>
 
+        <button
+            class="category-button"
+            data-category="อาหารแห้ง"
+        >
+            อาหารแห้ง
+        </button>
 
-<h2 class="font-bold
-           text-sm
-           text-thaiBlue">
+        <button
+            class="category-button"
+            data-category="อาหารทะเล"
+        >
+            อาหารทะเล
+        </button>
 
-ประเภทของกิน
+        <button
+            class="category-button"
+            data-category="อาหารท้องถิ่น"
+        >
+            อาหารท้องถิ่น
+        </button>
 
-</h2>
+        <button
+            class="category-button"
+            data-category="เครื่องปรุง"
+        >
+            เครื่องปรุง
+        </button>
 
+        <button
+            class="category-button"
+            data-category="เครื่องดื่ม"
+        >
+            เครื่องดื่ม
+        </button>
 
-</div>
+        <button
+            class="category-button"
+            data-category="อื่นๆ"
+        >
+            อื่นๆ
+        </button>
 
+    </div>
 
-
-<div
-
-    id="categoryContainer"
-
-    class="flex
-           gap-1.5
-           overflow-x-auto
-           hide-scrollbar
-           pb-1"
-
->
-</div>
-
-
-</div>
-
-
-
-<!-- ==================================================
-     NORMAL PRODUCT HEADER
-================================================== -->
-
-<div
-
-    id="productSectionHeader"
-
-    class="flex
-           items-center
-           justify-between
-           mb-3"
-
->
-
-
-<h2
-
-    class="font-bold
-           text-base
-           sm:text-lg
-           text-thaiBlue"
-
->
-
-🍜 ของกินน่าลอง
-
-</h2>
-
-
-<span
-
-    id="productCount"
-
-    class="text-[10px]
-           sm:text-xs
-           text-gray-400"
-
->
-</span>
-
-
-</div>
+</section>
 
 
 
 <!-- ==================================================
-     RANDOM HEADER
+     RANDOM
 ================================================== -->
 
-<div
-
-    id="randomHeader"
-
-    class="hidden
-           random-section
-           mb-3"
-
+<section
+    class="random-section"
+    id="randomSection"
 >
 
+    <div class="section-heading">
 
-<div class="flex
-            items-center
-            justify-between
-            gap-2">
+        <h2 class="section-title">
 
+            <i class="fas fa-wand-magic-sparkles"></i>
 
-<div>
+            สุ่มให้คุณ
 
-
-<span class="random-badge
-             px-2.5
-             py-1
-             rounded-full
-             text-[9px]
-             sm:text-[10px]
-             font-bold">
-
-<i class="fa-solid
-          fa-wand-magic-sparkles">
-
-</i>
-
-สุ่มให้แล้ว
-
-</span>
+        </h2>
 
 
-<h2 class="random-title
-           font-black
-           text-base
-           sm:text-lg
-           text-thaiBlue
-           mt-1">
+        <span
+            class="random-status"
+            id="randomStatus"
+        >
+            กดปุ่มสุ่มได้เลย
+        </span>
 
-✨ วันนี้เราเลือกให้คุณ
-
-</h2>
+    </div>
 
 
-<p class="text-[9px]
-          sm:text-xs
-          text-gray-400">
+    <div
+        class="random-grid"
+        id="randomGrid"
+    >
 
-3 ตัวเลือกจาก PHAENDIN
+        <!-- RANDOM PRODUCTS -->
 
-</p>
+    </div>
 
-</div>
-
-
-
-<button
-
-    onclick="randomFood()"
-
-    class="random-again
-           whitespace-nowrap
-           bg-thaiBlue
-           text-white
-           px-3
-           py-1.5
-           rounded-full
-           text-[9px]
-           sm:text-xs
-           font-bold
-           shadow-sm"
-
->
-
-<i class="fa-solid
-          fa-shuffle
-          mr-1">
-
-</i>
-
-สุ่มใหม่
-
-</button>
-
-
-</div>
-
-</div>
+</section>
 
 
 
 <!-- ==================================================
-     PRODUCT GRID
+     PRODUCTS
 ================================================== -->
 
-<div
+<section class="products-section">
 
-    id="productGrid"
+    <div class="section-heading">
 
-    class="grid
-           grid-cols-2
-           md:grid-cols-3
-           lg:grid-cols-4
-           gap-2.5
-           sm:gap-4"
+        <h2
+            class="section-title"
+            id="productsTitle"
+        >
 
->
-</div>
+            <i class="fas fa-bowl-food"></i>
 
+            ของอร่อยทั้งหมด
 
+        </h2>
 
-<!-- ==================================================
-     NOT FOUND
-================================================== -->
-
-<div
-
-    id="notFound"
-
-    class="hidden
-           text-center
-           py-14"
-
->
+    </div>
 
 
-<div class="text-5xl mb-3">
+    <!-- LOADING -->
 
-🍜
+    <div
+        class="loading"
+        id="loadingBox"
+    >
 
-</div>
+        <i class="fas fa-spinner fa-spin"></i>
 
+        กำลังโหลดของอร่อย...
 
-<h3 class="font-bold
-           text-gray-600">
-
-ไม่พบของกิน
-
-</h3>
-
-
-<p class="text-xs
-          text-gray-400
-          mt-1">
-
-ลองค้นหาคำอื่น
-
-</p>
+    </div>
 
 
-</div>
+    <!-- PRODUCTS -->
+
+    <div
+        class="products-grid"
+        id="productsGrid"
+    ></div>
 
 
-</main>
+    <!-- EMPTY -->
+
+    <div
+        class="empty-box"
+        id="emptyBox"
+        style="display:none;"
+    >
+
+        <i class="fas fa-face-sad-tear"></i>
+
+        <p>
+            ไม่พบสินค้าที่ค้นหา
+        </p>
+
+    </div>
+
+</section>
 
 
 
@@ -1380,51 +1755,17 @@ FOOD
      FOOTER
 ================================================== -->
 
-<footer class="bg-thaiBlue
-               text-white
-               mt-8">
+<footer class="footer">
 
+    <strong>PHAENDIN FOOD</strong>
 
-<div class="container
-            mx-auto
-            px-4
-            py-6
-            text-center">
+    <br>
 
+    ของอร่อยจากทั่วไทย
 
-<div class="font-black
-            text-lg">
+    <br><br>
 
-PHAENDIN
-
-<span class="text-red-300">
-
-FOOD
-
-</span>
-
-</div>
-
-
-<p class="text-blue-100
-          text-[10px]
-          mt-1">
-
-🇹🇭 ของอร่อยจากทั่วไทย
-
-</p>
-
-
-<p class="text-blue-200/50
-          text-[9px]
-          mt-3">
-
-© 2026 PHAENDIN FOOD
-
-</p>
-
-
-</div>
+    © 2026 PHAENDIN FOOD
 
 </footer>
 
@@ -1438,20 +1779,21 @@ FOOD
 
 
 /* ==================================================
-   GOOGLE SHEETS API
+   GOOGLE SHEET API
 ================================================== */
 
 const SHEET_API_URL =
-
 "https://script.google.com/macros/s/AKfycbxqXpc-Q_2TPzyVnfFaInoGldXl-s8Du6XKfcic3lYKUBXy-FkyQaXGtNcbjTSWOUJI/exec";
 
 
 
 /* ==================================================
-   DATA
+   VARIABLES
 ================================================== */
 
-let products = [];
+let allProducts = [];
+
+let filteredProducts = [];
 
 let currentCategory = "ทั้งหมด";
 
@@ -1460,196 +1802,240 @@ let lastRandomIds = [];
 
 
 /* ==================================================
-   CATEGORIES
+   DOM
 ================================================== */
 
-const categories = [
+const productsGrid =
+    document.getElementById("productsGrid");
 
-    "ทั้งหมด",
+const randomGrid =
+    document.getElementById("randomGrid");
 
-    "น้ำพริก",
+const randomButton =
+    document.getElementById("randomButton");
 
-    "ขนม",
+const randomStatus =
+    document.getElementById("randomStatus");
 
-    "ของฝาก",
+const searchInput =
+    document.getElementById("searchInput");
 
-    "อาหารแห้ง",
+const clearSearch =
+    document.getElementById("clearSearch");
 
-    "อาหารทะเล",
+const loadingBox =
+    document.getElementById("loadingBox");
 
-    "อาหารท้องถิ่น",
+const emptyBox =
+    document.getElementById("emptyBox");
 
-    "เครื่องปรุง",
-
-    "เครื่องดื่ม",
-
-    "อื่นๆ"
-
-];
+const productsTitle =
+    document.getElementById("productsTitle");
 
 
 
 /* ==================================================
-   START
+   LOAD PRODUCTS
 ================================================== */
 
-document.addEventListener(
+async function loadProducts() {
 
-    "DOMContentLoaded",
+    try {
 
-    function() {
+        loadingBox.style.display = "block";
 
-        renderCategories();
+        productsGrid.innerHTML = "";
 
-        fetchProductsFromSheet();
+        const response =
+            await fetch(SHEET_API_URL, {
+                cache: "no-store"
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "ไม่สามารถเชื่อมต่อ Google Sheet ได้"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+         * รองรับทั้งกรณี API ส่ง array ตรง ๆ
+         * และกรณีส่ง {data:[...]}
+         */
+
+        if (Array.isArray(data)) {
+
+            allProducts = data;
+
+        } else if (
+            data &&
+            Array.isArray(data.data)
+        ) {
+
+            allProducts = data.data;
+
+        } else {
+
+            allProducts = [];
+
+        }
+
+
+        /*
+         * ทำความสะอาดข้อมูล
+         */
+
+        allProducts =
+            allProducts
+            .filter(item => item)
+            .map(normalizeProduct);
+
+
+        /*
+         * สุ่มลำดับสินค้าเริ่มต้น
+         */
+
+        allProducts =
+            shuffleArray(allProducts);
+
+
+        filteredProducts =
+            [...allProducts];
+
+
+        loadingBox.style.display = "none";
+
+
+        renderProducts();
+
+
+        /*
+         * ยังไม่สุ่มจนกว่าผู้ใช้กดปุ่ม
+         */
+
+        randomGrid.innerHTML = "";
+
+        randomStatus.textContent =
+            `${allProducts.length} รายการ`;
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        loadingBox.style.display = "none";
+
+        productsGrid.innerHTML = "";
+
+        emptyBox.style.display = "block";
+
+        emptyBox.innerHTML = `
+
+            <i class="fas fa-triangle-exclamation"></i>
+
+            <p>
+                โหลดสินค้าไม่สำเร็จ
+            </p>
+
+            <small>
+                กรุณาตรวจสอบ Google Sheet API
+            </small>
+
+        `;
 
     }
 
-);
+}
 
 
 
 /* ==================================================
-   LOAD GOOGLE SHEETS
+   NORMALIZE PRODUCT
 ================================================== */
 
-function fetchProductsFromSheet() {
-
-
-    const grid =
-
-        document.getElementById(
-
-            "productGrid"
-
-        );
-
-
-    grid.innerHTML = `
-
-        <div class="col-span-full
-                    loading-box
-                    flex
-                    flex-col
-                    items-center
-                    justify-center
-                    text-gray-400">
-
-            <i class="fa-solid
-                      fa-spinner
-                      fa-spin
-                      text-thaiBlue
-                      text-2xl
-                      mb-2">
-
-            </i>
-
-
-            <p class="text-xs">
-
-                กำลังโหลดของกิน...
-
-            </p>
-
-        </div>
-
-    `;
-
-
-    fetch(SHEET_API_URL)
-
-
-        .then(response => {
-
-
-            if (!response.ok) {
-
-                throw new Error(
-
-                    "โหลดข้อมูลไม่สำเร็จ"
-
-                );
-
-            }
-
-
-            return response.json();
-
-        })
-
-
-        .then(data => {
-
-
-            products =
-
-                Array.isArray(data)
-
-                ? data
-
-                : [];
-
-
-            products =
-
-                shuffleProducts(
-
-                    products
-
-                );
-
-
-            renderProducts(
-
-                products
-
-            );
-
-        })
-
-
-        .catch(error => {
-
-
-            console.error(error);
-
-
-            grid.innerHTML = `
-
-                <div class="col-span-full
-                            text-center
-                            py-14
-                            text-thaiRed">
-
-                    <i class="fa-solid
-                              fa-triangle-exclamation
-                              text-2xl
-                              mb-2">
-
-                    </i>
-
-
-                    <p class="font-bold
-                              text-sm">
-
-                        โหลดข้อมูลไม่สำเร็จ
-
-                    </p>
-
-
-                    <p class="text-[10px]
-                              text-gray-400
-                              mt-1">
-
-                        ตรวจสอบ Google Sheets Web App
-
-                    </p>
-
-                </div>
-
-            `;
-
-        });
+function normalizeProduct(item) {
+
+    return {
+
+        id:
+            String(
+                item.id ??
+                Math.random()
+            ),
+
+        title:
+            String(
+                item.title ??
+                "สินค้าไม่มีชื่อ"
+            ),
+
+        category:
+            String(
+                item.category ??
+                "อื่นๆ"
+            ),
+
+        province:
+            String(
+                item.province ??
+                ""
+            ),
+
+        description:
+            String(
+                item.description ??
+                ""
+            ),
+
+        salePrice:
+            String(
+                item.salePrice ??
+                ""
+            ),
+
+        originalPrice:
+            String(
+                item.originalPrice ??
+                ""
+            ),
+
+        image:
+            String(
+                item.image ??
+                ""
+            ),
+
+        affiliateUrl:
+            String(
+                item.affiliateUrl ??
+                ""
+            ),
+
+        /*
+         * สำคัญ
+         * ช่องใหม่สำหรับขายเอง
+         */
+
+        ownUrl:
+            String(
+                item.ownUrl ??
+                ""
+            ),
+
+        tags:
+            String(
+                item.tags ??
+                ""
+            )
+
+    };
 
 }
 
@@ -1659,378 +2045,364 @@ function fetchProductsFromSheet() {
    SHUFFLE
 ================================================== */
 
-function shuffleProducts(items) {
+function shuffleArray(array) {
 
-
-    const shuffled = [...items];
-
+    const result =
+        [...array];
 
     for (
-
-        let i = shuffled.length - 1;
-
+        let i = result.length - 1;
         i > 0;
-
         i--
-
     ) {
 
-
         const j =
-
             Math.floor(
-
                 Math.random() * (i + 1)
-
             );
 
-
         [
-
-            shuffled[i],
-
-            shuffled[j]
-
-        ] = [
-
-            shuffled[j],
-
-            shuffled[i]
-
+            result[i],
+            result[j]
+        ] =
+        [
+            result[j],
+            result[i]
         ];
 
     }
 
-
-    return shuffled;
-
-}
-
-
-
-/* ==================================================
-   CATEGORY BUTTONS
-================================================== */
-
-function renderCategories() {
-
-
-    const container =
-
-        document.getElementById(
-
-            "categoryContainer"
-
-        );
-
-
-    container.innerHTML =
-
-        categories.map(
-
-            cat => `
-
-                <button
-
-                    onclick="setCategory('${cat}')"
-
-                    class="whitespace-nowrap
-                           px-3
-                           py-1.5
-                           rounded-full
-                           text-[11px]
-                           border
-
-                           ${
-                               currentCategory === cat
-
-                               ?
-
-                               "bg-thaiRed text-white border-thaiRed"
-
-                               :
-
-                               "bg-white text-gray-600 border-gray-200 hover:border-thaiBlue hover:text-thaiBlue"
-
-                           }"
-
-                >
-
-                    ${cat}
-
-                </button>
-
-            `
-
-        ).join("");
+    return result;
 
 }
 
 
 
 /* ==================================================
-   PRODUCT ID
+   ESCAPE HTML
 ================================================== */
 
-function getProductId(item) {
+function escapeHTML(value) {
 
-
-    return (
-
-        item.id ||
-
-        item.title ||
-
-        item.affiliateUrl ||
-
-        JSON.stringify(item)
-
-    );
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
 
 /* ==================================================
-   CREATE PRODUCT CARD
+   FORMAT PRICE
 ================================================== */
 
-function createProductCard(
+function formatPrice(price) {
 
-    item,
+    if (
+        price === null ||
+        price === undefined ||
+        price === ""
+    ) {
 
-    randomMode = false
+        return "";
 
-) {
-
-
-    const title =
-
-        item.title ||
-
-        "ของกินอร่อย";
+    }
 
 
-    const province =
-
-        item.province ||
-
-        "ประเทศไทย";
-
-
-    const image =
-
-        item.image ||
-
-        "https://placehold.co/600x600?text=FOOD";
-
-
-    const affiliateUrl =
-
-        item.affiliateUrl ||
-
-        "#";
-
-
-    const salePrice =
-
+    const number =
         Number(
-
-            item.salePrice || 0
-
+            String(price)
+            .replace(/,/g, "")
+            .replace(/[^\d.-]/g, "")
         );
 
 
-    const originalPrice =
+    if (
+        Number.isNaN(number)
+    ) {
 
-        Number(
+        return escapeHTML(price);
 
-            item.originalPrice || 0
+    }
 
-        );
 
+    return number.toLocaleString("th-TH");
 
+}
 
-    /* ==================================================
-       TAGS
-    ================================================== */
 
-    const tags =
 
-        item.tags
+/* ==================================================
+   TAG HTML
+================================================== */
 
-        ?
+function createTags(tags) {
 
-        String(item.tags)
+    if (!tags) {
 
-            .split(",")
+        return "";
 
-            .map(tag => {
+    }
 
 
-                tag = tag.trim();
+    const list =
+        String(tags)
+        .split(",")
+        .map(tag => tag.trim())
+        .filter(Boolean)
+        .slice(0, 2);
 
 
-                if (!tag) {
+    if (!list.length) {
 
-                    return "";
+        return "";
 
-                }
-
-
-                let color =
-
-                    "bg-gray-700 text-white";
-
-
-                if (
-
-                    tag === "ส่งฟรี"
-
-                ) {
-
-                    color =
-
-                        "bg-thaiBlue text-white";
-
-                }
-
-
-                else if (
-
-                    tag === "ขายดี"
-
-                ) {
-
-                    color =
-
-                        "bg-orange-500 text-white";
-
-                }
-
-
-                else if (
-
-                    tag === "Flash Sale"
-
-                ) {
-
-                    color =
-
-                        "bg-yellow-400 text-black";
-
-                }
-
-
-                else if (
-
-                    tag.includes("ลด")
-
-                ) {
-
-                    color =
-
-                        "bg-thaiRed text-white";
-
-                }
-
-
-                else if (
-
-                    tag === "Official Store"
-
-                ) {
-
-                    color =
-
-                        "bg-purple-600 text-white";
-
-                }
-
-
-                return `
-
-                    <span class="product-tag ${color}">
-
-                        ${tag}
-
-                    </span>
-
-                `;
-
-            })
-
-            .filter(
-
-                tag => tag !== ""
-
-            )
-
-            .slice(0, 2)
-
-            .join("")
-
-        :
-
-        "";
-
-
-
-    /* ==================================================
-       CARD CLASS
-    ================================================== */
-
-    const cardClass =
-
-        randomMode
-
-        ?
-
-        "product-card random-result"
-
-        :
-
-        "product-card";
-
+    }
 
 
     return `
 
-        <div
+        <div class="tags">
 
-            class="${cardClass}
-                   bg-white
-                   rounded-xl
-                   overflow-hidden
-                   border
-                   border-gray-100
-                   shadow-sm"
+            ${list.map(tag => `
 
+                <span class="tag">
+
+                    ${escapeHTML(tag)}
+
+                </span>
+
+            `).join("")}
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* ==================================================
+   IMAGE HTML
+================================================== */
+
+function createImage(image, title) {
+
+    if (!image) {
+
+        return `
+
+            <div class="image-placeholder">
+
+                <i class="fas fa-image"></i>
+
+            </div>
+
+        `;
+
+    }
+
+
+    return `
+
+        <img
+            src="${escapeHTML(image)}"
+            alt="${escapeHTML(title)}"
+            loading="lazy"
+            onerror="
+                this.style.display='none';
+                this.parentElement.innerHTML='<div class=&quot;image-placeholder&quot;><i class=&quot;fas fa-image&quot;></i></div>';
+            "
+        >
+
+    `;
+
+}
+
+
+
+/* ==================================================
+   BUTTON HTML
+================================================== */
+
+function createButtons(item) {
+
+    const affiliateUrl =
+        String(item.affiliateUrl || "").trim();
+
+    const ownUrl =
+        String(item.ownUrl || "").trim();
+
+
+    /*
+     * ถ้ามีทั้ง 2 ลิงก์
+     */
+
+    if (
+        affiliateUrl &&
+        ownUrl
+    ) {
+
+        return `
+
+            <div class="product-buttons">
+
+                <a
+                    href="${escapeHTML(affiliateUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="buy-button external-button"
+                >
+
+                    <i class="fas fa-store"></i>
+
+                    ดูสินค้า
+
+                </a>
+
+
+                <a
+                    href="${escapeHTML(ownUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="buy-button own-button"
+                >
+
+                    <i class="fas fa-shopping-cart"></i>
+
+                    ซื้อกับเรา
+
+                </a>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+     * ถ้ามีเฉพาะซื้อกับเรา
+     */
+
+    if (
+        ownUrl &&
+        !affiliateUrl
+    ) {
+
+        return `
+
+            <a
+                href="${escapeHTML(ownUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="buy-button own-button"
+            >
+
+                <i class="fas fa-shopping-cart"></i>
+
+                ซื้อกับเรา
+
+            </a>
+
+        `;
+
+    }
+
+
+    /*
+     * ถ้ามีเฉพาะลิงก์ภายนอก
+     */
+
+    if (
+        affiliateUrl
+    ) {
+
+        return `
+
+            <a
+                href="${escapeHTML(affiliateUrl)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="buy-button external-button"
+            >
+
+                <i class="fas fa-store"></i>
+
+                ดูสินค้า
+
+            </a>
+
+        `;
+
+    }
+
+
+    /*
+     * ไม่มีลิงก์เลย
+     */
+
+    return `
+
+        <button
+            type="button"
+            class="buy-button"
+            style="
+                background:#e5e7eb;
+                color:#6b7280;
+                cursor:not-allowed;
+            "
+            disabled
+        >
+
+            <i class="fas fa-clock"></i>
+
+            เร็วๆ นี้
+
+        </button>
+
+    `;
+
+}
+
+
+
+/* ==================================================
+   PRODUCT CARD
+================================================== */
+
+function createProductCard(
+    item,
+    random = false
+) {
+
+    const salePrice =
+        formatPrice(item.salePrice);
+
+    const originalPrice =
+        formatPrice(item.originalPrice);
+
+
+    return `
+
+        <article
+            class="product-card ${random ? "random-card" : ""}"
         >
 
 
             <!-- IMAGE -->
 
-            <div class="image-box">
+            <div class="product-image">
 
-
-                <img
-
-                    src="${image}"
-
-                    alt="${title}"
-
-                    loading="lazy"
-
-                    onerror="this.src='https://placehold.co/600x600?text=FOOD'"
-
-                    class="product-image"
-
-                >
-
+                ${createImage(
+                    item.image,
+                    item.title
+                )}
 
             </div>
-
 
 
             <!-- CONTENT -->
@@ -2040,167 +2412,86 @@ function createProductCard(
 
                 <!-- TITLE -->
 
-                <h3
+                <h3 class="product-title">
 
-                    class="product-title
-                           text-xs
-                           sm:text-sm
-                           font-semibold
-                           text-gray-800"
-
-                    title="${title}"
-
-                >
-
-                    ${title}
+                    ${escapeHTML(
+                        item.title
+                    )}
 
                 </h3>
 
 
-
-                <!-- TAG -->
-
-                <div class="tag-area">
-
-                    ${tags}
-
-                </div>
-
-
-
                 <!-- PROVINCE -->
 
-                <div
+                ${
+                    item.province
+                    ?
+                    `
+                    <div class="product-province">
 
-                    class="product-province
-                           flex
-                           items-center
-                           gap-1
-                           mt-0.5
-                           text-[9px]
-                           sm:text-[10px]
-                           text-thaiBlue"
+                        <i class="fas fa-location-dot"></i>
 
-                >
+                        ${escapeHTML(
+                            item.province
+                        )}
 
-                    <i class="fa-solid
-                              fa-location-dot">
-
-                    </i>
+                    </div>
+                    `
+                    :
+                    ""
+                }
 
 
-                    <span class="truncate">
+                <!-- TAGS -->
 
-                        ${province}
-
-                    </span>
-
-                </div>
-
+                ${createTags(
+                    item.tags
+                )}
 
 
                 <!-- PRICE -->
 
-                <div class="mt-0.5">
+                ${
+                    salePrice
+                    ?
+                    `
+                    <div class="price-row">
 
+                        <span class="sale-price">
 
-                    <div class="flex
-                                items-baseline
-                                gap-1.5
-                                flex-wrap">
-
-
-                        <span
-
-                            class="text-base
-                                   sm:text-lg
-                                   font-black
-                                   text-thaiRed"
-
-                        >
-
-                            ฿${salePrice.toLocaleString()}
+                            ฿${salePrice}
 
                         </span>
 
 
-
                         ${
-                            originalPrice > 0
-
+                            originalPrice
                             ?
-
                             `
+                            <span class="original-price">
 
-                            <span
-
-                                class="text-[9px]
-                                       sm:text-[10px]
-                                       text-gray-400
-                                       line-through"
-
-                            >
-
-                                ฿${originalPrice.toLocaleString()}
+                                ฿${originalPrice}
 
                             </span>
-
                             `
-
                             :
-
                             ""
-
                         }
 
-
                     </div>
+                    `
+                    :
+                    ""
+                }
 
 
-                </div>
+                <!-- BUTTONS -->
 
-
-
-                <!-- BUY -->
-
-                <a
-
-                    href="${affiliateUrl}"
-
-                    target="_blank"
-
-                    rel="noopener noreferrer"
-
-                    class="buy-button
-                           mt-1
-                           w-full
-                           text-white
-                           py-1
-                           rounded-lg
-                           text-[10px]
-                           sm:text-xs
-                           font-medium
-                           flex
-                           items-center
-                           justify-center
-                           gap-1"
-
-                >
-
-                    <i class="fa-solid
-                              fa-cart-shopping">
-
-                    </i>
-
-                    ดูสินค้า
-
-                </a>
-
+                ${createButtons(item)}
 
             </div>
 
-
-        </div>
+        </article>
 
     `;
 
@@ -2209,587 +2500,266 @@ function createProductCard(
 
 
 /* ==================================================
-   RENDER NORMAL PRODUCTS
+   RENDER PRODUCTS
 ================================================== */
 
-function renderProducts(items) {
+function renderProducts() {
 
+    productsGrid.innerHTML = "";
 
-    const grid =
+    emptyBox.style.display = "none";
 
-        document.getElementById(
-
-            "productGrid"
-
-        );
-
-
-    const notFound =
-
-        document.getElementById(
-
-            "notFound"
-
-        );
-
-
-    const count =
-
-        document.getElementById(
-
-            "productCount"
-
-        );
-
-
-    const randomHeader =
-
-        document.getElementById(
-
-            "randomHeader"
-
-        );
-
-
-    const normalHeader =
-
-        document.getElementById(
-
-            "productSectionHeader"
-
-        );
-
-
-    /* ==================================================
-       NORMAL GRID
-    ================================================== */
-
-    grid.className = `
-
-        grid
-
-        grid-cols-2
-
-        md:grid-cols-3
-
-        lg:grid-cols-4
-
-        gap-2.5
-
-        sm:gap-4
-
-    `;
-
-
-    /* ==================================================
-       HIDE RANDOM HEADER
-    ================================================== */
-
-    randomHeader.classList.add(
-
-        "hidden"
-
-    );
-
-
-    normalHeader.classList.remove(
-
-        "hidden"
-
-    );
-
-
-    /* ==================================================
-       EMPTY
-    ================================================== */
 
     if (
-
-        !items ||
-
-        items.length === 0
-
+        !filteredProducts.length
     ) {
 
+        emptyBox.style.display =
+            "block";
 
-        grid.innerHTML = "";
+        productsTitle.innerHTML = `
 
+            <i class="fas fa-bowl-food"></i>
 
-        notFound.classList.remove(
-
-            "hidden"
-
-        );
-
-
-        count.innerText = "";
-
-
-        return;
-
-    }
-
-
-    notFound.classList.add(
-
-        "hidden"
-
-    );
-
-
-    count.innerText =
-
-        `${items.length} รายการ`;
-
-
-    /* ==================================================
-       RENDER
-    ================================================== */
-
-    grid.innerHTML =
-
-        items.map(
-
-            item =>
-
-                createProductCard(
-
-                    item,
-
-                    false
-
-                )
-
-        ).join("");
-
-}
-
-
-
-/* ==================================================
-   RANDOM FOOD
-================================================== */
-
-function randomFood() {
-
-
-    const grid =
-
-        document.getElementById(
-
-            "productGrid"
-
-        );
-
-
-    const notFound =
-
-        document.getElementById(
-
-            "notFound"
-
-        );
-
-
-    const count =
-
-        document.getElementById(
-
-            "productCount"
-
-        );
-
-
-    const randomHeader =
-
-        document.getElementById(
-
-            "randomHeader"
-
-        );
-
-
-    const normalHeader =
-
-        document.getElementById(
-
-            "productSectionHeader"
-
-        );
-
-
-    const searchInput =
-
-        document.getElementById(
-
-            "searchInput"
-
-        );
-
-
-    /* ==================================================
-       CLEAR SEARCH
-    ================================================== */
-
-    searchInput.value = "";
-
-
-    currentCategory =
-
-        "ทั้งหมด";
-
-
-    renderCategories();
-
-
-    /* ==================================================
-       CHECK
-    ================================================== */
-
-    if (
-
-        !products ||
-
-        products.length === 0
-
-    ) {
-
-
-        grid.innerHTML = "";
-
-
-        notFound.classList.remove(
-
-            "hidden"
-
-        );
-
-
-        count.innerText = "";
-
-
-        return;
-
-    }
-
-
-    notFound.classList.add(
-
-        "hidden"
-
-    );
-
-
-    normalHeader.classList.add(
-
-        "hidden"
-
-    );
-
-
-    randomHeader.classList.add(
-
-        "hidden"
-
-    );
-
-
-    count.innerText = "";
-
-
-    /* ==================================================
-       LOADING
-    ================================================== */
-
-    grid.className = `
-
-        grid
-
-        grid-cols-1
-
-    `;
-
-
-    grid.innerHTML = `
-
-        <div class="loading-box
-                    flex
-                    flex-col
-                    items-center
-                    justify-center
-                    text-thaiBlue">
-
-            <div class="random-loading
-                        text-5xl
-                        mb-3">
-
-                🎲
-
-            </div>
-
-
-            <p class="font-bold
-                      text-sm">
-
-                กำลังสุ่มของกินให้คุณ...
-
-            </p>
-
-
-            <p class="text-[10px]
-                      text-gray-400
-                      mt-1">
-
-                PHAENDIN กำลังเลือกให้ 🍜
-
-            </p>
-
-        </div>
-
-    `;
-
-
-
-    /* ==================================================
-       RANDOM DELAY
-    ================================================== */
-
-    setTimeout(function() {
-
-
-        /* ==================================================
-           GET RANDOM
-        ================================================== */
-
-        const randomProducts =
-
-            getRandomProducts(
-
-                products,
-
-                3
-
-            );
-
-
-        /* ==================================================
-           SAVE LAST
-        ================================================== */
-
-        lastRandomIds =
-
-            randomProducts.map(
-
-                item =>
-
-                    getProductId(item)
-
-            );
-
-
-
-        /* ==================================================
-           RANDOM HEADER
-        ================================================== */
-
-        randomHeader.classList.remove(
-
-            "hidden"
-
-        );
-
-
-        /* ==================================================
-           RANDOM GRID
-        ================================================== */
-
-        grid.className = `
-
-            random-grid
+            ไม่พบสินค้า
 
         `;
 
+        return;
 
-        /* ==================================================
-           RENDER
-        ================================================== */
-
-        grid.innerHTML =
-
-            randomProducts.map(
-
-                item =>
-
-                    createProductCard(
-
-                        item,
-
-                        true
-
-                    )
-
-            ).join("");
+    }
 
 
-        /* ==================================================
-           COUNT
-        ================================================== */
+    productsTitle.innerHTML = `
 
-        count.innerText =
+        <i class="fas fa-bowl-food"></i>
 
-            `${randomProducts.length} รายการที่สุ่มได้`;
+        ${
+            currentCategory === "ทั้งหมด"
+            ?
+            "ของอร่อยทั้งหมด"
+            :
+            escapeHTML(currentCategory)
+        }
 
-
-        /* ==================================================
-           SCROLL
-        ================================================== */
-
-        setTimeout(function() {
-
-
-            randomHeader.scrollIntoView({
-
-                behavior: "smooth",
-
-                block: "start"
-
-            });
+    `;
 
 
-        }, 80);
-
-
-    }, 700);
+    productsGrid.innerHTML =
+        filteredProducts
+        .map(item =>
+            createProductCard(item)
+        )
+        .join("");
 
 }
 
 
 
 /* ==================================================
-   GET RANDOM PRODUCTS
+   FILTER PRODUCTS
 ================================================== */
 
-function getRandomProducts(
+function filterProducts() {
 
-    items,
-
-    amount
-
-) {
-
-
-    if (
-
-        !items ||
-
-        items.length === 0
-
-    ) {
-
-        return [];
-
-    }
+    const keyword =
+        searchInput.value
+        .trim()
+        .toLowerCase();
 
 
-    let available =
-
-        [...items];
-
-
-    /* ==================================================
-       AVOID PREVIOUS RESULTS
-    ================================================== */
-
-    if (
-
-        items.length > amount &&
-
-        lastRandomIds.length > 0
-
-    ) {
+    filteredProducts =
+        allProducts.filter(item => {
 
 
-        const filtered =
+            const matchCategory =
+                currentCategory === "ทั้งหมด" ||
+                item.category
+                    .toLowerCase()
+                    .includes(
+                        currentCategory.toLowerCase()
+                    );
 
-            available.filter(
 
-                item =>
+            const searchableText = [
 
-                    !lastRandomIds.includes(
+                item.title,
 
-                        getProductId(item)
+                item.category,
 
-                    )
+                item.province,
 
+                item.description,
+
+                item.tags
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+
+            const matchSearch =
+                !keyword ||
+                searchableText.includes(
+                    keyword
+                );
+
+
+            return (
+                matchCategory &&
+                matchSearch
             );
 
+        });
 
-        if (
 
-            filtered.length >= amount
+    renderProducts();
 
-        ) {
 
-            available =
+    clearSearch.style.display =
+        searchInput.value
+        ?
+        "block"
+        :
+        "none";
 
-                filtered;
+}
 
-        }
+
+
+/* ==================================================
+   RANDOM 3 PRODUCTS
+================================================== */
+
+function randomProducts() {
+
+    if (
+        !allProducts.length
+    ) {
+
+        return;
 
     }
 
 
-    /* ==================================================
-       SHUFFLE
-    ================================================== */
+    /*
+     * เอาสินค้าที่ไม่ซ้ำกับรอบก่อน
+     */
 
-    available =
-
-        shuffleProducts(
-
-            available
-
+    let available =
+        allProducts.filter(
+            item =>
+                !lastRandomIds.includes(
+                    item.id
+                )
         );
 
 
-    /* ==================================================
-       RETURN
-    ================================================== */
+    /*
+     * ถ้าเหลือน้อยกว่า 3
+     * ใช้ทั้งหมดแล้วสุ่มใหม่
+     */
 
-    return available.slice(
+    if (
+        available.length < 3
+    ) {
 
-        0,
+        available =
+            [...allProducts];
 
-        Math.min(
+    }
 
-            amount,
 
-            available.length
+    available =
+        shuffleArray(
+            available
+        );
 
+
+    const selected =
+        available.slice(
+            0,
+            Math.min(
+                3,
+                available.length
+            )
+        );
+
+
+    lastRandomIds =
+        selected.map(
+            item => item.id
+        );
+
+
+    randomGrid.innerHTML =
+        selected
+        .map(item =>
+            createProductCard(
+                item,
+                true
+            )
         )
+        .join("");
 
-    );
+
+    randomStatus.textContent =
+        `สุ่ม ${selected.length} รายการ`;
+
+
+    /*
+     * เลื่อนมาดูผลสุ่ม
+     */
+
+    document
+        .getElementById("randomSection")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
 
 }
 
 
 
 /* ==================================================
-   CATEGORY
+   CATEGORY CLICK
 ================================================== */
 
-function setCategory(cat) {
+document
+    .querySelectorAll(".category-button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".category-button"
+                    )
+                    .forEach(btn =>
+                        btn.classList.remove(
+                            "active"
+                        )
+                    );
 
 
-    currentCategory = cat;
+                button.classList.add(
+                    "active"
+                );
 
 
-    renderCategories();
+                currentCategory =
+                    button.dataset.category;
 
 
-    filterProducts();
+                filterProducts();
 
-}
+            }
+        );
+
+    });
 
 
 
@@ -2797,190 +2767,48 @@ function setCategory(cat) {
    SEARCH
 ================================================== */
 
-function filterProducts() {
-
-
-    const input =
-
-        document.getElementById(
-
-            "searchInput"
-
-        );
-
-
-    const searchText =
-
-        input.value
-
-            .toLowerCase()
-
-            .trim();
-
-
-
-    const filtered =
-
-        products.filter(
-
-            p => {
-
-
-                const title =
-
-                    String(
-
-                        p.title || ""
-
-                    ).toLowerCase();
-
-
-                const category =
-
-                    String(
-
-                        p.category || ""
-
-                    ).toLowerCase();
-
-
-                const province =
-
-                    String(
-
-                        p.province || ""
-
-                    ).toLowerCase();
-
-
-                const description =
-
-                    String(
-
-                        p.description || ""
-
-                    ).toLowerCase();
-
-
-
-                const matchesCategory =
-
-                    currentCategory === "ทั้งหมด"
-
-                    ||
-
-                    String(
-
-                        p.category || ""
-
-                    ) === currentCategory;
-
-
-
-                const matchesSearch =
-
-                    title.includes(
-
-                        searchText
-
-                    )
-
-                    ||
-
-                    category.includes(
-
-                        searchText
-
-                    )
-
-                    ||
-
-                    province.includes(
-
-                        searchText
-
-                    )
-
-                    ||
-
-                    description.includes(
-
-                        searchText
-
-                    );
-
-
-
-                return (
-
-                    matchesCategory &&
-
-                    matchesSearch
-
-                );
-
-            }
-
-        );
-
-
-
-    renderProducts(
-
-        filtered
-
-    );
-
-}
+searchInput.addEventListener(
+    "input",
+    filterProducts
+);
 
 
 
 /* ==================================================
-   GO HOME
+   CLEAR SEARCH
 ================================================== */
 
-function goHome() {
+clearSearch.addEventListener(
+    "click",
+    () => {
+
+        searchInput.value = "";
+
+        filterProducts();
+
+        searchInput.focus();
+
+    }
+);
 
 
-    const searchInput =
 
-        document.getElementById(
+/* ==================================================
+   RANDOM BUTTON
+================================================== */
 
-            "searchInput"
-
-        );
-
-
-    searchInput.value = "";
-
-
-    currentCategory =
-
-        "ทั้งหมด";
+randomButton.addEventListener(
+    "click",
+    randomProducts
+);
 
 
-    lastRandomIds = [];
 
+/* ==================================================
+   START
+================================================== */
 
-    renderCategories();
-
-
-    renderProducts(
-
-        products
-
-    );
-
-
-    window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
-    });
-
-}
+loadProducts();
 
 
 </script>
