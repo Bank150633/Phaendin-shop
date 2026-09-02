@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="th">
 
 <head>
@@ -8,16 +9,22 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>PHAENDIN FOOD | ของอร่อยจากทั่วไทย</title>
+
+<title>
+PHAENDIN FOOD | ของอร่อยจากทั่วไทย
+</title>
+
 
 <meta name="description"
       content="รวมของอร่อย น้ำพริก ขนม ของฝาก และอาหารเด็ดจากทั่วไทย">
+
 
 <!-- ==================================================
      TAILWIND
 ================================================== -->
 
 <script src="https://cdn.tailwindcss.com"></script>
+
 
 <!-- ==================================================
      FONT
@@ -33,6 +40,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet">
 
+
 <!-- ==================================================
      FONT AWESOME
 ================================================== -->
@@ -40,29 +48,58 @@
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+
 <!-- ==================================================
      STYLE
 ================================================== -->
 
 <style>
 
-*{
-    box-sizing:border-box;
+* {
+    box-sizing: border-box;
 }
 
-html{
-    scroll-behavior:smooth;
+
+html {
+    scroll-behavior: smooth;
 }
 
-body{
 
-    margin:0;
+body {
 
-    font-family:'Kanit',sans-serif;
+    margin: 0;
 
-    background:#f5f7fb;
+    font-family: "Kanit", sans-serif;
 
-    color:#172033;
+    background: #f8fafc;
+
+    color: #111827;
+
+}
+
+
+/* ==================================================
+   TOP STRIPE
+================================================== */
+
+.thai-stripe {
+
+    height: 5px;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #d91e18 0%,
+            #d91e18 20%,
+            #ffffff 20%,
+            #ffffff 35%,
+            #241f20 35%,
+            #241f20 65%,
+            #ffffff 65%,
+            #ffffff 80%,
+            #d91e18 80%
+        );
+
 }
 
 
@@ -70,176 +107,120 @@ body{
    HEADER
 ================================================== */
 
-.top-stripe{
+.header {
 
-    height:5px;
+    position: sticky;
 
-    background:linear-gradient(
-        to right,
-        #d71920 0%,
-        #d71920 33.33%,
-        #ffffff 33.33%,
-        #ffffff 66.66%,
-        #123c8c 66.66%,
-        #123c8c 100%
+    top: 0;
+
+    z-index: 50;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        0.95
     );
+
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid #e5e7eb;
+
 }
 
 
-.header{
+.header-inner {
 
-    position:sticky;
+    max-width: 1200px;
 
-    top:0;
+    margin: auto;
 
-    z-index:50;
+    padding: 12px 16px;
 
-    background:#ffffff;
+    display: flex;
 
-    border-bottom:1px solid #e5e7eb;
+    align-items: center;
 
-    box-shadow:0 3px 15px rgba(0,0,0,.07);
+    gap: 14px;
+
 }
 
 
-.header-inner{
+.logo {
 
-    max-width:1200px;
+    font-size: 23px;
 
-    margin:auto;
+    font-weight: 700;
 
-    padding:10px 14px;
+    white-space: nowrap;
 
-    display:flex;
+    color: #111827;
 
-    align-items:center;
-
-    gap:12px;
 }
 
 
-/* LOGO */
+.logo span {
 
-.logo{
+    color: #dc2626;
 
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    min-width:max-content;
-}
-
-.logo-mark{
-
-    width:40px;
-
-    height:40px;
-
-    border-radius:12px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    color:#ffffff;
-
-    font-size:19px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #d71920 0%,
-            #d71920 42%,
-            #ffffff 42%,
-            #ffffff 58%,
-            #123c8c 58%,
-            #123c8c 100%
-        );
-
-    box-shadow:0 4px 10px rgba(18,60,140,.18);
 }
 
 
-.logo-text{
+.search-box {
 
-    line-height:1.05;
-}
+    flex: 1;
 
-.logo-title{
+    position: relative;
 
-    font-size:18px;
-
-    font-weight:700;
-
-    color:#123c8c;
-}
-
-.logo-sub{
-
-    font-size:9px;
-
-    color:#d71920;
-
-    letter-spacing:.5px;
 }
 
 
-/* SEARCH */
+.search-box i {
 
-.search-box{
+    position: absolute;
 
-    flex:1;
+    left: 14px;
 
-    position:relative;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #9ca3af;
+
 }
 
-.search-box input{
 
-    width:100%;
+.search-box input {
 
-    height:40px;
+    width: 100%;
 
-    border:1px solid #dce1ea;
+    height: 43px;
 
-    border-radius:22px;
+    border-radius: 13px;
 
-    padding:0 42px 0 16px;
+    border: 1px solid #e5e7eb;
 
-    outline:none;
+    background: #f9fafb;
 
-    background:#f8fafc;
+    padding:
+        0
+        14px
+        0
+        42px;
 
-    font-family:'Kanit';
+    outline: none;
 
-    font-size:13px;
+    font-family: inherit;
 
-    transition:.2s;
 }
 
-.search-box input:focus{
 
-    border-color:#123c8c;
+.search-box input:focus {
 
-    background:#ffffff;
+    border-color: #ef4444;
 
-    box-shadow:0 0 0 3px rgba(18,60,140,.08);
-}
+    background: #fff;
 
-.search-icon{
-
-    position:absolute;
-
-    right:16px;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    color:#123c8c;
 }
 
 
@@ -247,134 +228,143 @@ body{
    HERO
 ================================================== */
 
-.hero{
+.hero {
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding:
+        25px
+        16px
+        15px;
+
+}
+
+
+.hero-box {
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    padding:
+        32px
+        24px;
 
     background:
         linear-gradient(
             135deg,
-            #d71920 0%,
-            #d71920 42%,
-            #ffffff 42%,
-            #ffffff 58%,
-            #123c8c 58%,
-            #123c8c 100%
+            #b91c1c,
+            #ef4444,
+            #f97316
         );
 
-    padding:18px 14px;
+    color: white;
 
-    position:relative;
-
-    overflow:hidden;
-}
-
-.hero::after{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:rgba(255,255,255,.10);
-
-    pointer-events:none;
-}
-
-.hero-inner{
-
-    max-width:1200px;
-
-    margin:auto;
-
-    position:relative;
-
-    z-index:2;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:15px;
-}
-
-.hero-title{
-
-    color:#ffffff;
-
-    font-size:23px;
-
-    font-weight:700;
-
-    margin:0 0 2px;
-
-    text-shadow:0 2px 5px rgba(0,0,0,.18);
-}
-
-.hero-desc{
-
-    color:#ffffff;
-
-    font-size:12px;
-
-    margin:0;
-
-    opacity:.95;
 }
 
 
-.random-btn{
+.hero-box::after {
 
-    border:0;
+    content: "";
 
-    background:#ffffff;
+    position: absolute;
 
-    color:#d71920;
+    width: 220px;
 
-    border-radius:25px;
+    height: 220px;
 
-    padding:9px 15px;
+    border-radius: 50%;
 
-    font-family:'Kanit';
+    background: rgba(
+        255,
+        255,
+        255,
+        0.10
+    );
 
-    font-size:12px;
+    right: -70px;
 
-    font-weight:600;
+    top: -70px;
 
-    white-space:nowrap;
-
-    cursor:pointer;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.16);
-
-    transition:.2s;
-}
-
-.random-btn:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:0 8px 20px rgba(0,0,0,.22);
-}
-
-.random-btn:active{
-
-    transform:scale(.96);
 }
 
 
-/* ==================================================
-   CONTAINER
-================================================== */
+.hero-title {
 
-.container-main{
+    position: relative;
 
-    max-width:1200px;
+    z-index: 2;
 
-    margin:auto;
+    margin: 0;
 
-    padding:14px;
+    font-size: clamp(
+        27px,
+        5vw,
+        42px
+    );
+
+    font-weight: 700;
+
+}
+
+
+.hero-text {
+
+    position: relative;
+
+    z-index: 2;
+
+    margin:
+        5px
+        0
+        20px;
+
+    font-size: 15px;
+
+    opacity: .95;
+
+}
+
+
+.random-btn {
+
+    position: relative;
+
+    z-index: 2;
+
+    border: none;
+
+    cursor: pointer;
+
+    background: white;
+
+    color: #dc2626;
+
+    padding:
+        10px
+        18px;
+
+    border-radius: 12px;
+
+    font-family: inherit;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 8px 20px
+        rgba(0,0,0,.12);
+
+}
+
+
+.random-btn:hover {
+
+    transform: translateY(-2px);
+
 }
 
 
@@ -382,221 +372,129 @@ body{
    CATEGORY
 ================================================== */
 
-.category-wrap{
+.category-wrap {
 
-    display:flex;
+    max-width: 1200px;
 
-    gap:7px;
+    margin: auto;
 
-    overflow-x:auto;
+    padding:
+        5px
+        16px
+        15px;
 
-    padding:2px 0 10px;
-
-    scrollbar-width:none;
-}
-
-.category-wrap::-webkit-scrollbar{
-
-    display:none;
-}
-
-.category-btn{
-
-    border:1px solid #dce2ec;
-
-    background:#ffffff;
-
-    color:#4b5563;
-
-    border-radius:20px;
-
-    padding:6px 13px;
-
-    font-family:'Kanit';
-
-    font-size:11px;
-
-    white-space:nowrap;
-
-    cursor:pointer;
-
-    transition:.2s;
-}
-
-.category-btn:hover{
-
-    border-color:#123c8c;
-
-    color:#123c8c;
-}
-
-.category-btn.active{
-
-    background:#123c8c;
-
-    color:#ffffff;
-
-    border-color:#123c8c;
-
-    box-shadow:0 3px 8px rgba(18,60,140,.2);
 }
 
 
-/* ==================================================
-   SECTION TITLE
-================================================== */
+.categories {
 
-.section-head{
+    display: flex;
 
-    display:flex;
+    gap: 8px;
 
-    align-items:center;
+    overflow-x: auto;
 
-    justify-content:space-between;
+    padding-bottom: 5px;
 
-    margin:7px 0 10px;
 }
 
-.section-title{
 
-    margin:0;
+.categories::-webkit-scrollbar {
 
-    font-size:17px;
+    height: 4px;
 
-    font-weight:600;
-
-    color:#172033;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
 }
 
-.section-title i{
 
-    color:#d71920;
+.categories::-webkit-scrollbar-thumb {
+
+    background: #d1d5db;
+
+    border-radius: 20px;
+
 }
 
-.product-count{
 
-    font-size:10px;
+.category-btn {
 
-    color:#64748b;
+    flex-shrink: 0;
+
+    border: 1px solid #e5e7eb;
+
+    background: white;
+
+    color: #4b5563;
+
+    padding:
+        8px
+        14px;
+
+    border-radius: 999px;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+}
+
+
+.category-btn.active {
+
+    background: #dc2626;
+
+    color: white;
+
+    border-color: #dc2626;
+
 }
 
 
 /* ==================================================
-   RANDOM
+   RANDOM SECTION
 ================================================== */
 
-.random-section{
+.random-section {
 
-    display:none;
+    max-width: 1200px;
 
-    margin-bottom:16px;
+    margin: auto;
+
+    padding:
+        0
+        16px
+        10px;
+
 }
 
-.random-section.show{
 
-    display:block;
+.random-head {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
 }
 
-.random-grid{
 
-    display:grid;
+.random-head h2 {
 
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    margin: 0;
 
-    gap:8px;
+    font-size: 21px;
+
 }
 
-.random-card{
 
-    background:#ffffff;
+.random-head span {
 
-    border-radius:12px;
+    font-size: 13px;
 
-    overflow:hidden;
+    color: #9ca3af;
 
-    border:1px solid #e4e8ef;
-
-    box-shadow:0 3px 10px rgba(0,0,0,.05);
-}
-
-.random-image{
-
-    width:100%;
-
-    height:105px;
-
-    background:#ffffff;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    overflow:hidden;
-}
-
-.random-image img{
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:contain;
-
-    display:block;
-}
-
-.random-info{
-
-    padding:7px;
-}
-
-.random-title{
-
-    font-size:10px;
-
-    font-weight:500;
-
-    color:#172033;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-    margin-bottom:2px;
-}
-
-.random-province{
-
-    font-size:9px;
-
-    color:#123c8c;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-    margin-bottom:4px;
-}
-
-.random-price{
-
-    font-size:12px;
-
-    font-weight:700;
-
-    color:#d71920;
 }
 
 
@@ -604,13 +502,57 @@ body{
    PRODUCT GRID
 ================================================== */
 
-.product-grid{
+.products-wrap {
 
-    display:grid;
+    max-width: 1200px;
 
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    margin: auto;
 
-    gap:10px;
+    padding:
+        5px
+        16px
+        40px;
+
+}
+
+
+.products-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+}
+
+
+@media (min-width: 640px) {
+
+    .products-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 14px;
+
+    }
+
+}
+
+
+@media (min-width: 1000px) {
+
+    .products-grid {
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 16px;
+
+    }
+
 }
 
 
@@ -618,353 +560,273 @@ body{
    PRODUCT CARD
 ================================================== */
 
-.product-card{
+.product-card {
 
-    background:#ffffff;
+    background: white;
 
-    border:1px solid #e5e9f0;
+    border-radius: 16px;
 
-    border-radius:13px;
+    overflow: hidden;
 
-    overflow:hidden;
+    border: 1px solid #e5e7eb;
 
-    box-shadow:0 3px 12px rgba(0,0,0,.05);
+    box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.04);
 
-    transition:.2s;
+    transition:
+        transform .2s,
+        box-shadow .2s;
 
-    min-width:0;
-}
-
-.product-card:hover{
-
-    transform:translateY(-2px);
-
-    box-shadow:0 7px 20px rgba(0,0,0,.09);
-
-    border-color:#cfd8e8;
 }
 
 
-/* ==================================================
-   IMAGE
-================================================== */
+.product-card:hover {
 
-.product-media{
+    transform: translateY(-3px);
 
-    position:relative;
+    box-shadow:
+        0 10px 25px
+        rgba(0,0,0,.09);
 
-    width:100%;
-
-    height:145px;
-
-    background:#ffffff;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    overflow:hidden;
-
-    border-bottom:1px solid #eef1f5;
-}
-
-.product-media img{
-
-    width:100%;
-
-    height:100%;
-
-    object-fit:contain;
-
-    object-position:center;
-
-    display:block;
-
-    padding:5px;
-
-    background:#ffffff;
-
-    transition:transform .25s ease;
-}
-
-.product-card:hover .product-media img{
-
-    transform:scale(1.025);
 }
 
 
-/* BADGE */
+.product-image-wrap {
 
-.product-badge{
+    position: relative;
 
-    position:absolute;
+    aspect-ratio: 1 / 1;
 
-    top:7px;
+    background: #f3f4f6;
 
-    left:7px;
+    overflow: hidden;
 
-    z-index:2;
-
-    background:#d71920;
-
-    color:#ffffff;
-
-    font-size:9px;
-
-    font-weight:500;
-
-    padding:3px 7px;
-
-    border-radius:10px;
-
-    box-shadow:0 2px 5px rgba(0,0,0,.15);
 }
 
 
-/* ==================================================
-   PRODUCT BODY
-================================================== */
+.product-image {
 
-.product-body{
+    width: 100%;
 
-    padding:8px 9px 9px;
-}
+    height: 100%;
 
-.product-title{
+    display: block;
 
-    font-size:12px;
+    object-fit: cover;
 
-    font-weight:500;
-
-    color:#172033;
-
-    line-height:1.35;
-
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-
-    margin:0 0 3px;
 }
 
 
-/* PROVINCE */
+.stock-badge {
 
-.product-province{
+    position: absolute;
 
-    display:flex;
+    top: 8px;
 
-    align-items:center;
+    right: 8px;
 
-    gap:4px;
+    background:
+        rgba(17,24,39,.78);
 
-    color:#123c8c;
+    color: white;
 
-    font-size:10px;
+    padding:
+        4px
+        8px;
 
-    line-height:1.2;
+    border-radius: 999px;
 
-    margin-bottom:5px;
+    font-size: 11px;
 
-    white-space:nowrap;
-
-    overflow:hidden;
-
-    text-overflow:ellipsis;
-}
-
-.product-province i{
-
-    color:#d71920;
-
-    font-size:9px;
-
-    flex:none;
 }
 
 
-/* TAG */
+.sold-badge {
 
-.product-tags{
+    position: absolute;
 
-    display:flex;
+    top: 8px;
 
-    gap:4px;
+    left: 8px;
 
-    overflow:hidden;
+    background: #111827;
 
-    margin-bottom:5px;
-}
+    color: white;
 
-.product-tag{
+    padding:
+        4px
+        8px;
 
-    background:#eef3fb;
+    border-radius: 999px;
 
-    color:#123c8c;
-
-    border-radius:8px;
-
-    padding:2px 5px;
-
-    font-size:8px;
-
-    white-space:nowrap;
-}
-
-
-/* ==================================================
-   PRICE
-================================================== */
-
-.price-row{
-
-    display:flex;
-
-    align-items:baseline;
-
-    gap:5px;
-
-    margin-bottom:7px;
-}
-
-.sale-price{
-
-    color:#d71920;
-
-    font-size:16px;
-
-    font-weight:700;
-
-    line-height:1;
-}
-
-.baht{
-
-    font-size:9px;
-
-    font-weight:400;
-}
-
-.original-price{
-
-    color:#9ca3af;
-
-    font-size:9px;
-
-    text-decoration:line-through;
-}
-
-
-/* ==================================================
-   BUTTONS
-================================================== */
-
-.product-buttons{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:5px;
-}
-
-.product-buttons.single{
-
-    grid-template-columns:1fr;
-}
-
-.btn{
-
-    min-height:32px;
-
-    border:0;
-
-    border-radius:8px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:4px;
-
-    font-family:'Kanit';
-
-    font-size:10px;
-
-    font-weight:500;
-
-    text-decoration:none;
-
-    cursor:pointer;
-
-    transition:.2s;
-}
-
-.btn:hover{
-
-    transform:translateY(-1px);
-}
-
-.btn-external{
-
-    background:#eef2f7;
-
-    color:#334155;
+    font-size: 11px;
 
 }
 
-.btn-own{
 
-    background:#d71920;
+.product-body {
 
-    color:#ffffff;
+    padding:
+        9px;
 
-    box-shadow:0 3px 8px rgba(215,25,32,.18);
-}
-
-.btn-soon{
-
-    background:#f1f5f9;
-
-    color:#94a3b8;
-
-    cursor:default;
 }
 
 
-/* ==================================================
-   LOADING
-================================================== */
+.product-title {
 
-.loading{
+    margin: 0;
 
-    padding:45px 20px;
+    font-size: 14px;
 
-    text-align:center;
+    font-weight: 600;
 
-    color:#64748b;
+    line-height: 1.4;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
 }
 
-.loading i{
 
-    color:#123c8c;
+.product-province {
 
-    font-size:25px;
+    margin-top: 3px;
 
-    margin-bottom:10px;
+    color: #9ca3af;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
 }
 
-.loading p{
 
-    margin:0;
+.product-tags {
 
-    font-size:12px;
+    display: flex;
+
+    gap: 4px;
+
+    overflow: hidden;
+
+    margin-top: 5px;
+
+}
+
+
+.product-tag {
+
+    flex-shrink: 0;
+
+    background: #fef2f2;
+
+    color: #dc2626;
+
+    border-radius: 6px;
+
+    padding:
+        2px
+        6px;
+
+    font-size: 10px;
+
+}
+
+
+.price-row {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 5px;
+
+    margin-top: 7px;
+
+}
+
+
+.sale-price {
+
+    color: #dc2626;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+}
+
+
+.baht {
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+}
+
+
+.original-price {
+
+    color: #9ca3af;
+
+    text-decoration: line-through;
+
+    font-size: 11px;
+
+}
+
+
+.buy-btn {
+
+    width: 100%;
+
+    margin-top: 7px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #dc2626;
+
+    color: white;
+
+    padding: 8px;
+
+    font-family: inherit;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.buy-btn:hover {
+
+    background: #b91c1c;
+
+}
+
+
+.buy-btn:disabled {
+
+    background: #d1d5db;
+
+    color: #6b7280;
+
+    cursor: not-allowed;
+
 }
 
 
@@ -972,31 +834,479 @@ body{
    EMPTY
 ================================================== */
 
-.empty{
+.empty {
 
-    padding:45px 20px;
+    grid-column: 1 / -1;
 
-    text-align:center;
+    text-align: center;
 
-    color:#64748b;
+    padding: 50px 20px;
 
-    display:none;
+    color: #9ca3af;
+
 }
 
-.empty i{
 
-    font-size:35px;
+.loading {
 
-    color:#cbd5e1;
+    grid-column: 1 / -1;
 
-    margin-bottom:10px;
+    text-align: center;
+
+    padding: 50px;
+
+    color: #9ca3af;
+
 }
 
-.empty p{
 
-    margin:0;
+/* ==================================================
+   MODAL
+================================================== */
 
-    font-size:13px;
+.modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    background:
+        rgba(0,0,0,.58);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 15px;
+
+}
+
+
+.modal.show {
+
+    display: flex;
+
+}
+
+
+.modal-box {
+
+    width: 100%;
+
+    max-width: 500px;
+
+    max-height: 92vh;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border-radius: 22px;
+
+    padding: 18px;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.25);
+
+}
+
+
+.modal-head {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+
+}
+
+
+.modal-head h3 {
+
+    margin: 0;
+
+    font-size: 20px;
+
+}
+
+
+.close-btn {
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #f3f4f6;
+
+    cursor: pointer;
+
+}
+
+
+.order-product {
+
+    display: flex;
+
+    gap: 12px;
+
+    padding: 10px;
+
+    background: #f9fafb;
+
+    border-radius: 14px;
+
+}
+
+
+.order-product img {
+
+    width: 75px;
+
+    height: 75px;
+
+    border-radius: 10px;
+
+    object-fit: cover;
+
+}
+
+
+.order-product-info {
+
+    flex: 1;
+
+}
+
+
+.order-product-title {
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+}
+
+
+.order-product-price {
+
+    color: #dc2626;
+
+    font-weight: 700;
+
+    margin-top: 4px;
+
+}
+
+
+.form-group {
+
+    margin-top: 12px;
+
+}
+
+
+.form-label {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    margin-bottom: 5px;
+
+}
+
+
+.form-input {
+
+    width: 100%;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    padding:
+        10px
+        12px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+}
+
+
+.form-input:focus {
+
+    border-color: #ef4444;
+
+}
+
+
+textarea.form-input {
+
+    min-height: 75px;
+
+    resize: vertical;
+
+}
+
+
+/* ==================================================
+   QUANTITY
+================================================== */
+
+.quantity-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.qty-btn {
+
+    width: 36px;
+
+    height: 36px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+}
+
+
+.qty-number {
+
+    min-width: 30px;
+
+    text-align: center;
+
+    font-weight: 600;
+
+}
+
+
+/* ==================================================
+   PAYMENT
+================================================== */
+
+.payment-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 8px;
+
+}
+
+
+.payment-option {
+
+    border:
+        1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    padding: 10px;
+
+    cursor: pointer;
+
+    text-align: center;
+
+    font-size: 13px;
+
+}
+
+
+.payment-option input {
+
+    display: none;
+
+}
+
+
+.payment-option:has(input:checked) {
+
+    border-color: #dc2626;
+
+    background: #fef2f2;
+
+    color: #dc2626;
+
+    font-weight: 600;
+
+}
+
+
+/* ==================================================
+   ORDER SUMMARY
+================================================== */
+
+.summary {
+
+    margin-top: 15px;
+
+    background: #f9fafb;
+
+    border-radius: 14px;
+
+    padding: 12px;
+
+}
+
+
+.summary-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 5px;
+
+    font-size: 13px;
+
+}
+
+
+.summary-total {
+
+    border-top:
+        1px solid #e5e7eb;
+
+    margin-top: 8px;
+
+    padding-top: 8px;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #dc2626;
+
+}
+
+
+.submit-order {
+
+    width: 100%;
+
+    margin-top: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: #dc2626;
+
+    color: white;
+
+    padding: 12px;
+
+    font-family: inherit;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+}
+
+
+.submit-order:disabled {
+
+    opacity: .6;
+
+    cursor: wait;
+
+}
+
+
+/* ==================================================
+   SUCCESS MODAL
+================================================== */
+
+.success-icon {
+
+    width: 70px;
+
+    height: 70px;
+
+    margin: 10px auto 15px;
+
+    border-radius: 50%;
+
+    background: #dcfce7;
+
+    color: #16a34a;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 34px;
+
+}
+
+
+.success-box {
+
+    text-align: center;
+
+}
+
+
+.order-number {
+
+    display: inline-block;
+
+    margin:
+        10px
+        0;
+
+    padding:
+        8px
+        14px;
+
+    border-radius: 10px;
+
+    background: #f3f4f6;
+
+    font-weight: 700;
+
 }
 
 
@@ -1004,231 +1314,82 @@ body{
    FOOTER
 ================================================== */
 
-.footer{
+.footer {
 
-    margin-top:30px;
+    border-top:
+        1px solid #e5e7eb;
 
-    background:#ffffff;
+    background: white;
 
-    border-top:1px solid #e5e7eb;
-}
+    text-align: center;
 
-.footer-inner{
+    padding:
+        25px
+        16px;
 
-    max-width:1200px;
+    color: #9ca3af;
 
-    margin:auto;
+    font-size: 12px;
 
-    padding:20px 14px;
-
-    text-align:center;
-}
-
-.footer-logo{
-
-    color:#123c8c;
-
-    font-weight:700;
-
-    font-size:16px;
-}
-
-.footer-text{
-
-    font-size:10px;
-
-    color:#64748b;
-
-    margin-top:3px;
-}
-
-.footer-line{
-
-    height:3px;
-
-    width:80px;
-
-    margin:10px auto 0;
-
-    border-radius:5px;
-
-    background:linear-gradient(
-        to right,
-        #d71920 33%,
-        #ffffff 33%,
-        #ffffff 66%,
-        #123c8c 66%
-    );
 }
 
 
 /* ==================================================
-   RESPONSIVE
+   MOBILE HEADER
 ================================================== */
 
-@media(min-width:640px){
+@media (max-width: 600px) {
 
-    .hero{
+    .header-inner {
 
-        padding:24px 20px;
+        flex-wrap: wrap;
+
     }
 
-    .hero-title{
 
-        font-size:28px;
+    .logo {
+
+        font-size: 20px;
+
     }
 
-    .hero-desc{
 
-        font-size:13px;
+    .search-box {
+
+        order: 3;
+
+        flex-basis: 100%;
+
     }
 
-    .product-grid{
 
-        grid-template-columns:repeat(3,minmax(0,1fr));
+    .hero-box {
 
-        gap:13px;
+        padding: 25px 20px;
+
     }
 
-    .product-media{
 
-        height:175px;
+    .product-body {
+
+        padding: 8px;
+
     }
 
-    .product-title{
 
-        font-size:13px;
+    .product-title {
+
+        font-size: 13px;
+
     }
 
-    .sale-price{
 
-        font-size:17px;
+    .sale-price {
+
+        font-size: 16px;
+
     }
 
-    .random-image{
-
-        height:145px;
-    }
-}
-
-
-@media(min-width:900px){
-
-    .header-inner{
-
-        padding:12px 18px;
-    }
-
-    .container-main{
-
-        padding:18px;
-    }
-
-    .product-grid{
-
-        grid-template-columns:repeat(4,minmax(0,1fr));
-
-        gap:14px;
-    }
-
-    .product-media{
-
-        height:195px;
-    }
-
-    .random-grid{
-
-        gap:12px;
-    }
-
-    .random-image{
-
-        height:165px;
-    }
-}
-
-
-/* MOBILE */
-
-@media(max-width:420px){
-
-    .header-inner{
-
-        gap:8px;
-    }
-
-    .logo-mark{
-
-        width:36px;
-
-        height:36px;
-    }
-
-    .logo-title{
-
-        font-size:15px;
-    }
-
-    .logo-sub{
-
-        font-size:8px;
-    }
-
-    .search-box input{
-
-        height:36px;
-
-        font-size:11px;
-    }
-
-    .hero-title{
-
-        font-size:20px;
-    }
-
-    .hero-desc{
-
-        font-size:10px;
-    }
-
-    .random-btn{
-
-        padding:8px 10px;
-
-        font-size:10px;
-    }
-
-    .product-media{
-
-        height:140px;
-    }
-
-    .product-body{
-
-        padding:7px 8px 8px;
-    }
-
-    .product-title{
-
-        font-size:11px;
-    }
-
-    .product-province{
-
-        font-size:10px;
-    }
-
-    .sale-price{
-
-        font-size:15px;
-    }
-
-    .btn{
-
-        min-height:30px;
-
-        font-size:9px;
-    }
 }
 
 </style>
@@ -1240,10 +1401,10 @@ body{
 
 
 <!-- ==================================================
-     THAI FLAG STRIPE
+     THAI STRIPE
 ================================================== -->
 
-<div class="top-stripe"></div>
+<div class="thai-stripe"></div>
 
 
 <!-- ==================================================
@@ -1254,44 +1415,32 @@ body{
 
     <div class="header-inner">
 
+
         <div class="logo">
 
-            <div class="logo-mark">
-                <i class="fas fa-utensils"></i>
-            </div>
-
-            <div class="logo-text">
-
-                <div class="logo-title">
-                    PHAENDIN
-                </div>
-
-                <div class="logo-sub">
-                    FOOD • ของอร่อยจากทั่วไทย
-                </div>
-
-            </div>
+            PHAENDIN
+            <span>FOOD</span>
 
         </div>
 
 
         <div class="search-box">
 
+            <i class="fa-solid fa-magnifying-glass"></i>
+
             <input
                 type="search"
                 id="searchInput"
-                placeholder="ค้นหา น้ำพริก ขนม ของฝาก..."
+                placeholder="ค้นหาของอร่อย..."
                 autocomplete="off"
             >
 
-            <i class="fas fa-search search-icon"></i>
-
         </div>
+
 
     </div>
 
 </header>
-
 
 
 <!-- ==================================================
@@ -1300,245 +1449,524 @@ body{
 
 <section class="hero">
 
-    <div class="hero-inner">
+    <div class="hero-box">
 
-        <div>
 
-            <h1 class="hero-title">
-                ของอร่อยจากทั่วไทย 🇹🇭
-            </h1>
+        <h1 class="hero-title">
 
-            <p class="hero-desc">
-                คัดของกินเด็ดจากแต่ละจังหวัด มาไว้ให้เลือกในที่เดียว
-            </p>
+            ของอร่อยจากทั่วไทย 🇹🇭
 
-        </div>
+        </h1>
+
+
+        <p class="hero-text">
+
+            คัดของกินเด็ด ๆ จากแต่ละจังหวัด
+            ส่งตรงถึงบ้านคุณ
+
+        </p>
 
 
         <button
             class="random-btn"
-            onclick="showRandomProducts()"
+            onclick="randomProducts()"
         >
 
-            <i class="fas fa-shuffle"></i>
+            <i class="fa-solid fa-shuffle"></i>
 
             สุ่มของกิน
 
         </button>
+
 
     </div>
 
 </section>
 
 
-
 <!-- ==================================================
-     MAIN
+     CATEGORY
 ================================================== -->
 
-<main class="container-main">
+<section class="category-wrap">
 
-
-    <!-- ==================================================
-         CATEGORY
-    ================================================== -->
-
-    <div class="category-wrap">
-
-        <button
-            class="category-btn active"
-            data-category="ทั้งหมด"
-            onclick="selectCategory(this)"
-        >
-            ทั้งหมด
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="น้ำพริก"
-            onclick="selectCategory(this)"
-        >
-            🌶️ น้ำพริก
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="ขนม"
-            onclick="selectCategory(this)"
-        >
-            🍪 ขนม
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="ของฝาก"
-            onclick="selectCategory(this)"
-        >
-            🎁 ของฝาก
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="อาหารแห้ง"
-            onclick="selectCategory(this)"
-        >
-            🥫 อาหารแห้ง
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="อาหารทะเล"
-            onclick="selectCategory(this)"
-        >
-            🦐 อาหารทะเล
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="อาหารท้องถิ่น"
-            onclick="selectCategory(this)"
-        >
-            🍜 อาหารท้องถิ่น
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="เครื่องปรุง"
-            onclick="selectCategory(this)"
-        >
-            🧂 เครื่องปรุง
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="เครื่องดื่ม"
-            onclick="selectCategory(this)"
-        >
-            🥤 เครื่องดื่ม
-        </button>
-
-        <button
-            class="category-btn"
-            data-category="อื่นๆ"
-            onclick="selectCategory(this)"
-        >
-            อื่นๆ
-        </button>
+    <div
+        class="categories"
+        id="categoryList"
+    >
 
     </div>
 
+</section>
 
 
-    <!-- ==================================================
-         RANDOM SECTION
-    ================================================== -->
+<!-- ==================================================
+     RANDOM
+================================================== -->
 
-    <section
-        id="randomSection"
-        class="random-section"
-    >
+<section
+    class="random-section"
+    id="randomSection"
+>
 
-        <div class="section-head">
+    <div class="random-head">
 
-            <h2 class="section-title">
+        <h2>
 
-                <i class="fas fa-wand-magic-sparkles"></i>
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
 
-                ลองชิมอะไรดี?
-
-            </h2>
-
-            <span
-                id="randomCount"
-                class="product-count"
-            ></span>
-
-        </div>
-
-        <div
-            id="randomGrid"
-            class="random-grid"
-        ></div>
-
-    </section>
-
-
-
-    <!-- ==================================================
-         PRODUCT HEADER
-    ================================================== -->
-
-    <div class="section-head">
-
-        <h2 class="section-title">
-
-            <i class="fas fa-basket-shopping"></i>
-
-            สินค้าทั้งหมด
+            ลองชิมดู
 
         </h2>
 
-        <span
-            id="productCount"
-            class="product-count"
-        >
-            กำลังโหลด...
+
+        <span>
+            สุ่ม 3 รายการ
         </span>
 
     </div>
 
 
-
-    <!-- ==================================================
-         LOADING
-    ================================================== -->
-
     <div
-        id="loading"
-        class="loading"
+        class="products-grid"
+        id="randomGrid"
     >
 
-        <i class="fas fa-spinner fa-spin"></i>
+        <div class="loading">
 
-        <p>
             กำลังโหลดสินค้า...
-        </p>
+
+        </div>
 
     </div>
 
+</section>
 
 
-    <!-- ==================================================
-         EMPTY
-    ================================================== -->
+<!-- ==================================================
+     PRODUCTS
+================================================== -->
+
+<section class="products-wrap">
 
     <div
-        id="empty"
-        class="empty"
+        class="products-grid"
+        id="productGrid"
     >
 
-        <i class="fas fa-box-open"></i>
+    </div>
 
-        <p>
-            ยังไม่พบสินค้าที่ค้นหา
-        </p>
+</section>
+
+
+<!-- ==================================================
+     ORDER MODAL
+================================================== -->
+
+<div
+    class="modal"
+    id="orderModal"
+>
+
+    <div class="modal-box">
+
+
+        <div class="modal-head">
+
+            <h3>
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+                สั่งซื้อสินค้า
+
+            </h3>
+
+
+            <button
+                class="close-btn"
+                onclick="closeOrderModal()"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- PRODUCT -->
+
+        <div class="order-product">
+
+
+            <img
+                id="orderImage"
+                src=""
+                alt=""
+            >
+
+
+            <div class="order-product-info">
+
+
+                <div
+                    class="order-product-title"
+                    id="orderTitle"
+                >
+
+                </div>
+
+
+                <div
+                    class="order-product-price"
+                    id="orderPrice"
+                >
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- QUANTITY -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                จำนวน
+
+            </label>
+
+
+            <div class="quantity-box">
+
+
+                <button
+                    class="qty-btn"
+                    type="button"
+                    onclick="changeQuantity(-1)"
+                >
+
+                    −
+
+                </button>
+
+
+                <div
+                    class="qty-number"
+                    id="quantityNumber"
+                >
+                    1
+                </div>
+
+
+                <button
+                    class="qty-btn"
+                    type="button"
+                    onclick="changeQuantity(1)"
+                >
+
+                    +
+
+                </button>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- NAME -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                ชื่อผู้รับ
+
+            </label>
+
+
+            <input
+                class="form-input"
+                id="customerName"
+                type="text"
+                placeholder="ชื่อ-นามสกุล"
+            >
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                เบอร์โทร
+
+            </label>
+
+
+            <input
+                class="form-input"
+                id="phone"
+                type="tel"
+                placeholder="08xxxxxxxx"
+            >
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                ที่อยู่จัดส่ง
+
+            </label>
+
+
+            <textarea
+                class="form-input"
+                id="address"
+                placeholder="บ้านเลขที่ หมู่ ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์"
+            ></textarea>
+
+        </div>
+
+
+        <!-- PAYMENT -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                วิธีชำระเงิน
+
+            </label>
+
+
+            <div class="payment-grid">
+
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="โอนเงิน"
+                        checked
+                    >
+
+                    <i class="fa-solid fa-building-columns"></i>
+
+                    โอนเงิน
+
+                </label>
+
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="payment"
+                        value="เก็บเงินปลายทาง"
+                    >
+
+                    <i class="fa-solid fa-truck"></i>
+
+                    เก็บเงินปลายทาง
+
+                </label>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTE -->
+
+        <div class="form-group">
+
+            <label class="form-label">
+
+                หมายเหตุ
+
+            </label>
+
+
+            <textarea
+                class="form-input"
+                id="note"
+                placeholder="เช่น โทรก่อนส่ง / ฝากไว้หน้าบ้าน"
+            ></textarea>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="summary">
+
+
+            <div class="summary-row">
+
+                <span>
+                    ราคาสินค้า
+                </span>
+
+                <span id="summaryPrice">
+                    ฿0
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    จำนวน
+                </span>
+
+                <span id="summaryQuantity">
+                    1
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span>
+                    ค่าส่ง
+                </span>
+
+                <span>
+                    ร้านแจ้งภายหลัง
+                </span>
+
+            </div>
+
+
+            <div class="summary-row summary-total">
+
+                <span>
+                    รวมค่าสินค้า
+                </span>
+
+                <span id="summaryTotal">
+                    ฿0
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- SUBMIT -->
+
+        <button
+            class="submit-order"
+            id="submitOrderBtn"
+            onclick="submitOrder()"
+        >
+
+            <i class="fa-solid fa-check"></i>
+
+            ยืนยันสั่งซื้อ
+
+        </button>
+
+
+        <iframe
+            name="orderFrame"
+            id="orderFrame"
+            style="display:none"
+        ></iframe>
+
 
     </div>
 
+</div>
 
 
-    <!-- ==================================================
-         PRODUCT GRID
-    ================================================== -->
+<!-- ==================================================
+     SUCCESS MODAL
+================================================== -->
 
-    <div
-        id="productGrid"
-        class="product-grid"
-    ></div>
+<div
+    class="modal"
+    id="successModal"
+>
+
+    <div class="modal-box success-box">
 
 
-</main>
+        <div class="success-icon">
 
+            <i class="fa-solid fa-check"></i>
+
+        </div>
+
+
+        <h2>
+
+            สั่งซื้อสำเร็จ 🎉
+
+        </h2>
+
+
+        <p>
+
+            ขอบคุณสำหรับการสั่งซื้อ
+
+        </p>
+
+
+        <div>
+
+            เลขที่ออเดอร์
+
+        </div>
+
+
+        <div
+            class="order-number"
+            id="successOrderId"
+        >
+
+        </div>
+
+
+        <p style="font-size:13px;color:#9ca3af">
+
+            ร้านจะติดต่อกลับเพื่อยืนยัน
+            รายละเอียดและค่าจัดส่ง
+
+        </p>
+
+
+        <button
+            class="submit-order"
+            onclick="closeSuccessModal()"
+        >
+
+            เรียบร้อย
+
+        </button>
+
+
+    </div>
+
+</div>
 
 
 <!-- ==================================================
@@ -1547,22 +1975,19 @@ body{
 
 <footer class="footer">
 
-    <div class="footer-inner">
+    <strong>
+        PHAENDIN FOOD
+    </strong>
 
-        <div class="footer-logo">
-            PHAENDIN FOOD
-        </div>
+    <br>
 
-        <div class="footer-text">
-            ของอร่อยจากทั่วไทย • คัดสรรจากผู้ขายและผู้ผลิต
-        </div>
+    ของอร่อยจากทั่วไทย 🇹🇭
 
-        <div class="footer-line"></div>
+    <br><br>
 
-    </div>
+    © 2026 PHAENDIN FOOD
 
 </footer>
-
 
 
 <!-- ==================================================
@@ -1581,177 +2006,200 @@ const API_URL =
 
 
 /* ==================================================
-   GLOBAL
+   DATA
 ================================================== */
 
 let allProducts = [];
 
-let currentCategory = "ทั้งหมด";
+let filteredProducts = [];
 
-let previousRandomIds = [];
+let selectedCategory = "ทั้งหมด";
 
+let selectedProduct = null;
 
-/* ==================================================
-   SAFE TEXT
-================================================== */
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
+let currentQuantity = 1;
 
 
 /* ==================================================
-   NUMBER
+   START
 ================================================== */
 
-function formatPrice(value){
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
 
-    if(
-        value === null ||
-        value === undefined ||
-        value === ""
-    ){
+        loadProducts();
 
-        return "";
+
+        document
+            .getElementById("searchInput")
+            .addEventListener(
+                "input",
+                filterProducts
+            );
+
     }
-
-    const number =
-        Number(
-            String(value)
-                .replace(/,/g,"")
-                .replace(/[^\d.-]/g,"")
-        );
-
-    if(Number.isNaN(number)){
-        return escapeHTML(value);
-    }
-
-    return number.toLocaleString("th-TH");
-}
+);
 
 
 /* ==================================================
-   GET VALUE
-   รองรับหัวตารางหลายแบบ
+   LOAD PRODUCTS
 ================================================== */
 
-function getValue(item, keys){
+async function loadProducts() {
 
-    for(const key of keys){
+    try {
 
-        if(
-            item &&
-            item[key] !== undefined &&
-            item[key] !== null &&
-            String(item[key]).trim() !== ""
-        ){
+        const response =
+            await fetch(API_URL);
 
-            return String(item[key]).trim();
+
+        const result =
+            await response.json();
+
+
+        let data =
+            result.data || result;
+
+
+        if (!Array.isArray(data)) {
+
+            data = [];
+
         }
 
+
+        allProducts =
+            data.map(normalizeProduct)
+                .filter(function(product) {
+
+                    return product.title;
+
+                });
+
+
+        filteredProducts =
+            [...allProducts];
+
+
+        renderCategories();
+
+        renderProducts();
+
+        randomProducts();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        document.getElementById(
+            "productGrid"
+        ).innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <br><br>
+
+                โหลดสินค้าไม่สำเร็จ
+
+                <br>
+
+                กรุณาตรวจสอบ Apps Script
+
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "randomGrid"
+        ).innerHTML = "";
+
     }
 
-    return "";
 }
 
 
 /* ==================================================
-   PROVINCE
+   NORMALIZE PRODUCT
 ================================================== */
 
-function getProvince(item){
-
-    return getValue(item,[
-        "province",
-        "Province",
-        "จังหวัด",
-        "จังหวัด ",
-        "provinceName",
-        "location"
-    ]);
-}
-
-
-/* ==================================================
-   NORMALIZE
-================================================== */
-
-function normalizeProduct(item){
+function normalizeProduct(item) {
 
     return {
 
-        id:getValue(item,[
-            "id",
-            "ID"
-        ]),
+        title:
+            item.title ||
+            item.name ||
+            item["ชื่อสินค้า"] ||
+            "",
 
-        title:getValue(item,[
-            "title",
-            "Title",
-            "ชื่อสินค้า",
-            "สินค้า"
-        ]),
 
-        category:getValue(item,[
-            "category",
-            "Category",
-            "หมวดหมู่",
-            "ประเภท"
-        ]),
+        category:
+            item.category ||
+            item["หมวดหมู่"] ||
+            "",
 
-        province:getProvince(item),
 
-        description:getValue(item,[
-            "description",
-            "Description",
-            "รายละเอียด"
-        ]),
+        province:
+            item.province ||
+            item["จังหวัด"] ||
+            "",
 
-        salePrice:getValue(item,[
-            "salePrice",
-            "ราคาขาย",
-            "price",
-            "Price"
-        ]),
 
-        originalPrice:getValue(item,[
-            "originalPrice",
-            "ราคาเดิม"
-        ]),
+        description:
+            item.description ||
+            item["รายละเอียด"] ||
+            "",
 
-        image:getValue(item,[
-            "image",
-            "Image",
-            "รูป",
-            "รูปภาพ",
-            "imageUrl"
-        ]),
 
-        affiliateUrl:getValue(item,[
-            "affiliateUrl",
-            "AffiliateUrl",
-            "ลิงก์",
-            "ลิงก์สินค้า"
-        ]),
+        salePrice:
+            Number(
+                String(
+                    item.salePrice ||
+                    item["ราคาขาย"] ||
+                    item.price ||
+                    0
+                )
+                .replace(/,/g, "")
+            ) || 0,
 
-        ownUrl:getValue(item,[
-            "ownUrl",
-            "OwnUrl",
-            "ซื้อกับเรา",
-            "ลิงก์ซื้อกับเรา"
-        ]),
 
-        tags:getValue(item,[
-            "tags",
-            "Tags",
-            "แท็ก"
-        ])
+        originalPrice:
+            Number(
+                String(
+                    item.originalPrice ||
+                    item["ราคาปกติ"] ||
+                    0
+                )
+                .replace(/,/g, "")
+            ) || 0,
+
+
+        image:
+            item.image ||
+            item.imageUrl ||
+            item["รูปภาพ"] ||
+            "",
+
+
+        tags:
+            item.tags ||
+            item["แท็ก"] ||
+            "",
+
+
+        stock:
+            parseStock(
+                item.stock ??
+                item["สต๊อก"] ??
+                item["สต็อก"] ??
+                item["จำนวนคงเหลือ"]
+            )
 
     };
 
@@ -1759,508 +2207,32 @@ function normalizeProduct(item){
 
 
 /* ==================================================
-   IMAGE
+   STOCK
 ================================================== */
 
-function createImage(url,title){
+function parseStock(value) {
 
-    const safeTitle =
-        escapeHTML(title || "สินค้า");
+    if (
+        value === undefined ||
+        value === null ||
+        String(value).trim() === ""
+    ) {
 
-    if(!url){
+        return null;
 
-        return `
-            <div
-                style="
-                width:100%;
-                height:100%;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                background:#f8fafc;
-                color:#cbd5e1;
-                font-size:30px;
-                "
-            >
-                <i class="fas fa-image"></i>
-            </div>
-        `;
-    }
-
-    return `
-        <img
-            src="${escapeHTML(url)}"
-            alt="${safeTitle}"
-            loading="lazy"
-            onerror="
-                this.style.display='none';
-                this.parentElement.innerHTML=
-                '<i class=&quot;fas fa-image&quot; style=&quot;font-size:30px;color:#cbd5e1&quot;></i>';
-            "
-        >
-    `;
-}
-
-
-/* ==================================================
-   TAGS
-================================================== */
-
-function createTags(tags){
-
-    if(!tags){
-        return "";
-    }
-
-    const list =
-        String(tags)
-        .split(",")
-        .map(x => x.trim())
-        .filter(Boolean)
-        .slice(0,3);
-
-    if(!list.length){
-        return "";
-    }
-
-    return `
-        <div class="product-tags">
-
-            ${list.map(tag => `
-                <span class="product-tag">
-                    ${escapeHTML(tag)}
-                </span>
-            `).join("")}
-
-        </div>
-    `;
-}
-
-
-/* ==================================================
-   BUTTONS
-================================================== */
-
-function createButtons(item){
-
-    const external =
-        item.affiliateUrl;
-
-    const own =
-        item.ownUrl;
-
-
-    if(external && own){
-
-        return `
-            <div class="product-buttons">
-
-                <a
-                    class="btn btn-external"
-                    href="${escapeHTML(external)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <i class="fas fa-external-link-alt"></i>
-                    ดูสินค้า
-                </a>
-
-                <a
-                    class="btn btn-own"
-                    href="${escapeHTML(own)}"
-                >
-                    <i class="fas fa-cart-shopping"></i>
-                    ซื้อกับเรา
-                </a>
-
-            </div>
-        `;
     }
 
 
-    if(own){
-
-        return `
-            <div class="product-buttons single">
-
-                <a
-                    class="btn btn-own"
-                    href="${escapeHTML(own)}"
-                >
-                    <i class="fas fa-cart-shopping"></i>
-                    ซื้อกับเรา
-                </a>
-
-            </div>
-        `;
-    }
-
-
-    if(external){
-
-        return `
-            <div class="product-buttons single">
-
-                <a
-                    class="btn btn-external"
-                    href="${escapeHTML(external)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <i class="fas fa-external-link-alt"></i>
-                    ดูสินค้า
-                </a>
-
-            </div>
-        `;
-    }
-
-
-    return `
-        <div class="product-buttons single">
-
-            <div class="btn btn-soon">
-                <i class="fas fa-clock"></i>
-                เร็วๆ นี้
-            </div>
-
-        </div>
-    `;
-
-}
-
-
-/* ==================================================
-   PRODUCT CARD
-================================================== */
-
-function createProductCard(item){
-
-    const province =
-        item.province || "ทั่วไทย";
-
-    const title =
-        item.title || "สินค้า";
-
-    const salePrice =
-        formatPrice(item.salePrice);
-
-    const originalPrice =
-        formatPrice(item.originalPrice);
-
-
-    return `
-
-        <article class="product-card">
-
-
-            <div class="product-media">
-
-                ${
-                    item.salePrice &&
-                    item.originalPrice &&
-                    Number(
-                        String(item.originalPrice)
-                        .replace(/,/g,"")
-                    ) >
-                    Number(
-                        String(item.salePrice)
-                        .replace(/,/g,"")
-                    )
-
-                    ?
-
-                    `<div class="product-badge">
-                        ราคาพิเศษ
-                    </div>`
-
-                    :
-
-                    ""
-                }
-
-
-                ${createImage(
-                    item.image,
-                    title
-                )}
-
-            </div>
-
-
-
-            <div class="product-body">
-
-
-                <h3 class="product-title"
-                    title="${escapeHTML(title)}">
-
-                    ${escapeHTML(title)}
-
-                </h3>
-
-
-
-                <div
-                    class="product-province"
-                    title="${escapeHTML(province)}"
-                >
-
-                    <i class="fas fa-location-dot"></i>
-
-                    <span>
-                        ${escapeHTML(province)}
-                    </span>
-
-                </div>
-
-
-
-                ${createTags(item.tags)}
-
-
-
-                <div class="price-row">
-
-                    ${
-                        salePrice
-
-                        ?
-
-                        `
-                        <span class="sale-price">
-
-                            ${salePrice}
-
-                            <span class="baht">
-                                บาท
-                            </span>
-
-                        </span>
-                        `
-
-                        :
-
-                        `
-                        <span class="sale-price">
-                            ติดต่อร้าน
-                        </span>
-                        `
-                    }
-
-
-                    ${
-                        originalPrice
-
-                        ?
-
-                        `
-                        <span class="original-price">
-                            ${originalPrice}
-                        </span>
-                        `
-
-                        :
-
-                        ""
-                    }
-
-                </div>
-
-
-
-                ${createButtons(item)}
-
-
-            </div>
-
-        </article>
-
-    `;
-
-}
-
-
-/* ==================================================
-   RANDOM CARD
-================================================== */
-
-function createRandomCard(item){
-
-    return `
-
-        <article class="random-card">
-
-
-            <div class="random-image">
-
-                ${createImage(
-                    item.image,
-                    item.title
-                )}
-
-            </div>
-
-
-            <div class="random-info">
-
-                <div
-                    class="random-title"
-                    title="${escapeHTML(item.title)}"
-                >
-                    ${escapeHTML(item.title)}
-                </div>
-
-
-                <div
-                    class="random-province"
-                    title="${escapeHTML(
-                        item.province || "ทั่วไทย"
-                    )}"
-                >
-
-                    <i class="fas fa-location-dot"></i>
-
-                    ${escapeHTML(
-                        item.province || "ทั่วไทย"
-                    )}
-
-                </div>
-
-
-                <div class="random-price">
-
-                    ${
-                        item.salePrice
-                        ?
-                        formatPrice(item.salePrice) + " บาท"
-                        :
-                        "ติดต่อร้าน"
-                    }
-
-                </div>
-
-            </div>
-
-        </article>
-
-    `;
-
-}
-
-
-/* ==================================================
-   FILTER PRODUCTS
-================================================== */
-
-function getFilteredProducts(){
-
-    const keyword =
-        document
-        .getElementById("searchInput")
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    return allProducts.filter(item => {
-
-
-        const matchCategory =
-            currentCategory === "ทั้งหมด" ||
-
-            String(item.category)
-            .trim()
-            .toLowerCase() ===
-            currentCategory
-            .trim()
-            .toLowerCase();
-
-
-        if(!matchCategory){
-            return false;
-        }
-
-
-        if(!keyword){
-            return true;
-        }
-
-
-        const searchText = [
-
-            item.title,
-
-            item.category,
-
-            item.province,
-
-            item.description,
-
-            item.tags
-
-        ]
-        .join(" ")
-        .toLowerCase();
-
-
-        return searchText.includes(keyword);
-
-    });
-
-}
-
-
-/* ==================================================
-   RENDER PRODUCTS
-================================================== */
-
-function renderProducts(){
-
-    const grid =
-        document.getElementById(
-            "productGrid"
-        );
-
-    const empty =
-        document.getElementById(
-            "empty"
-        );
-
-    const count =
-        document.getElementById(
-            "productCount"
+    const number =
+        Number(
+            String(value)
+                .replace(/,/g, "")
         );
 
 
-    const products =
-        getFilteredProducts();
-
-
-    grid.innerHTML = "";
-
-
-    count.textContent =
-        `${products.length} สินค้า`;
-
-
-    if(!products.length){
-
-        empty.style.display =
-            "block";
-
-        return;
-    }
-
-
-    empty.style.display =
-        "none";
-
-
-    grid.innerHTML =
-        products
-        .map(createProductCard)
-        .join("");
+    return isNaN(number)
+        ? null
+        : number;
 
 }
 
@@ -2269,32 +2241,377 @@ function renderProducts(){
    CATEGORY
 ================================================== */
 
-function selectCategory(button){
+function renderCategories() {
 
-    document
-        .querySelectorAll(".category-btn")
-        .forEach(btn => {
+    const categories = [
 
-            btn.classList.remove(
-                "active"
+        "ทั้งหมด",
+
+        ...new Set(
+            allProducts
+                .map(function(p) {
+
+                    return p.category;
+
+                })
+                .filter(Boolean)
+        )
+
+    ];
+
+
+    const box =
+        document.getElementById(
+            "categoryList"
+        );
+
+
+    box.innerHTML =
+        categories.map(function(category) {
+
+            return `
+
+                <button
+                    class="category-btn ${
+                        category === selectedCategory
+                            ? "active"
+                            : ""
+                    }"
+                    onclick='selectCategory(${JSON.stringify(category)})'
+                >
+
+                    ${escapeHtml(category)}
+
+                </button>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ==================================================
+   SELECT CATEGORY
+================================================== */
+
+function selectCategory(category) {
+
+    selectedCategory =
+        category;
+
+
+    renderCategories();
+
+    filterProducts();
+
+}
+
+
+/* ==================================================
+   FILTER
+================================================== */
+
+function filterProducts() {
+
+    const keyword =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    filteredProducts =
+        allProducts.filter(function(product) {
+
+
+            const categoryMatch =
+                selectedCategory === "ทั้งหมด" ||
+                product.category === selectedCategory;
+
+
+            const searchText = [
+
+                product.title,
+
+                product.category,
+
+                product.province,
+
+                product.description,
+
+                product.tags
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+
+            const searchMatch =
+                !keyword ||
+                searchText.includes(keyword);
+
+
+            return (
+                categoryMatch &&
+                searchMatch
             );
 
         });
 
 
-    button.classList.add("active");
-
-
-    currentCategory =
-        button.dataset.category;
-
-
     renderProducts();
 
+}
 
-    document
-        .getElementById("randomSection")
-        .classList.remove("show");
+
+/* ==================================================
+   RENDER PRODUCTS
+================================================== */
+
+function renderProducts() {
+
+    const grid =
+        document.getElementById(
+            "productGrid"
+        );
+
+
+    if (!filteredProducts.length) {
+
+        grid.innerHTML = `
+
+            <div class="empty">
+
+                <i class="fa-solid fa-box-open"></i>
+
+                <br><br>
+
+                ไม่พบสินค้าที่ค้นหา
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    grid.innerHTML =
+        filteredProducts
+            .map(createProductCard)
+            .join("");
+
+}
+
+
+/* ==================================================
+   PRODUCT CARD
+================================================== */
+
+function createProductCard(product) {
+
+    const soldOut =
+        product.stock !== null &&
+        product.stock <= 0;
+
+
+    const image =
+        product.image ||
+        "https://placehold.co/600x600?text=PHAENDIN+FOOD";
+
+
+    const tags =
+        String(product.tags || "")
+            .split(",")
+            .map(function(tag) {
+
+                return tag.trim();
+
+            })
+            .filter(Boolean)
+            .slice(0, 3);
+
+
+    const tagHtml =
+        tags.map(function(tag) {
+
+            return `
+
+                <span class="product-tag">
+
+                    ${escapeHtml(tag)}
+
+                </span>
+
+            `;
+
+        }).join("");
+
+
+    const stockHtml =
+        product.stock !== null
+            ? `
+
+                <div class="stock-badge">
+
+                    เหลือ ${product.stock}
+
+                </div>
+
+            `
+            : "";
+
+
+    const soldHtml =
+        soldOut
+            ? `
+
+                <div class="sold-badge">
+
+                    สินค้าหมด
+
+                </div>
+
+            `
+            : "";
+
+
+    const titleEncoded =
+        encodeURIComponent(
+            product.title
+        );
+
+
+    return `
+
+        <article class="product-card">
+
+
+            <div class="product-image-wrap">
+
+
+                <img
+                    class="product-image"
+                    src="${escapeAttribute(image)}"
+                    alt="${escapeAttribute(product.title)}"
+                    loading="lazy"
+                    onerror="this.src='https://placehold.co/600x600?text=PHAENDIN+FOOD'"
+                >
+
+
+                ${stockHtml}
+
+                ${soldHtml}
+
+
+            </div>
+
+
+            <div class="product-body">
+
+
+                <h3 class="product-title">
+
+                    ${escapeHtml(product.title)}
+
+                </h3>
+
+
+                ${
+                    product.province
+                    ? `
+
+                        <div class="product-province">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            ${escapeHtml(product.province)}
+
+                        </div>
+
+                    `
+                    : ""
+                }
+
+
+                ${
+                    tagHtml
+                    ? `
+
+                        <div class="product-tags">
+
+                            ${tagHtml}
+
+                        </div>
+
+                    `
+                    : ""
+                }
+
+
+                <div class="price-row">
+
+
+                    <div class="sale-price">
+
+                        ฿${formatPrice(product.salePrice)}
+
+                        <span class="baht">
+
+                            บาท
+
+                        </span>
+
+                    </div>
+
+
+                    ${
+                        product.originalPrice > product.salePrice
+                        ? `
+
+                            <div class="original-price">
+
+                                ฿${formatPrice(product.originalPrice)}
+
+                            </div>
+
+                        `
+                        : ""
+                    }
+
+
+                </div>
+
+
+                <button
+                    class="buy-btn"
+                    ${
+                        soldOut
+                        ? "disabled"
+                        : `onclick="openOrderModal(decodeURIComponent('${titleEncoded}'))"`
+                    }
+                >
+
+                    ${
+                        soldOut
+                        ? "สินค้าหมด"
+                        : '<i class="fa-solid fa-cart-shopping"></i> ซื้อเลย'
+                    }
+
+                </button>
+
+
+            </div>
+
+
+        </article>
+
+    `;
 
 }
 
@@ -2303,80 +2620,51 @@ function selectCategory(button){
    RANDOM PRODUCTS
 ================================================== */
 
-function showRandomProducts(){
+function randomProducts() {
 
-    if(!allProducts.length){
+    if (!allProducts.length) {
+
         return;
-    }
-
-
-    let pool =
-        [...allProducts];
-
-
-    /*
-       พยายามไม่ให้ซ้ำกับรอบก่อน
-    */
-
-    const newPool =
-        pool.filter(item =>
-            !previousRandomIds.includes(
-                String(item.id)
-            )
-        );
-
-
-    if(newPool.length >= 3){
-
-        pool = newPool;
 
     }
 
 
-    /*
-       สุ่ม
-    */
+    const available =
+        allProducts.filter(function(product) {
 
-    pool.sort(
-        () => Math.random() - .5
-    );
+            return !(
+                product.stock !== null &&
+                product.stock <= 0
+            );
+
+        });
+
+
+    const source =
+        available.length
+            ? available
+            : allProducts;
+
+
+    const shuffled =
+        [...source]
+            .sort(function() {
+
+                return Math.random() - .5;
+
+            });
 
 
     const selected =
-        pool.slice(0,3);
+        shuffled.slice(0, 3);
 
 
-    previousRandomIds =
-        selected.map(item =>
-            String(item.id)
-        );
-
-
-    const grid =
-        document.getElementById(
-            "randomGrid"
-        );
-
-
-    grid.innerHTML =
+    document.getElementById(
+        "randomGrid"
+    ).innerHTML =
         selected
-        .map(createRandomCard)
-        .join("");
-
-
-    document
-        .getElementById(
-            "randomCount"
-        )
-        .textContent =
-        `${selected.length} ชิ้น`;
-
-
-    document
-        .getElementById(
-            "randomSection"
-        )
-        .classList.add("show");
+            .map(createProductCard)
+            .join("");
 
 
     document
@@ -2384,146 +2672,679 @@ function showRandomProducts(){
             "randomSection"
         )
         .scrollIntoView({
-            behavior:"smooth",
-            block:"start"
+            behavior: "smooth",
+            block: "start"
         });
 
 }
 
 
 /* ==================================================
-   LOAD PRODUCTS
+   FIND PRODUCT
 ================================================== */
 
-async function loadProducts(){
+function findProduct(title) {
 
-    const loading =
-        document.getElementById(
-            "loading"
-        );
+    return allProducts.find(
+        function(product) {
 
-
-    try{
-
-        loading.style.display =
-            "block";
-
-
-        const response =
-            await fetch(API_URL);
-
-
-        if(!response.ok){
-
-            throw new Error(
-                "API Error"
-            );
+            return product.title === title;
 
         }
-
-
-        const data =
-            await response.json();
-
-
-        /*
-          รองรับทั้ง
-
-          [
-             {...},
-             {...}
-          ]
-
-          และ
-
-          {
-             data:[...]
-          }
-        */
-
-        const rawProducts =
-            Array.isArray(data)
-
-            ?
-
-            data
-
-            :
-
-            Array.isArray(data.data)
-
-            ?
-
-            data.data
-
-            :
-
-            [];
-
-
-        allProducts =
-            rawProducts
-            .map(normalizeProduct)
-            .filter(item =>
-                item.title
-            );
-
-
-        loading.style.display =
-            "none";
-
-
-        renderProducts();
-
-
-    }catch(error){
-
-        console.error(
-            "LOAD ERROR:",
-            error
-        );
-
-
-        loading.innerHTML = `
-
-            <i class="fas fa-triangle-exclamation"></i>
-
-            <p>
-                โหลดสินค้าไม่สำเร็จ
-            </p>
-
-            <p style="
-                font-size:10px;
-                margin-top:5px;
-                color:#94a3b8;
-            ">
-                กรุณาตรวจสอบ Google Apps Script
-            </p>
-
-        `;
-
-    }
+    );
 
 }
 
 
 /* ==================================================
-   SEARCH
+   OPEN ORDER MODAL
 ================================================== */
 
-document
-    .getElementById("searchInput")
-    .addEventListener(
-        "input",
-        renderProducts
-    );
+function openOrderModal(title) {
+
+    const product =
+        findProduct(title);
+
+
+    if (!product) {
+
+        alert(
+            "ไม่พบสินค้านี้"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        product.stock !== null &&
+        product.stock <= 0
+    ) {
+
+        alert(
+            "สินค้าหมดแล้ว"
+        );
+
+        return;
+
+    }
+
+
+    selectedProduct =
+        product;
+
+
+    currentQuantity = 1;
+
+
+    document.getElementById(
+        "orderImage"
+    ).src =
+        product.image ||
+        "https://placehold.co/600x600?text=PHAENDIN+FOOD";
+
+
+    document.getElementById(
+        "orderTitle"
+    ).textContent =
+        product.title;
+
+
+    document.getElementById(
+        "orderPrice"
+    ).textContent =
+        "฿" +
+        formatPrice(
+            product.salePrice
+        );
+
+
+    document.getElementById(
+        "customerName"
+    ).value = "";
+
+
+    document.getElementById(
+        "phone"
+    ).value = "";
+
+
+    document.getElementById(
+        "address"
+    ).value = "";
+
+
+    document.getElementById(
+        "note"
+    ).value = "";
+
+
+    document.querySelector(
+        'input[name="payment"][value="โอนเงิน"]'
+    ).checked = true;
+
+
+    updateQuantityUI();
+
+
+    document.getElementById(
+        "orderModal"
+    ).classList.add("show");
+
+}
 
 
 /* ==================================================
-   START
+   CLOSE ORDER
 ================================================== */
 
-loadProducts();
+function closeOrderModal() {
+
+    document.getElementById(
+        "orderModal"
+    ).classList.remove("show");
+
+}
+
+
+/* ==================================================
+   QUANTITY
+================================================== */
+
+function changeQuantity(change) {
+
+    if (!selectedProduct) {
+
+        return;
+
+    }
+
+
+    currentQuantity +=
+        change;
+
+
+    if (currentQuantity < 1) {
+
+        currentQuantity = 1;
+
+    }
+
+
+    if (
+        selectedProduct.stock !== null &&
+        currentQuantity >
+        selectedProduct.stock
+    ) {
+
+        currentQuantity =
+            selectedProduct.stock;
+
+    }
+
+
+    updateQuantityUI();
+
+}
+
+
+/* ==================================================
+   UPDATE QUANTITY
+================================================== */
+
+function updateQuantityUI() {
+
+    document.getElementById(
+        "quantityNumber"
+    ).textContent =
+        currentQuantity;
+
+
+    document.getElementById(
+        "summaryQuantity"
+    ).textContent =
+        currentQuantity;
+
+
+    if (!selectedProduct) {
+
+        return;
+
+    }
+
+
+    const total =
+        selectedProduct.salePrice *
+        currentQuantity;
+
+
+    document.getElementById(
+        "summaryPrice"
+    ).textContent =
+        "฿" +
+        formatPrice(
+            selectedProduct.salePrice
+        );
+
+
+    document.getElementById(
+        "summaryTotal"
+    ).textContent =
+        "฿" +
+        formatPrice(total);
+
+}
+
+
+/* ==================================================
+   SUBMIT ORDER
+================================================== */
+
+function submitOrder() {
+
+    if (!selectedProduct) {
+
+        return;
+
+    }
+
+
+    const customerName =
+        document
+            .getElementById(
+                "customerName"
+            )
+            .value
+            .trim();
+
+
+    const phone =
+        document
+            .getElementById(
+                "phone"
+            )
+            .value
+            .trim();
+
+
+    const address =
+        document
+            .getElementById(
+                "address"
+            )
+            .value
+            .trim();
+
+
+    const note =
+        document
+            .getElementById(
+                "note"
+            )
+            .value
+            .trim();
+
+
+    const paymentElement =
+        document.querySelector(
+            'input[name="payment"]:checked'
+        );
+
+
+    const payment =
+        paymentElement
+            ? paymentElement.value
+            : "";
+
+
+    if (!customerName) {
+
+        alert(
+            "กรุณากรอกชื่อผู้รับ"
+        );
+
+        return;
+
+    }
+
+
+    if (!phone) {
+
+        alert(
+            "กรุณากรอกเบอร์โทร"
+        );
+
+        return;
+
+    }
+
+
+    if (!address) {
+
+        alert(
+            "กรุณากรอกที่อยู่จัดส่ง"
+        );
+
+        return;
+
+    }
+
+
+    if (!payment) {
+
+        alert(
+            "กรุณาเลือกวิธีชำระเงิน"
+        );
+
+        return;
+
+    }
+
+
+    const order = {
+
+        productTitle:
+            selectedProduct.title,
+
+        quantity:
+            currentQuantity,
+
+        customerName:
+            customerName,
+
+        phone:
+            phone,
+
+        address:
+            address,
+
+        payment:
+            payment,
+
+        note:
+            note
+
+    };
+
+
+    const button =
+        document.getElementById(
+            "submitOrderBtn"
+        );
+
+
+    button.disabled = true;
+
+
+    button.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        กำลังส่งคำสั่งซื้อ...
+
+    `;
+
+
+    /* ----------------------------------------------
+       ส่งผ่าน Form + iframe
+       ลดปัญหา CORS
+    ---------------------------------------------- */
+
+    const form =
+        document.createElement("form");
+
+
+    form.method = "POST";
+
+    form.action = API_URL;
+
+    form.target = "orderFrame";
+
+
+    const input =
+        document.createElement("input");
+
+
+    input.type = "hidden";
+
+    input.name = "data";
+
+    input.value =
+        JSON.stringify(order);
+
+
+    form.appendChild(input);
+
+
+    document.body.appendChild(form);
+
+
+    form.submit();
+
+
+    form.remove();
+
+
+    /* ----------------------------------------------
+       สำรองกรณี Response ช้า
+    ---------------------------------------------- */
+
+    setTimeout(function() {
+
+        button.disabled = false;
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-check"></i>
+
+            ยืนยันสั่งซื้อ
+
+        `;
+
+    }, 15000);
+
+}
+
+
+/* ==================================================
+   RECEIVE ORDER RESULT
+================================================== */
+
+window.addEventListener(
+    "message",
+    function(event) {
+
+
+        const data =
+            event.data;
+
+
+        if (
+            !data ||
+            data.type !==
+            "PHAENDIN_ORDER"
+        ) {
+
+            return;
+
+        }
+
+
+        const button =
+            document.getElementById(
+                "submitOrderBtn"
+            );
+
+
+        button.disabled = false;
+
+
+        button.innerHTML = `
+
+            <i class="fa-solid fa-check"></i>
+
+            ยืนยันสั่งซื้อ
+
+        `;
+
+
+        if (data.success) {
+
+
+            closeOrderModal();
+
+
+            document.getElementById(
+                "successOrderId"
+            ).textContent =
+                data.orderId;
+
+
+            document.getElementById(
+                "successModal"
+            ).classList.add("show");
+
+
+            /*
+             * อัปเดต stock หน้าเว็บ
+             */
+
+            if (
+                selectedProduct &&
+                selectedProduct.stock !== null
+            ) {
+
+                selectedProduct.stock =
+                    Math.max(
+                        0,
+                        selectedProduct.stock -
+                        currentQuantity
+                    );
+
+            }
+
+
+            renderProducts();
+
+            randomProductsWithoutScroll();
+
+
+        } else {
+
+            alert(
+                data.message ||
+                "เกิดข้อผิดพลาด"
+            );
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   RANDOM WITHOUT SCROLL
+================================================== */
+
+function randomProductsWithoutScroll() {
+
+    if (!allProducts.length) {
+
+        return;
+
+    }
+
+
+    const available =
+        allProducts.filter(function(product) {
+
+            return !(
+                product.stock !== null &&
+                product.stock <= 0
+            );
+
+        });
+
+
+    const source =
+        available.length
+            ? available
+            : allProducts;
+
+
+    const selected =
+        [...source]
+            .sort(function() {
+
+                return Math.random() - .5;
+
+            })
+            .slice(0, 3);
+
+
+    document.getElementById(
+        "randomGrid"
+    ).innerHTML =
+        selected
+            .map(createProductCard)
+            .join("");
+
+}
+
+
+/* ==================================================
+   CLOSE SUCCESS
+================================================== */
+
+function closeSuccessModal() {
+
+    document.getElementById(
+        "successModal"
+    ).classList.remove("show");
+
+}
+
+
+/* ==================================================
+   FORMAT PRICE
+================================================== */
+
+function formatPrice(number) {
+
+    return Number(number || 0)
+        .toLocaleString(
+            "th-TH"
+        );
+
+}
+
+
+/* ==================================================
+   ESCAPE HTML
+================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ==================================================
+   ESCAPE ATTRIBUTE
+================================================== */
+
+function escapeAttribute(value) {
+
+    return escapeHtml(value);
+
+}
+
+
+/* ==================================================
+   CLOSE MODAL CLICK OUTSIDE
+================================================== */
+
+document
+    .getElementById("orderModal")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                closeOrderModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("successModal")
+    .addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target === this
+            ) {
+
+                closeSuccessModal();
+
+            }
+
+        }
+    );
 
 
 </script>
