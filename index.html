@@ -11,14 +11,13 @@
 <title>PHAENDIN FOOD | ของอร่อยจากทั่วไทย</title>
 
 <meta name="description"
-      content="รวมของอร่อย ของดี และอาหารเด็ดจากทั่วประเทศไทย">
+      content="รวมของอร่อย น้ำพริก ขนม ของฝาก และอาหารเด็ดจากทั่วไทย">
 
 <!-- ==================================================
      TAILWIND
 ================================================== -->
 
 <script src="https://cdn.tailwindcss.com"></script>
-
 
 <!-- ==================================================
      FONT
@@ -34,7 +33,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
       rel="stylesheet">
 
-
 <!-- ==================================================
      FONT AWESOME
 ================================================== -->
@@ -42,57 +40,29 @@
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-
 <!-- ==================================================
      STYLE
 ================================================== -->
 
 <style>
 
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-html {
-    scroll-behavior: smooth;
+html{
+    scroll-behavior:smooth;
 }
 
-body {
+body{
 
-    margin: 0;
+    margin:0;
 
-    font-family: "Kanit", sans-serif;
+    font-family:'Kanit',sans-serif;
 
-    background: #f8fafc;
+    background:#f5f7fb;
 
-    color: #111827;
-
-}
-
-
-/* ==================================================
-   TOP THAI STRIPE
-================================================== */
-
-.thai-stripe {
-
-    height: 5px;
-
-    background:
-        linear-gradient(
-            to bottom,
-            #ef3340 0%,
-            #ef3340 20%,
-            #ffffff 20%,
-            #ffffff 35%,
-            #00247d 35%,
-            #00247d 65%,
-            #ffffff 65%,
-            #ffffff 80%,
-            #ef3340 80%,
-            #ef3340 100%
-        );
-
+    color:#172033;
 }
 
 
@@ -100,193 +70,176 @@ body {
    HEADER
 ================================================== */
 
-.header {
+.top-stripe{
 
-    position: sticky;
+    height:5px;
 
-    top: 0;
-
-    z-index: 50;
-
-    background: rgba(255,255,255,.95);
-
-    backdrop-filter: blur(12px);
-
-    border-bottom: 1px solid #e5e7eb;
-
+    background:linear-gradient(
+        to right,
+        #d71920 0%,
+        #d71920 33.33%,
+        #ffffff 33.33%,
+        #ffffff 66.66%,
+        #123c8c 66.66%,
+        #123c8c 100%
+    );
 }
 
 
-.header-inner {
+.header{
 
-    max-width: 1180px;
+    position:sticky;
 
-    margin: auto;
+    top:0;
 
-    padding: 12px 15px;
+    z-index:50;
 
-    display: flex;
+    background:#ffffff;
 
-    align-items: center;
+    border-bottom:1px solid #e5e7eb;
 
-    gap: 12px;
-
+    box-shadow:0 3px 15px rgba(0,0,0,.07);
 }
 
 
-.logo {
+.header-inner{
 
-    display: flex;
+    max-width:1200px;
 
-    align-items: center;
+    margin:auto;
 
-    gap: 8px;
+    padding:10px 14px;
 
-    flex-shrink: 0;
+    display:flex;
 
+    align-items:center;
+
+    gap:12px;
 }
 
 
-.logo-icon {
+/* LOGO */
 
-    width: 38px;
+.logo{
 
-    height: 38px;
+    display:flex;
 
-    border-radius: 12px;
+    align-items:center;
+
+    gap:8px;
+
+    min-width:max-content;
+}
+
+.logo-mark{
+
+    width:40px;
+
+    height:40px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#ffffff;
+
+    font-size:19px;
 
     background:
         linear-gradient(
             135deg,
-            #ef3340,
-            #c81e2b
+            #d71920 0%,
+            #d71920 42%,
+            #ffffff 42%,
+            #ffffff 58%,
+            #123c8c 58%,
+            #123c8c 100%
         );
 
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 18px;
-
-    box-shadow:
-        0 5px 15px rgba(239,51,64,.22);
-
+    box-shadow:0 4px 10px rgba(18,60,140,.18);
 }
 
 
-.logo-text {
+.logo-text{
 
-    line-height: 1.05;
+    line-height:1.05;
+}
 
+.logo-title{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:#123c8c;
+}
+
+.logo-sub{
+
+    font-size:9px;
+
+    color:#d71920;
+
+    letter-spacing:.5px;
 }
 
 
-.logo-title {
+/* SEARCH */
 
-    font-size: 18px;
+.search-box{
 
-    font-weight: 700;
+    flex:1;
 
-    color: #111827;
-
+    position:relative;
 }
 
+.search-box input{
 
-.logo-sub {
+    width:100%;
 
-    font-size: 9px;
+    height:40px;
 
-    color: #6b7280;
+    border:1px solid #dce1ea;
 
+    border-radius:22px;
+
+    padding:0 42px 0 16px;
+
+    outline:none;
+
+    background:#f8fafc;
+
+    font-family:'Kanit';
+
+    font-size:13px;
+
+    transition:.2s;
 }
 
+.search-box input:focus{
 
-.search-box {
+    border-color:#123c8c;
 
-    flex: 1;
+    background:#ffffff;
 
-    position: relative;
-
+    box-shadow:0 0 0 3px rgba(18,60,140,.08);
 }
 
+.search-icon{
 
-.search-box input {
+    position:absolute;
 
-    width: 100%;
+    right:16px;
 
-    height: 40px;
+    top:50%;
 
-    border: 1px solid #e5e7eb;
+    transform:translateY(-50%);
 
-    background: #f8fafc;
-
-    border-radius: 12px;
-
-    outline: none;
-
-    padding:
-        0 40px 0 40px;
-
-    font-family: inherit;
-
-    font-size: 14px;
-
-    transition: .2s;
-
-}
-
-
-.search-box input:focus {
-
-    background: white;
-
-    border-color: #ef3340;
-
-    box-shadow:
-        0 0 0 3px rgba(239,51,64,.08);
-
-}
-
-
-.search-icon {
-
-    position: absolute;
-
-    left: 14px;
-
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    color: #9ca3af;
-
-}
-
-
-.clear-search {
-
-    position: absolute;
-
-    right: 12px;
-
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    border: 0;
-
-    background: transparent;
-
-    color: #9ca3af;
-
-    cursor: pointer;
-
-    display: none;
-
+    color:#123c8c;
 }
 
 
@@ -294,157 +247,134 @@ body {
    HERO
 ================================================== */
 
-.hero {
-
-    max-width: 1180px;
-
-    margin: 0 auto;
-
-    padding:
-        18px 15px 8px;
-
-}
-
-
-.hero-box {
-
-    border-radius: 22px;
-
-    padding: 25px 20px;
+.hero{
 
     background:
         linear-gradient(
             135deg,
-            #fff1f2,
-            #ffffff 50%,
-            #eff6ff
+            #d71920 0%,
+            #d71920 42%,
+            #ffffff 42%,
+            #ffffff 58%,
+            #123c8c 58%,
+            #123c8c 100%
         );
 
-    border: 1px solid #fee2e2;
+    padding:18px 14px;
 
-    position: relative;
+    position:relative;
 
-    overflow: hidden;
+    overflow:hidden;
+}
 
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:rgba(255,255,255,.10);
+
+    pointer-events:none;
+}
+
+.hero-inner{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    position:relative;
+
+    z-index:2;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+}
+
+.hero-title{
+
+    color:#ffffff;
+
+    font-size:23px;
+
+    font-weight:700;
+
+    margin:0 0 2px;
+
+    text-shadow:0 2px 5px rgba(0,0,0,.18);
+}
+
+.hero-desc{
+
+    color:#ffffff;
+
+    font-size:12px;
+
+    margin:0;
+
+    opacity:.95;
 }
 
 
-.hero-box::after {
+.random-btn{
 
-    content: "";
+    border:0;
 
-    position: absolute;
+    background:#ffffff;
 
-    width: 160px;
+    color:#d71920;
 
-    height: 160px;
+    border-radius:25px;
 
-    right: -50px;
+    padding:9px 15px;
 
-    top: -50px;
+    font-family:'Kanit';
 
-    border-radius: 50%;
+    font-size:12px;
 
-    background:
-        rgba(239,51,64,.08);
+    font-weight:600;
 
+    white-space:nowrap;
+
+    cursor:pointer;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.16);
+
+    transition:.2s;
+}
+
+.random-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 20px rgba(0,0,0,.22);
+}
+
+.random-btn:active{
+
+    transform:scale(.96);
 }
 
 
-.hero-title {
+/* ==================================================
+   CONTAINER
+================================================== */
 
-    font-size: 27px;
+.container-main{
 
-    font-weight: 700;
+    max-width:1200px;
 
-    margin: 0;
+    margin:auto;
 
-    position: relative;
-
-    z-index: 2;
-
-}
-
-
-.hero-title span {
-
-    color: #ef3340;
-
-}
-
-
-.hero-text {
-
-    color: #6b7280;
-
-    margin:
-        5px 0 15px;
-
-    font-size: 14px;
-
-    position: relative;
-
-    z-index: 2;
-
-}
-
-
-.random-button {
-
-    border: 0;
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    color: white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ef3340,
-            #c81e2b
-        );
-
-    padding:
-        11px 18px;
-
-    border-radius: 12px;
-
-    font-size: 14px;
-
-    font-weight: 500;
-
-    box-shadow:
-        0 7px 18px rgba(239,51,64,.25);
-
-    transition: .2s;
-
-    position: relative;
-
-    z-index: 2;
-
-}
-
-
-.random-button:hover {
-
-    transform: translateY(-2px);
-
-}
-
-
-.random-button:active {
-
-    transform: scale(.97);
-
-}
-
-
-.random-button i {
-
-    margin-right: 6px;
-
+    padding:14px;
 }
 
 
@@ -452,221 +382,266 @@ body {
    CATEGORY
 ================================================== */
 
-.category-wrapper {
+.category-wrap{
 
-    max-width: 1180px;
+    display:flex;
 
-    margin: auto;
+    gap:7px;
 
-    padding:
-        10px 15px 5px;
+    overflow-x:auto;
 
+    padding:2px 0 10px;
+
+    scrollbar-width:none;
 }
 
+.category-wrap::-webkit-scrollbar{
 
-.category-scroll {
-
-    display: flex;
-
-    gap: 7px;
-
-    overflow-x: auto;
-
-    padding-bottom: 5px;
-
-    scrollbar-width: none;
-
+    display:none;
 }
 
+.category-btn{
 
-.category-scroll::-webkit-scrollbar {
+    border:1px solid #dce2ec;
 
-    display: none;
+    background:#ffffff;
 
+    color:#4b5563;
+
+    border-radius:20px;
+
+    padding:6px 13px;
+
+    font-family:'Kanit';
+
+    font-size:11px;
+
+    white-space:nowrap;
+
+    cursor:pointer;
+
+    transition:.2s;
 }
 
+.category-btn:hover{
 
-.category-button {
+    border-color:#123c8c;
 
-    flex-shrink: 0;
-
-    border: 1px solid #e5e7eb;
-
-    background: white;
-
-    color: #4b5563;
-
-    border-radius: 999px;
-
-    padding:
-        7px 13px;
-
-    font-family: inherit;
-
-    font-size: 13px;
-
-    cursor: pointer;
-
-    transition: .2s;
-
+    color:#123c8c;
 }
 
+.category-btn.active{
 
-.category-button:hover {
+    background:#123c8c;
 
-    border-color: #ef3340;
+    color:#ffffff;
 
-    color: #ef3340;
+    border-color:#123c8c;
 
-}
-
-
-.category-button.active {
-
-    background: #ef3340;
-
-    border-color: #ef3340;
-
-    color: white;
-
+    box-shadow:0 3px 8px rgba(18,60,140,.2);
 }
 
 
 /* ==================================================
-   RANDOM SECTION
+   SECTION TITLE
 ================================================== */
 
-.random-section {
+.section-head{
 
-    max-width: 1180px;
+    display:flex;
 
-    margin: auto;
+    align-items:center;
 
-    padding:
-        12px 15px 5px;
+    justify-content:space-between;
 
+    margin:7px 0 10px;
 }
 
+.section-title{
 
-.section-heading {
+    margin:0;
 
-    display: flex;
+    font-size:17px;
 
-    align-items: center;
+    font-weight:600;
 
-    justify-content: space-between;
+    color:#172033;
 
-    margin-bottom: 9px;
+    display:flex;
 
+    align-items:center;
+
+    gap:8px;
 }
 
+.section-title i{
 
-.section-title {
-
-    margin: 0;
-
-    font-size: 18px;
-
-    font-weight: 600;
-
+    color:#d71920;
 }
 
+.product-count{
 
-.section-title i {
+    font-size:10px;
 
-    color: #ef3340;
-
-    margin-right: 5px;
-
-}
-
-
-.random-status {
-
-    color: #9ca3af;
-
-    font-size: 12px;
-
+    color:#64748b;
 }
 
 
 /* ==================================================
-   RANDOM GRID
+   RANDOM
 ================================================== */
 
-.random-grid {
+.random-section{
 
-    display: grid;
+    display:none;
 
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+    margin-bottom:16px;
+}
 
-    gap: 8px;
+.random-section.show{
 
+    display:block;
+}
+
+.random-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,minmax(0,1fr));
+
+    gap:8px;
+}
+
+.random-card{
+
+    background:#ffffff;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+    border:1px solid #e4e8ef;
+
+    box-shadow:0 3px 10px rgba(0,0,0,.05);
+}
+
+.random-image{
+
+    width:100%;
+
+    height:105px;
+
+    background:#ffffff;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+}
+
+.random-image img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+    display:block;
+}
+
+.random-info{
+
+    padding:7px;
+}
+
+.random-title{
+
+    font-size:10px;
+
+    font-weight:500;
+
+    color:#172033;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    margin-bottom:2px;
+}
+
+.random-province{
+
+    font-size:9px;
+
+    color:#123c8c;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    margin-bottom:4px;
+}
+
+.random-price{
+
+    font-size:12px;
+
+    font-weight:700;
+
+    color:#d71920;
 }
 
 
 /* ==================================================
-   PRODUCTS
+   PRODUCT GRID
 ================================================== */
 
-.products-section {
+.product-grid{
 
-    max-width: 1180px;
+    display:grid;
 
-    margin: auto;
+    grid-template-columns:repeat(2,minmax(0,1fr));
 
-    padding:
-        12px 15px 35px;
-
-}
-
-
-.products-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 9px;
-
+    gap:10px;
 }
 
 
 /* ==================================================
-   CARD
+   PRODUCT CARD
 ================================================== */
 
-.product-card {
+.product-card{
 
-    background: white;
+    background:#ffffff;
 
-    border-radius: 15px;
+    border:1px solid #e5e9f0;
 
-    overflow: hidden;
+    border-radius:13px;
 
-    border: 1px solid #e5e7eb;
+    overflow:hidden;
 
-    box-shadow:
-        0 2px 8px rgba(15,23,42,.04);
+    box-shadow:0 3px 12px rgba(0,0,0,.05);
 
-    transition: .2s;
+    transition:.2s;
 
-    display: flex;
-
-    flex-direction: column;
-
+    min-width:0;
 }
 
+.product-card:hover{
 
-.product-card:hover {
+    transform:translateY(-2px);
 
-    transform: translateY(-2px);
+    box-shadow:0 7px 20px rgba(0,0,0,.09);
 
-    box-shadow:
-        0 8px 20px rgba(15,23,42,.08);
-
+    border-color:#cfd8e8;
 }
 
 
@@ -674,159 +649,170 @@ body {
    IMAGE
 ================================================== */
 
-.product-image {
+.product-media{
 
-    width: 100%;
+    position:relative;
 
-    height: 135px;
+    width:100%;
 
-    background: #f3f4f6;
+    height:145px;
 
-    overflow: hidden;
+    background:#ffffff;
 
-    position: relative;
+    display:flex;
 
+    align-items:center;
+
+    justify-content:center;
+
+    overflow:hidden;
+
+    border-bottom:1px solid #eef1f5;
+}
+
+.product-media img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:contain;
+
+    object-position:center;
+
+    display:block;
+
+    padding:5px;
+
+    background:#ffffff;
+
+    transition:transform .25s ease;
+}
+
+.product-card:hover .product-media img{
+
+    transform:scale(1.025);
 }
 
 
-.product-image img {
+/* BADGE */
 
-    width: 100%;
+.product-badge{
 
-    height: 100%;
+    position:absolute;
 
-    object-fit: cover;
+    top:7px;
 
-    display: block;
+    left:7px;
 
-    transition: .3s;
+    z-index:2;
 
-}
+    background:#d71920;
 
+    color:#ffffff;
 
-.product-card:hover .product-image img {
+    font-size:9px;
 
-    transform: scale(1.03);
+    font-weight:500;
 
-}
+    padding:3px 7px;
 
+    border-radius:10px;
 
-.image-placeholder {
-
-    width: 100%;
-
-    height: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: #9ca3af;
-
-    font-size: 30px;
-
+    box-shadow:0 2px 5px rgba(0,0,0,.15);
 }
 
 
 /* ==================================================
-   CARD CONTENT
+   PRODUCT BODY
 ================================================== */
 
-.product-content {
+.product-body{
 
-    padding:
-        9px 9px 10px;
+    padding:8px 9px 9px;
+}
 
-    display: flex;
+.product-title{
 
-    flex-direction: column;
+    font-size:12px;
 
-    flex: 1;
+    font-weight:500;
 
+    color:#172033;
+
+    line-height:1.35;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    margin:0 0 3px;
 }
 
 
-.product-title {
+/* PROVINCE */
 
-    margin: 0;
+.product-province{
 
-    font-size: 14px;
+    display:flex;
 
-    font-weight: 600;
+    align-items:center;
 
-    color: #111827;
+    gap:4px;
 
-    line-height: 1.35;
+    color:#123c8c;
 
-    display: -webkit-box;
+    font-size:10px;
 
-    -webkit-line-clamp: 1;
+    line-height:1.2;
 
-    -webkit-box-orient: vertical;
+    margin-bottom:5px;
 
-    overflow: hidden;
+    white-space:nowrap;
 
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.product-province i{
+
+    color:#d71920;
+
+    font-size:9px;
+
+    flex:none;
 }
 
 
-.product-province {
+/* TAG */
 
-    font-size: 11px;
+.product-tags{
 
-    color: #6b7280;
+    display:flex;
 
-    margin-top: 3px;
+    gap:4px;
 
-    white-space: nowrap;
+    overflow:hidden;
 
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
+    margin-bottom:5px;
 }
 
+.product-tag{
 
-.product-province i {
+    background:#eef3fb;
 
-    color: #ef3340;
+    color:#123c8c;
 
-    margin-right: 3px;
+    border-radius:8px;
 
-}
+    padding:2px 5px;
 
+    font-size:8px;
 
-.tags {
-
-    display: flex;
-
-    gap: 4px;
-
-    margin-top: 5px;
-
-    overflow: hidden;
-
-}
-
-
-.tag {
-
-    flex-shrink: 0;
-
-    background: #fff1f2;
-
-    color: #dc2626;
-
-    border-radius: 5px;
-
-    padding:
-        2px 5px;
-
-    font-size: 9px;
-
-    white-space: nowrap;
-
+    white-space:nowrap;
 }
 
 
@@ -834,47 +820,42 @@ body {
    PRICE
 ================================================== */
 
-.price-row {
+.price-row{
 
-    display: flex;
+    display:flex;
 
-    align-items: baseline;
+    align-items:baseline;
 
-    gap: 5px;
+    gap:5px;
 
-    margin-top: 6px;
-
+    margin-bottom:7px;
 }
 
+.sale-price{
 
-.sale-price {
+    color:#d71920;
 
-    font-size: 18px;
+    font-size:16px;
 
-    font-weight: 700;
+    font-weight:700;
 
-    color: #ef3340;
-
+    line-height:1;
 }
 
+.baht{
 
-.sale-price small {
+    font-size:9px;
 
-    font-size: 10px;
-
-    font-weight: 400;
-
+    font-weight:400;
 }
 
+.original-price{
 
-.original-price {
+    color:#9ca3af;
 
-    font-size: 10px;
+    font-size:9px;
 
-    color: #9ca3af;
-
-    text-decoration: line-through;
-
+    text-decoration:line-through;
 }
 
 
@@ -882,200 +863,78 @@ body {
    BUTTONS
 ================================================== */
 
-.buy-button {
+.product-buttons{
 
-    width: 100%;
+    display:grid;
 
-    border: 0;
+    grid-template-columns:1fr 1fr;
 
-    border-radius: 9px;
+    gap:5px;
+}
 
-    padding:
-        8px 5px;
+.product-buttons.single{
 
-    margin-top: 7px;
+    grid-template-columns:1fr;
+}
 
-    font-family: inherit;
+.btn{
 
-    font-size: 12px;
+    min-height:32px;
 
-    font-weight: 500;
+    border:0;
 
-    text-align: center;
+    border-radius:8px;
 
-    text-decoration: none;
+    display:flex;
 
-    cursor: pointer;
+    align-items:center;
 
-    display: block;
+    justify-content:center;
 
-    transition: .2s;
+    gap:4px;
+
+    font-family:'Kanit';
+
+    font-size:10px;
+
+    font-weight:500;
+
+    text-decoration:none;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.btn:hover{
+
+    transform:translateY(-1px);
+}
+
+.btn-external{
+
+    background:#eef2f7;
+
+    color:#334155;
 
 }
 
+.btn-own{
 
-.buy-button:hover {
+    background:#d71920;
 
-    transform: translateY(-1px);
+    color:#ffffff;
 
+    box-shadow:0 3px 8px rgba(215,25,32,.18);
 }
 
+.btn-soon{
 
-/* ปุ่มดูสินค้าภายนอก */
+    background:#f1f5f9;
 
-.external-button {
+    color:#94a3b8;
 
-    background:
-        linear-gradient(
-            135deg,
-            #ef4444,
-            #dc2626
-        );
-
-    color: white;
-
-}
-
-
-/* ปุ่มซื้อกับเรา */
-
-.own-button {
-
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #1d4ed8
-        );
-
-    color: white;
-
-}
-
-
-.buy-button i {
-
-    margin-right: 3px;
-
-}
-
-
-/* 2 ปุ่ม */
-
-.product-buttons {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 5px;
-
-    margin-top: 7px;
-
-}
-
-
-.product-buttons .buy-button {
-
-    margin-top: 0;
-
-}
-
-
-/* ==================================================
-   RANDOM CARD
-================================================== */
-
-.random-card .product-image {
-
-    height: 105px;
-
-}
-
-
-.random-card .product-content {
-
-    padding:
-        7px;
-
-}
-
-
-.random-card .product-title {
-
-    font-size: 12px;
-
-}
-
-
-.random-card .product-province {
-
-    font-size: 9px;
-
-}
-
-
-.random-card .sale-price {
-
-    font-size: 14px;
-
-}
-
-
-.random-card .original-price {
-
-    font-size: 8px;
-
-}
-
-
-.random-card .buy-button {
-
-    font-size: 10px;
-
-    padding:
-        7px 3px;
-
-}
-
-
-.random-card .product-buttons {
-
-    gap: 3px;
-
-}
-
-
-/* ==================================================
-   EMPTY
-================================================== */
-
-.empty-box {
-
-    text-align: center;
-
-    padding:
-        50px 20px;
-
-    color: #9ca3af;
-
-}
-
-
-.empty-box i {
-
-    font-size: 40px;
-
-    margin-bottom: 10px;
-
-}
-
-
-.empty-box p {
-
-    margin: 0;
-
+    cursor:default;
 }
 
 
@@ -1083,22 +942,61 @@ body {
    LOADING
 ================================================== */
 
-.loading {
+.loading{
 
-    text-align: center;
+    padding:45px 20px;
 
-    padding:
-        35px 15px;
+    text-align:center;
 
-    color: #6b7280;
+    color:#64748b;
+}
 
+.loading i{
+
+    color:#123c8c;
+
+    font-size:25px;
+
+    margin-bottom:10px;
+}
+
+.loading p{
+
+    margin:0;
+
+    font-size:12px;
 }
 
 
-.loading i {
+/* ==================================================
+   EMPTY
+================================================== */
 
-    margin-right: 5px;
+.empty{
 
+    padding:45px 20px;
+
+    text-align:center;
+
+    color:#64748b;
+
+    display:none;
+}
+
+.empty i{
+
+    font-size:35px;
+
+    color:#cbd5e1;
+
+    margin-bottom:10px;
+}
+
+.empty p{
+
+    margin:0;
+
+    font-size:13px;
 }
 
 
@@ -1106,28 +1004,61 @@ body {
    FOOTER
 ================================================== */
 
-.footer {
+.footer{
 
-    border-top: 1px solid #e5e7eb;
+    margin-top:30px;
 
-    background: white;
+    background:#ffffff;
 
-    padding:
-        25px 15px;
-
-    text-align: center;
-
-    color: #6b7280;
-
-    font-size: 12px;
-
+    border-top:1px solid #e5e7eb;
 }
 
+.footer-inner{
 
-.footer strong {
+    max-width:1200px;
 
-    color: #111827;
+    margin:auto;
 
+    padding:20px 14px;
+
+    text-align:center;
+}
+
+.footer-logo{
+
+    color:#123c8c;
+
+    font-weight:700;
+
+    font-size:16px;
+}
+
+.footer-text{
+
+    font-size:10px;
+
+    color:#64748b;
+
+    margin-top:3px;
+}
+
+.footer-line{
+
+    height:3px;
+
+    width:80px;
+
+    margin:10px auto 0;
+
+    border-radius:5px;
+
+    background:linear-gradient(
+        to right,
+        #d71920 33%,
+        #ffffff 33%,
+        #ffffff 66%,
+        #123c8c 66%
+    );
 }
 
 
@@ -1135,305 +1066,169 @@ body {
    RESPONSIVE
 ================================================== */
 
-@media (min-width: 640px) {
+@media(min-width:640px){
 
-    .products-grid {
+    .hero{
 
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-
-        gap: 12px;
-
+        padding:24px 20px;
     }
 
+    .hero-title{
 
-    .product-image {
-
-        height: 170px;
-
+        font-size:28px;
     }
 
+    .hero-desc{
 
-    .random-card .product-image {
-
-        height: 150px;
-
+        font-size:13px;
     }
 
+    .product-grid{
+
+        grid-template-columns:repeat(3,minmax(0,1fr));
+
+        gap:13px;
+    }
+
+    .product-media{
+
+        height:175px;
+    }
+
+    .product-title{
+
+        font-size:13px;
+    }
+
+    .sale-price{
+
+        font-size:17px;
+    }
+
+    .random-image{
+
+        height:145px;
+    }
 }
 
 
-@media (min-width: 900px) {
+@media(min-width:900px){
 
-    .header-inner {
+    .header-inner{
 
-        padding:
-            13px 20px;
-
+        padding:12px 18px;
     }
 
+    .container-main{
 
-    .hero {
-
-        padding-top: 25px;
-
+        padding:18px;
     }
 
+    .product-grid{
 
-    .hero-box {
+        grid-template-columns:repeat(4,minmax(0,1fr));
 
-        padding:
-            35px 35px;
-
+        gap:14px;
     }
 
+    .product-media{
 
-    .hero-title {
-
-        font-size: 34px;
-
+        height:195px;
     }
 
+    .random-grid{
 
-    .products-grid {
-
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr));
-
+        gap:12px;
     }
 
+    .random-image{
 
-    .product-image {
-
-        height: 190px;
-
+        height:165px;
     }
-
-
-    .random-card .product-image {
-
-        height: 165px;
-
-    }
-
 }
 
 
-/* ==================================================
-   MOBILE SMALL
-================================================== */
+/* MOBILE */
 
-@media (max-width: 420px) {
+@media(max-width:420px){
 
-    .header-inner {
+    .header-inner{
 
-        padding:
-            9px 10px;
-
-        gap: 8px;
-
+        gap:8px;
     }
 
+    .logo-mark{
 
-    .logo-icon {
+        width:36px;
 
-        width: 34px;
-
-        height: 34px;
-
-        border-radius: 10px;
-
-        font-size: 15px;
-
+        height:36px;
     }
 
+    .logo-title{
 
-    .logo-title {
-
-        font-size: 15px;
-
+        font-size:15px;
     }
 
+    .logo-sub{
 
-    .logo-sub {
-
-        font-size: 8px;
-
+        font-size:8px;
     }
 
+    .search-box input{
 
-    .search-box input {
+        height:36px;
 
-        height: 36px;
-
-        font-size: 12px;
-
-        padding-left: 34px;
-
+        font-size:11px;
     }
 
+    .hero-title{
 
-    .search-icon {
-
-        left: 11px;
-
+        font-size:20px;
     }
 
+    .hero-desc{
 
-    .hero {
-
-        padding:
-            12px 10px 6px;
-
+        font-size:10px;
     }
 
+    .random-btn{
 
-    .hero-box {
+        padding:8px 10px;
 
-        border-radius: 17px;
-
-        padding:
-            20px 15px;
-
+        font-size:10px;
     }
 
+    .product-media{
 
-    .hero-title {
-
-        font-size: 23px;
-
+        height:140px;
     }
 
+    .product-body{
 
-    .hero-text {
-
-        font-size: 12px;
-
+        padding:7px 8px 8px;
     }
 
+    .product-title{
 
-    .category-wrapper,
-    .random-section,
-    .products-section {
-
-        padding-left: 10px;
-
-        padding-right: 10px;
-
+        font-size:11px;
     }
 
+    .product-province{
 
-    .products-grid {
-
-        gap: 7px;
-
+        font-size:10px;
     }
 
+    .sale-price{
 
-    .product-image {
-
-        height: 120px;
-
+        font-size:15px;
     }
 
+    .btn{
 
-    .product-content {
+        min-height:30px;
 
-        padding:
-            7px;
-
+        font-size:9px;
     }
-
-
-    .product-title {
-
-        font-size: 12px;
-
-    }
-
-
-    .product-province {
-
-        font-size: 9px;
-
-    }
-
-
-    .sale-price {
-
-        font-size: 16px;
-
-    }
-
-
-    .buy-button {
-
-        font-size: 10px;
-
-        padding:
-            7px 3px;
-
-    }
-
-
-    .random-grid {
-
-        gap: 5px;
-
-    }
-
-
-    .random-card .product-image {
-
-        height: 90px;
-
-    }
-
-
-    .random-card .product-content {
-
-        padding: 5px;
-
-    }
-
-
-    .random-card .product-title {
-
-        font-size: 10px;
-
-    }
-
-
-    .random-card .product-province {
-
-        font-size: 8px;
-
-    }
-
-
-    .random-card .sale-price {
-
-        font-size: 12px;
-
-    }
-
-
-    .random-card .buy-button {
-
-        font-size: 8px;
-
-        padding:
-            6px 2px;
-
-    }
-
-
-    .product-buttons {
-
-        gap: 3px;
-
-    }
-
 }
 
 </style>
@@ -1445,10 +1240,10 @@ body {
 
 
 <!-- ==================================================
-     THAI STRIPE
+     THAI FLAG STRIPE
 ================================================== -->
 
-<div class="thai-stripe"></div>
+<div class="top-stripe"></div>
 
 
 <!-- ==================================================
@@ -1459,15 +1254,10 @@ body {
 
     <div class="header-inner">
 
-
-        <!-- LOGO -->
-
         <div class="logo">
 
-            <div class="logo-icon">
-
+            <div class="logo-mark">
                 <i class="fas fa-utensils"></i>
-
             </div>
 
             <div class="logo-text">
@@ -1485,31 +1275,18 @@ body {
         </div>
 
 
-        <!-- SEARCH -->
-
         <div class="search-box">
 
-            <i class="fas fa-search search-icon"></i>
-
             <input
-                type="text"
+                type="search"
                 id="searchInput"
-                placeholder="ค้นหาของกิน..."
+                placeholder="ค้นหา น้ำพริก ขนม ของฝาก..."
                 autocomplete="off"
             >
 
-            <button
-                class="clear-search"
-                id="clearSearch"
-                type="button"
-            >
-
-                <i class="fas fa-times"></i>
-
-            </button>
+            <i class="fas fa-search search-icon"></i>
 
         </div>
-
 
     </div>
 
@@ -1523,31 +1300,29 @@ body {
 
 <section class="hero">
 
-    <div class="hero-box">
+    <div class="hero-inner">
 
-        <h1 class="hero-title">
+        <div>
 
-            วันนี้ <span>กินอะไรดี?</span>
+            <h1 class="hero-title">
+                ของอร่อยจากทั่วไทย 🇹🇭
+            </h1>
 
-        </h1>
+            <p class="hero-desc">
+                คัดของกินเด็ดจากแต่ละจังหวัด มาไว้ให้เลือกในที่เดียว
+            </p>
 
-
-        <p class="hero-text">
-
-            ให้ PHAENDIN FOOD สุ่มของอร่อยจากทั่วไทยให้คุณ
-
-        </p>
+        </div>
 
 
         <button
-            class="random-button"
-            id="randomButton"
-            type="button"
+            class="random-btn"
+            onclick="showRandomProducts()"
         >
 
-            <i class="fas fa-dice"></i>
+            <i class="fas fa-shuffle"></i>
 
-            สุ่มของกินให้ฉัน
+            สุ่มของกิน
 
         </button>
 
@@ -1558,196 +1333,211 @@ body {
 
 
 <!-- ==================================================
-     CATEGORY
+     MAIN
 ================================================== -->
 
-<section class="category-wrapper">
+<main class="container-main">
 
-    <div
-        class="category-scroll"
-        id="categoryContainer"
-    >
+
+    <!-- ==================================================
+         CATEGORY
+    ================================================== -->
+
+    <div class="category-wrap">
 
         <button
-            class="category-button active"
+            class="category-btn active"
             data-category="ทั้งหมด"
+            onclick="selectCategory(this)"
         >
             ทั้งหมด
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="น้ำพริก"
+            onclick="selectCategory(this)"
         >
-            น้ำพริก
+            🌶️ น้ำพริก
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="ขนม"
+            onclick="selectCategory(this)"
         >
-            ขนม
+            🍪 ขนม
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="ของฝาก"
+            onclick="selectCategory(this)"
         >
-            ของฝาก
+            🎁 ของฝาก
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="อาหารแห้ง"
+            onclick="selectCategory(this)"
         >
-            อาหารแห้ง
+            🥫 อาหารแห้ง
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="อาหารทะเล"
+            onclick="selectCategory(this)"
         >
-            อาหารทะเล
+            🦐 อาหารทะเล
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="อาหารท้องถิ่น"
+            onclick="selectCategory(this)"
         >
-            อาหารท้องถิ่น
+            🍜 อาหารท้องถิ่น
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="เครื่องปรุง"
+            onclick="selectCategory(this)"
         >
-            เครื่องปรุง
+            🧂 เครื่องปรุง
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="เครื่องดื่ม"
+            onclick="selectCategory(this)"
         >
-            เครื่องดื่ม
+            🥤 เครื่องดื่ม
         </button>
 
         <button
-            class="category-button"
+            class="category-btn"
             data-category="อื่นๆ"
+            onclick="selectCategory(this)"
         >
             อื่นๆ
         </button>
 
     </div>
 
-</section>
+
+
+    <!-- ==================================================
+         RANDOM SECTION
+    ================================================== -->
+
+    <section
+        id="randomSection"
+        class="random-section"
+    >
+
+        <div class="section-head">
+
+            <h2 class="section-title">
+
+                <i class="fas fa-wand-magic-sparkles"></i>
+
+                ลองชิมอะไรดี?
+
+            </h2>
+
+            <span
+                id="randomCount"
+                class="product-count"
+            ></span>
+
+        </div>
+
+        <div
+            id="randomGrid"
+            class="random-grid"
+        ></div>
+
+    </section>
 
 
 
-<!-- ==================================================
-     RANDOM
-================================================== -->
+    <!-- ==================================================
+         PRODUCT HEADER
+    ================================================== -->
 
-<section
-    class="random-section"
-    id="randomSection"
->
-
-    <div class="section-heading">
+    <div class="section-head">
 
         <h2 class="section-title">
 
-            <i class="fas fa-wand-magic-sparkles"></i>
+            <i class="fas fa-basket-shopping"></i>
 
-            สุ่มให้คุณ
+            สินค้าทั้งหมด
 
         </h2>
 
-
         <span
-            class="random-status"
-            id="randomStatus"
+            id="productCount"
+            class="product-count"
         >
-            กดปุ่มสุ่มได้เลย
+            กำลังโหลด...
         </span>
 
     </div>
 
 
-    <div
-        class="random-grid"
-        id="randomGrid"
-    >
 
-        <!-- RANDOM PRODUCTS -->
-
-    </div>
-
-</section>
-
-
-
-<!-- ==================================================
-     PRODUCTS
-================================================== -->
-
-<section class="products-section">
-
-    <div class="section-heading">
-
-        <h2
-            class="section-title"
-            id="productsTitle"
-        >
-
-            <i class="fas fa-bowl-food"></i>
-
-            ของอร่อยทั้งหมด
-
-        </h2>
-
-    </div>
-
-
-    <!-- LOADING -->
+    <!-- ==================================================
+         LOADING
+    ================================================== -->
 
     <div
+        id="loading"
         class="loading"
-        id="loadingBox"
     >
 
         <i class="fas fa-spinner fa-spin"></i>
 
-        กำลังโหลดของอร่อย...
-
-    </div>
-
-
-    <!-- PRODUCTS -->
-
-    <div
-        class="products-grid"
-        id="productsGrid"
-    ></div>
-
-
-    <!-- EMPTY -->
-
-    <div
-        class="empty-box"
-        id="emptyBox"
-        style="display:none;"
-    >
-
-        <i class="fas fa-face-sad-tear"></i>
-
         <p>
-            ไม่พบสินค้าที่ค้นหา
+            กำลังโหลดสินค้า...
         </p>
 
     </div>
 
-</section>
+
+
+    <!-- ==================================================
+         EMPTY
+    ================================================== -->
+
+    <div
+        id="empty"
+        class="empty"
+    >
+
+        <i class="fas fa-box-open"></i>
+
+        <p>
+            ยังไม่พบสินค้าที่ค้นหา
+        </p>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         PRODUCT GRID
+    ================================================== -->
+
+    <div
+        id="productGrid"
+        class="product-grid"
+    ></div>
+
+
+</main>
 
 
 
@@ -1757,15 +1547,19 @@ body {
 
 <footer class="footer">
 
-    <strong>PHAENDIN FOOD</strong>
+    <div class="footer-inner">
 
-    <br>
+        <div class="footer-logo">
+            PHAENDIN FOOD
+        </div>
 
-    ของอร่อยจากทั่วไทย
+        <div class="footer-text">
+            ของอร่อยจากทั่วไทย • คัดสรรจากผู้ขายและผู้ผลิต
+        </div>
 
-    <br><br>
+        <div class="footer-line"></div>
 
-    © 2026 PHAENDIN FOOD
+    </div>
 
 </footer>
 
@@ -1779,605 +1573,374 @@ body {
 
 
 /* ==================================================
-   GOOGLE SHEET API
+   API
 ================================================== */
 
-const SHEET_API_URL =
+const API_URL =
 "https://script.google.com/macros/s/AKfycbxqXpc-Q_2TPzyVnfFaInoGldXl-s8Du6XKfcic3lYKUBXy-FkyQaXGtNcbjTSWOUJI/exec";
 
 
-
 /* ==================================================
-   VARIABLES
+   GLOBAL
 ================================================== */
 
 let allProducts = [];
 
-let filteredProducts = [];
-
 let currentCategory = "ทั้งหมด";
 
-let lastRandomIds = [];
-
-
-
-/* ==================================================
-   DOM
-================================================== */
-
-const productsGrid =
-    document.getElementById("productsGrid");
-
-const randomGrid =
-    document.getElementById("randomGrid");
-
-const randomButton =
-    document.getElementById("randomButton");
-
-const randomStatus =
-    document.getElementById("randomStatus");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const clearSearch =
-    document.getElementById("clearSearch");
-
-const loadingBox =
-    document.getElementById("loadingBox");
-
-const emptyBox =
-    document.getElementById("emptyBox");
-
-const productsTitle =
-    document.getElementById("productsTitle");
-
+let previousRandomIds = [];
 
 
 /* ==================================================
-   LOAD PRODUCTS
+   SAFE TEXT
 ================================================== */
 
-async function loadProducts() {
+function escapeHTML(value){
 
-    try {
-
-        loadingBox.style.display = "block";
-
-        productsGrid.innerHTML = "";
-
-        const response =
-            await fetch(SHEET_API_URL, {
-                cache: "no-store"
-            });
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "ไม่สามารถเชื่อมต่อ Google Sheet ได้"
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        /*
-         * รองรับทั้งกรณี API ส่ง array ตรง ๆ
-         * และกรณีส่ง {data:[...]}
-         */
-
-        if (Array.isArray(data)) {
-
-            allProducts = data;
-
-        } else if (
-            data &&
-            Array.isArray(data.data)
-        ) {
-
-            allProducts = data.data;
-
-        } else {
-
-            allProducts = [];
-
-        }
-
-
-        /*
-         * ทำความสะอาดข้อมูล
-         */
-
-        allProducts =
-            allProducts
-            .filter(item => item)
-            .map(normalizeProduct);
-
-
-        /*
-         * สุ่มลำดับสินค้าเริ่มต้น
-         */
-
-        allProducts =
-            shuffleArray(allProducts);
-
-
-        filteredProducts =
-            [...allProducts];
-
-
-        loadingBox.style.display = "none";
-
-
-        renderProducts();
-
-
-        /*
-         * ยังไม่สุ่มจนกว่าผู้ใช้กดปุ่ม
-         */
-
-        randomGrid.innerHTML = "";
-
-        randomStatus.textContent =
-            `${allProducts.length} รายการ`;
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        loadingBox.style.display = "none";
-
-        productsGrid.innerHTML = "";
-
-        emptyBox.style.display = "block";
-
-        emptyBox.innerHTML = `
-
-            <i class="fas fa-triangle-exclamation"></i>
-
-            <p>
-                โหลดสินค้าไม่สำเร็จ
-            </p>
-
-            <small>
-                กรุณาตรวจสอบ Google Sheet API
-            </small>
-
-        `;
-
-    }
-
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
 
-
 /* ==================================================
-   NORMALIZE PRODUCT
+   NUMBER
 ================================================== */
 
-function normalizeProduct(item) {
+function formatPrice(value){
+
+    if(
+        value === null ||
+        value === undefined ||
+        value === ""
+    ){
+
+        return "";
+    }
+
+    const number =
+        Number(
+            String(value)
+                .replace(/,/g,"")
+                .replace(/[^\d.-]/g,"")
+        );
+
+    if(Number.isNaN(number)){
+        return escapeHTML(value);
+    }
+
+    return number.toLocaleString("th-TH");
+}
+
+
+/* ==================================================
+   GET VALUE
+   รองรับหัวตารางหลายแบบ
+================================================== */
+
+function getValue(item, keys){
+
+    for(const key of keys){
+
+        if(
+            item &&
+            item[key] !== undefined &&
+            item[key] !== null &&
+            String(item[key]).trim() !== ""
+        ){
+
+            return String(item[key]).trim();
+        }
+
+    }
+
+    return "";
+}
+
+
+/* ==================================================
+   PROVINCE
+================================================== */
+
+function getProvince(item){
+
+    return getValue(item,[
+        "province",
+        "Province",
+        "จังหวัด",
+        "จังหวัด ",
+        "provinceName",
+        "location"
+    ]);
+}
+
+
+/* ==================================================
+   NORMALIZE
+================================================== */
+
+function normalizeProduct(item){
 
     return {
 
-        id:
-            String(
-                item.id ??
-                Math.random()
-            ),
+        id:getValue(item,[
+            "id",
+            "ID"
+        ]),
 
-        title:
-            String(
-                item.title ??
-                "สินค้าไม่มีชื่อ"
-            ),
+        title:getValue(item,[
+            "title",
+            "Title",
+            "ชื่อสินค้า",
+            "สินค้า"
+        ]),
 
-        category:
-            String(
-                item.category ??
-                "อื่นๆ"
-            ),
+        category:getValue(item,[
+            "category",
+            "Category",
+            "หมวดหมู่",
+            "ประเภท"
+        ]),
 
-        province:
-            String(
-                item.province ??
-                ""
-            ),
+        province:getProvince(item),
 
-        description:
-            String(
-                item.description ??
-                ""
-            ),
+        description:getValue(item,[
+            "description",
+            "Description",
+            "รายละเอียด"
+        ]),
 
-        salePrice:
-            String(
-                item.salePrice ??
-                ""
-            ),
+        salePrice:getValue(item,[
+            "salePrice",
+            "ราคาขาย",
+            "price",
+            "Price"
+        ]),
 
-        originalPrice:
-            String(
-                item.originalPrice ??
-                ""
-            ),
+        originalPrice:getValue(item,[
+            "originalPrice",
+            "ราคาเดิม"
+        ]),
 
-        image:
-            String(
-                item.image ??
-                ""
-            ),
+        image:getValue(item,[
+            "image",
+            "Image",
+            "รูป",
+            "รูปภาพ",
+            "imageUrl"
+        ]),
 
-        affiliateUrl:
-            String(
-                item.affiliateUrl ??
-                ""
-            ),
+        affiliateUrl:getValue(item,[
+            "affiliateUrl",
+            "AffiliateUrl",
+            "ลิงก์",
+            "ลิงก์สินค้า"
+        ]),
 
-        /*
-         * สำคัญ
-         * ช่องใหม่สำหรับขายเอง
-         */
+        ownUrl:getValue(item,[
+            "ownUrl",
+            "OwnUrl",
+            "ซื้อกับเรา",
+            "ลิงก์ซื้อกับเรา"
+        ]),
 
-        ownUrl:
-            String(
-                item.ownUrl ??
-                ""
-            ),
-
-        tags:
-            String(
-                item.tags ??
-                ""
-            )
+        tags:getValue(item,[
+            "tags",
+            "Tags",
+            "แท็ก"
+        ])
 
     };
 
 }
 
 
-
 /* ==================================================
-   SHUFFLE
+   IMAGE
 ================================================== */
 
-function shuffleArray(array) {
+function createImage(url,title){
 
-    const result =
-        [...array];
+    const safeTitle =
+        escapeHTML(title || "สินค้า");
 
-    for (
-        let i = result.length - 1;
-        i > 0;
-        i--
-    ) {
+    if(!url){
 
-        const j =
-            Math.floor(
-                Math.random() * (i + 1)
-            );
-
-        [
-            result[i],
-            result[j]
-        ] =
-        [
-            result[j],
-            result[i]
-        ];
-
+        return `
+            <div
+                style="
+                width:100%;
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:#f8fafc;
+                color:#cbd5e1;
+                font-size:30px;
+                "
+            >
+                <i class="fas fa-image"></i>
+            </div>
+        `;
     }
 
-    return result;
-
+    return `
+        <img
+            src="${escapeHTML(url)}"
+            alt="${safeTitle}"
+            loading="lazy"
+            onerror="
+                this.style.display='none';
+                this.parentElement.innerHTML=
+                '<i class=&quot;fas fa-image&quot; style=&quot;font-size:30px;color:#cbd5e1&quot;></i>';
+            "
+        >
+    `;
 }
 
 
-
 /* ==================================================
-   ESCAPE HTML
+   TAGS
 ================================================== */
 
-function escapeHTML(value) {
+function createTags(tags){
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-
-/* ==================================================
-   FORMAT PRICE
-================================================== */
-
-function formatPrice(price) {
-
-    if (
-        price === null ||
-        price === undefined ||
-        price === ""
-    ) {
-
+    if(!tags){
         return "";
-
     }
-
-
-    const number =
-        Number(
-            String(price)
-            .replace(/,/g, "")
-            .replace(/[^\d.-]/g, "")
-        );
-
-
-    if (
-        Number.isNaN(number)
-    ) {
-
-        return escapeHTML(price);
-
-    }
-
-
-    return number.toLocaleString("th-TH");
-
-}
-
-
-
-/* ==================================================
-   TAG HTML
-================================================== */
-
-function createTags(tags) {
-
-    if (!tags) {
-
-        return "";
-
-    }
-
 
     const list =
         String(tags)
         .split(",")
-        .map(tag => tag.trim())
+        .map(x => x.trim())
         .filter(Boolean)
-        .slice(0, 2);
+        .slice(0,3);
 
-
-    if (!list.length) {
-
+    if(!list.length){
         return "";
-
     }
 
-
     return `
-
-        <div class="tags">
+        <div class="product-tags">
 
             ${list.map(tag => `
-
-                <span class="tag">
-
+                <span class="product-tag">
                     ${escapeHTML(tag)}
-
                 </span>
-
             `).join("")}
 
         </div>
-
     `;
-
 }
 
 
-
 /* ==================================================
-   IMAGE HTML
+   BUTTONS
 ================================================== */
 
-function createImage(image, title) {
+function createButtons(item){
 
-    if (!image) {
+    const external =
+        item.affiliateUrl;
 
-        return `
-
-            <div class="image-placeholder">
-
-                <i class="fas fa-image"></i>
-
-            </div>
-
-        `;
-
-    }
+    const own =
+        item.ownUrl;
 
 
-    return `
-
-        <img
-            src="${escapeHTML(image)}"
-            alt="${escapeHTML(title)}"
-            loading="lazy"
-            onerror="
-                this.style.display='none';
-                this.parentElement.innerHTML='<div class=&quot;image-placeholder&quot;><i class=&quot;fas fa-image&quot;></i></div>';
-            "
-        >
-
-    `;
-
-}
-
-
-
-/* ==================================================
-   BUTTON HTML
-================================================== */
-
-function createButtons(item) {
-
-    const affiliateUrl =
-        String(item.affiliateUrl || "").trim();
-
-    const ownUrl =
-        String(item.ownUrl || "").trim();
-
-
-    /*
-     * ถ้ามีทั้ง 2 ลิงก์
-     */
-
-    if (
-        affiliateUrl &&
-        ownUrl
-    ) {
+    if(external && own){
 
         return `
-
             <div class="product-buttons">
 
                 <a
-                    href="${escapeHTML(affiliateUrl)}"
+                    class="btn btn-external"
+                    href="${escapeHTML(external)}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="buy-button external-button"
                 >
-
-                    <i class="fas fa-store"></i>
-
+                    <i class="fas fa-external-link-alt"></i>
                     ดูสินค้า
-
                 </a>
 
-
                 <a
-                    href="${escapeHTML(ownUrl)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="buy-button own-button"
+                    class="btn btn-own"
+                    href="${escapeHTML(own)}"
                 >
-
-                    <i class="fas fa-shopping-cart"></i>
-
+                    <i class="fas fa-cart-shopping"></i>
                     ซื้อกับเรา
-
                 </a>
 
             </div>
-
         `;
-
     }
 
 
-    /*
-     * ถ้ามีเฉพาะซื้อกับเรา
-     */
-
-    if (
-        ownUrl &&
-        !affiliateUrl
-    ) {
+    if(own){
 
         return `
+            <div class="product-buttons single">
 
-            <a
-                href="${escapeHTML(ownUrl)}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="buy-button own-button"
-            >
+                <a
+                    class="btn btn-own"
+                    href="${escapeHTML(own)}"
+                >
+                    <i class="fas fa-cart-shopping"></i>
+                    ซื้อกับเรา
+                </a>
 
-                <i class="fas fa-shopping-cart"></i>
-
-                ซื้อกับเรา
-
-            </a>
-
+            </div>
         `;
-
     }
 
 
-    /*
-     * ถ้ามีเฉพาะลิงก์ภายนอก
-     */
-
-    if (
-        affiliateUrl
-    ) {
+    if(external){
 
         return `
+            <div class="product-buttons single">
 
-            <a
-                href="${escapeHTML(affiliateUrl)}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="buy-button external-button"
-            >
+                <a
+                    class="btn btn-external"
+                    href="${escapeHTML(external)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <i class="fas fa-external-link-alt"></i>
+                    ดูสินค้า
+                </a>
 
-                <i class="fas fa-store"></i>
-
-                ดูสินค้า
-
-            </a>
-
+            </div>
         `;
-
     }
 
-
-    /*
-     * ไม่มีลิงก์เลย
-     */
 
     return `
+        <div class="product-buttons single">
 
-        <button
-            type="button"
-            class="buy-button"
-            style="
-                background:#e5e7eb;
-                color:#6b7280;
-                cursor:not-allowed;
-            "
-            disabled
-        >
+            <div class="btn btn-soon">
+                <i class="fas fa-clock"></i>
+                เร็วๆ นี้
+            </div>
 
-            <i class="fas fa-clock"></i>
-
-            เร็วๆ นี้
-
-        </button>
-
+        </div>
     `;
 
 }
-
 
 
 /* ==================================================
    PRODUCT CARD
 ================================================== */
 
-function createProductCard(
-    item,
-    random = false
-) {
+function createProductCard(item){
+
+    const province =
+        item.province || "ทั่วไทย";
+
+    const title =
+        item.title || "สินค้า";
 
     const salePrice =
         formatPrice(item.salePrice);
@@ -2388,106 +1951,126 @@ function createProductCard(
 
     return `
 
-        <article
-            class="product-card ${random ? "random-card" : ""}"
-        >
+        <article class="product-card">
 
 
-            <!-- IMAGE -->
+            <div class="product-media">
 
-            <div class="product-image">
+                ${
+                    item.salePrice &&
+                    item.originalPrice &&
+                    Number(
+                        String(item.originalPrice)
+                        .replace(/,/g,"")
+                    ) >
+                    Number(
+                        String(item.salePrice)
+                        .replace(/,/g,"")
+                    )
+
+                    ?
+
+                    `<div class="product-badge">
+                        ราคาพิเศษ
+                    </div>`
+
+                    :
+
+                    ""
+                }
+
 
                 ${createImage(
                     item.image,
-                    item.title
+                    title
                 )}
 
             </div>
 
 
-            <!-- CONTENT -->
 
-            <div class="product-content">
+            <div class="product-body">
 
 
-                <!-- TITLE -->
+                <h3 class="product-title"
+                    title="${escapeHTML(title)}">
 
-                <h3 class="product-title">
-
-                    ${escapeHTML(
-                        item.title
-                    )}
+                    ${escapeHTML(title)}
 
                 </h3>
 
 
-                <!-- PROVINCE -->
 
-                ${
-                    item.province
-                    ?
-                    `
-                    <div class="product-province">
+                <div
+                    class="product-province"
+                    title="${escapeHTML(province)}"
+                >
 
-                        <i class="fas fa-location-dot"></i>
+                    <i class="fas fa-location-dot"></i>
 
-                        ${escapeHTML(
-                            item.province
-                        )}
+                    <span>
+                        ${escapeHTML(province)}
+                    </span>
 
-                    </div>
-                    `
-                    :
-                    ""
-                }
+                </div>
 
 
-                <!-- TAGS -->
 
-                ${createTags(
-                    item.tags
-                )}
+                ${createTags(item.tags)}
 
 
-                <!-- PRICE -->
 
-                ${
-                    salePrice
-                    ?
-                    `
-                    <div class="price-row">
+                <div class="price-row">
 
+                    ${
+                        salePrice
+
+                        ?
+
+                        `
                         <span class="sale-price">
 
-                            ฿${salePrice}
+                            ${salePrice}
+
+                            <span class="baht">
+                                บาท
+                            </span>
 
                         </span>
+                        `
+
+                        :
+
+                        `
+                        <span class="sale-price">
+                            ติดต่อร้าน
+                        </span>
+                        `
+                    }
 
 
-                        ${
-                            originalPrice
-                            ?
-                            `
-                            <span class="original-price">
+                    ${
+                        originalPrice
 
-                                ฿${originalPrice}
+                        ?
 
-                            </span>
-                            `
-                            :
-                            ""
-                        }
+                        `
+                        <span class="original-price">
+                            ${originalPrice}
+                        </span>
+                        `
 
-                    </div>
-                    `
-                    :
-                    ""
-                }
+                        :
+
+                        ""
+                    }
+
+                </div>
 
 
-                <!-- BUTTONS -->
 
                 ${createButtons(item)}
+
 
             </div>
 
@@ -2498,310 +2081,442 @@ function createProductCard(
 }
 
 
-
 /* ==================================================
-   RENDER PRODUCTS
+   RANDOM CARD
 ================================================== */
 
-function renderProducts() {
+function createRandomCard(item){
 
-    productsGrid.innerHTML = "";
+    return `
 
-    emptyBox.style.display = "none";
-
-
-    if (
-        !filteredProducts.length
-    ) {
-
-        emptyBox.style.display =
-            "block";
-
-        productsTitle.innerHTML = `
-
-            <i class="fas fa-bowl-food"></i>
-
-            ไม่พบสินค้า
-
-        `;
-
-        return;
-
-    }
+        <article class="random-card">
 
 
-    productsTitle.innerHTML = `
+            <div class="random-image">
 
-        <i class="fas fa-bowl-food"></i>
+                ${createImage(
+                    item.image,
+                    item.title
+                )}
 
-        ${
-            currentCategory === "ทั้งหมด"
-            ?
-            "ของอร่อยทั้งหมด"
-            :
-            escapeHTML(currentCategory)
-        }
+            </div>
+
+
+            <div class="random-info">
+
+                <div
+                    class="random-title"
+                    title="${escapeHTML(item.title)}"
+                >
+                    ${escapeHTML(item.title)}
+                </div>
+
+
+                <div
+                    class="random-province"
+                    title="${escapeHTML(
+                        item.province || "ทั่วไทย"
+                    )}"
+                >
+
+                    <i class="fas fa-location-dot"></i>
+
+                    ${escapeHTML(
+                        item.province || "ทั่วไทย"
+                    )}
+
+                </div>
+
+
+                <div class="random-price">
+
+                    ${
+                        item.salePrice
+                        ?
+                        formatPrice(item.salePrice) + " บาท"
+                        :
+                        "ติดต่อร้าน"
+                    }
+
+                </div>
+
+            </div>
+
+        </article>
 
     `;
 
-
-    productsGrid.innerHTML =
-        filteredProducts
-        .map(item =>
-            createProductCard(item)
-        )
-        .join("");
-
 }
-
 
 
 /* ==================================================
    FILTER PRODUCTS
 ================================================== */
 
-function filterProducts() {
+function getFilteredProducts(){
 
     const keyword =
-        searchInput.value
+        document
+        .getElementById("searchInput")
+        .value
         .trim()
         .toLowerCase();
 
 
-    filteredProducts =
-        allProducts.filter(item => {
+    return allProducts.filter(item => {
 
 
-            const matchCategory =
-                currentCategory === "ทั้งหมด" ||
-                item.category
-                    .toLowerCase()
-                    .includes(
-                        currentCategory.toLowerCase()
-                    );
+        const matchCategory =
+            currentCategory === "ทั้งหมด" ||
 
-
-            const searchableText = [
-
-                item.title,
-
-                item.category,
-
-                item.province,
-
-                item.description,
-
-                item.tags
-
-            ]
-            .join(" ")
+            String(item.category)
+            .trim()
+            .toLowerCase() ===
+            currentCategory
+            .trim()
             .toLowerCase();
 
 
-            const matchSearch =
-                !keyword ||
-                searchableText.includes(
-                    keyword
-                );
+        if(!matchCategory){
+            return false;
+        }
 
 
-            return (
-                matchCategory &&
-                matchSearch
+        if(!keyword){
+            return true;
+        }
+
+
+        const searchText = [
+
+            item.title,
+
+            item.category,
+
+            item.province,
+
+            item.description,
+
+            item.tags
+
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+        return searchText.includes(keyword);
+
+    });
+
+}
+
+
+/* ==================================================
+   RENDER PRODUCTS
+================================================== */
+
+function renderProducts(){
+
+    const grid =
+        document.getElementById(
+            "productGrid"
+        );
+
+    const empty =
+        document.getElementById(
+            "empty"
+        );
+
+    const count =
+        document.getElementById(
+            "productCount"
+        );
+
+
+    const products =
+        getFilteredProducts();
+
+
+    grid.innerHTML = "";
+
+
+    count.textContent =
+        `${products.length} สินค้า`;
+
+
+    if(!products.length){
+
+        empty.style.display =
+            "block";
+
+        return;
+    }
+
+
+    empty.style.display =
+        "none";
+
+
+    grid.innerHTML =
+        products
+        .map(createProductCard)
+        .join("");
+
+}
+
+
+/* ==================================================
+   CATEGORY
+================================================== */
+
+function selectCategory(button){
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(btn => {
+
+            btn.classList.remove(
+                "active"
             );
 
         });
 
 
+    button.classList.add("active");
+
+
+    currentCategory =
+        button.dataset.category;
+
+
     renderProducts();
 
 
-    clearSearch.style.display =
-        searchInput.value
-        ?
-        "block"
-        :
-        "none";
+    document
+        .getElementById("randomSection")
+        .classList.remove("show");
 
 }
 
 
-
 /* ==================================================
-   RANDOM 3 PRODUCTS
+   RANDOM PRODUCTS
 ================================================== */
 
-function randomProducts() {
+function showRandomProducts(){
 
-    if (
-        !allProducts.length
-    ) {
-
+    if(!allProducts.length){
         return;
+    }
+
+
+    let pool =
+        [...allProducts];
+
+
+    /*
+       พยายามไม่ให้ซ้ำกับรอบก่อน
+    */
+
+    const newPool =
+        pool.filter(item =>
+            !previousRandomIds.includes(
+                String(item.id)
+            )
+        );
+
+
+    if(newPool.length >= 3){
+
+        pool = newPool;
 
     }
 
 
     /*
-     * เอาสินค้าที่ไม่ซ้ำกับรอบก่อน
-     */
+       สุ่ม
+    */
 
-    let available =
-        allProducts.filter(
-            item =>
-                !lastRandomIds.includes(
-                    item.id
-                )
-        );
-
-
-    /*
-     * ถ้าเหลือน้อยกว่า 3
-     * ใช้ทั้งหมดแล้วสุ่มใหม่
-     */
-
-    if (
-        available.length < 3
-    ) {
-
-        available =
-            [...allProducts];
-
-    }
-
-
-    available =
-        shuffleArray(
-            available
-        );
+    pool.sort(
+        () => Math.random() - .5
+    );
 
 
     const selected =
-        available.slice(
-            0,
-            Math.min(
-                3,
-                available.length
-            )
+        pool.slice(0,3);
+
+
+    previousRandomIds =
+        selected.map(item =>
+            String(item.id)
         );
 
 
-    lastRandomIds =
-        selected.map(
-            item => item.id
+    const grid =
+        document.getElementById(
+            "randomGrid"
         );
 
 
-    randomGrid.innerHTML =
+    grid.innerHTML =
         selected
-        .map(item =>
-            createProductCard(
-                item,
-                true
-            )
-        )
+        .map(createRandomCard)
         .join("");
 
 
-    randomStatus.textContent =
-        `สุ่ม ${selected.length} รายการ`;
+    document
+        .getElementById(
+            "randomCount"
+        )
+        .textContent =
+        `${selected.length} ชิ้น`;
 
-
-    /*
-     * เลื่อนมาดูผลสุ่ม
-     */
 
     document
-        .getElementById("randomSection")
+        .getElementById(
+            "randomSection"
+        )
+        .classList.add("show");
+
+
+    document
+        .getElementById(
+            "randomSection"
+        )
         .scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+            behavior:"smooth",
+            block:"start"
         });
 
 }
 
 
-
 /* ==================================================
-   CATEGORY CLICK
+   LOAD PRODUCTS
 ================================================== */
 
-document
-    .querySelectorAll(".category-button")
-    .forEach(button => {
+async function loadProducts(){
 
-        button.addEventListener(
-            "click",
-            () => {
-
-                document
-                    .querySelectorAll(
-                        ".category-button"
-                    )
-                    .forEach(btn =>
-                        btn.classList.remove(
-                            "active"
-                        )
-                    );
-
-
-                button.classList.add(
-                    "active"
-                );
-
-
-                currentCategory =
-                    button.dataset.category;
-
-
-                filterProducts();
-
-            }
+    const loading =
+        document.getElementById(
+            "loading"
         );
 
-    });
 
+    try{
+
+        loading.style.display =
+            "block";
+
+
+        const response =
+            await fetch(API_URL);
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "API Error"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+          รองรับทั้ง
+
+          [
+             {...},
+             {...}
+          ]
+
+          และ
+
+          {
+             data:[...]
+          }
+        */
+
+        const rawProducts =
+            Array.isArray(data)
+
+            ?
+
+            data
+
+            :
+
+            Array.isArray(data.data)
+
+            ?
+
+            data.data
+
+            :
+
+            [];
+
+
+        allProducts =
+            rawProducts
+            .map(normalizeProduct)
+            .filter(item =>
+                item.title
+            );
+
+
+        loading.style.display =
+            "none";
+
+
+        renderProducts();
+
+
+    }catch(error){
+
+        console.error(
+            "LOAD ERROR:",
+            error
+        );
+
+
+        loading.innerHTML = `
+
+            <i class="fas fa-triangle-exclamation"></i>
+
+            <p>
+                โหลดสินค้าไม่สำเร็จ
+            </p>
+
+            <p style="
+                font-size:10px;
+                margin-top:5px;
+                color:#94a3b8;
+            ">
+                กรุณาตรวจสอบ Google Apps Script
+            </p>
+
+        `;
+
+    }
+
+}
 
 
 /* ==================================================
    SEARCH
 ================================================== */
 
-searchInput.addEventListener(
-    "input",
-    filterProducts
-);
-
-
-
-/* ==================================================
-   CLEAR SEARCH
-================================================== */
-
-clearSearch.addEventListener(
-    "click",
-    () => {
-
-        searchInput.value = "";
-
-        filterProducts();
-
-        searchInput.focus();
-
-    }
-);
-
-
-
-/* ==================================================
-   RANDOM BUTTON
-================================================== */
-
-randomButton.addEventListener(
-    "click",
-    randomProducts
-);
-
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "input",
+        renderProducts
+    );
 
 
 /* ==================================================
@@ -2812,6 +2527,7 @@ loadProducts();
 
 
 </script>
+
 
 </body>
 
