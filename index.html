@@ -1,54 +1,34 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>PHAENDIN KITCHEN | มีอะไรในตู้เย็น?</title>
 
 <meta name="description"
-      content="มีอะไรในตู้เย็น บอกเรา แล้ว PHAENDIN KITCHEN ช่วยคิดเมนูให้">
+content="บอกวัตถุดิบที่มี แล้วให้ AI ช่วยคิดเมนู พร้อมเลือกซื้อวัตถุดิบที่ต้องการ">
 
-<link rel="preconnect"
-      href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet">
-
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
 *{
     box-sizing:border-box;
     margin:0;
     padding:0;
 }
 
-html{
-    scroll-behavior:smooth;
-}
-
 body{
     font-family:'Kanit',sans-serif;
     background:#f5f7fb;
-    color:#18212f;
-    transition:.25s;
+    color:#222;
 }
 
 body.dark{
-    background:#10141b;
-    color:#f4f6f8;
+    background:#111827;
+    color:#f3f4f6;
 }
 
 button,
@@ -57,891 +37,439 @@ textarea{
     font-family:inherit;
 }
 
-button{
-    cursor:pointer;
-}
-
-.container{
-    width:min(1180px,92%);
-    margin:auto;
-}
-
-
-/* =========================
-   HEADER
-========================= */
-
 header{
     position:sticky;
     top:0;
-    z-index:1000;
-    background:rgba(255,255,255,.94);
-    backdrop-filter:blur(12px);
-    border-bottom:1px solid #e5e7eb;
+    z-index:100;
+    background:#d71920;
+    color:white;
+    box-shadow:0 3px 15px rgba(0,0,0,.15);
 }
 
-.dark header{
-    background:rgba(16,20,27,.94);
-    border-color:#252b35;
-}
-
-.nav{
-    min-height:70px;
+.header-inner{
+    max-width:1100px;
+    margin:auto;
+    padding:13px 16px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:15px;
+    gap:10px;
 }
 
 .logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
     font-size:21px;
     font-weight:700;
-    white-space:nowrap;
-}
-
-.logo-mark{
-    width:42px;
-    height:42px;
-    border-radius:13px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    background:linear-gradient(135deg,#d71920,#123c8c);
-    box-shadow:0 8px 20px rgba(215,25,32,.2);
 }
 
 .logo span{
-    color:#d71920;
+    display:block;
+    font-size:11px;
+    font-weight:400;
+    opacity:.9;
 }
 
-.logo small{
-    color:#123c8c;
-    font-size:13px;
-    margin-left:2px;
-}
-
-.dark .logo small{
-    color:#72a2ff;
-}
-
-.header-actions{
+.header-buttons{
     display:flex;
-    gap:8px;
+    gap:7px;
 }
 
 .icon-btn{
-    width:42px;
-    height:42px;
-    border:none;
-    border-radius:12px;
-    background:#f1f3f6;
-    color:#263142;
-    font-size:17px;
+    border:0;
+    background:white;
+    color:#d71920;
+    border-radius:10px;
+    padding:8px 11px;
+    cursor:pointer;
+    font-size:15px;
 }
 
-.dark .icon-btn{
-    background:#202630;
-    color:#fff;
+.cart-btn{
+    position:relative;
 }
 
-
-/* =========================
-   HERO
-========================= */
+.cart-count{
+    position:absolute;
+    right:-5px;
+    top:-6px;
+    background:#123c8c;
+    color:white;
+    width:20px;
+    height:20px;
+    border-radius:50%;
+    font-size:11px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
 
 .hero{
-    padding:55px 0 35px;
-    background:
-        radial-gradient(circle at top right,rgba(18,60,140,.10),transparent 35%),
-        radial-gradient(circle at top left,rgba(215,25,32,.10),transparent 30%);
-}
-
-.hero-box{
+    background:linear-gradient(135deg,#d71920,#123c8c);
+    color:white;
+    padding:42px 16px;
     text-align:center;
-    max-width:850px;
-    margin:auto;
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    padding:7px 14px;
-    border-radius:999px;
-    background:#fff;
-    border:1px solid #e6e9ee;
-    color:#123c8c;
-    font-size:13px;
-    font-weight:500;
-    margin-bottom:15px;
-}
-
-.dark .badge{
-    background:#1c222c;
-    border-color:#2c3440;
-    color:#8db2ff;
 }
 
 .hero h1{
-    font-size:clamp(34px,7vw,62px);
-    line-height:1.1;
-    font-weight:700;
-}
-
-.hero h1 .red{
-    color:#d71920;
-}
-
-.hero h1 .blue{
-    color:#123c8c;
-}
-
-.dark .hero h1 .blue{
-    color:#75a2ff;
+    font-size:31px;
+    line-height:1.25;
+    margin-bottom:9px;
 }
 
 .hero p{
-    margin:16px auto 0;
-    max-width:650px;
-    color:#687385;
-    font-size:16px;
-    line-height:1.8;
+    font-size:15px;
+    opacity:.95;
 }
 
-.dark .hero p{
-    color:#aeb7c5;
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px 15px 50px;
 }
 
-
-/* =========================
-   MAIN INPUT
-========================= */
-
-.input-card{
-    margin-top:28px;
-    background:#fff;
-    border:1px solid #e6e9ee;
-    border-radius:25px;
-    padding:20px;
-    box-shadow:0 18px 50px rgba(20,30,50,.08);
-    text-align:left;
+.card{
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 5px 22px rgba(0,0,0,.07);
+    margin-bottom:18px;
 }
 
-.dark .input-card{
-    background:#181e27;
-    border-color:#2a323e;
-    box-shadow:0 18px 50px rgba(0,0,0,.25);
+.dark .card{
+    background:#1f2937;
 }
 
-.input-title{
-    font-size:18px;
+.section-title{
+    font-size:20px;
     font-weight:600;
-    margin-bottom:10px;
-}
-
-.input-sub{
-    color:#7a8492;
-    font-size:13px;
     margin-bottom:12px;
-}
-
-.dark .input-sub{
-    color:#9da7b5;
 }
 
 textarea{
     width:100%;
-    min-height:115px;
+    min-height:105px;
     resize:vertical;
-    border:2px solid #e7eaf0;
-    border-radius:17px;
-    padding:15px;
-    font-size:16px;
+    border:2px solid #e5e7eb;
+    border-radius:13px;
+    padding:13px;
     outline:none;
-    background:#fafbfc;
-    color:#18212f;
-    transition:.2s;
+    font-size:15px;
+    background:white;
+}
+
+.dark textarea{
+    background:#111827;
+    color:white;
+    border-color:#374151;
 }
 
 textarea:focus{
     border-color:#123c8c;
-    background:#fff;
 }
 
-.dark textarea{
-    background:#11161d;
-    color:#fff;
-    border-color:#2d3643;
-}
-
-.dark textarea:focus{
-    border-color:#6f9cff;
-}
-
-
-/* =========================
-   QUICK INGREDIENTS
-========================= */
-
-.quick-title{
-    font-size:13px;
-    color:#7a8492;
-    margin:15px 0 9px;
-}
-
-.quick-list{
+.quick{
     display:flex;
     flex-wrap:wrap;
     gap:7px;
+    margin:12px 0;
 }
 
-.quick-btn{
-    border:1px solid #e0e4ea;
+.quick button{
+    border:1px solid #dbe2ef;
     background:#f8fafc;
-    color:#344054;
-    border-radius:999px;
-    padding:7px 12px;
-    font-size:13px;
-    transition:.2s;
-}
-
-.quick-btn:hover{
-    border-color:#123c8c;
-    color:#123c8c;
-    transform:translateY(-1px);
-}
-
-.dark .quick-btn{
-    background:#202630;
-    color:#d9dee7;
-    border-color:#343d4a;
-}
-
-
-/* =========================
-   PHOTO
-========================= */
-
-.photo-area{
-    margin-top:17px;
-    border:2px dashed #d9dee7;
-    border-radius:18px;
-    padding:15px;
-    text-align:center;
-    background:#fafbfc;
-}
-
-.dark .photo-area{
-    background:#11161d;
-    border-color:#343d4a;
-}
-
-.photo-icon{
-    font-size:27px;
-    color:#123c8c;
-    margin-bottom:5px;
-}
-
-.photo-title{
-    font-size:15px;
-    font-weight:600;
-}
-
-.photo-sub{
-    font-size:12px;
-    color:#7b8492;
-    margin:3px 0 10px;
-}
-
-.photo-buttons{
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:8px;
-}
-
-.upload-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:7px;
-    padding:9px 15px;
-    border-radius:11px;
-    background:#123c8c;
-    color:#fff;
-    font-size:13px;
+    padding:7px 11px;
+    border-radius:20px;
     cursor:pointer;
 }
 
-.upload-btn input{
-    display:none;
+.dark .quick button{
+    background:#374151;
+    color:white;
+    border-color:#4b5563;
 }
 
-.preview-wrap{
-    display:none;
+.main-btn{
+    width:100%;
+    border:0;
+    border-radius:13px;
+    padding:13px;
+    background:#d71920;
+    color:white;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.main-btn:hover{
+    opacity:.9;
+}
+
+.secondary-btn{
+    background:#123c8c;
+}
+
+.ai-box{
     margin-top:12px;
 }
 
-.preview-wrap.show{
-    display:block;
+.ai-box summary{
+    cursor:pointer;
+    font-weight:500;
 }
 
-.preview-wrap img{
-    width:100%;
-    max-height:280px;
-    object-fit:contain;
-    border-radius:15px;
-    background:#eee;
-}
-
-.ai-btn{
+.ai-box input{
     width:100%;
     margin-top:10px;
-    border:none;
-    border-radius:13px;
-    padding:13px;
-    background:linear-gradient(135deg,#7c3aed,#2563eb);
-    color:#fff;
-    font-size:15px;
-    font-weight:600;
+    padding:11px;
+    border:1px solid #ddd;
+    border-radius:10px;
 }
 
-.ai-btn:disabled{
-    opacity:.55;
-    cursor:not-allowed;
+.dark .ai-box input{
+    background:#111827;
+    color:white;
+    border-color:#374151;
 }
 
+.status{
+    margin-top:10px;
+    text-align:center;
+    font-size:14px;
+    color:#666;
+}
 
-/* =========================
-   API BOX
-========================= */
+.dark .status{
+    color:#cbd5e1;
+}
 
-.api-box{
-    margin-top:14px;
-    padding:13px;
+.results{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.menu-card{
+    border:1px solid #e5e7eb;
     border-radius:15px;
-    background:#f5f7fb;
-    border:1px solid #e3e7ee;
+    overflow:hidden;
+    background:white;
 }
 
-.dark .api-box{
-    background:#11161d;
-    border-color:#303846;
+.dark .menu-card{
+    background:#111827;
+    border-color:#374151;
 }
 
-.api-head{
+.menu-img{
+    height:170px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:65px;
+    background:#f1f5f9;
+}
+
+.dark .menu-img{
+    background:#374151;
+}
+
+.menu-body{
+    padding:13px;
+}
+
+.menu-body h3{
+    font-size:18px;
+    margin-bottom:6px;
+}
+
+.match{
+    display:inline-block;
+    background:#dcfce7;
+    color:#166534;
+    padding:3px 8px;
+    border-radius:20px;
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.missing{
+    font-size:13px;
+    color:#dc2626;
+    margin-bottom:8px;
+}
+
+.recipe-btn{
+    width:100%;
+    border:0;
+    background:#123c8c;
+    color:white;
+    border-radius:9px;
+    padding:9px;
+    cursor:pointer;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:13px;
+}
+
+.product{
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    overflow:hidden;
+    background:white;
+}
+
+.dark .product{
+    background:#111827;
+    border-color:#374151;
+}
+
+.product-image{
+    height:150px;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.product-placeholder{
+    font-size:55px;
+}
+
+.product-body{
+    padding:12px;
+}
+
+.product-name{
+    font-size:16px;
+    font-weight:500;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.product-desc{
+    font-size:12px;
+    color:#6b7280;
+    min-height:20px;
+}
+
+.price{
+    font-size:19px;
+    font-weight:700;
+    color:#d71920;
+    margin:5px 0 8px;
+}
+
+.buy-btn{
+    width:100%;
+    border:0;
+    background:#d71920;
+    color:white;
+    padding:9px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+.ad{
+    min-height:110px;
+    border:2px dashed #cbd5e1;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#64748b;
+    margin-top:20px;
+    background:#fff;
+}
+
+.dark .ad{
+    background:#1f2937;
+    border-color:#4b5563;
+    color:#cbd5e1;
+}
+
+.cart-list{
+    margin:12px 0;
+}
+
+.cart-item{
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap:10px;
-    margin-bottom:7px;
+    padding:10px 0;
+    border-bottom:1px solid #e5e7eb;
 }
 
-.api-head strong{
-    font-size:13px;
+.dark .cart-item{
+    border-color:#374151;
 }
 
-.api-status{
-    font-size:11px;
-    padding:4px 8px;
-    border-radius:999px;
-    background:#e8edf5;
-    color:#667085;
-}
-
-.api-status.ok{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.api-input-row{
-    display:flex;
-    gap:7px;
-}
-
-.api-input{
+.cart-item-info{
     flex:1;
-    min-width:0;
-    border:1px solid #dce1e8;
-    background:#fff;
-    border-radius:10px;
-    padding:9px 11px;
-    outline:none;
-    font-size:12px;
 }
 
-.dark .api-input{
-    background:#1b212b;
-    color:#fff;
-    border-color:#343d49;
+.cart-item-name{
+    font-weight:500;
 }
 
-.save-api{
-    border:none;
-    background:#18212f;
-    color:#fff;
-    border-radius:10px;
-    padding:0 12px;
-    font-size:12px;
-}
-
-.dark .save-api{
-    background:#fff;
-    color:#111;
-}
-
-.api-note{
-    margin-top:7px;
-    font-size:10px;
-    line-height:1.6;
-    color:#858e9c;
-}
-
-
-/* =========================
-   ACTIONS
-========================= */
-
-.action-row{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:9px;
-    margin-top:15px;
-}
-
-.main-btn{
-    border:none;
-    border-radius:13px;
-    padding:13px 10px;
-    font-size:14px;
-    font-weight:600;
-    color:#fff;
-}
-
-.btn-red{
-    background:#d71920;
-}
-
-.btn-blue{
-    background:#123c8c;
-}
-
-.btn-gray{
-    background:#eef1f5;
-    color:#3e4755;
-}
-
-.dark .btn-gray{
-    background:#29313d;
-    color:#fff;
-}
-
-
-/* =========================
-   UNDERSTOOD INGREDIENTS
-========================= */
-
-.understood{
-    display:none;
-    margin-top:18px;
-    padding:15px;
-    border-radius:17px;
-    background:#f8fafc;
-    border:1px solid #e6e9ee;
-}
-
-.understood.show{
-    display:block;
-}
-
-.dark .understood{
-    background:#11161d;
-    border-color:#2d3541;
-}
-
-.understood-title{
+.cart-item-price{
     font-size:13px;
-    font-weight:600;
-    margin-bottom:9px;
+    color:#666;
 }
 
-.chips{
+.qty{
     display:flex;
-    flex-wrap:wrap;
+    align-items:center;
     gap:7px;
 }
 
-.chip{
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    padding:6px 10px;
-    border-radius:999px;
-    background:#fff;
-    border:1px solid #dfe4eb;
-    font-size:12px;
+.qty button{
+    width:27px;
+    height:27px;
+    border:0;
+    border-radius:7px;
+    background:#e5e7eb;
+    cursor:pointer;
 }
 
-.dark .chip{
-    background:#202630;
-    border-color:#333d49;
+.dark .qty button{
+    background:#374151;
+    color:white;
 }
 
-
-/* =========================
-   RESULTS
-========================= */
-
-.results-section{
-    padding:20px 0 45px;
+.remove{
+    border:0;
+    background:none;
+    color:#dc2626;
+    cursor:pointer;
 }
 
-.section-head{
+.total{
     display:flex;
-    align-items:end;
     justify-content:space-between;
-    gap:15px;
-    margin-bottom:15px;
-}
-
-.section-title{
-    font-size:25px;
+    font-size:19px;
     font-weight:700;
+    margin:15px 0;
 }
-
-.section-sub{
-    font-size:12px;
-    color:#7b8492;
-    margin-top:2px;
-}
-
-.dark .section-sub{
-    color:#9ba5b4;
-}
-
-.result-count{
-    font-size:12px;
-    color:#7b8492;
-}
-
-
-/* =========================
-   FILTER
-========================= */
-
-.filter-box{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    padding-bottom:5px;
-    margin-bottom:18px;
-}
-
-.filter-box::-webkit-scrollbar{
-    height:3px;
-}
-
-.filter-btn{
-    flex:none;
-    border:1px solid #dde2e9;
-    background:#fff;
-    color:#4b5563;
-    border-radius:999px;
-    padding:8px 13px;
-    font-size:12px;
-}
-
-.filter-btn.active{
-    background:#123c8c;
-    color:#fff;
-    border-color:#123c8c;
-}
-
-.dark .filter-btn{
-    background:#1a2029;
-    color:#d8dee8;
-    border-color:#303946;
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-.menu-search{
-    width:100%;
-    border:1px solid #dfe4eb;
-    border-radius:13px;
-    padding:11px 13px;
-    background:#fff;
-    outline:none;
-    margin-bottom:15px;
-}
-
-.dark .menu-search{
-    background:#181e27;
-    color:#fff;
-    border-color:#313a47;
-}
-
-
-/* =========================
-   PRODUCT GRID
-========================= */
-
-.menu-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-}
-
-.menu-card{
-    background:#fff;
-    border:1px solid #e6e9ee;
-    border-radius:19px;
-    overflow:hidden;
-    box-shadow:0 8px 25px rgba(20,30,50,.05);
-    transition:.2s;
-    position:relative;
-}
-
-.menu-card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 15px 35px rgba(20,30,50,.10);
-}
-
-.dark .menu-card{
-    background:#181e27;
-    border-color:#2b333f;
-    box-shadow:none;
-}
-
-.menu-img{
-    height:155px;
-    background:#f0f2f5;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:70px;
-}
-
-.dark .menu-img{
-    background:#11161d;
-}
-
-.menu-body{
-    padding:14px;
-}
-
-.menu-top{
-    display:flex;
-    align-items:start;
-    justify-content:space-between;
-    gap:8px;
-}
-
-.menu-name{
-    font-size:18px;
-    font-weight:600;
-    line-height:1.3;
-}
-
-.favorite{
-    width:34px;
-    height:34px;
-    flex:none;
-    border:none;
-    border-radius:10px;
-    background:#f2f4f7;
-    color:#8992a0;
-}
-
-.favorite.active{
-    color:#d71920;
-}
-
-.dark .favorite{
-    background:#252c36;
-}
-
-.menu-desc{
-    margin-top:6px;
-    color:#737d8c;
-    font-size:12px;
-    line-height:1.6;
-    min-height:38px;
-}
-
-.dark .menu-desc{
-    color:#a5afbc;
-}
-
-.meta{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-    margin-top:10px;
-}
-
-.meta span{
-    padding:5px 8px;
-    border-radius:8px;
-    background:#f3f5f8;
-    color:#626c7b;
-    font-size:10px;
-}
-
-.dark .meta span{
-    background:#252c36;
-    color:#b7c0cd;
-}
-
-.match{
-    margin-top:12px;
-}
-
-.match-head{
-    display:flex;
-    justify-content:space-between;
-    font-size:11px;
-    margin-bottom:5px;
-}
-
-.match-percent{
-    font-weight:600;
-    color:#123c8c;
-}
-
-.match-bar{
-    height:7px;
-    background:#e9edf2;
-    border-radius:999px;
-    overflow:hidden;
-}
-
-.match-fill{
-    height:100%;
-    background:linear-gradient(90deg,#d71920,#123c8c);
-    border-radius:999px;
-}
-
-.missing{
-    margin-top:10px;
-    font-size:11px;
-    line-height:1.6;
-    color:#a16207;
-    background:#fff7df;
-    padding:8px;
-    border-radius:9px;
-}
-
-.dark .missing{
-    background:#352b14;
-    color:#f6cb68;
-}
-
-.ready{
-    margin-top:10px;
-    font-size:11px;
-    color:#15803d;
-    background:#eaf9ef;
-    padding:8px;
-    border-radius:9px;
-}
-
-.dark .ready{
-    background:#142d1d;
-    color:#7be29b;
-}
-
-.menu-actions{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:7px;
-    margin-top:12px;
-}
-
-.recipe-btn{
-    border:none;
-    border-radius:11px;
-    padding:10px;
-    background:#123c8c;
-    color:#fff;
-    font-size:12px;
-    font-weight:600;
-}
-
-
-/* =========================
-   EMPTY
-========================= */
-
-.empty{
-    text-align:center;
-    padding:45px 15px;
-    color:#7b8492;
-    display:none;
-}
-
-.empty-icon{
-    font-size:50px;
-    margin-bottom:10px;
-}
-
-
-/* =========================
-   AD
-========================= */
-
-.ad-box{
-    margin:10px auto 30px;
-    min-height:105px;
-    border:2px dashed #d8dde5;
-    border-radius:18px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    color:#98a1ae;
-    background:#fafbfc;
-}
-
-.dark .ad-box{
-    background:#141920;
-    border-color:#303743;
-    color:#727d8c;
-}
-
-.ad-box strong{
-    display:block;
-    font-size:13px;
-    color:#737d8b;
-}
-
-.dark .ad-box strong{
-    color:#9ca6b4;
-}
-
-.ad-box span{
-    font-size:10px;
-}
-
-
-/* =========================
-   MODAL
-========================= */
 
 .modal{
     position:fixed;
     inset:0;
     background:rgba(0,0,0,.65);
-    z-index:2000;
+    z-index:500;
     display:none;
-    align-items:flex-end;
+    align-items:center;
     justify-content:center;
     padding:15px;
 }
@@ -950,2285 +478,1071 @@ textarea:focus{
     display:flex;
 }
 
-.modal-card{
-    width:min(650px,100%);
+.modal-box{
+    width:100%;
+    max-width:520px;
     max-height:90vh;
     overflow:auto;
-    background:#fff;
-    border-radius:25px 25px 18px 18px;
-    padding:22px;
-    position:relative;
+    background:white;
+    border-radius:18px;
+    padding:20px;
 }
 
-.dark .modal-card{
-    background:#181e27;
-    color:#fff;
+.dark .modal-box{
+    background:#1f2937;
+    color:white;
 }
 
-.modal-close{
-    position:absolute;
-    right:15px;
-    top:15px;
-    width:38px;
-    height:38px;
-    border:none;
-    border-radius:10px;
-    background:#f0f2f5;
-    color:#333;
-}
-
-.dark .modal-close{
-    background:#282f39;
-    color:#fff;
-}
-
-.modal h2{
-    padding-right:45px;
-    font-size:25px;
-}
-
-.recipe-intro{
-    color:#747e8d;
-    font-size:13px;
-    margin:7px 0 17px;
-}
-
-.dark .recipe-intro{
-    color:#aeb7c4;
-}
-
-.recipe-section{
-    margin-top:18px;
-}
-
-.recipe-section h3{
-    font-size:16px;
-    margin-bottom:8px;
-}
-
-.recipe-section ul,
-.recipe-section ol{
-    padding-left:22px;
-}
-
-.recipe-section li{
-    margin:5px 0;
-    font-size:13px;
-    line-height:1.6;
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
-.toast{
-    position:fixed;
-    left:50%;
-    bottom:22px;
-    transform:translate(-50%,20px);
-    background:#18212f;
-    color:#fff;
-    padding:11px 17px;
-    border-radius:12px;
-    font-size:12px;
-    opacity:0;
-    pointer-events:none;
-    transition:.25s;
-    z-index:5000;
-    box-shadow:0 10px 30px rgba(0,0,0,.2);
-}
-
-.toast.show{
-    opacity:1;
-    transform:translate(-50%,0);
-}
-
-
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-    position:fixed;
-    inset:0;
-    background:rgba(255,255,255,.82);
-    backdrop-filter:blur(5px);
-    z-index:4000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-}
-
-.dark .loading{
-    background:rgba(10,13,18,.85);
-}
-
-.loading.show{
-    display:flex;
-}
-
-.loading-card{
-    background:#fff;
-    padding:25px 30px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 15px 50px rgba(0,0,0,.15);
-}
-
-.dark .loading-card{
-    background:#1b212b;
-    color:#fff;
-}
-
-.spinner{
-    width:42px;
-    height:42px;
-    border:4px solid #e5e7eb;
-    border-top-color:#123c8c;
+.close{
+    float:right;
+    border:0;
+    background:#eee;
+    width:32px;
+    height:32px;
     border-radius:50%;
-    animation:spin .8s linear infinite;
-    margin:0 auto 12px;
+    cursor:pointer;
 }
 
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
+.dark .close{
+    background:#374151;
+    color:white;
 }
 
-.loading-text{
+.form-group{
+    margin-bottom:11px;
+}
+
+.form-group label{
+    display:block;
     font-size:14px;
-    font-weight:500;
+    margin-bottom:4px;
 }
 
+.form-group input,
+.form-group textarea{
+    min-height:auto;
+    width:100%;
+    padding:10px;
+    border:1px solid #d1d5db;
+    border-radius:9px;
+}
 
-/* =========================
-   FOOTER
-========================= */
+.order-summary{
+    background:#f8fafc;
+    border-radius:10px;
+    padding:12px;
+    margin:12px 0;
+}
 
-footer{
-    padding:30px 0;
-    border-top:1px solid #e6e9ee;
+.dark .order-summary{
+    background:#111827;
+}
+
+.success{
     text-align:center;
-    color:#7d8795;
-    font-size:12px;
+    padding:25px 10px;
 }
 
-.dark footer{
-    border-color:#292f39;
+.success-icon{
+    font-size:60px;
+    margin-bottom:10px;
 }
 
+.empty{
+    text-align:center;
+    padding:25px;
+    color:#64748b;
+}
 
-/* =========================
-   RESPONSIVE
-========================= */
+.hidden{
+    display:none !important;
+}
 
 @media(max-width:850px){
-
-    .menu-grid{
-        grid-template-columns:repeat(2,1fr);
+    .results{
+        grid-template-columns:1fr 1fr;
     }
 
+    .products{
+        grid-template-columns:1fr 1fr;
+    }
 }
 
 @media(max-width:600px){
-
-    .nav{
-        min-height:62px;
-    }
-
-    .logo{
-        font-size:17px;
-    }
-
-    .logo-mark{
-        width:37px;
-        height:37px;
-    }
-
-    .hero{
-        padding:38px 0 25px;
-    }
-
     .hero h1{
-        font-size:37px;
+        font-size:27px;
     }
 
-    .hero p{
-        font-size:14px;
-    }
-
-    .input-card{
-        padding:15px;
-        border-radius:20px;
-    }
-
-    .action-row{
+    .results{
         grid-template-columns:1fr;
     }
 
-    .menu-grid{
+    .products{
         grid-template-columns:1fr 1fr;
-        gap:10px;
+    }
+
+    .product-image{
+        height:125px;
     }
 
     .menu-img{
-        height:125px;
-        font-size:55px;
+        height:150px;
     }
-
-    .menu-body{
-        padding:11px;
-    }
-
-    .menu-name{
-        font-size:15px;
-    }
-
-    .menu-desc{
-        font-size:10px;
-    }
-
-    .meta span{
-        font-size:9px;
-        padding:4px 6px;
-    }
-
-    .recipe-btn{
-        padding:9px 5px;
-        font-size:10px;
-    }
-
 }
-
-@media(max-width:380px){
-
-    .menu-grid{
-        grid-template-columns:1fr;
-    }
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
-
 <header>
+    <div class="header-inner">
 
-<div class="container nav">
-
-    <div class="logo">
-
-        <div class="logo-mark">
-            <i class="fa-solid fa-utensils"></i>
+        <div class="logo">
+            PHAENDIN KITCHEN
+            <span>AI MENU • SHOP</span>
         </div>
 
-        <div>
-            PHAENDIN <span>KITCHEN</span>
-            <small>AI MENU</small>
+        <div class="header-buttons">
+
+            <button class="icon-btn"
+                    onclick="toggleDark()">
+                🌙
+            </button>
+
+            <button class="icon-btn cart-btn"
+                    onclick="openCart()">
+                🛒
+                <span id="cartCount"
+                      class="cart-count">0</span>
+            </button>
+
         </div>
 
     </div>
-
-
-    <div class="header-actions">
-
-        <button
-            class="icon-btn"
-            id="darkBtn"
-            title="โหมดกลางคืน">
-
-            <i class="fa-solid fa-moon"></i>
-
-        </button>
-
-    </div>
-
-</div>
-
 </header>
 
 
-<!-- =========================
-     HERO
-========================= -->
-
 <section class="hero">
 
-<div class="container">
-
-<div class="hero-box">
-
-    <div class="badge">
-
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-
-        PHAENDIN KITCHEN V5
-
-    </div>
-
-
-    <h1>
-
-        <span class="red">มีอะไร</span>
-        ในตู้เย็น?
-
-        <br>
-
-        <span class="blue">
-            เราช่วยคิดเมนูให้ 🍳
-        </span>
-
-    </h1>
-
+    <h1>มีอะไรในตู้เย็น?<br>เราช่วยคิดเมนูให้ 🍳</h1>
 
     <p>
-
-        พิมพ์วัตถุดิบที่มีอยู่ หรือถ่ายรูปของในตู้เย็น
-        แล้วให้ระบบช่วยคิดว่า
-        <b>วันนี้ทำอะไรกินดี?</b>
-
+        บอกวัตถุดิบที่มี แล้วให้ AI ช่วยคิดเมนู
     </p>
-
-
-    <!-- INPUT -->
-
-    <div class="input-card">
-
-        <div class="input-title">
-
-            🧊 วัตถุดิบที่คุณมี
-
-        </div>
-
-        <div class="input-sub">
-
-            พิมพ์แบบธรรมดาได้เลย เช่น
-            “มีไข่ 3 ฟอง หมูสับ กระเทียม พริก และข้าว”
-
-        </div>
-
-
-        <textarea
-            id="ingredientInput"
-            placeholder="เช่น มีไข่ หมู กระเทียม พริก ข้าว และผัก..."></textarea>
-
-
-        <div class="quick-title">
-            กดเพิ่มวัตถุดิบแบบเร็ว
-        </div>
-
-
-        <div class="quick-list">
-
-            <button class="quick-btn" onclick="addIngredient('ไข่')">🥚 ไข่</button>
-
-            <button class="quick-btn" onclick="addIngredient('หมู')">🐷 หมู</button>
-
-            <button class="quick-btn" onclick="addIngredient('ไก่')">🍗 ไก่</button>
-
-            <button class="quick-btn" onclick="addIngredient('ข้าว')">🍚 ข้าว</button>
-
-            <button class="quick-btn" onclick="addIngredient('กระเทียม')">🧄 กระเทียม</button>
-
-            <button class="quick-btn" onclick="addIngredient('พริก')">🌶️ พริก</button>
-
-            <button class="quick-btn" onclick="addIngredient('ผัก')">🥬 ผัก</button>
-
-            <button class="quick-btn" onclick="addIngredient('หอมใหญ่')">🧅 หอมใหญ่</button>
-
-            <button class="quick-btn" onclick="addIngredient('ถั่วฝักยาว')">🫛 ถั่วฝักยาว</button>
-
-            <button class="quick-btn" onclick="addIngredient('พริกแกง')">🌶️ พริกแกง</button>
-
-            <button class="quick-btn" onclick="addIngredient('มะเขือเทศ')">🍅 มะเขือเทศ</button>
-
-            <button class="quick-btn" onclick="addIngredient('แครอท')">🥕 แครอท</button>
-
-        </div>
-
-
-        <!-- PHOTO -->
-
-        <div class="photo-area">
-
-            <div class="photo-icon">
-                <i class="fa-solid fa-camera"></i>
-            </div>
-
-            <div class="photo-title">
-                ให้ AI ดูวัตถุดิบจากรูป
-            </div>
-
-            <div class="photo-sub">
-                ถ่ายรูปตู้เย็น / วัตถุดิบ แล้วให้ AI ช่วยอ่าน
-            </div>
-
-
-            <div class="photo-buttons">
-
-                <label class="upload-btn">
-
-                    <i class="fa-solid fa-camera"></i>
-
-                    ถ่ายรูป / เลือกรูป
-
-                    <input
-                        type="file"
-                        id="photoInput"
-                        accept="image/*"
-                        capture="environment">
-
-                </label>
-
-            </div>
-
-
-            <div
-                class="preview-wrap"
-                id="previewWrap">
-
-                <img
-                    id="previewImage"
-                    alt="รูปวัตถุดิบ">
-
-                <button
-                    class="ai-btn"
-                    id="aiAnalyzeBtn"
-                    onclick="analyzeImage()">
-
-                    🧠 ให้ AI วิเคราะห์วัตถุดิบ
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- API KEY -->
-
-        <div class="api-box">
-
-            <div class="api-head">
-
-                <strong>
-                    🔐 AI Image API
-                </strong>
-
-                <span
-                    class="api-status"
-                    id="apiStatus">
-
-                    ยังไม่ได้ตั้งค่า
-
-                </span>
-
-            </div>
-
-
-            <div class="api-input-row">
-
-                <input
-                    class="api-input"
-                    id="apiKeyInput"
-                    type="password"
-                    placeholder="ใส่ Gemini API Key ตรงนี้">
-
-                <button
-                    class="save-api"
-                    onclick="saveApiKey()">
-
-                    บันทึก
-
-                </button>
-
-            </div>
-
-
-            <div class="api-note">
-
-                API Key จะถูกเก็บไว้ในเครื่องนี้ด้วย localStorage
-                เหมาะสำหรับทดลอง/ทำต้นแบบ
-                หากเปิดเว็บให้คนจำนวนมากใช้งานจริง
-                ควรย้าย API Key ไปไว้ฝั่งเซิร์ฟเวอร์ภายหลัง
-
-            </div>
-
-        </div>
-
-
-        <!-- ACTION -->
-
-        <div class="action-row">
-
-            <button
-                class="main-btn btn-red"
-                onclick="findMenus()">
-
-                🔎 ช่วยคิดเมนู
-
-            </button>
-
-
-            <button
-                class="main-btn btn-blue"
-                onclick="randomMenu()">
-
-                🎲 สุ่มให้เลย
-
-            </button>
-
-
-            <button
-                class="main-btn btn-gray"
-                onclick="clearAll()">
-
-                🗑️ ล้างข้อมูล
-
-            </button>
-
-        </div>
-
-
-        <!-- UNDERSTOOD -->
-
-        <div
-            class="understood"
-            id="understoodBox">
-
-            <div class="understood-title">
-
-                🧠 วัตถุดิบที่ระบบเข้าใจ
-
-            </div>
-
-            <div
-                class="chips"
-                id="ingredientChips">
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</div>
 
 </section>
 
 
-<!-- =========================
-     RESULTS
-========================= -->
-
-<section class="results-section">
-
-<div class="container">
+<main class="container">
 
 
-<div class="section-head">
+<!-- ==================================================
+     AI INPUT
+================================================== -->
 
-    <div>
+<section class="card">
 
-        <div class="section-title">
-            🍳 เมนูที่แนะนำ
+    <div class="section-title">
+        🥕 บอกวัตถุดิบที่คุณมี
+    </div>
+
+    <textarea
+        id="ingredients"
+        placeholder="เช่น มีไข่ 3 ฟอง หมูสับ กระเทียม พริก และกะหล่ำปลี">
+    </textarea>
+
+
+    <div class="quick">
+
+        <button onclick="addIngredient('ไข่')">🥚 ไข่</button>
+        <button onclick="addIngredient('หมูสับ')">🐷 หมู</button>
+        <button onclick="addIngredient('ไก่')">🍗 ไก่</button>
+        <button onclick="addIngredient('ข้าว')">🍚 ข้าว</button>
+        <button onclick="addIngredient('กระเทียม')">🧄 กระเทียม</button>
+        <button onclick="addIngredient('พริก')">🌶️ พริก</button>
+        <button onclick="addIngredient('กะหล่ำปลี')">🥬 กะหล่ำปลี</button>
+        <button onclick="addIngredient('มะเขือเทศ')">🍅 มะเขือเทศ</button>
+        <button onclick="addIngredient('แครอท')">🥕 แครอท</button>
+        <button onclick="addIngredient('หอมใหญ่')">🧅 หอมใหญ่</button>
+
+    </div>
+
+
+    <button class="main-btn"
+            onclick="askAI()">
+        🤖 ให้ AI คิดเมนูให้
+    </button>
+
+
+    <details class="ai-box">
+
+        <summary>
+            ⚙️ ตั้งค่า AI สำหรับทดลอง
+        </summary>
+
+        <input
+            id="apiKey"
+            type="password"
+            placeholder="ใส่ Gemini API Key">
+
+        <div class="status">
+            API Key จะถูกเก็บไว้ในเครื่องนี้เท่านั้น
         </div>
 
-        <div class="section-sub">
-            เลือกเมนูที่อยากทำได้เลย
+    </details>
+
+    <div id="status"
+         class="status">
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     MENU RESULTS
+================================================== -->
+
+<section id="menuSection"
+         class="card hidden">
+
+    <div class="section-title">
+        🍳 เมนูที่ AI แนะนำ
+    </div>
+
+    <div id="menuResults"
+         class="results">
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     RELATED PRODUCTS
+================================================== -->
+
+<section class="card">
+
+    <div class="section-title">
+        🛒 วัตถุดิบและของกินที่น่าสนใจ
+    </div>
+
+    <p style="font-size:13px;color:#64748b;margin-bottom:13px;">
+        เลือกซื้อวัตถุดิบหรือสินค้าที่เกี่ยวข้องกับการทำอาหาร
+    </p>
+
+    <div id="products"
+         class="products">
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+     AD
+================================================== -->
+
+<section class="ad">
+
+    <div>
+
+        <div style="font-size:28px;">
+            📢
         </div>
-
-    </div>
-
-
-    <div
-        class="result-count"
-        id="resultCount">
-
-        0 เมนู
-
-    </div>
-
-</div>
-
-
-<input
-    class="menu-search"
-    id="menuSearch"
-    placeholder="🔍 ค้นหาเมนู เช่น ผัดกะเพรา ต้มจืด ไข่เจียว..."
-    oninput="renderMenus()">
-
-
-<div class="filter-box">
-
-    <button
-        class="filter-btn active"
-        data-category="ทั้งหมด"
-        onclick="setCategory('ทั้งหมด',this)">
-
-        ทั้งหมด
-
-    </button>
-
-
-    <button
-        class="filter-btn"
-        data-category="จานเดียว"
-        onclick="setCategory('จานเดียว',this)">
-
-        🍚 จานเดียว
-
-    </button>
-
-
-    <button
-        class="filter-btn"
-        data-category="ไข่"
-        onclick="setCategory('ไข่',this)">
-
-        🥚 เมนูไข่
-
-    </button>
-
-
-    <button
-        class="filter-btn"
-        data-category="หมู"
-        onclick="setCategory('หมู',this)">
-
-        🐷 เมนูหมู
-
-    </button>
-
-
-    <button
-        class="filter-btn"
-        data-category="ไก่"
-        onclick="setCategory('ไก่',this)">
-
-        🍗 เมนูไก่
-
-    </button>
-
-
-    <button
-        class="filter-btn"
-        data-category="ผัก"
-        onclick="setCategory('ผัก',this)">
-
-        🥬 เมนูผัก
-
-    </button>
-
-
-    <button
-        class="filter-btn"
-        data-category="ต้ม"
-        onclick="setCategory('ต้ม',this)">
-
-        🍲 เมนูต้ม
-
-    </button>
-
-</div>
-
-
-<div
-    class="menu-grid"
-    id="menuGrid">
-</div>
-
-
-<div
-    class="empty"
-    id="emptyBox">
-
-    <div class="empty-icon">
-        🍳
-    </div>
-
-    <div>
-        ยังหาเมนูไม่เจอ
-    </div>
-
-    <small>
-        ลองเพิ่มวัตถุดิบ หรือเปลี่ยนคำค้นหา
-    </small>
-
-</div>
-
-
-<!-- AD -->
-
-<div class="ad-box">
-
-    <div>
 
         <strong>
             พื้นที่โฆษณา
         </strong>
 
-        <span>
-            ตรงนี้สามารถใส่ Google AdSense / Affiliate / สินค้า PHAENDIN ได้
-        </span>
+        <div style="font-size:13px;">
+            สามารถใส่ Google AdSense
+            หรือโฆษณาสินค้าของ PHAENDIN ได้
+        </div>
 
     </div>
-
-</div>
-
-
-</div>
 
 </section>
 
 
-<!-- =========================
-     FOOTER
-========================= -->
+</main>
 
-<footer>
 
-<div class="container">
 
-    PHAENDIN KITCHEN 🇹🇭
+<!-- ==================================================
+     RECIPE MODAL
+================================================== -->
 
-    <br>
+<div id="recipeModal"
+     class="modal"
+     onclick="closeModalOutside(event)">
 
-    มีอะไรในตู้เย็น? เราช่วยคิดเมนูให้
+    <div class="modal-box">
+
+        <button class="close"
+                onclick="closeRecipe()">
+            ✕
+        </button>
+
+        <div id="recipeContent">
+        </div>
+
+    </div>
 
 </div>
 
-</footer>
 
 
-<!-- =========================
-     RECIPE MODAL
-========================= -->
+<!-- ==================================================
+     CART MODAL
+================================================== -->
 
-<div
-    class="modal"
-    id="recipeModal"
-    onclick="closeModal(event)">
+<div id="cartModal"
+     class="modal"
+     onclick="closeCartOutside(event)">
 
-    <div
-        class="modal-card"
-        onclick="event.stopPropagation()">
+    <div class="modal-box">
 
-        <button
-            class="modal-close"
-            onclick="closeRecipe()">
+        <button class="close"
+                onclick="closeCart()">
+            ✕
+        </button>
 
-            <i class="fa-solid fa-xmark"></i>
+        <h2>🛒 ตะกร้าของฉัน</h2>
+
+        <div id="cartList"
+             class="cart-list">
+        </div>
+
+        <div class="total">
+
+            <span>รวม</span>
+
+            <span id="cartTotal">
+                ฿0
+            </span>
+
+        </div>
+
+        <button class="main-btn"
+                onclick="openOrder()">
+            🧾 ดำเนินการสั่งซื้อ
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================================================
+     ORDER MODAL
+================================================== -->
+
+<div id="orderModal"
+     class="modal">
+
+    <div class="modal-box">
+
+        <button class="close"
+                onclick="closeOrder()">
+            ✕
+        </button>
+
+        <h2>
+            🧾 สั่งซื้อสินค้า
+        </h2>
+
+        <div id="orderSummary"
+             class="order-summary">
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                ชื่อผู้สั่งซื้อ
+            </label>
+
+            <input
+                id="customerName"
+                placeholder="ชื่อ-นามสกุล">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                เบอร์โทรศัพท์
+            </label>
+
+            <input
+                id="customerPhone"
+                type="tel"
+                placeholder="08xxxxxxxx">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                ที่อยู่จัดส่ง
+            </label>
+
+            <textarea
+                id="customerAddress"
+                rows="4"
+                placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์">
+            </textarea>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                แนบสลิปการโอนเงิน
+            </label>
+
+            <input
+                id="slip"
+                type="file"
+                accept="image/*">
+
+        </div>
+
+
+        <button class="main-btn"
+                onclick="submitOrder()">
+
+            ✅ ยืนยันคำสั่งซื้อ
 
         </button>
 
-
-        <h2 id="modalTitle">
-            เมนู
-        </h2>
-
-
-        <div
-            class="recipe-intro"
-            id="modalIntro">
-        </div>
-
-
-        <div class="recipe-section">
-
-            <h3>
-                🥬 วัตถุดิบ
-            </h3>
-
-            <ul id="modalIngredients"></ul>
-
-        </div>
-
-
-        <div class="recipe-section">
-
-            <h3>
-                👨‍🍳 วิธีทำ
-            </h3>
-
-            <ol id="modalSteps"></ol>
-
-        </div>
+        <p style="font-size:12px;color:#64748b;margin-top:10px;">
+            ระบบนี้เป็นต้นแบบสำหรับทดลองการสั่งซื้อ
+        </p>
 
     </div>
 
 </div>
 
-
-<!-- =========================
-     LOADING
-========================= -->
-
-<div
-    class="loading"
-    id="loading">
-
-    <div class="loading-card">
-
-        <div class="spinner"></div>
-
-        <div
-            class="loading-text"
-            id="loadingText">
-
-            กำลังคิดเมนู...
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     TOAST
-========================= -->
-
-<div
-    class="toast"
-    id="toast">
-
-    สำเร็จ
-
-</div>
 
 
 <script>
 
 /* ==================================================
-   PHAENDIN KITCHEN V5
+   PRODUCT DATA
 ================================================== */
 
+const products = [
 
-/* =========================
-   MENU DATABASE
-========================= */
+    {
+        id:1,
+        name:"น้ำปลาแท้",
+        price:59,
+        image:"",
+        description:"เครื่องปรุงสำหรับอาหารไทย"
+    },
 
-const menus = [
+    {
+        id:2,
+        name:"พริกแห้ง",
+        price:49,
+        image:"",
+        description:"เหมาะสำหรับผัดและทำน้ำพริก"
+    },
 
-{
-    id:1,
-    name:"กะเพราหมูสับ",
-    emoji:"🍳",
-    category:"จานเดียว",
-    ingredients:["หมู","กระเทียม","พริก","กะเพรา","น้ำปลา","น้ำมัน","ข้าว"],
-    description:"เมนูง่ายๆ ทำเร็ว กินกับข้าวร้อนๆ",
-    time:"15 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียมและพริกให้หอม",
-        "ใส่หมูสับลงไปผัดจนสุก",
-        "ปรุงรสด้วยน้ำปลาและเครื่องปรุง",
-        "ใส่ใบกะเพรา ผัดเร็วๆ แล้วปิดไฟ",
-        "ตักราดข้าว"
-    ]
-},
+    {
+        id:3,
+        name:"กระเทียม",
+        price:35,
+        image:"",
+        description:"กระเทียมสำหรับทำอาหาร"
+    },
 
-{
-    id:2,
-    name:"ไข่เจียวหมูสับ",
-    emoji:"🍳",
-    category:"ไข่",
-    ingredients:["ไข่","หมู","น้ำปลา","น้ำมัน"],
-    description:"ง่ายมาก ใช้วัตถุดิบน้อย",
-    time:"8 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ตอกไข่ใส่ชาม",
-        "ใส่หมูสับและน้ำปลา",
-        "ตีให้เข้ากัน",
-        "ตั้งน้ำมันให้ร้อน",
-        "เทไข่ลงทอด",
-        "กลับด้านจนสุก"
-    ]
-},
+    {
+        id:4,
+        name:"พริกไทย",
+        price:45,
+        image:"",
+        description:"เพิ่มความหอมและเผ็ดร้อน"
+    },
 
-{
-    id:3,
-    name:"ไข่เจียวธรรมดา",
-    emoji:"🥚",
-    category:"ไข่",
-    ingredients:["ไข่","น้ำปลา","น้ำมัน"],
-    description:"เมนูฉุกเฉินสำหรับวันที่ของเหลือน้อย",
-    time:"5 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ตอกไข่ใส่ชาม",
-        "เติมน้ำปลาเล็กน้อย",
-        "ตีไข่ให้เข้ากัน",
-        "ทอดในน้ำมันร้อน",
-        "กลับด้านแล้วตักเสิร์ฟ"
-    ]
-},
+    {
+        id:5,
+        name:"พริกแกง",
+        price:65,
+        image:"",
+        description:"พร้อมสำหรับทำอาหารไทย"
+    },
 
-{
-    id:4,
-    name:"ผัดพริกแกงหมู",
-    emoji:"🌶️",
-    category:"หมู",
-    ingredients:["หมู","พริกแกง","ถั่วฝักยาว","น้ำปลา","น้ำมัน"],
-    description:"เผ็ดหอม กินกับข้าวสวย",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดพริกแกงกับน้ำมัน",
-        "ใส่หมูลงไปผัด",
-        "เติมน้ำเล็กน้อย",
-        "ใส่ถั่วฝักยาว",
-        "ปรุงรส",
-        "ผัดจนทุกอย่างสุก"
-    ]
-},
+    {
+        id:6,
+        name:"ซอสหอยนางรม",
+        price:55,
+        image:"",
+        description:"เหมาะกับเมนูผัด"
+    },
 
-{
-    id:5,
-    name:"ผัดผักรวม",
-    emoji:"🥬",
-    category:"ผัก",
-    ingredients:["ผัก","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"เมนูผักง่ายๆ ทำได้หลายแบบ",
-    time:"10 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียม",
-        "ใส่ผักลงไป",
-        "ปรุงรส",
-        "ผัดจนผักสุกตามชอบ"
-    ]
-},
+    {
+        id:7,
+        name:"ข้าวหอมมะลิ",
+        price:129,
+        image:"",
+        description:"ข้าวหอมมะลิสำหรับมื้ออาหาร"
+    },
 
-{
-    id:6,
-    name:"ผัดผักบุ้งไฟแดง",
-    emoji:"🥬",
-    category:"ผัก",
-    ingredients:["ผักบุ้ง","กระเทียม","พริก","น้ำมัน","น้ำปลา"],
-    description:"ผักบุ้งกรอบๆ หอมกระเทียม",
-    time:"7 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ล้างและหั่นผักบุ้ง",
-        "ตำกระเทียมกับพริกพอหยาบ",
-        "ตั้งกระทะให้ร้อน",
-        "ใส่น้ำมัน",
-        "ใส่กระเทียม พริก และผักบุ้ง",
-        "ปรุงรสแล้วผัดเร็วๆ"
-    ]
-},
-
-{
-    id:7,
-    name:"ข้าวผัดไข่",
-    emoji:"🍚",
-    category:"จานเดียว",
-    ingredients:["ข้าว","ไข่","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"เมนูง่าย ใช้ข้าวเหลือในตู้เย็นได้",
-    time:"10 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียม",
-        "ใส่ไข่แล้วคน",
-        "ใส่ข้าว",
-        "ปรุงรส",
-        "ผัดให้เข้ากัน"
-    ]
-},
-
-{
-    id:8,
-    name:"ข้าวผัดหมู",
-    emoji:"🍚",
-    category:"จานเดียว",
-    ingredients:["ข้าว","หมู","ไข่","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"ข้าวผัดหมูแบบง่ายๆ",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียม",
-        "ใส่หมูลงผัด",
-        "ใส่ไข่",
-        "ใส่ข้าว",
-        "ปรุงรส",
-        "ผัดจนหอม"
-    ]
-},
-
-{
-    id:9,
-    name:"ข้าวผัดไก่",
-    emoji:"🍗",
-    category:"จานเดียว",
-    ingredients:["ข้าว","ไก่","ไข่","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"ข้าวผัดไก่ทำง่าย",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียม",
-        "ใส่ไก่",
-        "ใส่ไข่",
-        "ใส่ข้าว",
-        "ปรุงรส",
-        "ผัดจนเข้ากัน"
-    ]
-},
-
-{
-    id:10,
-    name:"ต้มจืดไข่น้ำ",
-    emoji:"🍲",
-    category:"ต้ม",
-    ingredients:["ไข่","ผัก","กระเทียม","น้ำปลา"],
-    description:"ซุปร้อนๆ กินง่าย",
-    time:"15 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ตีไข่แล้วทอดเป็นแผ่น",
-        "ต้มน้ำให้เดือด",
-        "ใส่ผัก",
-        "ใส่ไข่ทอดที่หั่นไว้",
-        "ปรุงรส",
-        "ต้มต่อเล็กน้อย"
-    ]
-},
-
-{
-    id:11,
-    name:"ต้มจืดหมูสับ",
-    emoji:"🍲",
-    category:"ต้ม",
-    ingredients:["หมู","ผัก","กระเทียม","น้ำปลา"],
-    description:"ต้มจืดง่ายๆ สำหรับทุกคน",
-    time:"20 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ต้มน้ำให้เดือด",
-        "ปั้นหมูสับเป็นก้อน",
-        "ใส่ลงในน้ำเดือด",
-        "ใส่ผัก",
-        "ปรุงรส",
-        "ต้มจนทุกอย่างสุก"
-    ]
-},
-
-{
-    id:12,
-    name:"ไก่ผัดกระเทียม",
-    emoji:"🍗",
-    category:"ไก่",
-    ingredients:["ไก่","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"หอมกระเทียม ทำง่ายมาก",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "หมักไก่ด้วยน้ำปลาเล็กน้อย",
-        "เจียวกระเทียม",
-        "ใส่ไก่ลงผัด",
-        "ผัดจนไก่สุก",
-        "ปรุงรสตามชอบ"
-    ]
-},
-
-{
-    id:13,
-    name:"ไก่ผัดพริก",
-    emoji:"🌶️",
-    category:"ไก่",
-    ingredients:["ไก่","พริก","กระเทียม","หอมใหญ่","น้ำปลา","น้ำมัน"],
-    description:"เผ็ดหอม กินกับข้าว",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียมและพริก",
-        "ใส่ไก่",
-        "ผัดจนสุก",
-        "ใส่หอมใหญ่",
-        "ปรุงรส",
-        "ผัดต่อจนเข้ากัน"
-    ]
-},
-
-{
-    id:14,
-    name:"หมูกระเทียม",
-    emoji:"🐷",
-    category:"หมู",
-    ingredients:["หมู","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"เมนูหมูง่ายๆ",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "หมักหมูกับเครื่องปรุง",
-        "เจียวกระเทียม",
-        "ใส่หมู",
-        "ผัดจนสุก",
-        "โรยกระเทียมเจียว"
-    ]
-},
-
-{
-    id:15,
-    name:"ผัดคะน้าหมู",
-    emoji:"🥬",
-    category:"หมู",
-    ingredients:["หมู","ผัก","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"คะน้าหมูแบบบ้านๆ",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียม",
-        "ใส่หมู",
-        "ใส่คะน้า",
-        "ปรุงรส",
-        "เติมน้ำเล็กน้อย",
-        "ผัดจนสุก"
-    ]
-},
-
-{
-    id:16,
-    name:"ยำไข่ต้ม",
-    emoji:"🥚",
-    category:"ไข่",
-    ingredients:["ไข่","พริก","หอมใหญ่","น้ำปลา","มะนาว"],
-    description:"เปรี้ยวเผ็ด สดชื่น",
-    time:"15 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ต้มไข่แล้วผ่าครึ่ง",
-        "ซอยหอมใหญ่",
-        "ทำน้ำยำด้วยพริก น้ำปลา และมะนาว",
-        "ใส่หอมใหญ่",
-        "ราดบนไข่ต้ม"
-    ]
-},
-
-{
-    id:17,
-    name:"ไข่ผัดมะเขือเทศ",
-    emoji:"🍅",
-    category:"ไข่",
-    ingredients:["ไข่","มะเขือเทศ","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"เมนูไข่ง่ายๆ รสเปรี้ยวหวาน",
-    time:"10 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียม",
-        "ใส่มะเขือเทศ",
-        "ใส่ไข่",
-        "ผัดให้เข้ากัน",
-        "ปรุงรส"
-    ]
-},
-
-{
-    id:18,
-    name:"ผัดถั่วฝักยาวหมู",
-    emoji:"🫛",
-    category:"หมู",
-    ingredients:["ถั่วฝักยาว","หมู","กระเทียม","พริก","น้ำปลา","น้ำมัน"],
-    description:"กรอบๆ เผ็ดนิดๆ",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียมและพริก",
-        "ใส่หมู",
-        "ใส่ถั่วฝักยาว",
-        "ปรุงรส",
-        "ผัดจนถั่วสุก"
-    ]
-},
-
-{
-    id:19,
-    name:"ไข่ดาวกระเทียมพริก",
-    emoji:"🍳",
-    category:"ไข่",
-    ingredients:["ไข่","กระเทียม","พริก","น้ำปลา","น้ำมัน"],
-    description:"เมนูง่ายๆ แต่เพิ่มรสชาติได้เยอะ",
-    time:"8 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ทอดไข่ดาว",
-        "ผัดกระเทียมกับพริก",
-        "ปรุงรส",
-        "นำมาราดบนไข่ดาว"
-    ]
-},
-
-{
-    id:20,
-    name:"ผัดพริกหมู",
-    emoji:"🌶️",
-    category:"หมู",
-    ingredients:["หมู","พริก","กระเทียม","หอมใหญ่","น้ำปลา","น้ำมัน"],
-    description:"ผัดพริกหมูรสจัด",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียมและพริก",
-        "ใส่หมู",
-        "ใส่หอมใหญ่",
-        "ปรุงรส",
-        "ผัดจนสุก"
-    ]
-},
-
-{
-    id:21,
-    name:"แกงจืดผักรวม",
-    emoji:"🥬",
-    category:"ต้ม",
-    ingredients:["ผัก","แครอท","หอมใหญ่","กระเทียม","น้ำปลา"],
-    description:"ซุปผักเบาๆ",
-    time:"20 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ต้มน้ำ",
-        "ใส่แครอท",
-        "ใส่ผัก",
-        "ใส่หอมใหญ่",
-        "ปรุงรส",
-        "ต้มจนผักนุ่ม"
-    ]
-},
-
-{
-    id:22,
-    name:"ผัดแครอทไข่",
-    emoji:"🥕",
-    category:"ผัก",
-    ingredients:["แครอท","ไข่","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"เมนูผักกับไข่",
-    time:"10 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียม",
-        "ใส่แครอท",
-        "ใส่ไข่",
-        "ปรุงรส",
-        "ผัดจนสุก"
-    ]
-},
-
-{
-    id:23,
-    name:"ไข่คนผัก",
-    emoji:"🥚",
-    category:"ไข่",
-    ingredients:["ไข่","ผัก","หอมใหญ่","น้ำปลา","น้ำมัน"],
-    description:"อาหารเช้าหรือมื้อเบาๆ",
-    time:"8 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "หั่นผัก",
-        "ผัดผักกับหอมใหญ่",
-        "ใส่ไข่",
-        "คนเบาๆ",
-        "ปรุงรส"
-    ]
-},
-
-{
-    id:24,
-    name:"ข้าวผัดพริกแกง",
-    emoji:"🌶️",
-    category:"จานเดียว",
-    ingredients:["ข้าว","พริกแกง","ไข่","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"ข้าวผัดรสจัดแบบไทย",
-    time:"12 นาที",
-    cost:"฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดพริกแกงกับน้ำมัน",
-        "ใส่กระเทียม",
-        "ใส่ไข่",
-        "ใส่ข้าว",
-        "ปรุงรส",
-        "ผัดจนหอม"
-    ]
-},
-
-{
-    id:25,
-    name:"ผัดมะเขือเทศหมู",
-    emoji:"🍅",
-    category:"หมู",
-    ingredients:["มะเขือเทศ","หมู","กระเทียม","น้ำปลา","น้ำมัน"],
-    description:"หมูผัดมะเขือเทศง่ายๆ",
-    time:"15 นาที",
-    cost:"฿฿",
-    difficulty:"ง่าย",
-    steps:[
-        "ผัดกระเทียม",
-        "ใส่หมู",
-        "ใส่มะเขือเทศ",
-        "ปรุงรส",
-        "ผัดจนมะเขือเทศนิ่ม"
-    ]
-}
+    {
+        id:8,
+        name:"น้ำตาล",
+        price:29,
+        image:"",
+        description:"เครื่องปรุงพื้นฐาน"
+    }
 
 ];
 
 
-/* =========================
-   SYNONYMS
-========================= */
+/* ==================================================
+   CART
+================================================== */
 
-const synonymGroups = {
-
-    "ไข่":[
-        "ไข่",
-        "ไข่ไก่",
-        "ไข่เป็ด"
-    ],
-
-    "หมู":[
-        "หมู",
-        "หมูสับ",
-        "หมูบด",
-        "สันคอหมู",
-        "หมูชิ้น"
-    ],
-
-    "ไก่":[
-        "ไก่",
-        "เนื้อไก่",
-        "อกไก่",
-        "สะโพกไก่",
-        "น่องไก่"
-    ],
-
-    "ข้าว":[
-        "ข้าว",
-        "ข้าวสวย",
-        "ข้าวเย็น",
-        "ข้าวเหลือ"
-    ],
-
-    "กระเทียม":[
-        "กระเทียม",
-        "กระเทียมกลีบ"
-    ],
-
-    "พริก":[
-        "พริก",
-        "พริกสด",
-        "พริกแดง",
-        "พริกขี้หนู"
-    ],
-
-    "ผัก":[
-        "ผัก",
-        "ผักรวม",
-        "ผักใบ"
-    ],
-
-    "หอมใหญ่":[
-        "หอมใหญ่",
-        "หัวหอม",
-        "หอมหัวใหญ่"
-    ],
-
-    "ถั่วฝักยาว":[
-        "ถั่วฝักยาว"
-    ],
-
-    "พริกแกง":[
-        "พริกแกง",
-        "เครื่องแกง"
-    ],
-
-    "มะเขือเทศ":[
-        "มะเขือเทศ",
-        "tomato"
-    ],
-
-    "แครอท":[
-        "แครอท",
-        "carrot"
-    ],
-
-    "กะเพรา":[
-        "กะเพรา",
-        "ใบกะเพรา"
-    ],
-
-    "มะนาว":[
-        "มะนาว"
-    ],
-
-    "น้ำปลา":[
-        "น้ำปลา"
-    ],
-
-    "น้ำมัน":[
-        "น้ำมัน",
-        "น้ำมันพืช"
-    ],
-
-    "ผักบุ้ง":[
-        "ผักบุ้ง"
-    ]
-
-};
-
-
-/* =========================
-   STATE
-========================= */
-
-let currentCategory = "ทั้งหมด";
-
-let currentIngredients = [];
-
-let uploadedImage = null;
-
-let favorites =
+let cart =
     JSON.parse(
-        localStorage.getItem("phaendinKitchenFavorites") || "[]"
-    );
-
-let savedApiKey =
-    localStorage.getItem("phaendinKitchenGeminiKey") || "";
+        localStorage.getItem("phaendinKitchenCart")
+    ) || [];
 
 
-/* =========================
-   INIT
-========================= */
-
-document.addEventListener("DOMContentLoaded",function(){
-
-    document
-        .getElementById("apiKeyInput")
-        .value = savedApiKey;
-
-    updateApiStatus();
-
-    renderMenus();
-
-    applyDarkMode();
-
-});
-
-
-/* =========================
-   DARK MODE
-========================= */
-
-document
-    .getElementById("darkBtn")
-    .addEventListener("click",function(){
-
-        document.body.classList.toggle("dark");
-
-        const isDark =
-            document.body.classList.contains("dark");
-
-        localStorage.setItem(
-            "phaendinKitchenDark",
-            isDark ? "1" : "0"
-        );
-
-        this.innerHTML =
-            isDark
-            ? '<i class="fa-solid fa-sun"></i>'
-            : '<i class="fa-solid fa-moon"></i>';
-
-    });
-
-
-function applyDarkMode(){
-
-    const isDark =
-        localStorage.getItem("phaendinKitchenDark") === "1";
-
-    if(isDark){
-
-        document.body.classList.add("dark");
-
-        document.getElementById("darkBtn").innerHTML =
-            '<i class="fa-solid fa-sun"></i>';
-
-    }
-
-}
-
-
-/* =========================
-   API KEY
-========================= */
-
-function saveApiKey(){
-
-    const key =
-        document
-        .getElementById("apiKeyInput")
-        .value
-        .trim();
-
-    if(!key){
-
-        localStorage.removeItem(
-            "phaendinKitchenGeminiKey"
-        );
-
-        savedApiKey = "";
-
-        updateApiStatus();
-
-        showToast("ลบ API Key แล้ว");
-
-        return;
-    }
+function saveCart(){
 
     localStorage.setItem(
-        "phaendinKitchenGeminiKey",
-        key
+        "phaendinKitchenCart",
+        JSON.stringify(cart)
     );
 
-    savedApiKey = key;
-
-    updateApiStatus();
-
-    showToast("บันทึก API Key แล้ว");
+    updateCartCount();
 
 }
 
 
-function updateApiStatus(){
-
-    const status =
-        document.getElementById("apiStatus");
-
-    if(savedApiKey){
-
-        status.textContent = "พร้อมใช้งาน";
-
-        status.classList.add("ok");
-
-    }else{
-
-        status.textContent = "ยังไม่ได้ตั้งค่า";
-
-        status.classList.remove("ok");
-
-    }
-
-}
-
-
-/* =========================
-   QUICK INGREDIENT
-========================= */
-
-function addIngredient(name){
-
-    const input =
-        document.getElementById("ingredientInput");
-
-    const old =
-        input.value.trim();
-
-    if(!old){
-
-        input.value = name;
-
-    }else{
-
-        input.value =
-            old + ", " + name;
-
-    }
-
-    input.focus();
-
-}
-
-
-/* =========================
-   PARSE INGREDIENTS
-========================= */
-
-function parseIngredients(text){
-
-    const clean =
-        text
-        .toLowerCase()
-        .replace(/[0-9๐-๙]+/g," ")
-        .replace(/กรัม|กิโล|กก|ชิ้น|ฟอง|กำ|ถุง|ถ้วย|ลูก|ขีด/g," ");
-
-    const found = [];
-
-    Object.keys(synonymGroups).forEach(function(canonical){
-
-        const words =
-            synonymGroups[canonical];
-
-        for(const word of words){
-
-            if(clean.includes(word.toLowerCase())){
-
-                found.push(canonical);
-
-                break;
-            }
-
-        }
-
-    });
-
-
-    return [...new Set(found)];
-
-}
-
-
-/* =========================
-   SHOW INGREDIENTS
-========================= */
-
-function showIngredients(list){
-
-    currentIngredients = list;
-
-    const box =
-        document.getElementById("understoodBox");
-
-    const chips =
-        document.getElementById("ingredientChips");
-
-    if(!list.length){
-
-        box.classList.remove("show");
-
-        chips.innerHTML = "";
-
-        return;
-    }
-
-    box.classList.add("show");
-
-    chips.innerHTML =
-        list.map(function(item){
-
-            return `
-                <span class="chip">
-                    ✓ ${item}
-                </span>
-            `;
-
-        }).join("");
-
-}
-
-
-/* =========================
-   FIND MENUS
-========================= */
-
-function findMenus(){
-
-    const text =
-        document
-        .getElementById("ingredientInput")
-        .value
-        .trim();
-
-    if(!text){
-
-        showToast("ลองใส่วัตถุดิบก่อนครับ");
-
-        document
-        .getElementById("ingredientInput")
-        .focus();
-
-        return;
-    }
-
-
-    const ingredients =
-        parseIngredients(text);
-
-    if(!ingredients.length){
-
-        showToast(
-            "ระบบยังไม่รู้จักวัตถุดิบนี้ ลองพิมพ์ ไข่ หมู ไก่ ข้าว หรือผัก"
+function updateCartCount(){
+
+    const count =
+        cart.reduce(
+            (sum,item)=>sum + item.qty,
+            0
         );
 
-        return;
-    }
-
-
-    showIngredients(ingredients);
-
-    renderMenus();
-
-    document
-        .getElementById("results")
-        ?.scrollIntoView({
-            behavior:"smooth"
-        });
-
-    document
-        .querySelector(".results-section")
-        .scrollIntoView({
-            behavior:"smooth"
-        });
+    document.getElementById("cartCount")
+        .textContent = count;
 
 }
 
 
-/* =========================
-   SCORE MENU
-========================= */
+function addToCart(id){
 
-function scoreMenu(menu){
+    const product =
+        products.find(
+            p => p.id === id
+        );
 
-    if(!currentIngredients.length){
+    if(!product) return;
 
-        return 0;
+
+    const existing =
+        cart.find(
+            item => item.id === id
+        );
+
+
+    if(existing){
+
+        existing.qty++;
+
+    }else{
+
+        cart.push({
+
+            id:product.id,
+            name:product.name,
+            price:product.price,
+            qty:1
+
+        });
+
     }
 
 
-    let matched = 0;
+    saveCart();
 
-
-    menu.ingredients.forEach(function(required){
-
-        if(
-            currentIngredients
-            .some(function(have){
-
-                if(have === required){
-                    return true;
-                }
-
-                if(
-                    have === "ผัก" &&
-                    [
-                        "ผัก",
-                        "ผักบุ้ง"
-                    ].includes(required)
-                ){
-                    return true;
-                }
-
-                return false;
-
-            })
-        ){
-
-            matched++;
-
-        }
-
-    });
-
-
-    return Math.round(
-        (matched / menu.ingredients.length) * 100
+    alert(
+        "เพิ่ม " +
+        product.name +
+        " ลงตะกร้าแล้ว 🛒"
     );
 
 }
 
 
-/* =========================
-   FILTER CATEGORY
-========================= */
+function changeQty(id,amount){
 
-function setCategory(category,button){
+    const item =
+        cart.find(
+            p => p.id === id
+        );
 
-    currentCategory = category;
+    if(!item) return;
 
-    document
-        .querySelectorAll(".filter-btn")
-        .forEach(function(btn){
 
-            btn.classList.remove("active");
+    item.qty += amount;
 
-        });
 
-    button.classList.add("active");
+    if(item.qty <= 0){
 
-    renderMenus();
-
-}
-
-
-/* =========================
-   RENDER MENUS
-========================= */
-
-function renderMenus(){
-
-    const grid =
-        document.getElementById("menuGrid");
-
-    const empty =
-        document.getElementById("emptyBox");
-
-    const search =
-        document
-        .getElementById("menuSearch")
-        .value
-        .trim()
-        .toLowerCase();
-
-
-    let list =
-        menus.filter(function(menu){
-
-            const categoryOK =
-                currentCategory === "ทั้งหมด" ||
-                menu.category === currentCategory;
-
-            const searchOK =
-                !search ||
-                menu.name.toLowerCase().includes(search) ||
-                menu.description.toLowerCase().includes(search) ||
-                menu.ingredients.join(" ").toLowerCase().includes(search);
-
-            return categoryOK && searchOK;
-
-        });
-
-
-    if(currentIngredients.length){
-
-        list =
-            list
-            .map(function(menu){
-
-                return {
-                    ...menu,
-                    match:scoreMenu(menu)
-                };
-
-            })
-            .sort(function(a,b){
-
-                return b.match - a.match;
-
-            });
-
-    }else{
-
-        list =
-            list.map(function(menu){
-
-                return {
-                    ...menu,
-                    match:0
-                };
-
-            });
-
-    }
-
-
-    document
-        .getElementById("resultCount")
-        .textContent =
-        list.length + " เมนู";
-
-
-    if(!list.length){
-
-        grid.innerHTML = "";
-
-        empty.style.display = "block";
-
-        return;
-
-    }
-
-
-    empty.style.display = "none";
-
-
-    grid.innerHTML =
-        list.map(function(menu){
-
-            return createMenuCard(menu);
-
-        }).join("");
-
-}
-
-
-/* =========================
-   MENU CARD
-========================= */
-
-function createMenuCard(menu){
-
-    const isFavorite =
-        favorites.includes(menu.id);
-
-    let matchHTML = "";
-
-
-    if(currentIngredients.length){
-
-        let missing =
-            menu.ingredients.filter(function(item){
-
-                return !currentIngredients.includes(item);
-
-            });
-
-
-        if(menu.match >= 80){
-
-            matchHTML = `
-
-                <div class="match">
-
-                    <div class="match-head">
-
-                        <span>
-                            เข้ากับของที่มี
-                        </span>
-
-                        <span class="match-percent">
-                            ${menu.match}%
-                        </span>
-
-                    </div>
-
-                    <div class="match-bar">
-
-                        <div
-                            class="match-fill"
-                            style="width:${menu.match}%">
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="ready">
-
-                    <i class="fa-solid fa-circle-check"></i>
-
-                    ทำได้เลย
-
-                </div>
-
-            `;
-
-        }else{
-
-            const missingText =
-                missing.length
-                ? missing.slice(0,4).join(" • ")
-                : "เกือบครบแล้ว";
-
-            matchHTML = `
-
-                <div class="match">
-
-                    <div class="match-head">
-
-                        <span>
-                            เข้ากับของที่มี
-                        </span>
-
-                        <span class="match-percent">
-                            ${menu.match}%
-                        </span>
-
-                    </div>
-
-                    <div class="match-bar">
-
-                        <div
-                            class="match-fill"
-                            style="width:${menu.match}%">
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="missing">
-
-                    🛒 ต้องมีเพิ่ม:
-                    ${missingText}
-
-                </div>
-
-            `;
-
-        }
-
-    }
-
-
-    return `
-
-        <div class="menu-card">
-
-            <div class="menu-img">
-
-                ${menu.emoji}
-
-            </div>
-
-
-            <div class="menu-body">
-
-                <div class="menu-top">
-
-                    <div class="menu-name">
-
-                        ${menu.name}
-
-                    </div>
-
-
-                    <button
-                        class="favorite ${isFavorite ? "active" : ""}"
-                        onclick="toggleFavorite(${menu.id})">
-
-                        <i class="${isFavorite ? "fa-solid" : "fa-regular"} fa-heart"></i>
-
-                    </button>
-
-                </div>
-
-
-                <div class="menu-desc">
-
-                    ${menu.description}
-
-                </div>
-
-
-                <div class="meta">
-
-                    <span>
-                        ⏱️ ${menu.time}
-                    </span>
-
-                    <span>
-                        💰 ${menu.cost}
-                    </span>
-
-                    <span>
-                        ${menu.difficulty}
-                    </span>
-
-                </div>
-
-
-                ${matchHTML}
-
-
-                <div class="menu-actions">
-
-                    <button
-                        class="recipe-btn"
-                        onclick="openRecipe(${menu.id})">
-
-                        👨‍🍳 ดูวิธีทำ
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================
-   RANDOM MENU
-========================= */
-
-function randomMenu(){
-
-    currentIngredients = [];
-
-    showIngredients([]);
-
-    const shuffled =
-        [...menus]
-        .sort(
-            () => Math.random() - .5
-        )
-        .slice(0,3);
-
-
-    const grid =
-        document.getElementById("menuGrid");
-
-    const empty =
-        document.getElementById("emptyBox");
-
-    grid.innerHTML =
-        shuffled
-        .map(function(menu){
-
-            return createMenuCard(menu);
-
-        })
-        .join("");
-
-
-    empty.style.display = "none";
-
-    document
-        .getElementById("resultCount")
-        .textContent =
-        "วันนี้เราเลือกให้คุณ 3 เมนู";
-
-
-    document
-        .querySelector(".results-section")
-        .scrollIntoView({
-            behavior:"smooth"
-        });
-
-}
-
-
-/* =========================
-   FAVORITE
-========================= */
-
-function toggleFavorite(id){
-
-    if(favorites.includes(id)){
-
-        favorites =
-            favorites.filter(
-                x => x !== id
+        cart =
+            cart.filter(
+                p => p.id !== id
             );
 
-        showToast("ลบจากเมนูโปรดแล้ว");
-
-    }else{
-
-        favorites.push(id);
-
-        showToast("เพิ่มเมนูโปรดแล้ว");
-
     }
 
 
-    localStorage.setItem(
-        "phaendinKitchenFavorites",
-        JSON.stringify(favorites)
-    );
+    saveCart();
 
-
-    renderMenus();
+    renderCart();
 
 }
 
 
-/* =========================
-   RECIPE MODAL
-========================= */
+function removeFromCart(id){
 
-function openRecipe(id){
-
-    const menu =
-        menus.find(
-            x => x.id === id
+    cart =
+        cart.filter(
+            p => p.id !== id
         );
 
-    if(!menu){
+    saveCart();
+
+    renderCart();
+
+}
+
+
+/* ==================================================
+   RENDER PRODUCTS
+================================================== */
+
+function renderProducts(){
+
+    const box =
+        document.getElementById("products");
+
+
+    box.innerHTML =
+        products.map(product => `
+
+            <div class="product">
+
+                <div class="product-image">
+
+                    ${
+                        product.image
+
+                        ?
+
+                        `<img
+                            src="${product.image}"
+                            alt="${product.name}">
+                        `
+
+                        :
+
+                        `<div class="product-placeholder">
+                            🛒
+                        </div>`
+                    }
+
+                </div>
+
+
+                <div class="product-body">
+
+                    <div class="product-name">
+                        ${product.name}
+                    </div>
+
+                    <div class="product-desc">
+                        ${product.description}
+                    </div>
+
+                    <div class="price">
+                        ฿${product.price}
+                    </div>
+
+                    <button
+                        class="buy-btn"
+                        onclick="addToCart(${product.id})">
+
+                        🛒 เพิ่มลงตะกร้า
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* ==================================================
+   CART MODAL
+================================================== */
+
+function openCart(){
+
+    renderCart();
+
+    document
+        .getElementById("cartModal")
+        .classList.add("show");
+
+}
+
+
+function closeCart(){
+
+    document
+        .getElementById("cartModal")
+        .classList.remove("show");
+
+}
+
+
+function closeCartOutside(event){
+
+    if(event.target.id === "cartModal"){
+
+        closeCart();
+
+    }
+
+}
+
+
+function renderCart(){
+
+    const box =
+        document.getElementById("cartList");
+
+
+    if(cart.length === 0){
+
+        box.innerHTML = `
+            <div class="empty">
+                🛒 ยังไม่มีสินค้าในตะกร้า
+            </div>
+        `;
+
+        document.getElementById("cartTotal")
+            .textContent = "฿0";
+
         return;
+
     }
 
 
-    document
-        .getElementById("modalTitle")
+    let total = 0;
+
+
+    box.innerHTML =
+        cart.map(item => {
+
+            const itemTotal =
+                item.price * item.qty;
+
+            total += itemTotal;
+
+
+            return `
+
+                <div class="cart-item">
+
+                    <div class="cart-item-info">
+
+                        <div class="cart-item-name">
+                            ${item.name}
+                        </div>
+
+                        <div class="cart-item-price">
+                            ฿${item.price} / ชิ้น
+                        </div>
+
+                    </div>
+
+
+                    <div class="qty">
+
+                        <button
+                            onclick="changeQty(${item.id},-1)">
+                            −
+                        </button>
+
+                        <span>
+                            ${item.qty}
+                        </span>
+
+                        <button
+                            onclick="changeQty(${item.id},1)">
+                            +
+                        </button>
+
+                    </div>
+
+
+                    <strong>
+                        ฿${itemTotal}
+                    </strong>
+
+
+                    <button
+                        class="remove"
+                        onclick="removeFromCart(${item.id})">
+
+                        ลบ
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+    document.getElementById("cartTotal")
         .textContent =
-        menu.emoji + " " + menu.name;
+        "฿" + total.toLocaleString();
 
+}
+
+
+/* ==================================================
+   ORDER
+================================================== */
+
+function openOrder(){
+
+    if(cart.length === 0){
+
+        alert("ยังไม่มีสินค้าในตะกร้า");
+
+        return;
+
+    }
+
+
+    let total = 0;
+
+
+    const html =
+        cart.map(item => {
+
+            const itemTotal =
+                item.price * item.qty;
+
+            total += itemTotal;
+
+            return `
+                <div>
+                    ${item.name}
+                    × ${item.qty}
+                    = ฿${itemTotal}
+                </div>
+            `;
+
+        }).join("");
+
+
+    document.getElementById("orderSummary")
+        .innerHTML = `
+
+            ${html}
+
+            <hr style="margin:10px 0">
+
+            <strong>
+                รวมทั้งหมด ฿${total.toLocaleString()}
+            </strong>
+
+        `;
+
+
+    closeCart();
 
     document
-        .getElementById("modalIntro")
-        .textContent =
-        menu.description +
-        " • " +
-        menu.time +
-        " • ระดับ " +
-        menu.difficulty;
+        .getElementById("orderModal")
+        .classList.add("show");
+
+}
 
 
-    document
-        .getElementById("modalIngredients")
-        .innerHTML =
-        menu.ingredients
-        .map(function(item){
-
-            return `<li>${item}</li>`;
-
-        })
-        .join("");
-
+function closeOrder(){
 
     document
-        .getElementById("modalSteps")
-        .innerHTML =
-        menu.steps
-        .map(function(step){
+        .getElementById("orderModal")
+        .classList.remove("show");
 
-            return `<li>${step}</li>`;
+}
 
-        })
-        .join("");
+
+function submitOrder(){
+
+    const name =
+        document.getElementById("customerName")
+            .value.trim();
+
+    const phone =
+        document.getElementById("customerPhone")
+            .value.trim();
+
+    const address =
+        document.getElementById("customerAddress")
+            .value.trim();
+
+
+    if(!name){
+
+        alert("กรุณากรอกชื่อ");
+
+        return;
+
+    }
+
+
+    if(!phone){
+
+        alert("กรุณากรอกเบอร์โทร");
+
+        return;
+
+    }
+
+
+    if(!address){
+
+        alert("กรุณากรอกที่อยู่");
+
+        return;
+
+    }
+
+
+    /*
+       ตอนนี้เป็น DEMO
+
+       ขั้นถัดไปเราจะต่อระบบส่งคำสั่งซื้อจริง
+       เช่น Google Sheet / Database / LINE
+    */
+
+
+    const orderNumber =
+        "PH" +
+        Date.now().toString().slice(-8);
+
+
+    document.querySelector("#orderModal .modal-box")
+        .innerHTML = `
+
+            <div class="success">
+
+                <div class="success-icon">
+                    ✅
+                </div>
+
+                <h2>
+                    สั่งซื้อสำเร็จ
+                </h2>
+
+                <p style="margin:10px 0">
+                    เลขที่คำสั่งซื้อ
+                </p>
+
+                <strong style="font-size:22px">
+                    ${orderNumber}
+                </strong>
+
+                <p style="margin-top:15px;color:#64748b">
+                    ขั้นต่อไปเราจะเชื่อมระบบนี้
+                    ให้ส่งคำสั่งซื้อเข้าหลังบ้านจริง
+                </p>
+
+                <button
+                    class="main-btn"
+                    style="margin-top:18px"
+                    onclick="finishOrder()">
+
+                    ปิด
+
+                </button>
+
+            </div>
+
+        `;
+
+}
+
+
+function finishOrder(){
+
+    cart = [];
+
+    saveCart();
+
+    location.reload();
+
+}
+
+
+/* ==================================================
+   RECIPE
+================================================== */
+
+function showRecipe(menu){
+
+    document.getElementById("recipeContent")
+        .innerHTML = `
+
+            <h2>
+                🍳 ${menu.name}
+            </h2>
+
+            <p style="margin:10px 0">
+                ${menu.description || ""}
+            </p>
+
+            <hr style="margin:12px 0">
+
+            <h3>🥕 วัตถุดิบ</h3>
+
+            <p style="margin:8px 0">
+                ${(menu.ingredients || []).join(" • ")}
+            </p>
+
+            <h3 style="margin-top:15px">
+                👨‍🍳 วิธีทำ
+            </h3>
+
+            <p style="white-space:pre-line;margin-top:8px">
+                ${menu.steps || "AI จะสร้างวิธีทำให้"}
+            </p>
+
+        `;
 
 
     document
@@ -3247,11 +1561,9 @@ function closeRecipe(){
 }
 
 
-function closeModal(event){
+function closeModalOutside(event){
 
-    if(
-        event.target.id === "recipeModal"
-    ){
+    if(event.target.id === "recipeModal"){
 
         closeRecipe();
 
@@ -3260,701 +1572,387 @@ function closeModal(event){
 }
 
 
-/* =========================
-   PHOTO SELECT
-========================= */
+/* ==================================================
+   INGREDIENT BUTTON
+================================================== */
 
-document
-.getElementById("photoInput")
-.addEventListener("change",function(event){
+function addIngredient(text){
 
-    const file =
-        event.target.files[0];
+    const box =
+        document.getElementById("ingredients");
 
-    if(!file){
-        return;
+
+    let current =
+        box.value.trim();
+
+
+    if(current){
+
+        box.value =
+            current + ", " + text;
+
+    }else{
+
+        box.value = text;
+
     }
-
-
-    if(!file.type.startsWith("image/")){
-
-        showToast("ไฟล์นี้ไม่ใช่รูปภาพ");
-
-        return;
-    }
-
-
-    uploadedImage = file;
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload = function(e){
-
-        document
-            .getElementById("previewImage")
-            .src = e.target.result;
-
-
-        document
-            .getElementById("previewWrap")
-            .classList.add("show");
-
-
-        showToast("เลือกรูปแล้ว");
-
-    };
-
-
-    reader.readAsDataURL(file);
-
-});
-
-
-/* =========================
-   IMAGE RESIZE
-========================= */
-
-function resizeImage(file,maxSize=1200){
-
-    return new Promise(function(resolve,reject){
-
-        const reader =
-            new FileReader();
-
-
-        reader.onload = function(e){
-
-            const img =
-                new Image();
-
-
-            img.onload = function(){
-
-                let width =
-                    img.width;
-
-                let height =
-                    img.height;
-
-
-                if(width > maxSize){
-
-                    height =
-                        Math.round(
-                            height *
-                            maxSize /
-                            width
-                        );
-
-                    width = maxSize;
-
-                }
-
-
-                if(height > maxSize){
-
-                    width =
-                        Math.round(
-                            width *
-                            maxSize /
-                            height
-                        );
-
-                    height = maxSize;
-
-                }
-
-
-                const canvas =
-                    document.createElement("canvas");
-
-
-                canvas.width = width;
-
-                canvas.height = height;
-
-
-                const ctx =
-                    canvas.getContext("2d");
-
-
-                ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-
-                canvas.toBlob(
-                    function(blob){
-
-                        resolve(blob);
-
-                    },
-                    "image/jpeg",
-                    .82
-                );
-
-            };
-
-
-            img.onerror = reject;
-
-            img.src = e.target.result;
-
-        };
-
-
-        reader.onerror = reject;
-
-        reader.readAsDataURL(file);
-
-    });
 
 }
 
 
-/* =========================
-   BLOB TO BASE64
-========================= */
+/* ==================================================
+   AI
+================================================== */
 
-function blobToBase64(blob){
+async function askAI(){
 
-    return new Promise(function(resolve,reject){
-
-        const reader =
-            new FileReader();
-
-
-        reader.onloadend =
-            function(){
-
-                const result =
-                    reader.result;
-
-
-                resolve(
-                    result.split(",")[1]
-                );
-
-            };
-
-
-        reader.onerror = reject;
-
-        reader.readAsDataURL(blob);
-
-    });
-
-}
-
-
-/* =========================
-   AI IMAGE ANALYSIS
-========================= */
-
-async function analyzeImage(){
-
-    if(!uploadedImage){
-
-        showToast("กรุณาเลือกรูปก่อน");
-
-        return;
-    }
+    const ingredients =
+        document.getElementById("ingredients")
+            .value.trim();
 
 
     const key =
-        localStorage.getItem(
-            "phaendinKitchenGeminiKey"
-        ) || "";
+        document.getElementById("apiKey")
+            .value.trim();
+
+
+    if(!ingredients){
+
+        alert("ลองใส่วัตถุดิบก่อนครับ เช่น ไข่ หมู กระเทียม");
+
+        return;
+
+    }
 
 
     if(!key){
 
-        showToast(
-            "กรุณาใส่ Gemini API Key ก่อน"
-        );
-
-        document
-            .getElementById("apiKeyInput")
-            .focus();
+        alert("กรุณาใส่ Gemini API Key สำหรับทดลองก่อน");
 
         return;
+
     }
 
 
-    const button =
-        document.getElementById("aiAnalyzeBtn");
+    const status =
+        document.getElementById("status");
 
 
-    button.disabled = true;
-
-    button.innerHTML =
-        "🧠 AI กำลังดูรูป...";
-
-
-    showLoading(
-        "AI กำลังตรวจดูวัตถุดิบในรูป..."
-    );
+    status.textContent =
+        "🤖 AI กำลังคิดเมนู...";
 
 
     try{
 
-        const resized =
-            await resizeImage(
-                uploadedImage,
-                1200
-            );
-
-
-        const base64 =
-            await blobToBase64(
-                resized
-            );
-
-
-        const mimeType =
-            "image/jpeg";
-
 
         /*
-          Gemini REST API
-
-          ขอให้ AI ตอบเฉพาะชื่อวัตถุดิบ
-          เพื่อให้เราเอาไปจับคู่กับเมนู
+           เปลี่ยน MODEL ตรงนี้ได้ในอนาคต
+           หาก Google เปลี่ยนชื่อรุ่น
         */
+
+        const model =
+            "gemini-3.8-flash";
+
+
+        const url =
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            +
+            model
+            +
+            ":generateContent?key="
+            +
+            encodeURIComponent(key);
+
 
         const prompt = `
 
-คุณเป็นผู้ช่วยทำอาหารของเว็บไซต์ PHAENDIN KITCHEN
+คุณคือ AI เชฟสำหรับเว็บไซต์ PHAENDIN KITCHEN
 
-ดูภาพนี้แล้วระบุ "วัตถุดิบที่มองเห็นจริง" เท่านั้น
+ผู้ใช้มีวัตถุดิบ:
+${ingredients}
 
-ให้ตอบเป็น JSON array เท่านั้น
+ช่วยคิดเมนูอาหารไทยที่ทำได้จากวัตถุดิบเหล่านี้
 
-ตัวอย่าง:
-["ไข่","หมู","กระเทียม","พริก","มะเขือเทศ"]
+ขอ 3 เมนู
 
-กฎ:
-- ใช้ชื่อวัตถุดิบภาษาไทย
-- ไม่ต้องบอกจำนวน
-- ไม่ต้องบอกวิธีทำ
-- ไม่ต้องอธิบาย
-- ห้ามเดาสิ่งที่มองไม่เห็นชัด
-- ถ้าไม่แน่ใจให้ไม่ใส่
-- ถ้าเป็นอาหารสำเร็จรูป ให้พยายามระบุวัตถุดิบหลักที่เห็น
-- ตอบ JSON array อย่างเดียว
+ตอบเป็น JSON เท่านั้น ห้ามมีข้อความอื่น
 
-        `;
+รูปแบบ:
+
+[
+ {
+  "name":"ชื่อเมนู",
+  "description":"คำอธิบายสั้นๆ",
+  "ingredients":["วัตถุดิบ1","วัตถุดิบ2"],
+  "missing":["สิ่งที่ผู้ใช้อาจไม่มี"],
+  "steps":"วิธีทำแบบสั้นๆ"
+ }
+]
+
+`;
 
 
         const response =
-            await fetch(
-                "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" +
-                encodeURIComponent(key),
-                {
+            await fetch(url,{
 
-                    method:"POST",
+                method:"POST",
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
 
-                    body:JSON.stringify({
+                body:JSON.stringify({
 
-                        contents:[
+                    contents:[
 
-                            {
+                        {
+                            parts:[
+                                {
+                                    text:prompt
+                                }
+                            ]
+                        }
 
-                                parts:[
+                    ]
 
-                                    {
-                                        text:prompt
-                                    },
+                })
 
-                                    {
-                                        inline_data:{
-                                            mime_type:mimeType,
-                                            data:base64
-                                        }
-                                    }
-
-                                ]
-
-                            }
-
-                        ]
-
-                    })
-
-                }
-            );
-
-
-        const data =
-            await response.json();
+            });
 
 
         if(!response.ok){
 
-            console.error(data);
-
             throw new Error(
-                data?.error?.message ||
                 "AI API Error"
             );
 
         }
 
 
-        const raw =
+        const data =
+            await response.json();
+
+
+        const text =
             data
-            ?.candidates?.[0]
-            ?.content?.parts
-            ?.map(
-                part => part.text || ""
-            )
-            .join("")
-            .trim();
+                ?.candidates?.[0]
+                ?.content?.parts?.[0]
+                ?.text;
 
 
-        if(!raw){
+        if(!text){
 
             throw new Error(
-                "AI ไม่ได้ส่งผลลัพธ์กลับมา"
+                "ไม่ได้รับคำตอบจาก AI"
             );
 
         }
 
 
-        let aiIngredients = [];
+        /*
+           ทำความสะอาด JSON
+        */
+
+        const clean =
+            text
+                .replace(/```json/gi,"")
+                .replace(/```/g,"")
+                .trim();
 
 
-        try{
-
-            aiIngredients =
-                JSON.parse(
-                    cleanJson(raw)
-                );
-
-        }catch(error){
-
-            /*
-              fallback:
-              ดึงชื่อวัตถุดิบที่เรารู้จัก
-              จากข้อความ AI
-            */
-
-            aiIngredients =
-                parseIngredients(raw);
-
-        }
+        const menus =
+            JSON.parse(clean);
 
 
-        if(!Array.isArray(aiIngredients)){
-
-            aiIngredients =
-                parseIngredients(
-                    String(aiIngredients)
-                );
-
-        }
+        renderMenus(menus);
 
 
-        const normalized =
-            normalizeAIIngredients(
-                aiIngredients
-            );
-
-
-        if(!normalized.length){
-
-            showToast(
-                "AI มองไม่เห็นวัตถุดิบที่ระบบรู้จัก"
-            );
-
-            return;
-
-        }
-
-
-        currentIngredients =
-            normalized;
-
-
-        document
-            .getElementById("ingredientInput")
-            .value =
-            normalized.join(", ");
-
-
-        showIngredients(
-            normalized
-        );
-
-
-        renderMenus();
-
-
-        showToast(
-            "AI พบ " +
-            normalized.length +
-            " วัตถุดิบ"
-        );
-
-
-        document
-            .querySelector(".results-section")
-            .scrollIntoView({
-                behavior:"smooth"
-            });
+        status.textContent =
+            "✅ AI สร้างเมนูให้แล้ว";
 
 
     }catch(error){
 
         console.error(error);
 
-        showToast(
-            "AI วิเคราะห์ไม่ได้: " +
-            error.message
+        status.textContent =
+            "❌ AI ทำงานไม่สำเร็จ";
+
+        alert(
+            "AI ยังตอบไม่ได้\n\n" +
+            "ตรวจสอบ API Key หรือรุ่น AI อีกครั้ง"
         );
-
-    }finally{
-
-        hideLoading();
-
-        button.disabled = false;
-
-        button.innerHTML =
-            "🧠 ให้ AI วิเคราะห์วัตถุดิบ";
 
     }
 
 }
 
 
-/* =========================
-   CLEAN JSON
-========================= */
+/* ==================================================
+   RENDER AI MENUS
+================================================== */
 
-function cleanJson(text){
+function renderMenus(menus){
 
-    let value =
-        text.trim();
-
-
-    value =
-        value.replace(
-            /^```json/i,
-            ""
-        );
+    const section =
+        document.getElementById("menuSection");
 
 
-    value =
-        value.replace(
-            /^```/i,
-            ""
-        );
+    const box =
+        document.getElementById("menuResults");
 
 
-    value =
-        value.replace(
-            /```$/i,
-            ""
-        );
+    section.classList.remove("hidden");
 
 
-    return value.trim();
+    box.innerHTML =
+        menus.map((menu,index)=>`
 
-}
+            <div class="menu-card">
 
-
-/* =========================
-   NORMALIZE AI
-========================= */
-
-function normalizeAIIngredients(list){
-
-    const result = [];
-
-
-    list.forEach(function(raw){
-
-        if(typeof raw !== "string"){
-            return;
-        }
-
-
-        const text =
-            raw
-            .trim()
-            .toLowerCase();
-
-
-        Object.keys(synonymGroups)
-        .forEach(function(canonical){
-
-            const synonyms =
-                synonymGroups[canonical];
-
-
-            const found =
-                synonyms.some(
-                    function(word){
-
-                        return text.includes(
-                            word.toLowerCase()
-                        );
-
+                <div class="menu-img">
+                    ${
+                        index === 0
+                        ? "🍳"
+                        : index === 1
+                        ? "🍲"
+                        : "🥘"
                     }
-                );
+                </div>
 
 
-            if(found){
+                <div class="menu-body">
 
-                result.push(canonical);
+                    <h3>
+                        ${menu.name}
+                    </h3>
 
-            }
+                    <span class="match">
+                        🤖 AI แนะนำ
+                    </span>
 
-        });
 
+                    <p style="font-size:13px;margin-bottom:8px;">
+                        ${menu.description || ""}
+                    </p>
+
+
+                    ${
+                        menu.missing &&
+                        menu.missing.length
+
+                        ?
+
+                        `<div class="missing">
+                            ❗ ขาด:
+                            ${menu.missing.join(", ")}
+                        </div>`
+
+                        :
+
+                        `<div style="font-size:13px;color:#15803d;margin-bottom:8px;">
+                            ✅ มีวัตถุดิบเพียงพอ
+                        </div>`
+                    }
+
+
+                    <button
+                        class="recipe-btn"
+                        onclick='showRecipe(${JSON.stringify(menu)})'>
+
+                        👨‍🍳 ดูวิธีทำ
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+
+
+    /*
+       เลื่อนหน้าจอไปยังผลลัพธ์
+    */
+
+    section.scrollIntoView({
+        behavior:"smooth"
     });
 
+}
 
-    return [
-        ...new Set(result)
-    ];
+
+/* ==================================================
+   DARK MODE
+================================================== */
+
+function toggleDark(){
+
+    document.body.classList.toggle("dark");
+
+
+    localStorage.setItem(
+        "phaendinKitchenDark",
+        document.body.classList.contains("dark")
+    );
 
 }
 
 
-/* =========================
-   LOADING
-========================= */
+if(
+    localStorage.getItem(
+        "phaendinKitchenDark"
+    ) === "true"
+){
 
-function showLoading(text){
-
-    document
-        .getElementById("loadingText")
-        .textContent =
-        text;
-
-
-    document
-        .getElementById("loading")
-        .classList.add("show");
+    document.body.classList.add("dark");
 
 }
 
 
-function hideLoading(){
+/* ==================================================
+   API KEY MEMORY
+================================================== */
 
-    document
-        .getElementById("loading")
-        .classList.remove("show");
-
-}
-
-
-/* =========================
-   CLEAR
-========================= */
-
-function clearAll(){
-
-    document
-        .getElementById("ingredientInput")
-        .value = "";
+const savedKey =
+    localStorage.getItem(
+        "phaendinKitchenApiKey"
+    );
 
 
-    document
-        .getElementById("menuSearch")
-        .value = "";
+if(savedKey){
 
-
-    document
-        .getElementById("photoInput")
-        .value = "";
-
-
-    uploadedImage = null;
-
-    currentIngredients = [];
-
-
-    document
-        .getElementById("previewWrap")
-        .classList.remove("show");
-
-
-    showIngredients([]);
-
-
-    currentCategory = "ทั้งหมด";
-
-
-    document
-        .querySelectorAll(".filter-btn")
-        .forEach(function(btn){
-
-            btn.classList.remove("active");
-
-        });
-
-
-    document
-        .querySelector('.filter-btn[data-category="ทั้งหมด"]')
-        .classList.add("active");
-
-
-    renderMenus();
-
-
-    showToast("ล้างข้อมูลแล้ว");
+    document.getElementById("apiKey")
+        .value = savedKey;
 
 }
 
 
-/* =========================
-   TOAST
-========================= */
+document.getElementById("apiKey")
+    .addEventListener(
+        "change",
+        function(){
 
-let toastTimer;
+            localStorage.setItem(
+                "phaendinKitchenApiKey",
+                this.value.trim()
+            );
 
-
-function showToast(message){
-
-    const toast =
-        document.getElementById("toast");
-
-
-    toast.textContent =
-        message;
+        }
+    );
 
 
-    toast.classList.add("show");
+/* ==================================================
+   INIT
+================================================== */
 
+renderProducts();
 
-    clearTimeout(toastTimer);
-
-
-    toastTimer =
-        setTimeout(function(){
-
-            toast.classList.remove("show");
-
-        },3000);
-
-}
+updateCartCount();
 
 </script>
 
 </body>
-
 </html>
