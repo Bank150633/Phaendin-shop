@@ -4,13 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PHAENDIN FOOD | ของอร่อยจากทั่วไทย</title>
+<title>ตู้เย็นทำอะไรดี? | PHAENDIN</title>
 
-<meta name="description"
-      content="PHAENDIN FOOD รวมของอร่อย น้ำพริก ขนม ของฝาก และอาหารเด็ดจากทั่วไทย">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -22,1422 +17,654 @@
 
 body{
     font-family:'Kanit',sans-serif;
-    background:#f6f7f9;
+    background:#f5f7fb;
     color:#222;
-}
-
-button,
-input{
-    font-family:inherit;
 }
 
 header{
-    position:sticky;
-    top:0;
-    z-index:100;
-    background:#fff;
-    border-bottom:1px solid #eee;
-}
-
-.header-inner{
-    max-width:1200px;
-    margin:auto;
-    padding:12px 18px;
-    display:flex;
-    align-items:center;
-    gap:15px;
+    background:linear-gradient(135deg,#d71920,#123c8c);
+    color:white;
+    padding:18px 16px;
+    text-align:center;
 }
 
 .logo{
-    font-size:24px;
+    font-size:25px;
     font-weight:700;
-    color:#b91c1c;
-    white-space:nowrap;
 }
 
 .logo span{
-    color:#222;
+    color:#ffe500;
 }
 
-.search{
-    flex:1;
-    position:relative;
-}
-
-.search input{
-    width:100%;
-    border:1px solid #ddd;
-    border-radius:30px;
-    padding:11px 18px;
-    font-size:15px;
-    outline:none;
-    background:#f7f7f7;
-}
-
-.search input:focus{
-    border-color:#dc2626;
-    background:#fff;
-}
-
-.cart-btn{
-    border:0;
-    background:#111;
-    color:#fff;
-    border-radius:25px;
-    padding:10px 16px;
-    cursor:pointer;
+header p{
+    margin-top:4px;
     font-size:14px;
+    opacity:.95;
 }
 
-.cart-count{
-    background:#ef4444;
-    padding:1px 6px;
-    border-radius:20px;
-    margin-left:3px;
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px 14px 100px;
 }
-
-/* HERO */
 
 .hero{
-    max-width:1200px;
-    margin:18px auto;
-    padding:0 18px;
-}
-
-.hero-box{
-    min-height:190px;
-    border-radius:24px;
-    padding:30px;
-    background:
-      linear-gradient(120deg,#7f1d1d,#dc2626,#f97316);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    overflow:hidden;
-}
-
-.hero-text{
-    max-width:650px;
+    text-align:center;
+    padding:20px 5px;
 }
 
 .hero h1{
-    font-size:34px;
-    line-height:1.15;
-    margin-bottom:8px;
-}
-
-.hero p{
-    font-size:16px;
-    opacity:.9;
-}
-
-.hero-btn{
-    margin-top:18px;
-    border:0;
-    background:#fff;
-    color:#b91c1c;
-    padding:10px 20px;
-    border-radius:25px;
-    cursor:pointer;
-    font-weight:600;
-}
-
-.hero-icon{
-    font-size:100px;
-    opacity:.18;
-}
-
-/* CATEGORY */
-
-.categories{
-    max-width:1200px;
-    margin:0 auto 18px;
-    padding:0 18px;
-}
-
-.category-scroll{
-    display:flex;
-    gap:8px;
-    overflow-x:auto;
-    scrollbar-width:none;
-}
-
-.category-scroll::-webkit-scrollbar{
-    display:none;
-}
-
-.category{
-    white-space:nowrap;
-    border:1px solid #ddd;
-    background:#fff;
-    padding:8px 15px;
-    border-radius:25px;
-    cursor:pointer;
-    font-size:14px;
-}
-
-.category.active{
-    background:#b91c1c;
-    border-color:#b91c1c;
-    color:#fff;
-}
-
-/* TOOLBAR */
-
-.toolbar{
-    max-width:1200px;
-    margin:0 auto 15px;
-    padding:0 18px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-}
-
-.section-title{
-    font-size:22px;
-    font-weight:600;
-}
-
-.random-btn{
-    border:0;
-    background:#111;
-    color:#fff;
-    border-radius:22px;
-    padding:9px 16px;
-    cursor:pointer;
-}
-
-.random-btn:hover{
-    opacity:.85;
-}
-
-/* PRODUCTS */
-
-.products{
-    max-width:1200px;
-    margin:auto;
-    padding:0 18px 40px;
-
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:14px;
-}
-
-.card{
-    background:#fff;
-    border-radius:16px;
-    overflow:hidden;
-    border:1px solid #eee;
-    transition:.2s;
-}
-
-.card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
-}
-
-.product-img{
-    width:100%;
-    aspect-ratio:1/1;
-    object-fit:cover;
-    display:block;
-    background:#eee;
-}
-
-.card-body{
-    padding:10px;
-}
-
-.tag{
-    display:inline-block;
-    background:#fee2e2;
-    color:#b91c1c;
-    font-size:11px;
-    padding:3px 7px;
-    border-radius:8px;
-    margin-bottom:5px;
-}
-
-.title{
-    font-size:15px;
-    font-weight:500;
-
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-.province{
-    font-size:12px;
-    color:#888;
-    margin-top:2px;
-}
-
-.price-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-top:7px;
-}
-
-.price{
-    color:#dc2626;
-    font-size:19px;
+    font-size:30px;
     font-weight:700;
 }
 
-.old-price{
-    color:#aaa;
-    font-size:11px;
-    text-decoration:line-through;
-    margin-left:4px;
+.hero p{
+    color:#666;
+    margin-top:5px;
 }
 
-.buy-btn{
+/* INPUT */
+
+.input-box{
+    background:white;
+    border-radius:20px;
+    padding:18px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.input-title{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+textarea{
     width:100%;
-    border:0;
-    background:#111;
-    color:#fff;
-    border-radius:10px;
-    padding:8px;
-    margin-top:8px;
+    height:100px;
+    resize:none;
+    border:2px solid #e5e7eb;
+    border-radius:14px;
+    padding:13px;
+    font-family:inherit;
+    font-size:16px;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#123c8c;
+}
+
+.example{
+    color:#777;
+    font-size:13px;
+    margin-top:7px;
+}
+
+button{
+    border:none;
+    font-family:inherit;
     cursor:pointer;
 }
 
-.buy-btn:hover{
-    background:#b91c1c;
+.find-btn{
+    width:100%;
+    margin-top:13px;
+    padding:14px;
+    border-radius:13px;
+    background:#d71920;
+    color:white;
+    font-size:18px;
+    font-weight:600;
+}
+
+.find-btn:hover{
+    opacity:.9;
+}
+
+/* RESULTS */
+
+.result-title{
+    margin:25px 2px 12px;
+    font-size:21px;
+    font-weight:600;
+}
+
+.result-count{
+    font-size:13px;
+    color:#777;
+    font-weight:400;
+}
+
+.menu-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:13px;
+}
+
+.card{
+    background:white;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
+}
+
+.food-img{
+    height:145px;
+    background:#eee;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:65px;
+}
+
+.card-body{
+    padding:13px;
+}
+
+.card h3{
+    font-size:18px;
+    margin-bottom:5px;
+}
+
+.match{
+    font-size:13px;
+    color:#16803c;
+    background:#eaf8ef;
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:20px;
+    margin-bottom:8px;
+}
+
+.ingredients{
+    color:#777;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.cook-btn{
+    width:100%;
+    margin-top:10px;
+    padding:9px;
+    border-radius:10px;
+    background:#123c8c;
+    color:white;
+    font-size:14px;
+}
+
+/* AD */
+
+.ad{
+    margin-top:25px;
+    background:white;
+    border:1px dashed #bbb;
+    border-radius:14px;
+    min-height:90px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#999;
+    font-size:13px;
+}
+
+/* MODAL */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    z-index:99;
+    padding:20px;
+}
+
+.modal-box{
+    background:white;
+    max-width:500px;
+    margin:60px auto;
+    border-radius:20px;
+    padding:20px;
+    max-height:80vh;
+    overflow:auto;
+}
+
+.close{
+    float:right;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.modal h2{
+    margin-bottom:10px;
+}
+
+.modal p{
+    line-height:1.7;
+    color:#555;
+}
+
+.steps{
+    margin-top:15px;
+}
+
+.steps div{
+    background:#f5f7fb;
+    padding:10px;
+    margin-bottom:7px;
+    border-radius:10px;
 }
 
 /* EMPTY */
 
 .empty{
-    grid-column:1/-1;
     text-align:center;
-    padding:50px 10px;
-    color:#888;
-}
-
-/* CART */
-
-.overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    z-index:200;
-    display:none;
-}
-
-.overlay.show{
-    display:block;
-}
-
-.cart-panel{
-    position:absolute;
-    right:0;
-    top:0;
-    height:100%;
-    width:min(420px,94%);
-    background:#fff;
-    padding:20px;
-    overflow-y:auto;
-}
-
-.cart-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:20px;
-}
-
-.close{
-    border:0;
-    background:#eee;
-    width:35px;
-    height:35px;
-    border-radius:50%;
-    cursor:pointer;
-}
-
-.cart-item{
-    display:flex;
-    gap:10px;
-    padding:10px 0;
-    border-bottom:1px solid #eee;
-}
-
-.cart-item img{
-    width:65px;
-    height:65px;
-    object-fit:cover;
-    border-radius:10px;
-}
-
-.cart-info{
-    flex:1;
-}
-
-.cart-name{
-    font-size:14px;
-}
-
-.cart-price{
-    color:#dc2626;
-    font-weight:600;
-}
-
-.qty{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    margin-top:5px;
-}
-
-.qty button{
-    border:0;
-    background:#eee;
-    width:25px;
-    height:25px;
-    border-radius:6px;
-    cursor:pointer;
-}
-
-.remove{
-    border:0;
-    background:none;
-    color:#999;
-    cursor:pointer;
-}
-
-.cart-total{
-    margin-top:20px;
-    padding-top:15px;
-    border-top:2px solid #222;
-    display:flex;
-    justify-content:space-between;
-    font-size:20px;
-    font-weight:600;
-}
-
-.checkout{
-    width:100%;
-    margin-top:15px;
-    border:0;
-    background:#b91c1c;
-    color:#fff;
-    padding:12px;
-    border-radius:12px;
-    font-size:16px;
-    cursor:pointer;
-}
-
-/* ORDER MODAL */
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    z-index:300;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:15px;
-}
-
-.modal.show{
-    display:flex;
-}
-
-.modal-box{
-    background:#fff;
-    width:min(500px,100%);
-    max-height:90vh;
-    overflow:auto;
-    border-radius:20px;
-    padding:22px;
-}
-
-.modal-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
-}
-
-.form-group{
-    margin-bottom:12px;
-}
-
-.form-group label{
-    display:block;
-    font-size:13px;
-    margin-bottom:4px;
-}
-
-.form-group input,
-.form-group textarea{
-    width:100%;
-    border:1px solid #ddd;
-    border-radius:10px;
-    padding:10px;
-    font-size:14px;
-    outline:none;
-}
-
-.form-group textarea{
-    min-height:80px;
-    resize:vertical;
-}
-
-.submit-order{
-    width:100%;
-    border:0;
-    background:#16a34a;
-    color:#fff;
-    padding:12px;
-    border-radius:12px;
-    font-size:16px;
-    cursor:pointer;
-}
-
-/* FOOTER */
-
-footer{
-    background:#111;
-    color:#aaa;
-    text-align:center;
-    padding:25px 15px;
-    font-size:13px;
+    padding:30px 10px;
+    color:#777;
 }
 
 /* MOBILE */
 
-@media(max-width:900px){
-
-    .products{
-        grid-template-columns:repeat(3,1fr);
-    }
-
-}
-
-@media(max-width:650px){
-
-    .header-inner{
-        flex-wrap:wrap;
-    }
-
-    .logo{
-        font-size:21px;
-    }
-
-    .search{
-        order:3;
-        flex-basis:100%;
-    }
-
-    .hero-box{
-        min-height:170px;
-        padding:22px;
-    }
-
+@media(max-width:500px){
     .hero h1{
-        font-size:27px;
+        font-size:26px;
     }
 
-    .hero-icon{
-        display:none;
+    .menu-grid{
+        grid-template-columns:1fr;
     }
 
-    .products{
-        grid-template-columns:repeat(2,1fr);
-        gap:10px;
-        padding-left:12px;
-        padding-right:12px;
+    .food-img{
+        height:160px;
     }
-
-    .categories{
-        padding-left:12px;
-        padding-right:12px;
-    }
-
-    .toolbar{
-        padding-left:12px;
-        padding-right:12px;
-    }
-
-    .section-title{
-        font-size:19px;
-    }
-
-    .random-btn{
-        font-size:12px;
-        padding:8px 12px;
-    }
-
-    .card-body{
-        padding:8px;
-    }
-
-    .title{
-        font-size:14px;
-    }
-
-    .price{
-        font-size:17px;
-    }
-
-}
-
-@media(max-width:380px){
-
-    .products{
-        gap:7px;
-    }
-
-    .buy-btn{
-        font-size:12px;
-    }
-
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-
 <header>
-    <div class="header-inner">
-
-        <div class="logo">
-            PHAENDIN <span>FOOD</span>
-        </div>
-
-        <div class="search">
-            <input
-                id="searchInput"
-                type="search"
-                placeholder="ค้นหาน้ำพริก ขนม ของฝาก..."
-                oninput="renderProducts()"
-            >
-        </div>
-
-        <button class="cart-btn" onclick="openCart()">
-            🛒 ตะกร้า
-            <span id="cartCount" class="cart-count">0</span>
-        </button>
-
-    </div>
+    <div class="logo">PHAENDIN <span>FOOD</span></div>
+    <p>มีอะไรในตู้เย็น บอกเรา เดี๋ยวช่วยคิดเมนูให้ 🍳</p>
 </header>
 
+<div class="container">
 
-<!-- HERO -->
+    <section class="hero">
+        <h1>🥘 วันนี้ทำอะไรกินดี?</h1>
+        <p>พิมพ์วัตถุดิบที่มีอยู่ในตู้เย็น</p>
+    </section>
 
-<section class="hero">
+    <section class="input-box">
 
-    <div class="hero-box">
-
-        <div class="hero-text">
-
-            <h1>
-                ของอร่อยจากทั่วไทย
-            </h1>
-
-            <p>
-                คัดสรรน้ำพริก ขนม ของฝาก และของดีจากแต่ละจังหวัด
-            </p>
-
-            <button class="hero-btn" onclick="randomProducts()">
-                🎲 สุ่มของอร่อย
-            </button>
-
+        <div class="input-title">
+            🧊 ในตู้เย็นมีอะไรบ้าง?
         </div>
 
-        <div class="hero-icon">
-            🍜
+        <textarea
+            id="ingredients"
+            placeholder="เช่น ไข่, หมู, กระเทียม, พริก, หอมใหญ่"
+        ></textarea>
+
+        <div class="example">
+            💡 ใส่หลายอย่างคั่นด้วยเครื่องหมาย , ได้เลย
         </div>
 
-    </div>
-
-</section>
-
-
-<!-- CATEGORY -->
-
-<section class="categories">
-
-    <div class="category-scroll">
-
-        <button
-            class="category active"
-            data-category="ทั้งหมด"
-            onclick="setCategory('ทั้งหมด',this)">
-            ทั้งหมด
+        <button class="find-btn" onclick="findMenu()">
+            🔎 หาเมนูให้ฉัน
         </button>
 
-        <button
-            class="category"
-            data-category="น้ำพริก"
-            onclick="setCategory('น้ำพริก',this)">
-            🌶️ น้ำพริก
-        </button>
+    </section>
 
-        <button
-            class="category"
-            data-category="ขนม"
-            onclick="setCategory('ขนม',this)">
-            🍪 ขนม
-        </button>
+    <div id="results"></div>
 
-        <button
-            class="category"
-            data-category="ของฝาก"
-            onclick="setCategory('ของฝาก',this)">
-            🎁 ของฝาก
-        </button>
-
-        <button
-            class="category"
-            data-category="อาหาร"
-            onclick="setCategory('อาหาร',this)">
-            🍜 อาหาร
-        </button>
-
-        <button
-            class="category"
-            data-category="เครื่องดื่ม"
-            onclick="setCategory('เครื่องดื่ม',this)">
-            🥤 เครื่องดื่ม
-        </button>
-
-    </div>
-
-</section>
-
-
-<!-- TOOLBAR -->
-
-<section class="toolbar">
-
-    <div class="section-title">
-        สินค้าแนะนำ
-    </div>
-
-    <button class="random-btn" onclick="randomProducts()">
-        🎲 สุ่มสินค้า
-    </button>
-
-</section>
-
-
-<!-- PRODUCTS -->
-
-<main id="products" class="products"></main>
-
-
-<!-- CART -->
-
-<div id="cartOverlay" class="overlay">
-
-    <div class="cart-panel">
-
-        <div class="cart-head">
-
-            <h2>🛒 ตะกร้าสินค้า</h2>
-
-            <button class="close" onclick="closeCart()">
-                ✕
-            </button>
-
-        </div>
-
-        <div id="cartItems"></div>
-
-        <div class="cart-total">
-
-            <span>รวม</span>
-
-            <span id="cartTotal">
-                ฿0
-            </span>
-
-        </div>
-
-        <button
-            class="checkout"
-            onclick="openOrder()">
-            ดำเนินการสั่งซื้อ
-        </button>
-
+    <!-- พื้นที่โฆษณา -->
+    <div class="ad">
+        พื้นที่โฆษณา
     </div>
 
 </div>
 
 
-<!-- ORDER MODAL -->
+<!-- MODAL -->
 
-<div id="orderModal" class="modal">
+<div class="modal" id="modal">
 
     <div class="modal-box">
 
-        <div class="modal-head">
+        <span class="close" onclick="closeModal()">×</span>
 
-            <h2>📦 ข้อมูลจัดส่ง</h2>
+        <h2 id="modalTitle"></h2>
 
-            <button
-                class="close"
-                onclick="closeOrder()">
-                ✕
-            </button>
+        <p id="modalDescription"></p>
 
-        </div>
-
-        <form onsubmit="submitOrder(event)">
-
-            <div class="form-group">
-
-                <label>
-                    ชื่อผู้รับ
-                </label>
-
-                <input
-                    id="customerName"
-                    required
-                    placeholder="ชื่อ-นามสกุล">
-
-            </div>
-
-            <div class="form-group">
-
-                <label>
-                    เบอร์โทร
-                </label>
-
-                <input
-                    id="customerPhone"
-                    type="tel"
-                    required
-                    placeholder="08xxxxxxxx">
-
-            </div>
-
-            <div class="form-group">
-
-                <label>
-                    ที่อยู่จัดส่ง
-                </label>
-
-                <textarea
-                    id="customerAddress"
-                    required
-                    placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์"></textarea>
-
-            </div>
-
-            <button
-                class="submit-order"
-                type="submit">
-
-                ยืนยันการสั่งซื้อ
-
-            </button>
-
-        </form>
+        <div class="steps" id="modalSteps"></div>
 
     </div>
 
 </div>
-
-
-<!-- FOOTER -->
-
-<footer>
-
-    © 2026 PHAENDIN FOOD
-    <br>
-    ของอร่อยจากทั่วไทย
-
-</footer>
 
 
 <script>
 
-/* ==========================================
-   ข้อมูลสินค้า
-   ตอนนี้ใช้ข้อมูลตัวอย่าง
-   ภายหลังจะเปลี่ยนเป็น Google Sheets
-========================================== */
+/* =====================================================
+   ฐานข้อมูลเมนูเบื้องต้น
+===================================================== */
 
-const products = [
+const menus = [
 
-    {
-        id:1,
-        title:"น้ำพริกปลาร้าทรงเครื่อง",
-        category:"น้ำพริก",
-        province:"อุบลราชธานี",
-        price:89,
-        oldPrice:120,
-        image:"https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=800&q=80"
-    },
+{
+    name:"กะเพราหมู",
+    emoji:"🌶️",
+    ingredients:["หมู","กระเทียม","พริก","ใบกะเพรา"],
+    description:"เมนูง่ายๆ ใช้วัตถุดิบไม่เยอะ เหมาะกับวันที่อยากกินอะไรเร็วๆ",
+    steps:[
+        "โขลกกระเทียมกับพริก",
+        "ตั้งกระทะใส่น้ำมัน",
+        "ผัดกระเทียมและพริกให้หอม",
+        "ใส่หมูลงไปผัดจนสุก",
+        "ปรุงรสตามชอบ",
+        "ใส่ใบกะเพราแล้วผัดอีกเล็กน้อย"
+    ]
+},
 
-    {
-        id:2,
-        title:"หมูฝอยกรอบ สูตรโบราณ",
-        category:"ของฝาก",
-        province:"เชียงใหม่",
-        price:159,
-        oldPrice:199,
-        image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80"
-    },
+{
+    name:"ไข่เจียว",
+    emoji:"🍳",
+    ingredients:["ไข่","น้ำมัน"],
+    description:"เมนูพื้นฐาน ทำง่ายและใช้เวลาน้อย",
+    steps:[
+        "ตอกไข่ใส่ชาม",
+        "ตีไข่ให้เข้ากัน",
+        "ปรุงรสตามชอบ",
+        "ตั้งกระทะใส่น้ำมัน",
+        "เทไข่ลงทอดจนเหลืองกรอบ"
+    ]
+},
 
-    {
-        id:3,
-        title:"ข้าวแต๋นน้ำแตงโม",
-        category:"ขนม",
-        province:"ลำปาง",
-        price:79,
-        oldPrice:99,
-        image:"https://images.unsplash.com/photo-1606312619070-d48b4c652a52?auto=format&fit=crop&w=800&q=80"
-    },
+{
+    name:"ข้าวผัดหมู",
+    emoji:"🍚",
+    ingredients:["ข้าว","หมู","ไข่","กระเทียม"],
+    description:"ใช้ข้าวที่เหลือจากมื้อก่อนมาทำเป็นเมนูใหม่ได้",
+    steps:[
+        "ตั้งกระทะใส่น้ำมัน",
+        "ผัดกระเทียมให้หอม",
+        "ใส่หมูลงผัด",
+        "ใส่ไข่แล้วยีให้พอสุก",
+        "ใส่ข้าวลงผัด",
+        "ปรุงรสตามชอบ"
+    ]
+},
 
-    {
-        id:4,
-        title:"น้ำพริกกากหมูแซ่บๆ",
-        category:"น้ำพริก",
-        province:"นครราชสีมา",
-        price:99,
-        oldPrice:129,
-        image:"https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=800&q=80"
-    },
+{
+    name:"ผัดผักรวม",
+    emoji:"🥦",
+    ingredients:["ผัก","กระเทียม","น้ำมัน"],
+    description:"เหมาะสำหรับใช้ผักหลายชนิดที่เหลืออยู่ในตู้เย็น",
+    steps:[
+        "ล้างและหั่นผัก",
+        "ตั้งกระทะใส่น้ำมัน",
+        "ผัดกระเทียมให้หอม",
+        "ใส่ผักลงไป",
+        "ปรุงรส",
+        "ผัดจนผักสุกตามชอบ"
+    ]
+},
 
-    {
-        id:5,
-        title:"กล้วยฉาบหวานกรอบ",
-        category:"ขนม",
-        province:"พิษณุโลก",
-        price:69,
-        oldPrice:89,
-        image:"https://images.unsplash.com/photo-1621939514649-280e2aa4c3a3?auto=format&fit=crop&w=800&q=80"
-    },
+{
+    name:"ต้มจืดไข่",
+    emoji:"🍲",
+    ingredients:["ไข่","หมู","ผัก"],
+    description:"เมนูซุปร้อนๆ ทำง่ายและกินได้ทั้งครอบครัว",
+    steps:[
+        "ต้มน้ำให้เดือด",
+        "ใส่หมูลงไป",
+        "ใส่ผัก",
+        "ปรุงรส",
+        "ตอกไข่ลงไป",
+        "ต้มจนไข่สุก"
+    ]
+},
 
-    {
-        id:6,
-        title:"ปลาส้มทอดพร้อมทาน",
-        category:"อาหาร",
-        province:"ยโสธร",
-        price:129,
-        oldPrice:159,
-        image:"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80"
-    },
+{
+    name:"หมูทอดกระเทียม",
+    emoji:"🥩",
+    ingredients:["หมู","กระเทียม","น้ำมัน"],
+    description:"เมนูง่ายๆ ที่เข้ากับข้าวสวยร้อนๆ",
+    steps:[
+        "หมักหมูกับเครื่องปรุง",
+        "เจียวกระเทียมให้เหลือง",
+        "นำกระเทียมพักไว้",
+        "ทอดหมูจนสุก",
+        "โรยกระเทียมเจียวก่อนเสิร์ฟ"
+    ]
+},
 
-    {
-        id:7,
-        title:"กาแฟคั่วหอมจากดอย",
-        category:"เครื่องดื่ม",
-        province:"เชียงราย",
-        price:149,
-        oldPrice:189,
-        image:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=800&q=80"
-    },
+{
+    name:"ผัดพริกแกงหมู",
+    emoji:"🌶️",
+    ingredients:["หมู","พริกแกง","ถั่วฝักยาว"],
+    description:"เมนูรสจัดสำหรับคนชอบอาหารไทย",
+    steps:[
+        "ตั้งกระทะใส่น้ำมัน",
+        "ผัดพริกแกงให้หอม",
+        "ใส่หมูลงผัด",
+        "ใส่ถั่วฝักยาว",
+        "ปรุงรส",
+        "ผัดจนทุกอย่างสุก"
+    ]
+},
 
-    {
-        id:8,
-        title:"มะม่วงอบแห้ง",
-        category:"ของฝาก",
-        province:"เพชรบุรี",
-        price:109,
-        oldPrice:139,
-        image:"https://images.unsplash.com/photo-1599909533730-f9d5d5c2f7d3?auto=format&fit=crop&w=800&q=80"
-    }
+{
+    name:"ไข่ดาว",
+    emoji:"🍳",
+    ingredients:["ไข่","น้ำมัน"],
+    description:"เมนูเร็วที่สุดสำหรับวันที่ไม่อยากทำอาหารเยอะ",
+    steps:[
+        "ตั้งกระทะใส่น้ำมัน",
+        "ตอกไข่ลงกระทะ",
+        "ทอดจนไข่ขาวสุก",
+        "ตักใส่จาน"
+    ]
+}
 
 ];
 
 
-/* ==========================================
-   ตัวแปรระบบ
-========================================== */
+/* =====================================================
+   ค้นหาเมนู
+===================================================== */
 
-let currentCategory = "ทั้งหมด";
+function findMenu(){
 
-let cart = [];
-
-let randomMode = false;
-
-
-/* ==========================================
-   แสดงสินค้า
-========================================== */
-
-function renderProducts(){
-
-    const container =
-        document.getElementById("products");
-
-    const search =
-        document
-        .getElementById("searchInput")
+    const input =
+        document.getElementById("ingredients")
         .value
-        .trim()
-        .toLowerCase();
+        .toLowerCase()
+        .trim();
 
+    const results =
+        document.getElementById("results");
 
-    let list = products.filter(product => {
+    if(!input){
 
-        const categoryOK =
-            currentCategory === "ทั้งหมด" ||
-            product.category === currentCategory;
-
-        const searchOK =
-            !search ||
-            product.title.toLowerCase().includes(search) ||
-            product.province.toLowerCase().includes(search);
-
-        return categoryOK && searchOK;
-
-    });
-
-
-    if(randomMode){
-
-        list = [...list]
-            .sort(() => Math.random() - 0.5)
-            .slice(0,3);
-
-        randomMode = false;
-
-    }
-
-
-    if(list.length === 0){
-
-        container.innerHTML = `
+        results.innerHTML = `
             <div class="empty">
-                ไม่พบสินค้าที่ค้นหา
+                🧊 ลองบอกเราก่อนว่าในตู้เย็นมีอะไร
             </div>
         `;
 
         return;
+    }
 
+    const userIngredients =
+        input
+        .split(",")
+        .map(x => x.trim())
+        .filter(x => x);
+
+    const matchedMenus = menus
+        .map(menu => {
+
+            let matches = 0;
+
+            menu.ingredients.forEach(item => {
+
+                userIngredients.forEach(userItem => {
+
+                    if(
+                        userItem.includes(item) ||
+                        item.includes(userItem)
+                    ){
+                        matches++;
+                    }
+
+                });
+
+            });
+
+            return {
+                ...menu,
+                matches:matches
+            };
+
+        })
+        .filter(menu => menu.matches > 0)
+        .sort((a,b) => b.matches - a.matches);
+
+
+    if(matchedMenus.length === 0){
+
+        results.innerHTML = `
+            <div class="empty">
+                😅 ยังหาเมนูที่ตรงไม่เจอ
+                <br>
+                ลองเพิ่มวัตถุดิบอีกนิด เช่น ไข่, หมู, ผัก
+            </div>
+        `;
+
+        return;
     }
 
 
-    container.innerHTML =
-        list.map(product => `
+    let html = `
+
+        <div class="result-title">
+            🍽️ เมนูที่ทำได้
+            <span class="result-count">
+                พบ ${matchedMenus.length} เมนู
+            </span>
+        </div>
+
+        <div class="menu-grid">
+    `;
+
+
+    matchedMenus.forEach(menu => {
+
+        html += `
 
             <div class="card">
 
-                <img
-                    class="product-img"
-                    src="${product.image}"
-                    alt="${product.title}"
-                    loading="lazy"
-                >
+                <div class="food-img">
+                    ${menu.emoji}
+                </div>
 
                 <div class="card-body">
 
-                    <span class="tag">
-                        ${product.category}
-                    </span>
+                    <h3>${menu.name}</h3>
 
-                    <div class="title"
-                         title="${product.title}">
-                        ${product.title}
+                    <div class="match">
+                        ✓ ตรงกับ ${menu.matches} วัตถุดิบ
                     </div>
 
-                    <div class="province">
-                        📍 ${product.province}
-                    </div>
-
-                    <div class="price-row">
-
-                        <div>
-
-                            <span class="price">
-                                ฿${product.price}
-                            </span>
-
-                            <span class="old-price">
-                                ฿${product.oldPrice}
-                            </span>
-
-                        </div>
-
+                    <div class="ingredients">
+                        ใช้: ${menu.ingredients.join(", ")}
                     </div>
 
                     <button
-                        class="buy-btn"
-                        onclick="addToCart(${product.id})">
-
-                        🛒 เพิ่มลงตะกร้า
-
+                        class="cook-btn"
+                        onclick="showRecipe('${menu.name}')"
+                    >
+                        👨‍🍳 ดูวิธีทำ
                     </button>
 
                 </div>
 
             </div>
 
-        `).join("");
+        `;
 
-}
-
-
-/* ==========================================
-   เลือกหมวดหมู่
-========================================== */
-
-function setCategory(category,button){
-
-    currentCategory = category;
-
-    document
-        .querySelectorAll(".category")
-        .forEach(btn => btn.classList.remove("active"));
-
-    button.classList.add("active");
-
-    renderProducts();
-
-}
-
-
-/* ==========================================
-   สุ่มสินค้า 1-3 ชิ้น
-========================================== */
-
-function randomProducts(){
-
-    randomMode = true;
-
-    renderProducts();
-
-    window.scrollTo({
-        top:document.querySelector(".toolbar").offsetTop - 70,
-        behavior:"smooth"
     });
 
-}
 
+    html += `</div>`;
 
-/* ==========================================
-   CART
-========================================== */
-
-function addToCart(id){
-
-    const product =
-        products.find(p => p.id === id);
-
-    if(!product) return;
-
-
-    const existing =
-        cart.find(item => item.id === id);
-
-
-    if(existing){
-
-        existing.qty++;
-
-    }else{
-
-        cart.push({
-            ...product,
-            qty:1
-        });
-
-    }
-
-
-    updateCart();
-
-    openCart();
+    results.innerHTML = html;
 
 }
 
 
-function updateCart(){
+/* =====================================================
+   เปิดสูตร
+===================================================== */
 
-    const count =
-        cart.reduce(
-            (sum,item) => sum + item.qty,
-            0
-        );
+function showRecipe(name){
 
+    const menu =
+        menus.find(x => x.name === name);
 
-    document
-        .getElementById("cartCount")
-        .textContent = count;
+    if(!menu) return;
 
+    document.getElementById("modalTitle").innerText =
+        menu.emoji + " " + menu.name;
 
-    renderCart();
-
-}
-
-
-function renderCart(){
-
-    const container =
-        document.getElementById("cartItems");
+    document.getElementById("modalDescription").innerText =
+        menu.description;
 
 
-    if(cart.length === 0){
+    let stepsHTML = "";
 
-        container.innerHTML = `
-            <div class="empty">
-                ยังไม่มีสินค้าในตะกร้า
+    menu.steps.forEach((step,index) => {
+
+        stepsHTML += `
+            <div>
+                <b>${index+1}.</b> ${step}
             </div>
         `;
 
-        document
-            .getElementById("cartTotal")
-            .textContent = "฿0";
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        cart.map(item => `
-
-            <div class="cart-item">
-
-                <img
-                    src="${item.image}"
-                    alt="${item.title}"
-                >
-
-                <div class="cart-info">
-
-                    <div class="cart-name">
-                        ${item.title}
-                    </div>
-
-                    <div class="cart-price">
-                        ฿${item.price}
-                    </div>
-
-                    <div class="qty">
-
-                        <button
-                            onclick="changeQty(${item.id},-1)">
-                            −
-                        </button>
-
-                        <span>
-                            ${item.qty}
-                        </span>
-
-                        <button
-                            onclick="changeQty(${item.id},1)">
-                            +
-                        </button>
-
-                        <button
-                            class="remove"
-                            onclick="removeFromCart(${item.id})">
-                            ลบ
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-
-    const total =
-        cart.reduce(
-            (sum,item) =>
-                sum + item.price * item.qty,
-            0
-        );
-
-
-    document
-        .getElementById("cartTotal")
-        .textContent =
-        "฿" + total.toLocaleString();
-
-}
-
-
-function changeQty(id,amount){
-
-    const item =
-        cart.find(item => item.id === id);
-
-    if(!item) return;
-
-
-    item.qty += amount;
-
-
-    if(item.qty <= 0){
-
-        cart =
-            cart.filter(item => item.id !== id);
-
-    }
-
-
-    updateCart();
-
-}
-
-
-function removeFromCart(id){
-
-    cart =
-        cart.filter(item => item.id !== id);
-
-    updateCart();
-
-}
-
-
-/* ==========================================
-   CART PANEL
-========================================== */
-
-function openCart(){
-
-    document
-        .getElementById("cartOverlay")
-        .classList.add("show");
-
-    renderCart();
-
-}
-
-
-function closeCart(){
-
-    document
-        .getElementById("cartOverlay")
-        .classList.remove("show");
-
-}
-
-
-/* ==========================================
-   ORDER
-========================================== */
-
-function openOrder(){
-
-    if(cart.length === 0){
-
-        alert("กรุณาเลือกสินค้าก่อน");
-
-        return;
-
-    }
-
-
-    closeCart();
-
-    document
-        .getElementById("orderModal")
-        .classList.add("show");
-
-}
-
-
-function closeOrder(){
-
-    document
-        .getElementById("orderModal")
-        .classList.remove("show");
-
-}
-
-
-function submitOrder(event){
-
-    event.preventDefault();
-
-
-    const name =
-        document
-        .getElementById("customerName")
-        .value;
-
-    const phone =
-        document
-        .getElementById("customerPhone")
-        .value;
-
-    const address =
-        document
-        .getElementById("customerAddress")
-        .value;
-
-
-    let orderText =
-        "รายการสั่งซื้อ\n\n";
-
-
-    cart.forEach(item => {
-
-        orderText +=
-            `${item.title} x ${item.qty} = ฿${item.price * item.qty}\n`;
-
     });
 
+    document.getElementById("modalSteps").innerHTML =
+        stepsHTML;
 
-    const total =
-        cart.reduce(
-            (sum,item) =>
-                sum + item.price * item.qty,
-            0
-        );
-
-
-    orderText +=
-        `\nรวม ฿${total.toLocaleString()}`;
-
-    orderText +=
-        `\n\nชื่อ: ${name}`;
-
-    orderText +=
-        `\nโทร: ${phone}`;
-
-    orderText +=
-        `\nที่อยู่: ${address}`;
-
-
-    alert(
-        "รับข้อมูลคำสั่งซื้อแล้วครับ\n\n" +
-        orderText
-    );
-
-
-    /*
-      ขั้นต่อไปเราจะเปลี่ยนส่วนนี้
-      ให้ส่งข้อมูลไป Google Sheets
-    */
-
-
-    cart = [];
-
-    updateCart();
-
-    closeOrder();
+    document.getElementById("modal").style.display =
+        "block";
 
 }
 
 
-/* ==========================================
-   START
-========================================== */
+function closeModal(){
 
-renderProducts();
+    document.getElementById("modal").style.display =
+        "none";
 
-updateCart();
+}
+
+
+window.onclick = function(event){
+
+    const modal =
+        document.getElementById("modal");
+
+    if(event.target === modal){
+
+        modal.style.display = "none";
+
+    }
+
+}
 
 </script>
 
