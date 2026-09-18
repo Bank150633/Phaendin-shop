@@ -5,19 +5,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PHAENDIN KITCHEN | มีอะไรในตู้เย็น?</title>
+<title>PHAENDIN KITCHEN | วันนี้กินอะไรดี?</title>
 
 <meta name="description"
-content="มีอะไรในตู้เย็น บอก PHAENDIN KITCHEN แล้วให้เราช่วยคิดเมนูอาหาร">
+content="มีอะไรในตู้เย็น บอก PHAENDIN KITCHEN แล้วช่วยคิดเมนูให้">
 
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
-rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
-/* =====================================================
-   RESET
-===================================================== */
 
 *{
     box-sizing:border-box;
@@ -32,7 +27,8 @@ body{
 }
 
 button,
-textarea{
+textarea,
+input{
     font-family:inherit;
 }
 
@@ -41,27 +37,22 @@ button{
 }
 
 
-/* =====================================================
-   HEADER
-===================================================== */
+/* ================================
+HEADER
+================================ */
 
 header{
-    background:linear-gradient(
-        135deg,
-        #d71920,
-        #123c8c
-    );
-
+    background:linear-gradient(135deg,#d71920,#123c8c);
     color:white;
-    padding:16px;
     position:sticky;
     top:0;
     z-index:50;
 }
 
-.header-inner{
+.header{
     max-width:950px;
     margin:auto;
+    padding:14px 16px;
 
     display:flex;
     align-items:center;
@@ -69,7 +60,7 @@ header{
 }
 
 .logo{
-    font-size:23px;
+    font-size:22px;
     font-weight:700;
 }
 
@@ -77,36 +68,34 @@ header{
     color:#ffe500;
 }
 
-.favorite-btn{
-    border:none;
-    background:rgba(255,255,255,.15);
+.favorite-top{
+    border:0;
+    background:rgba(255,255,255,.16);
     color:white;
-
-    padding:8px 12px;
-    border-radius:20px;
-
+    border-radius:30px;
+    padding:8px 13px;
     font-size:14px;
 }
 
 
-/* =====================================================
-   MAIN
-===================================================== */
+/* ================================
+MAIN
+================================ */
 
 .container{
     max-width:950px;
     margin:auto;
-    padding:18px 14px 100px;
+    padding:15px 14px 100px;
 }
 
 
-/* =====================================================
-   HERO
-===================================================== */
+/* ================================
+HERO
+================================ */
 
 .hero{
     text-align:center;
-    padding:18px 5px 20px;
+    padding:20px 5px;
 }
 
 .hero-icon{
@@ -121,41 +110,94 @@ header{
 
 .hero p{
     color:#666;
-    margin-top:7px;
     font-size:15px;
+    margin-top:6px;
 }
 
 
-/* =====================================================
-   INGREDIENT BOX
-===================================================== */
+/* ================================
+PHOTO BOX
+================================ */
+
+.photo-box{
+    background:white;
+    border-radius:20px;
+    padding:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+    margin-bottom:12px;
+}
+
+.photo-title{
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+.photo-area{
+    border:2px dashed #d5d9df;
+    border-radius:15px;
+    min-height:105px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+    padding:10px;
+
+    color:#777;
+    position:relative;
+    overflow:hidden;
+}
+
+.photo-area img{
+    width:100%;
+    max-height:220px;
+    object-fit:cover;
+    border-radius:11px;
+    display:none;
+}
+
+.photo-text{
+    font-size:14px;
+}
+
+.photo-btn{
+    margin-top:8px;
+    background:#f1f3f5;
+    border:0;
+    padding:9px 15px;
+    border-radius:10px;
+    font-size:14px;
+}
+
+
+/* ================================
+INGREDIENT BOX
+================================ */
 
 .input-box{
     background:white;
     border-radius:20px;
     padding:17px;
-
-    box-shadow:
-        0 5px 20px rgba(0,0,0,.07);
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
 }
 
 .input-title{
     font-size:19px;
     font-weight:600;
-    margin-bottom:12px;
+    margin-bottom:10px;
 }
 
 textarea{
     width:100%;
     height:80px;
-
     resize:none;
 
     border:2px solid #e5e7eb;
     border-radius:14px;
 
     padding:12px;
-
     font-size:16px;
     outline:none;
 }
@@ -171,14 +213,13 @@ textarea:focus{
 }
 
 
-/* =====================================================
-   QUICK INGREDIENTS
-===================================================== */
+/* ================================
+QUICK INGREDIENT
+================================ */
 
 .quick-title{
-    margin-top:15px;
+    margin-top:14px;
     margin-bottom:8px;
-
     font-size:14px;
     color:#555;
 }
@@ -191,19 +232,10 @@ textarea:focus{
 
 .ingredient-btn{
     border:1px solid #ddd;
-    background:#fff;
-
+    background:white;
     padding:7px 11px;
-
     border-radius:30px;
-
     font-size:14px;
-
-    transition:.15s;
-}
-
-.ingredient-btn:hover{
-    border-color:#123c8c;
 }
 
 .ingredient-btn.active{
@@ -213,27 +245,22 @@ textarea:focus{
 }
 
 
-/* =====================================================
-   MAIN BUTTONS
-===================================================== */
+/* ================================
+ACTIONS
+================================ */
 
 .actions{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:8px;
-
     margin-top:15px;
 }
 
 .find-btn,
 .random-btn{
-
-    border:none;
-
+    border:0;
     padding:13px;
-
     border-radius:13px;
-
     font-size:17px;
     font-weight:600;
 }
@@ -249,62 +276,83 @@ textarea:focus{
 }
 
 
-/* =====================================================
-   RESULTS
-===================================================== */
+/* ================================
+RESULT
+================================ */
+
+.result-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+
+    margin:26px 2px 12px;
+}
 
 .result-title{
-    margin:27px 2px 12px;
-
     font-size:21px;
     font-weight:600;
 }
 
-.result-count{
-    font-size:13px;
+.result-sub{
     color:#777;
-    font-weight:400;
+    font-size:13px;
 }
 
 .menu-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:12px;
 }
 
 
-/* =====================================================
-   CARD
-===================================================== */
+/* ================================
+CARD
+================================ */
 
 .card{
     background:white;
-    border-radius:17px;
-
+    border-radius:18px;
     overflow:hidden;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
+}
 
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.07);
+.food-img{
+    height:155px;
+
+    background:linear-gradient(
+        135deg,
+        #fff3e0,
+        #fff
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:70px;
 
     position:relative;
 }
 
-.food-img{
+.food-number{
+    position:absolute;
+    top:8px;
+    left:8px;
 
-    height:145px;
+    width:30px;
+    height:30px;
 
-    background:
-        linear-gradient(
-            135deg,
-            #fff3e0,
-            #fff
-        );
+    border-radius:50%;
+
+    background:#d71920;
+    color:white;
 
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
 
-    font-size:68px;
+    font-size:14px;
+    font-weight:600;
 }
 
 .card-body{
@@ -318,18 +366,27 @@ textarea:focus{
 
 .match{
     display:inline-block;
-
-    font-size:12px;
-
-    color:#16803c;
-
     background:#eaf8ef;
-
+    color:#16803c;
     padding:3px 8px;
-
     border-radius:20px;
-
+    font-size:12px;
     margin-bottom:7px;
+}
+
+.info-row{
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+    margin-bottom:7px;
+}
+
+.info{
+    background:#f1f3f5;
+    color:#666;
+    border-radius:20px;
+    padding:3px 7px;
+    font-size:11px;
 }
 
 .ingredients{
@@ -338,127 +395,112 @@ textarea:focus{
     line-height:1.5;
 }
 
-.card-buttons{
+.missing{
+    background:#fff7e6;
+    color:#a15c00;
+    border-radius:9px;
+    padding:7px;
+    margin-top:8px;
+    font-size:12px;
+    line-height:1.5;
+}
+
+.card-actions{
     display:grid;
     grid-template-columns:1fr 42px;
     gap:6px;
-
     margin-top:10px;
 }
 
 .cook-btn{
-
-    border:none;
-
-    padding:9px;
-
-    border-radius:9px;
-
+    border:0;
     background:#123c8c;
     color:white;
-
+    border-radius:9px;
+    padding:9px;
     font-size:14px;
 }
 
 .save-btn{
-
-    border:none;
-
-    border-radius:9px;
-
+    border:0;
     background:#f1f3f5;
-
+    border-radius:9px;
     font-size:20px;
 }
 
 .save-btn.saved{
-    background:#ffe7e7;
+    background:#ffe8e8;
 }
 
 
-/* =====================================================
-   EMPTY
-===================================================== */
+/* ================================
+EMPTY
+================================ */
 
 .empty{
     background:white;
-
     border-radius:18px;
-
-    text-align:center;
-
     padding:30px 15px;
-
+    text-align:center;
     color:#777;
-
     margin-top:15px;
 }
 
 
-/* =====================================================
-   AD
-===================================================== */
+/* ================================
+AD
+================================ */
 
 .ad{
-
     margin-top:25px;
-
     min-height:100px;
 
     background:white;
 
     border:1px dashed #bbb;
-
     border-radius:15px;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
     color:#aaa;
-
+    text-align:center;
     font-size:13px;
 }
 
-.ad small{
+.ad span{
     display:block;
 }
 
 
-/* =====================================================
-   MODAL
-===================================================== */
+/* ================================
+MODAL
+================================ */
 
 .modal{
-
     display:none;
 
     position:fixed;
-
     inset:0;
 
-    background:rgba(0,0,0,.6);
+    background:rgba(0,0,0,.62);
 
     z-index:100;
 
-    padding:18px;
+    padding:15px;
 }
 
 .modal-box{
-
     background:white;
-
     max-width:520px;
+    max-height:88vh;
 
-    margin:35px auto;
+    margin:25px auto;
 
     border-radius:20px;
 
     padding:20px;
-
-    max-height:85vh;
 
     overflow:auto;
 
@@ -466,114 +508,100 @@ textarea:focus{
 }
 
 .close{
-
     position:absolute;
-
     right:15px;
-    top:10px;
+    top:8px;
 
     font-size:28px;
+    color:#777;
 
     cursor:pointer;
-
-    color:#777;
 }
 
 .modal h2{
     font-size:24px;
-
     padding-right:30px;
-
-    margin-bottom:7px;
 }
 
-.modal-description{
-
+.modal-desc{
     color:#666;
-
     line-height:1.7;
-
-    margin-bottom:15px;
+    margin:7px 0 15px;
 }
 
-.steps-title{
-
+.section-title{
     font-weight:600;
-
     margin-bottom:8px;
 }
 
+.modal-info{
+    display:flex;
+    gap:7px;
+    margin-bottom:15px;
+}
+
 .step{
-
     background:#f5f7fb;
-
-    padding:10px;
-
     border-radius:10px;
-
+    padding:10px;
     margin-bottom:7px;
-
     line-height:1.5;
 }
 
 
-/* =====================================================
-   FAVORITES
-===================================================== */
+/* ================================
+FAVORITES
+================================ */
 
-.favorite-list{
+.favorite-area{
     display:none;
 }
 
-.favorite-list.show{
+.favorite-area.show{
     display:block;
 }
 
 .back-btn{
-    border:none;
+    border:0;
     background:#123c8c;
     color:white;
-
-    padding:8px 13px;
-
     border-radius:20px;
-
-    margin-bottom:15px;
+    padding:8px 13px;
+    margin-bottom:12px;
 }
 
 
-/* =====================================================
-   DESKTOP
-===================================================== */
-
-@media(min-width:640px){
-
-    .menu-grid{
-        grid-template-columns:
-            repeat(3,1fr);
-    }
-
-    .food-img{
-        height:160px;
-    }
-
-}
+/* ================================
+DESKTOP
+================================ */
 
 @media(min-width:900px){
 
     .menu-grid{
-        grid-template-columns:
-            repeat(4,1fr);
+        grid-template-columns:repeat(3,1fr);
     }
 
 }
 
 
-/* =====================================================
-   MOBILE
-===================================================== */
+/* ================================
+TABLET
+================================ */
 
-@media(max-width:430px){
+@media(max-width:700px){
+
+    .menu-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+
+/* ================================
+MOBILE
+================================ */
+
+@media(max-width:450px){
 
     .hero h1{
         font-size:26px;
@@ -581,6 +609,14 @@ textarea:focus{
 
     .actions{
         grid-template-columns:1fr;
+    }
+
+    .menu-grid{
+        grid-template-columns:1fr;
+    }
+
+    .food-img{
+        height:170px;
     }
 
 }
@@ -593,191 +629,251 @@ textarea:focus{
 <body>
 
 
-<!-- =====================================================
-     HEADER
-===================================================== -->
+<!-- ==================================================
+HEADER
+================================================== -->
 
 <header>
 
-    <div class="header-inner">
+<div class="header">
 
-        <div class="logo">
-            PHAENDIN <span>KITCHEN</span>
+    <div class="logo">
+        PHAENDIN <span>KITCHEN</span>
+    </div>
+
+    <button
+        class="favorite-top"
+        onclick="showFavorites()">
+
+        ❤️ เมนูโปรด
+
+    </button>
+
+</div>
+
+</header>
+
+
+
+<div class="container">
+
+
+<!-- ==================================================
+HERO
+================================================== -->
+
+<section class="hero">
+
+    <div class="hero-icon">
+        🧊
+    </div>
+
+    <h1>
+        วันนี้ทำอะไรกินดี?
+    </h1>
+
+    <p>
+        มีอะไรในตู้เย็น บอกเรา แล้วเราช่วยคิดให้ 🍳
+    </p>
+
+</section>
+
+
+
+<!-- ==================================================
+PHOTO
+================================================== -->
+
+<section class="photo-box">
+
+    <div class="photo-title">
+        📸 ถ่ายรูปของในตู้เย็น
+    </div>
+
+    <div class="photo-area">
+
+        <div
+            class="photo-text"
+            id="photoText">
+
+            ถ่ายรูปหรือเลือกรูปตู้เย็นของคุณ
+
+            <br>
+
+            <button
+                class="photo-btn"
+                onclick="document.getElementById('photoInput').click()">
+
+                📷 เลือกรูป
+
+            </button>
+
         </div>
 
-        <button
-            class="favorite-btn"
-            onclick="showFavorites()">
+        <img
+            id="preview"
+            alt="รูปตู้เย็น">
 
-            ❤️ เมนูโปรด
+    </div>
+
+    <input
+        id="photoInput"
+        type="file"
+        accept="image/*"
+        capture="environment"
+        style="display:none"
+        onchange="previewPhoto(event)">
+
+</section>
+
+
+
+<!-- ==================================================
+INGREDIENT
+================================================== -->
+
+<section class="input-box">
+
+    <div class="input-title">
+        🥬 มีวัตถุดิบอะไรบ้าง?
+    </div>
+
+    <textarea
+        id="ingredients"
+        placeholder="เช่น ไข่, หมู, กระเทียม, พริก">
+    </textarea>
+
+    <div class="example">
+        พิมพ์เอง หรือเลือกจากรายการด้านล่างก็ได้
+    </div>
+
+
+    <div class="quick-title">
+        ⚡ เลือกเร็ว
+    </div>
+
+    <div class="quick-list">
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'ไข่')">
+            🥚 ไข่
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'หมู')">
+            🥩 หมู
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'ไก่')">
+            🍗 ไก่
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'ข้าว')">
+            🍚 ข้าว
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'กระเทียม')">
+            🧄 กระเทียม
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'พริก')">
+            🌶️ พริก
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'ผัก')">
+            🥦 ผัก
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'หอมใหญ่')">
+            🧅 หอมใหญ่
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'ถั่วฝักยาว')">
+            🫛 ถั่วฝักยาว
+        </button>
+
+        <button class="ingredient-btn"
+            onclick="toggleIngredient(this,'พริกแกง')">
+            🌶️ พริกแกง
+        </button>
+
+    </div>
+
+
+    <div class="actions">
+
+        <button
+            class="find-btn"
+            onclick="findMenu()">
+
+            🔎 ช่วยคิดเมนู
+
+        </button>
+
+        <button
+            class="random-btn"
+            onclick="randomMenu()">
+
+            🎲 สุ่มให้เลย
 
         </button>
 
     </div>
 
-</header>
+</section>
 
 
-<!-- =====================================================
-     MAIN
-===================================================== -->
 
-<div class="container">
+<!-- ==================================================
+RESULTS
+================================================== -->
 
-
-    <!-- HERO -->
-
-    <section class="hero">
-
-        <div class="hero-icon">
-            🧊
-        </div>
-
-        <h1>
-            ในตู้เย็นมีอะไร?
-        </h1>
-
-        <p>
-            บอกวัตถุดิบที่มี แล้วให้เราช่วยคิดเมนูให้
-        </p>
-
-    </section>
+<div id="results"></div>
 
 
-    <!-- INPUT -->
 
-    <section class="input-box">
+<!-- ==================================================
+FAVORITES
+================================================== -->
 
-        <div class="input-title">
-            🥬 วัตถุดิบของคุณ
-        </div>
-
-        <textarea
-            id="ingredients"
-            placeholder="เช่น ไข่, หมู, กระเทียม, พริก">
-        </textarea>
-
-        <div class="example">
-            ใส่หลายอย่างได้ โดยคั่นด้วย ,
-        </div>
+<div
+    id="favorites"
+    class="favorite-area">
+</div>
 
 
-        <!-- QUICK -->
 
-        <div class="quick-title">
-            ⚡ เลือกวัตถุดิบที่มี
-        </div>
+<!-- ==================================================
+AD
+================================================== -->
 
-        <div class="quick-list">
+<div class="ad">
 
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'ไข่')">
-                🥚 ไข่
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'หมู')">
-                🥩 หมู
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'ไก่')">
-                🍗 ไก่
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'ข้าว')">
-                🍚 ข้าว
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'กระเทียม')">
-                🧄 กระเทียม
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'พริก')">
-                🌶️ พริก
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'ผัก')">
-                🥦 ผัก
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'หอมใหญ่')">
-                🧅 หอมใหญ่
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'ถั่วฝักยาว')">
-                🫛 ถั่วฝักยาว
-            </button>
-
-            <button class="ingredient-btn"
-                onclick="toggleIngredient(this,'พริกแกง')">
-                🌶️ พริกแกง
-            </button>
-
-        </div>
-
-
-        <!-- ACTIONS -->
-
-        <div class="actions">
-
-            <button
-                class="find-btn"
-                onclick="findMenu()">
-
-                🔎 หาเมนู
-
-            </button>
-
-            <button
-                class="random-btn"
-                onclick="randomMenu()">
-
-                🎲 สุ่มเมนู
-
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- RESULTS -->
-
-    <div id="results"></div>
-
-
-    <!-- FAVORITES -->
-
-    <div
-        id="favorites"
-        class="favorite-list">
-
-    </div>
-
-
-    <!-- AD -->
-
-    <div class="ad">
-
+    <div>
         📢 พื้นที่โฆษณา
-
+        <br>
+        <span>
+            ตรงนี้สามารถใส่โฆษณาเพื่อสร้างรายได้ภายหลัง
+        </span>
     </div>
+
+</div>
 
 
 </div>
 
 
 
-<!-- =====================================================
-     MODAL
-===================================================== -->
+<!-- ==================================================
+MODAL
+================================================== -->
 
 <div
     class="modal"
@@ -795,12 +891,17 @@ textarea:focus{
 
         <h2 id="modalTitle"></h2>
 
+        <div
+            class="modal-info"
+            id="modalInfo">
+        </div>
+
         <p
-            class="modal-description"
+            class="modal-desc"
             id="modalDescription">
         </p>
 
-        <div class="steps-title">
+        <div class="section-title">
             👨‍🍳 วิธีทำ
         </div>
 
@@ -814,22 +915,27 @@ textarea:focus{
 
 <script>
 
-/* =====================================================
-   MENU DATABASE
-===================================================== */
+/* ==================================================
+DATABASE
+================================================== */
 
 const menus = [
 
 {
     name:"กะเพราหมู",
     emoji:"🌶️",
+
     ingredients:[
         "หมู",
         "กระเทียม",
         "พริก"
     ],
+
+    time:"15 นาที",
+    cost:"💰 ประหยัด",
+
     description:
-        "เมนูยอดฮิต ทำง่ายและเหมาะกับวัตถุดิบพื้นฐานในครัว",
+    "เมนูยอดฮิตที่ใช้วัตถุดิบไม่เยอะ ทำง่ายและกินกับข้าวร้อนๆ ได้เลย",
 
     steps:[
         "โขลกกระเทียมกับพริก",
@@ -837,20 +943,25 @@ const menus = [
         "ผัดกระเทียมกับพริกให้หอม",
         "ใส่หมูลงไปผัดจนสุก",
         "ปรุงรสตามชอบ",
-        "ใส่ใบกะเพราแล้วผัดอีกเล็กน้อย",
-        "ตักเสิร์ฟพร้อมข้าวร้อนๆ"
+        "ใส่ใบกะเพรา",
+        "ผัดอีกเล็กน้อยแล้วเสิร์ฟ"
     ]
 },
+
 
 {
     name:"ไข่เจียว",
     emoji:"🍳",
+
     ingredients:[
-        "ไข่",
-        "น้ำมัน"
+        "ไข่"
     ],
+
+    time:"5 นาที",
+    cost:"💰 ประหยัด",
+
     description:
-        "เมนูง่ายที่สุด ใช้เวลาไม่นาน",
+    "เมนูง่ายมาก เหมาะกับวันที่อยากทำอาหารเร็วๆ",
 
     steps:[
         "ตอกไข่ใส่ชาม",
@@ -862,99 +973,103 @@ const menus = [
     ]
 },
 
+
 {
     name:"ข้าวผัดหมู",
     emoji:"🍚",
+
     ingredients:[
         "ข้าว",
         "หมู",
         "ไข่",
         "กระเทียม"
     ],
+
+    time:"15 นาที",
+    cost:"💰 ประหยัด",
+
     description:
-        "เอาข้าวเหลือจากเมื่อวานมาทำเป็นมื้อใหม่ได้",
+    "เหมาะมากสำหรับใช้ข้าวที่เหลือจากมื้อก่อน",
 
     steps:[
         "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียม",
+        "ผัดกระเทียมให้หอม",
         "ใส่หมูลงผัด",
         "ใส่ไข่แล้วยีให้พอสุก",
-        "ใส่ข้าวลงไป",
+        "ใส่ข้าว",
         "ปรุงรส",
         "ผัดให้เข้ากัน"
     ]
 },
 
-{
-    name:"ผัดผักรวม",
-    emoji:"🥦",
-    ingredients:[
-        "ผัก",
-        "กระเทียม"
-    ],
-    description:
-        "ใช้ผักที่เหลืออยู่หลายชนิดมารวมกันได้",
-
-    steps:[
-        "ล้างและหั่นผัก",
-        "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียม",
-        "ใส่ผักลงไป",
-        "ปรุงรส",
-        "ผัดจนผักสุก"
-    ]
-},
 
 {
     name:"หมูทอดกระเทียม",
     emoji:"🥩",
+
     ingredients:[
         "หมู",
         "กระเทียม"
     ],
+
+    time:"20 นาที",
+    cost:"💰💰 ปานกลาง",
+
     description:
-        "หมูทอดหอมๆ กินกับข้าวสวย",
+    "หมูทอดหอมกระเทียม กินกับข้าวสวยร้อนๆ",
 
     steps:[
+        "หั่นหมูเป็นชิ้น",
         "หมักหมูกับเครื่องปรุง",
-        "เจียวกระเทียมให้เหลือง",
+        "เจียวกระเทียม",
         "ตักกระเทียมพักไว้",
         "ทอดหมูจนสุก",
         "โรยกระเทียมเจียว"
     ]
 },
 
+
 {
-    name:"ผัดพริกแกงหมู",
-    emoji:"🌶️",
+    name:"ผัดผักรวม",
+    emoji:"🥦",
+
     ingredients:[
-        "หมู",
-        "พริกแกง",
-        "ถั่วฝักยาว"
+        "ผัก",
+        "กระเทียม"
     ],
+
+    time:"10 นาที",
+    cost:"💰 ประหยัด",
+
     description:
-        "เมนูไทยรสจัด หอมพริกแกง",
+    "เอาผักที่เหลืออยู่ในตู้เย็นมารวมกันได้",
 
     steps:[
-        "ตั้งกระทะใส่น้ำมัน",
-        "ผัดพริกแกงให้หอม",
-        "ใส่หมูลงผัด",
-        "ใส่ถั่วฝักยาว",
+        "ล้างและหั่นผัก",
+        "ตั้งกระทะ",
+        "ผัดกระเทียม",
+        "ใส่ผัก",
         "ปรุงรส",
-        "ผัดจนสุก"
+        "ผัดจนผักสุก"
     ]
 },
+
 
 {
     name:"ต้มจืด",
     emoji:"🍲",
+
     ingredients:[
         "หมู",
         "ผัก",
         "ไข่"
     ],
+
+    time:"25 นาที",
+    cost:"💰💰 ปานกลาง",
+
     description:
-        "ซุปร้อนๆ รสอ่อน ทำง่าย",
+    "ซุปร้อนๆ รสอ่อน เหมาะสำหรับมื้ออาหารง่ายๆ",
 
     steps:[
         "ต้มน้ำให้เดือด",
@@ -966,36 +1081,51 @@ const menus = [
     ]
 },
 
+
 {
-    name:"ไข่ดาว",
-    emoji:"🍳",
+    name:"ผัดพริกแกงหมู",
+    emoji:"🌶️",
+
     ingredients:[
-        "ไข่"
+        "หมู",
+        "พริกแกง",
+        "ถั่วฝักยาว"
     ],
+
+    time:"15 นาที",
+    cost:"💰💰 ปานกลาง",
+
     description:
-        "เมนูง่ายและเร็ว เหมาะกับวันที่ไม่อยากทำอาหาร",
+    "เมนูไทยรสจัด หอมพริกแกง",
 
     steps:[
-        "ตั้งกระทะ",
-        "ใส่น้ำมัน",
-        "ตอกไข่ลงไป",
-        "ทอดจนไข่ขาวสุก",
-        "ตักใส่จาน"
+        "ตั้งกระทะใส่น้ำมัน",
+        "ผัดพริกแกงให้หอม",
+        "ใส่หมู",
+        "ใส่ถั่วฝักยาว",
+        "ปรุงรส",
+        "ผัดจนสุก"
     ]
 },
+
 
 {
     name:"ผัดไก่กระเทียม",
     emoji:"🍗",
+
     ingredients:[
         "ไก่",
         "กระเทียม"
     ],
+
+    time:"15 นาที",
+    cost:"💰 ประหยัด",
+
     description:
-        "ไก่ผัดกระเทียมหอมๆ ทำง่าย",
+    "ไก่ผัดกระเทียมหอมๆ ทำง่าย ใช้วัตถุดิบไม่มาก",
 
     steps:[
-        "หั่นไก่เป็นชิ้น",
+        "หั่นไก่",
         "ผัดกระเทียมให้หอม",
         "ใส่ไก่ลงผัด",
         "ปรุงรส",
@@ -1003,16 +1133,22 @@ const menus = [
     ]
 },
 
+
 {
     name:"ข้าวผัดไก่",
     emoji:"🍚",
+
     ingredients:[
         "ข้าว",
         "ไก่",
         "ไข่"
     ],
+
+    time:"15 นาที",
+    cost:"💰 ประหยัด",
+
     description:
-        "ข้าวผัดง่ายๆ สำหรับมื้อเร่งด่วน",
+    "ข้าวผัดง่ายๆ สำหรับมื้อเร่งด่วน",
 
     steps:[
         "ผัดไก่ให้สุก",
@@ -1021,137 +1157,187 @@ const menus = [
         "ปรุงรส",
         "ผัดให้เข้ากัน"
     ]
+},
+
+
+{
+    name:"ไข่ดาว",
+    emoji:"🍳",
+
+    ingredients:[
+        "ไข่"
+    ],
+
+    time:"5 นาที",
+    cost:"💰 ประหยัด",
+
+    description:
+    "เมนูเร็วที่สุดสำหรับวันที่ไม่อยากทำอาหารเยอะ",
+
+    steps:[
+        "ตั้งกระทะ",
+        "ใส่น้ำมัน",
+        "ตอกไข่ลงไป",
+        "ทอดจนไข่ขาวสุก",
+        "ตักใส่จาน"
+    ]
 }
 
 ];
 
 
-/* =====================================================
-   QUICK INGREDIENT
-===================================================== */
+/* ==================================================
+PHOTO PREVIEW
+================================================== */
 
-function toggleIngredient(button, ingredient){
+function previewPhoto(event){
+
+    const file =
+        event.target.files[0];
+
+    if(!file) return;
+
+    const preview =
+        document.getElementById("preview");
+
+    const text =
+        document.getElementById("photoText");
+
+    preview.src =
+        URL.createObjectURL(file);
+
+    preview.style.display =
+        "block";
+
+    text.style.display =
+        "none";
+}
+
+
+/* ==================================================
+QUICK INGREDIENT
+================================================== */
+
+function toggleIngredient(button,ingredient){
 
     button.classList.toggle("active");
 
     const textarea =
         document.getElementById("ingredients");
 
-    let current =
+    let items =
         textarea.value
         .split(",")
         .map(x => x.trim())
-        .filter(x => x);
+        .filter(Boolean);
+
 
     if(button.classList.contains("active")){
 
-        if(!current.includes(ingredient)){
-            current.push(ingredient);
+        if(!items.includes(ingredient)){
+            items.push(ingredient);
         }
 
     }else{
 
-        current =
-            current.filter(
+        items =
+            items.filter(
                 x => x !== ingredient
             );
 
     }
 
+
     textarea.value =
-        current.join(", ");
+        items.join(", ");
 
 }
 
 
-/* =====================================================
-   GET INGREDIENTS
-===================================================== */
+/* ==================================================
+GET USER INGREDIENTS
+================================================== */
 
 function getIngredients(){
 
-    const value =
-        document
+    return document
         .getElementById("ingredients")
         .value
         .toLowerCase()
-        .trim();
-
-    return value
         .split(",")
         .map(x => x.trim())
-        .filter(x => x);
+        .filter(Boolean);
 
 }
 
 
-/* =====================================================
-   FIND MENU
-===================================================== */
+/* ==================================================
+FIND MENU
+================================================== */
 
 function findMenu(){
 
-    const userIngredients =
+    const user =
         getIngredients();
 
-    const results =
-        document.getElementById("results");
+    if(!user.length){
 
-
-    if(userIngredients.length === 0){
-
-        results.innerHTML = `
-
-            <div class="empty">
-
-                🧊
-                <br><br>
-
-                ลองเลือกวัตถุดิบด้านบน
-                <br>
-                หรือพิมพ์วัตถุดิบที่มีได้เลย
-
-            </div>
-
-        `;
+        showEmpty();
 
         return;
 
     }
 
 
-    const matched =
-        menus
+    const result = menus
 
         .map(menu => {
 
             let matches = 0;
 
+            let matchedItems = [];
+
+
             menu.ingredients.forEach(item => {
 
-                userIngredients.forEach(user => {
+                const found =
+                    user.some(
+                        u =>
+                        u.includes(item) ||
+                        item.includes(u)
+                    );
 
-                    if(
-                        user.includes(item) ||
-                        item.includes(user)
-                    ){
 
-                        matches++;
+                if(found){
 
-                    }
+                    matches++;
 
-                });
+                    matchedItems.push(item);
+
+                }
 
             });
 
+
+            const missing =
+                menu.ingredients.filter(
+                    item =>
+                    !matchedItems.includes(item)
+                );
+
+
             return {
                 ...menu,
-                matches
+                matches,
+                missing
             };
 
         })
 
-        .filter(menu => menu.matches > 0)
+        .filter(
+            menu =>
+            menu.matches > 0
+        )
 
         .sort(
             (a,b) =>
@@ -1159,74 +1345,71 @@ function findMenu(){
         );
 
 
-    renderMenus(matched);
+    renderMenus(
+        result.slice(0,3)
+    );
 
 }
 
 
-/* =====================================================
-   RANDOM MENU
-===================================================== */
+/* ==================================================
+RANDOM
+================================================== */
 
 function randomMenu(){
 
-    const random =
-        menus[
-            Math.floor(
-                Math.random() * menus.length
-            )
-        ];
+    const shuffled =
+        [...menus]
+        .sort(
+            () =>
+            Math.random() - .5
+        );
 
-    renderMenus([random]);
+    renderMenus(
+        shuffled.slice(0,3)
+    );
 
 }
 
 
-/* =====================================================
-   RENDER
-===================================================== */
+/* ==================================================
+RENDER
+================================================== */
 
 function renderMenus(list){
 
     const results =
         document.getElementById("results");
 
+    document
+        .getElementById("favorites")
+        .classList.remove("show");
+
 
     if(!list.length){
 
-        results.innerHTML = `
-
-            <div class="empty">
-
-                😅
-                <br><br>
-
-                ยังหาเมนูที่ตรงไม่เจอ
-
-                <br>
-
-                ลองเพิ่มวัตถุดิบอีกหน่อย
-
-            </div>
-
-        `;
+        showEmpty();
 
         return;
 
     }
 
 
+    results.style.display =
+        "block";
+
+
     let html = `
 
-        <div class="result-title">
+        <div class="result-head">
 
-            🍽️ เมนูที่น่าสนใจ
+            <div class="result-title">
+                🍽️ เมนูที่เราเลือกให้
+            </div>
 
-            <span class="result-count">
-
+            <div class="result-sub">
                 ${list.length} เมนู
-
-            </span>
+            </div>
 
         </div>
 
@@ -1235,10 +1418,46 @@ function renderMenus(list){
     `;
 
 
-    list.forEach(menu => {
+    list.forEach((menu,index) => {
 
         const saved =
             isFavorite(menu.name);
+
+
+        let missingHTML = "";
+
+
+        if(menu.missing &&
+           menu.missing.length){
+
+            missingHTML = `
+
+                <div class="missing">
+
+                    🛒 ขาด:
+                    ${menu.missing.join(", ")}
+
+                </div>
+
+            `;
+
+        }else{
+
+            missingHTML = `
+
+                <div class="missing"
+                     style="
+                     background:#eaf8ef;
+                     color:#16803c;
+                     ">
+
+                    ✅ วัตถุดิบพร้อมทำ
+
+                </div>
+
+            `;
+
+        }
 
 
         html += `
@@ -1246,6 +1465,10 @@ function renderMenus(list){
             <div class="card">
 
                 <div class="food-img">
+
+                    <div class="food-number">
+                        ${index + 1}
+                    </div>
 
                     ${menu.emoji}
 
@@ -1265,7 +1488,7 @@ function renderMenus(list){
                         `
                         <div class="match">
 
-                            ✓ ตรง ${menu.matches}
+                            ✓ มี ${menu.matches}
                             วัตถุดิบ
 
                         </div>
@@ -1273,6 +1496,19 @@ function renderMenus(list){
                         :
                         ""
                     }
+
+
+                    <div class="info-row">
+
+                        <div class="info">
+                            ⏱️ ${menu.time}
+                        </div>
+
+                        <div class="info">
+                            ${menu.cost}
+                        </div>
+
+                    </div>
 
 
                     <div class="ingredients">
@@ -1283,7 +1519,10 @@ function renderMenus(list){
                     </div>
 
 
-                    <div class="card-buttons">
+                    ${missingHTML}
+
+
+                    <div class="card-actions">
 
                         <button
                             class="cook-btn"
@@ -1295,7 +1534,7 @@ function renderMenus(list){
 
 
                         <button
-                            class="save-btn ${saved ? 'saved':''}"
+                            class="save-btn ${saved ? "saved":""}"
                             onclick="toggleFavorite('${menu.name}',this)">
 
                             ${saved ? "❤️":"♡"}
@@ -1313,16 +1552,66 @@ function renderMenus(list){
     });
 
 
-    html += `</div>`;
+    html += `
+        </div>
+    `;
 
-    results.innerHTML = html;
+
+    results.innerHTML =
+        html;
 
 }
 
 
-/* =====================================================
-   SHOW RECIPE
-===================================================== */
+/* ==================================================
+EMPTY
+================================================== */
+
+function showEmpty(){
+
+    document
+        .getElementById("results")
+        .style.display =
+        "block";
+
+
+    document
+        .getElementById("favorites")
+        .classList.remove("show");
+
+
+    document
+        .getElementById("results")
+        .innerHTML = `
+
+            <div class="empty">
+
+                🧊
+                <br><br>
+
+                บอกเราก่อนว่า
+                <br>
+                ในตู้เย็นมีอะไร
+
+                <br><br>
+
+                เช่น
+                <br>
+
+                <b>
+                ไข่, หมู, กระเทียม
+                </b>
+
+            </div>
+
+        `;
+
+}
+
+
+/* ==================================================
+RECIPE MODAL
+================================================== */
 
 function showRecipe(name){
 
@@ -1346,6 +1635,21 @@ function showRecipe(name){
         menu.description;
 
 
+    document
+        .getElementById("modalInfo")
+        .innerHTML = `
+
+            <div class="info">
+                ⏱️ ${menu.time}
+            </div>
+
+            <div class="info">
+                ${menu.cost}
+            </div>
+
+        `;
+
+
     let html = "";
 
 
@@ -1357,7 +1661,6 @@ function showRecipe(name){
                 <div class="step">
 
                     <b>${index+1}.</b>
-
                     ${step}
 
                 </div>
@@ -1381,10 +1684,6 @@ function showRecipe(name){
 
 }
 
-
-/* =====================================================
-   CLOSE MODAL
-===================================================== */
 
 function closeModal(){
 
@@ -1411,15 +1710,15 @@ function(event){
 };
 
 
-/* =====================================================
-   FAVORITES
-===================================================== */
+/* ==================================================
+FAVORITES
+================================================== */
 
 function getFavorites(){
 
     return JSON.parse(
         localStorage.getItem(
-            "phaendinFavorites"
+            "phaendinKitchenFavorites"
         ) || "[]"
     );
 
@@ -1447,56 +1746,63 @@ function toggleFavorite(name,button){
                 x => x !== name
             );
 
-        button.innerText = "♡";
+        button.innerText =
+            "♡";
 
-        button.classList.remove("saved");
+        button.classList.remove(
+            "saved"
+        );
 
     }else{
 
         favorites.push(name);
 
-        button.innerText = "❤️";
+        button.innerText =
+            "❤️";
 
-        button.classList.add("saved");
+        button.classList.add(
+            "saved"
+        );
 
     }
 
 
     localStorage.setItem(
-        "phaendinFavorites",
+        "phaendinKitchenFavorites",
         JSON.stringify(favorites)
     );
 
 }
 
 
-/* =====================================================
-   SHOW FAVORITES
-===================================================== */
+/* ==================================================
+SHOW FAVORITES
+================================================== */
 
 function showFavorites(){
 
     const results =
         document.getElementById("results");
 
-    const favoritesBox =
+    const favorites =
         document.getElementById("favorites");
 
 
-    const favorites =
+    const saved =
         getFavorites();
 
 
     results.style.display =
         "none";
 
-    favoritesBox.classList.add("show");
+
+    favorites.classList.add("show");
 
 
     let list =
         menus.filter(
             menu =>
-            favorites.includes(menu.name)
+            saved.includes(menu.name)
         );
 
 
@@ -1506,13 +1812,20 @@ function showFavorites(){
             class="back-btn"
             onclick="hideFavorites()">
 
-            ← กลับไปหาเมนู
+            ← กลับไปหน้าเมนู
 
         </button>
 
-        <div class="result-title">
 
-            ❤️ เมนูโปรด
+        <div class="result-head">
+
+            <div class="result-title">
+                ❤️ เมนูโปรด
+            </div>
+
+            <div class="result-sub">
+                ${list.length} เมนู
+            </div>
 
         </div>
 
@@ -1526,6 +1839,7 @@ function showFavorites(){
             <div class="empty">
 
                 ❤️
+
                 <br><br>
 
                 ยังไม่มีเมนูโปรด
@@ -1540,7 +1854,9 @@ function showFavorites(){
 
     }else{
 
-        html += `<div class="menu-grid">`;
+        html += `
+            <div class="menu-grid">
+        `;
 
 
         list.forEach(menu => {
@@ -1555,22 +1871,29 @@ function showFavorites(){
 
                     </div>
 
+
                     <div class="card-body">
 
                         <h3>
                             ${menu.name}
                         </h3>
 
-                        <div class="ingredients">
+                        <div class="info-row">
 
-                            ใช้:
-                            ${menu.ingredients.join(", ")}
+                            <div class="info">
+                                ⏱️ ${menu.time}
+                            </div>
+
+                            <div class="info">
+                                ${menu.cost}
+                            </div>
 
                         </div>
 
+
                         <button
                             class="cook-btn"
-                            style="width:100%;margin-top:10px"
+                            style="width:100%"
                             onclick="showRecipe('${menu.name}')">
 
                             👨‍🍳 ดูวิธีทำ
@@ -1586,12 +1909,14 @@ function showFavorites(){
         });
 
 
-        html += `</div>`;
+        html += `
+            </div>
+        `;
 
     }
 
 
-    favoritesBox.innerHTML =
+    favorites.innerHTML =
         html;
 
 }
@@ -1609,7 +1934,6 @@ function hideFavorites(){
         "block";
 
 }
-
 
 </script>
 
