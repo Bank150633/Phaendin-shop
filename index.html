@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ตู้เย็นทำอะไรดี? | PHAENDIN</title>
+<title>PHAENDIN KITCHEN | มีอะไรในตู้เย็น?</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="description"
+content="มีอะไรในตู้เย็น บอก PHAENDIN KITCHEN แล้วให้เราช่วยคิดเมนูอาหาร">
+
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
 
 <style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -21,15 +31,45 @@ body{
     color:#222;
 }
 
+button,
+textarea{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
 header{
-    background:linear-gradient(135deg,#d71920,#123c8c);
+    background:linear-gradient(
+        135deg,
+        #d71920,
+        #123c8c
+    );
+
     color:white;
-    padding:18px 16px;
-    text-align:center;
+    padding:16px;
+    position:sticky;
+    top:0;
+    z-index:50;
+}
+
+.header-inner{
+    max-width:950px;
+    margin:auto;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
 }
 
 .logo{
-    font-size:25px;
+    font-size:23px;
     font-weight:700;
 }
 
@@ -37,56 +77,85 @@ header{
     color:#ffe500;
 }
 
-header p{
-    margin-top:4px;
+.favorite-btn{
+    border:none;
+    background:rgba(255,255,255,.15);
+    color:white;
+
+    padding:8px 12px;
+    border-radius:20px;
+
     font-size:14px;
-    opacity:.95;
 }
 
+
+/* =====================================================
+   MAIN
+===================================================== */
+
 .container{
-    max-width:900px;
+    max-width:950px;
     margin:auto;
-    padding:20px 14px 100px;
+    padding:18px 14px 100px;
 }
+
+
+/* =====================================================
+   HERO
+===================================================== */
 
 .hero{
     text-align:center;
-    padding:20px 5px;
+    padding:18px 5px 20px;
+}
+
+.hero-icon{
+    font-size:55px;
 }
 
 .hero h1{
     font-size:30px;
-    font-weight:700;
+    line-height:1.25;
+    margin-top:5px;
 }
 
 .hero p{
     color:#666;
-    margin-top:5px;
+    margin-top:7px;
+    font-size:15px;
 }
 
-/* INPUT */
+
+/* =====================================================
+   INGREDIENT BOX
+===================================================== */
 
 .input-box{
     background:white;
     border-radius:20px;
-    padding:18px;
-    box-shadow:0 5px 20px rgba(0,0,0,.07);
+    padding:17px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.07);
 }
 
 .input-title{
-    font-size:18px;
+    font-size:19px;
     font-weight:600;
-    margin-bottom:10px;
+    margin-bottom:12px;
 }
 
 textarea{
     width:100%;
-    height:100px;
+    height:80px;
+
     resize:none;
+
     border:2px solid #e5e7eb;
     border-radius:14px;
-    padding:13px;
-    font-family:inherit;
+
+    padding:12px;
+
     font-size:16px;
     outline:none;
 }
@@ -96,36 +165,97 @@ textarea:focus{
 }
 
 .example{
-    color:#777;
-    font-size:13px;
-    margin-top:7px;
+    color:#888;
+    font-size:12px;
+    margin-top:5px;
 }
 
-button{
-    border:none;
-    font-family:inherit;
-    cursor:pointer;
+
+/* =====================================================
+   QUICK INGREDIENTS
+===================================================== */
+
+.quick-title{
+    margin-top:15px;
+    margin-bottom:8px;
+
+    font-size:14px;
+    color:#555;
 }
 
-.find-btn{
-    width:100%;
-    margin-top:13px;
-    padding:14px;
-    border-radius:13px;
-    background:#d71920;
+.quick-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.ingredient-btn{
+    border:1px solid #ddd;
+    background:#fff;
+
+    padding:7px 11px;
+
+    border-radius:30px;
+
+    font-size:14px;
+
+    transition:.15s;
+}
+
+.ingredient-btn:hover{
+    border-color:#123c8c;
+}
+
+.ingredient-btn.active{
+    background:#123c8c;
     color:white;
-    font-size:18px;
+    border-color:#123c8c;
+}
+
+
+/* =====================================================
+   MAIN BUTTONS
+===================================================== */
+
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+
+    margin-top:15px;
+}
+
+.find-btn,
+.random-btn{
+
+    border:none;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    font-size:17px;
     font-weight:600;
 }
 
-.find-btn:hover{
-    opacity:.9;
+.find-btn{
+    background:#d71920;
+    color:white;
 }
 
-/* RESULTS */
+.random-btn{
+    background:#123c8c;
+    color:white;
+}
+
+
+/* =====================================================
+   RESULTS
+===================================================== */
 
 .result-title{
-    margin:25px 2px 12px;
+    margin:27px 2px 12px;
+
     font-size:21px;
     font-weight:600;
 }
@@ -139,27 +269,46 @@ button{
 .menu-grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:13px;
+    gap:12px;
 }
+
+
+/* =====================================================
+   CARD
+===================================================== */
 
 .card{
     background:white;
-    border-radius:18px;
+    border-radius:17px;
+
     overflow:hidden;
-    box-shadow:0 4px 15px rgba(0,0,0,.07);
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.07);
+
+    position:relative;
 }
 
 .food-img{
+
     height:145px;
-    background:#eee;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff3e0,
+            #fff
+        );
+
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:65px;
+
+    font-size:68px;
 }
 
 .card-body{
-    padding:13px;
+    padding:12px;
 }
 
 .card h3{
@@ -168,187 +317,505 @@ button{
 }
 
 .match{
-    font-size:13px;
-    color:#16803c;
-    background:#eaf8ef;
     display:inline-block;
+
+    font-size:12px;
+
+    color:#16803c;
+
+    background:#eaf8ef;
+
     padding:3px 8px;
+
     border-radius:20px;
-    margin-bottom:8px;
+
+    margin-bottom:7px;
 }
 
 .ingredients{
     color:#777;
-    font-size:13px;
+    font-size:12px;
     line-height:1.5;
 }
 
-.cook-btn{
-    width:100%;
+.card-buttons{
+    display:grid;
+    grid-template-columns:1fr 42px;
+    gap:6px;
+
     margin-top:10px;
+}
+
+.cook-btn{
+
+    border:none;
+
     padding:9px;
-    border-radius:10px;
+
+    border-radius:9px;
+
     background:#123c8c;
     color:white;
+
     font-size:14px;
 }
 
-/* AD */
+.save-btn{
 
-.ad{
-    margin-top:25px;
+    border:none;
+
+    border-radius:9px;
+
+    background:#f1f3f5;
+
+    font-size:20px;
+}
+
+.save-btn.saved{
+    background:#ffe7e7;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
     background:white;
-    border:1px dashed #bbb;
-    border-radius:14px;
-    min-height:90px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#999;
-    font-size:13px;
-}
 
-/* MODAL */
+    border-radius:18px;
 
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.6);
-    z-index:99;
-    padding:20px;
-}
+    text-align:center;
 
-.modal-box{
-    background:white;
-    max-width:500px;
-    margin:60px auto;
-    border-radius:20px;
-    padding:20px;
-    max-height:80vh;
-    overflow:auto;
-}
+    padding:30px 15px;
 
-.close{
-    float:right;
-    font-size:25px;
-    cursor:pointer;
-}
+    color:#777;
 
-.modal h2{
-    margin-bottom:10px;
-}
-
-.modal p{
-    line-height:1.7;
-    color:#555;
-}
-
-.steps{
     margin-top:15px;
 }
 
-.steps div{
-    background:#f5f7fb;
-    padding:10px;
-    margin-bottom:7px;
-    border-radius:10px;
+
+/* =====================================================
+   AD
+===================================================== */
+
+.ad{
+
+    margin-top:25px;
+
+    min-height:100px;
+
+    background:white;
+
+    border:1px dashed #bbb;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#aaa;
+
+    font-size:13px;
 }
 
-/* EMPTY */
+.ad small{
+    display:block;
+}
 
-.empty{
-    text-align:center;
-    padding:30px 10px;
+
+/* =====================================================
+   MODAL
+===================================================== */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.6);
+
+    z-index:100;
+
+    padding:18px;
+}
+
+.modal-box{
+
+    background:white;
+
+    max-width:520px;
+
+    margin:35px auto;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    max-height:85vh;
+
+    overflow:auto;
+
+    position:relative;
+}
+
+.close{
+
+    position:absolute;
+
+    right:15px;
+    top:10px;
+
+    font-size:28px;
+
+    cursor:pointer;
+
     color:#777;
 }
 
-/* MOBILE */
+.modal h2{
+    font-size:24px;
 
-@media(max-width:500px){
-    .hero h1{
-        font-size:26px;
-    }
+    padding-right:30px;
+
+    margin-bottom:7px;
+}
+
+.modal-description{
+
+    color:#666;
+
+    line-height:1.7;
+
+    margin-bottom:15px;
+}
+
+.steps-title{
+
+    font-weight:600;
+
+    margin-bottom:8px;
+}
+
+.step{
+
+    background:#f5f7fb;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    margin-bottom:7px;
+
+    line-height:1.5;
+}
+
+
+/* =====================================================
+   FAVORITES
+===================================================== */
+
+.favorite-list{
+    display:none;
+}
+
+.favorite-list.show{
+    display:block;
+}
+
+.back-btn{
+    border:none;
+    background:#123c8c;
+    color:white;
+
+    padding:8px 13px;
+
+    border-radius:20px;
+
+    margin-bottom:15px;
+}
+
+
+/* =====================================================
+   DESKTOP
+===================================================== */
+
+@media(min-width:640px){
 
     .menu-grid{
-        grid-template-columns:1fr;
+        grid-template-columns:
+            repeat(3,1fr);
     }
 
     .food-img{
         height:160px;
     }
+
 }
+
+@media(min-width:900px){
+
+    .menu-grid{
+        grid-template-columns:
+            repeat(4,1fr);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:430px){
+
+    .hero h1{
+        font-size:26px;
+    }
+
+    .actions{
+        grid-template-columns:1fr;
+    }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <header>
-    <div class="logo">PHAENDIN <span>FOOD</span></div>
-    <p>มีอะไรในตู้เย็น บอกเรา เดี๋ยวช่วยคิดเมนูให้ 🍳</p>
+
+    <div class="header-inner">
+
+        <div class="logo">
+            PHAENDIN <span>KITCHEN</span>
+        </div>
+
+        <button
+            class="favorite-btn"
+            onclick="showFavorites()">
+
+            ❤️ เมนูโปรด
+
+        </button>
+
+    </div>
+
 </header>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <div class="container">
 
+
+    <!-- HERO -->
+
     <section class="hero">
-        <h1>🥘 วันนี้ทำอะไรกินดี?</h1>
-        <p>พิมพ์วัตถุดิบที่มีอยู่ในตู้เย็น</p>
+
+        <div class="hero-icon">
+            🧊
+        </div>
+
+        <h1>
+            ในตู้เย็นมีอะไร?
+        </h1>
+
+        <p>
+            บอกวัตถุดิบที่มี แล้วให้เราช่วยคิดเมนูให้
+        </p>
+
     </section>
+
+
+    <!-- INPUT -->
 
     <section class="input-box">
 
         <div class="input-title">
-            🧊 ในตู้เย็นมีอะไรบ้าง?
+            🥬 วัตถุดิบของคุณ
         </div>
 
         <textarea
             id="ingredients"
-            placeholder="เช่น ไข่, หมู, กระเทียม, พริก, หอมใหญ่"
-        ></textarea>
+            placeholder="เช่น ไข่, หมู, กระเทียม, พริก">
+        </textarea>
 
         <div class="example">
-            💡 ใส่หลายอย่างคั่นด้วยเครื่องหมาย , ได้เลย
+            ใส่หลายอย่างได้ โดยคั่นด้วย ,
         </div>
 
-        <button class="find-btn" onclick="findMenu()">
-            🔎 หาเมนูให้ฉัน
-        </button>
+
+        <!-- QUICK -->
+
+        <div class="quick-title">
+            ⚡ เลือกวัตถุดิบที่มี
+        </div>
+
+        <div class="quick-list">
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'ไข่')">
+                🥚 ไข่
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'หมู')">
+                🥩 หมู
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'ไก่')">
+                🍗 ไก่
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'ข้าว')">
+                🍚 ข้าว
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'กระเทียม')">
+                🧄 กระเทียม
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'พริก')">
+                🌶️ พริก
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'ผัก')">
+                🥦 ผัก
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'หอมใหญ่')">
+                🧅 หอมใหญ่
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'ถั่วฝักยาว')">
+                🫛 ถั่วฝักยาว
+            </button>
+
+            <button class="ingredient-btn"
+                onclick="toggleIngredient(this,'พริกแกง')">
+                🌶️ พริกแกง
+            </button>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="actions">
+
+            <button
+                class="find-btn"
+                onclick="findMenu()">
+
+                🔎 หาเมนู
+
+            </button>
+
+            <button
+                class="random-btn"
+                onclick="randomMenu()">
+
+                🎲 สุ่มเมนู
+
+            </button>
+
+        </div>
 
     </section>
 
+
+    <!-- RESULTS -->
+
     <div id="results"></div>
 
-    <!-- พื้นที่โฆษณา -->
-    <div class="ad">
-        พื้นที่โฆษณา
+
+    <!-- FAVORITES -->
+
+    <div
+        id="favorites"
+        class="favorite-list">
+
     </div>
+
+
+    <!-- AD -->
+
+    <div class="ad">
+
+        📢 พื้นที่โฆษณา
+
+    </div>
+
 
 </div>
 
 
-<!-- MODAL -->
 
-<div class="modal" id="modal">
+<!-- =====================================================
+     MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="modal">
 
     <div class="modal-box">
 
-        <span class="close" onclick="closeModal()">×</span>
+        <span
+            class="close"
+            onclick="closeModal()">
+
+            ×
+
+        </span>
 
         <h2 id="modalTitle"></h2>
 
-        <p id="modalDescription"></p>
+        <p
+            class="modal-description"
+            id="modalDescription">
+        </p>
 
-        <div class="steps" id="modalSteps"></div>
+        <div class="steps-title">
+            👨‍🍳 วิธีทำ
+        </div>
+
+        <div id="modalSteps"></div>
 
     </div>
 
 </div>
+
 
 
 <script>
 
 /* =====================================================
-   ฐานข้อมูลเมนูเบื้องต้น
+   MENU DATABASE
 ===================================================== */
 
 const menus = [
@@ -356,116 +823,203 @@ const menus = [
 {
     name:"กะเพราหมู",
     emoji:"🌶️",
-    ingredients:["หมู","กระเทียม","พริก","ใบกะเพรา"],
-    description:"เมนูง่ายๆ ใช้วัตถุดิบไม่เยอะ เหมาะกับวันที่อยากกินอะไรเร็วๆ",
+    ingredients:[
+        "หมู",
+        "กระเทียม",
+        "พริก"
+    ],
+    description:
+        "เมนูยอดฮิต ทำง่ายและเหมาะกับวัตถุดิบพื้นฐานในครัว",
+
     steps:[
         "โขลกกระเทียมกับพริก",
         "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียมและพริกให้หอม",
+        "ผัดกระเทียมกับพริกให้หอม",
         "ใส่หมูลงไปผัดจนสุก",
         "ปรุงรสตามชอบ",
-        "ใส่ใบกะเพราแล้วผัดอีกเล็กน้อย"
+        "ใส่ใบกะเพราแล้วผัดอีกเล็กน้อย",
+        "ตักเสิร์ฟพร้อมข้าวร้อนๆ"
     ]
 },
 
 {
     name:"ไข่เจียว",
     emoji:"🍳",
-    ingredients:["ไข่","น้ำมัน"],
-    description:"เมนูพื้นฐาน ทำง่ายและใช้เวลาน้อย",
+    ingredients:[
+        "ไข่",
+        "น้ำมัน"
+    ],
+    description:
+        "เมนูง่ายที่สุด ใช้เวลาไม่นาน",
+
     steps:[
         "ตอกไข่ใส่ชาม",
         "ตีไข่ให้เข้ากัน",
-        "ปรุงรสตามชอบ",
+        "ปรุงรส",
         "ตั้งกระทะใส่น้ำมัน",
-        "เทไข่ลงทอดจนเหลืองกรอบ"
+        "เทไข่ลงทอด",
+        "ทอดจนเหลืองแล้วตักเสิร์ฟ"
     ]
 },
 
 {
     name:"ข้าวผัดหมู",
     emoji:"🍚",
-    ingredients:["ข้าว","หมู","ไข่","กระเทียม"],
-    description:"ใช้ข้าวที่เหลือจากมื้อก่อนมาทำเป็นเมนูใหม่ได้",
+    ingredients:[
+        "ข้าว",
+        "หมู",
+        "ไข่",
+        "กระเทียม"
+    ],
+    description:
+        "เอาข้าวเหลือจากเมื่อวานมาทำเป็นมื้อใหม่ได้",
+
     steps:[
         "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียมให้หอม",
+        "ผัดกระเทียม",
         "ใส่หมูลงผัด",
         "ใส่ไข่แล้วยีให้พอสุก",
-        "ใส่ข้าวลงผัด",
-        "ปรุงรสตามชอบ"
+        "ใส่ข้าวลงไป",
+        "ปรุงรส",
+        "ผัดให้เข้ากัน"
     ]
 },
 
 {
     name:"ผัดผักรวม",
     emoji:"🥦",
-    ingredients:["ผัก","กระเทียม","น้ำมัน"],
-    description:"เหมาะสำหรับใช้ผักหลายชนิดที่เหลืออยู่ในตู้เย็น",
+    ingredients:[
+        "ผัก",
+        "กระเทียม"
+    ],
+    description:
+        "ใช้ผักที่เหลืออยู่หลายชนิดมารวมกันได้",
+
     steps:[
         "ล้างและหั่นผัก",
         "ตั้งกระทะใส่น้ำมัน",
-        "ผัดกระเทียมให้หอม",
+        "ผัดกระเทียม",
         "ใส่ผักลงไป",
         "ปรุงรส",
-        "ผัดจนผักสุกตามชอบ"
-    ]
-},
-
-{
-    name:"ต้มจืดไข่",
-    emoji:"🍲",
-    ingredients:["ไข่","หมู","ผัก"],
-    description:"เมนูซุปร้อนๆ ทำง่ายและกินได้ทั้งครอบครัว",
-    steps:[
-        "ต้มน้ำให้เดือด",
-        "ใส่หมูลงไป",
-        "ใส่ผัก",
-        "ปรุงรส",
-        "ตอกไข่ลงไป",
-        "ต้มจนไข่สุก"
+        "ผัดจนผักสุก"
     ]
 },
 
 {
     name:"หมูทอดกระเทียม",
     emoji:"🥩",
-    ingredients:["หมู","กระเทียม","น้ำมัน"],
-    description:"เมนูง่ายๆ ที่เข้ากับข้าวสวยร้อนๆ",
+    ingredients:[
+        "หมู",
+        "กระเทียม"
+    ],
+    description:
+        "หมูทอดหอมๆ กินกับข้าวสวย",
+
     steps:[
         "หมักหมูกับเครื่องปรุง",
         "เจียวกระเทียมให้เหลือง",
-        "นำกระเทียมพักไว้",
+        "ตักกระเทียมพักไว้",
         "ทอดหมูจนสุก",
-        "โรยกระเทียมเจียวก่อนเสิร์ฟ"
+        "โรยกระเทียมเจียว"
     ]
 },
 
 {
     name:"ผัดพริกแกงหมู",
     emoji:"🌶️",
-    ingredients:["หมู","พริกแกง","ถั่วฝักยาว"],
-    description:"เมนูรสจัดสำหรับคนชอบอาหารไทย",
+    ingredients:[
+        "หมู",
+        "พริกแกง",
+        "ถั่วฝักยาว"
+    ],
+    description:
+        "เมนูไทยรสจัด หอมพริกแกง",
+
     steps:[
         "ตั้งกระทะใส่น้ำมัน",
         "ผัดพริกแกงให้หอม",
         "ใส่หมูลงผัด",
         "ใส่ถั่วฝักยาว",
         "ปรุงรส",
-        "ผัดจนทุกอย่างสุก"
+        "ผัดจนสุก"
+    ]
+},
+
+{
+    name:"ต้มจืด",
+    emoji:"🍲",
+    ingredients:[
+        "หมู",
+        "ผัก",
+        "ไข่"
+    ],
+    description:
+        "ซุปร้อนๆ รสอ่อน ทำง่าย",
+
+    steps:[
+        "ต้มน้ำให้เดือด",
+        "ใส่หมู",
+        "ใส่ผัก",
+        "ปรุงรส",
+        "ใส่ไข่",
+        "ต้มจนทุกอย่างสุก"
     ]
 },
 
 {
     name:"ไข่ดาว",
     emoji:"🍳",
-    ingredients:["ไข่","น้ำมัน"],
-    description:"เมนูเร็วที่สุดสำหรับวันที่ไม่อยากทำอาหารเยอะ",
+    ingredients:[
+        "ไข่"
+    ],
+    description:
+        "เมนูง่ายและเร็ว เหมาะกับวันที่ไม่อยากทำอาหาร",
+
     steps:[
-        "ตั้งกระทะใส่น้ำมัน",
-        "ตอกไข่ลงกระทะ",
+        "ตั้งกระทะ",
+        "ใส่น้ำมัน",
+        "ตอกไข่ลงไป",
         "ทอดจนไข่ขาวสุก",
         "ตักใส่จาน"
+    ]
+},
+
+{
+    name:"ผัดไก่กระเทียม",
+    emoji:"🍗",
+    ingredients:[
+        "ไก่",
+        "กระเทียม"
+    ],
+    description:
+        "ไก่ผัดกระเทียมหอมๆ ทำง่าย",
+
+    steps:[
+        "หั่นไก่เป็นชิ้น",
+        "ผัดกระเทียมให้หอม",
+        "ใส่ไก่ลงผัด",
+        "ปรุงรส",
+        "ผัดจนไก่สุก"
+    ]
+},
+
+{
+    name:"ข้าวผัดไก่",
+    emoji:"🍚",
+    ingredients:[
+        "ข้าว",
+        "ไก่",
+        "ไข่"
+    ],
+    description:
+        "ข้าวผัดง่ายๆ สำหรับมื้อเร่งด่วน",
+
+    steps:[
+        "ผัดไก่ให้สุก",
+        "ใส่ไข่",
+        "ใส่ข้าว",
+        "ปรุงรส",
+        "ผัดให้เข้ากัน"
     ]
 }
 
@@ -473,51 +1027,117 @@ const menus = [
 
 
 /* =====================================================
-   ค้นหาเมนู
+   QUICK INGREDIENT
 ===================================================== */
 
-function findMenu(){
+function toggleIngredient(button, ingredient){
 
-    const input =
-        document.getElementById("ingredients")
-        .value
-        .toLowerCase()
-        .trim();
+    button.classList.toggle("active");
 
-    const results =
-        document.getElementById("results");
+    const textarea =
+        document.getElementById("ingredients");
 
-    if(!input){
-
-        results.innerHTML = `
-            <div class="empty">
-                🧊 ลองบอกเราก่อนว่าในตู้เย็นมีอะไร
-            </div>
-        `;
-
-        return;
-    }
-
-    const userIngredients =
-        input
+    let current =
+        textarea.value
         .split(",")
         .map(x => x.trim())
         .filter(x => x);
 
-    const matchedMenus = menus
+    if(button.classList.contains("active")){
+
+        if(!current.includes(ingredient)){
+            current.push(ingredient);
+        }
+
+    }else{
+
+        current =
+            current.filter(
+                x => x !== ingredient
+            );
+
+    }
+
+    textarea.value =
+        current.join(", ");
+
+}
+
+
+/* =====================================================
+   GET INGREDIENTS
+===================================================== */
+
+function getIngredients(){
+
+    const value =
+        document
+        .getElementById("ingredients")
+        .value
+        .toLowerCase()
+        .trim();
+
+    return value
+        .split(",")
+        .map(x => x.trim())
+        .filter(x => x);
+
+}
+
+
+/* =====================================================
+   FIND MENU
+===================================================== */
+
+function findMenu(){
+
+    const userIngredients =
+        getIngredients();
+
+    const results =
+        document.getElementById("results");
+
+
+    if(userIngredients.length === 0){
+
+        results.innerHTML = `
+
+            <div class="empty">
+
+                🧊
+                <br><br>
+
+                ลองเลือกวัตถุดิบด้านบน
+                <br>
+                หรือพิมพ์วัตถุดิบที่มีได้เลย
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const matched =
+        menus
+
         .map(menu => {
 
             let matches = 0;
 
             menu.ingredients.forEach(item => {
 
-                userIngredients.forEach(userItem => {
+                userIngredients.forEach(user => {
 
                     if(
-                        userItem.includes(item) ||
-                        item.includes(userItem)
+                        user.includes(item) ||
+                        item.includes(user)
                     ){
+
                         matches++;
+
                     }
 
                 });
@@ -526,69 +1146,163 @@ function findMenu(){
 
             return {
                 ...menu,
-                matches:matches
+                matches
             };
 
         })
+
         .filter(menu => menu.matches > 0)
-        .sort((a,b) => b.matches - a.matches);
+
+        .sort(
+            (a,b) =>
+            b.matches - a.matches
+        );
 
 
-    if(matchedMenus.length === 0){
+    renderMenus(matched);
+
+}
+
+
+/* =====================================================
+   RANDOM MENU
+===================================================== */
+
+function randomMenu(){
+
+    const random =
+        menus[
+            Math.floor(
+                Math.random() * menus.length
+            )
+        ];
+
+    renderMenus([random]);
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderMenus(list){
+
+    const results =
+        document.getElementById("results");
+
+
+    if(!list.length){
 
         results.innerHTML = `
+
             <div class="empty">
-                😅 ยังหาเมนูที่ตรงไม่เจอ
+
+                😅
+                <br><br>
+
+                ยังหาเมนูที่ตรงไม่เจอ
+
                 <br>
-                ลองเพิ่มวัตถุดิบอีกนิด เช่น ไข่, หมู, ผัก
+
+                ลองเพิ่มวัตถุดิบอีกหน่อย
+
             </div>
+
         `;
 
         return;
+
     }
 
 
     let html = `
 
         <div class="result-title">
-            🍽️ เมนูที่ทำได้
+
+            🍽️ เมนูที่น่าสนใจ
+
             <span class="result-count">
-                พบ ${matchedMenus.length} เมนู
+
+                ${list.length} เมนู
+
             </span>
+
         </div>
 
         <div class="menu-grid">
+
     `;
 
 
-    matchedMenus.forEach(menu => {
+    list.forEach(menu => {
+
+        const saved =
+            isFavorite(menu.name);
+
 
         html += `
 
             <div class="card">
 
                 <div class="food-img">
+
                     ${menu.emoji}
+
                 </div>
+
 
                 <div class="card-body">
 
-                    <h3>${menu.name}</h3>
+                    <h3>
+                        ${menu.name}
+                    </h3>
 
-                    <div class="match">
-                        ✓ ตรงกับ ${menu.matches} วัตถุดิบ
-                    </div>
+
+                    ${
+                        menu.matches
+                        ?
+                        `
+                        <div class="match">
+
+                            ✓ ตรง ${menu.matches}
+                            วัตถุดิบ
+
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
 
                     <div class="ingredients">
-                        ใช้: ${menu.ingredients.join(", ")}
+
+                        ใช้:
+                        ${menu.ingredients.join(", ")}
+
                     </div>
 
-                    <button
-                        class="cook-btn"
-                        onclick="showRecipe('${menu.name}')"
-                    >
-                        👨‍🍳 ดูวิธีทำ
-                    </button>
+
+                    <div class="card-buttons">
+
+                        <button
+                            class="cook-btn"
+                            onclick="showRecipe('${menu.name}')">
+
+                            👨‍🍳 วิธีทำ
+
+                        </button>
+
+
+                        <button
+                            class="save-btn ${saved ? 'saved':''}"
+                            onclick="toggleFavorite('${menu.name}',this)">
+
+                            ${saved ? "❤️":"♡"}
+
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -607,64 +1321,295 @@ function findMenu(){
 
 
 /* =====================================================
-   เปิดสูตร
+   SHOW RECIPE
 ===================================================== */
 
 function showRecipe(name){
 
     const menu =
-        menus.find(x => x.name === name);
+        menus.find(
+            x => x.name === name
+        );
 
     if(!menu) return;
 
-    document.getElementById("modalTitle").innerText =
+
+    document
+        .getElementById("modalTitle")
+        .innerText =
         menu.emoji + " " + menu.name;
 
-    document.getElementById("modalDescription").innerText =
+
+    document
+        .getElementById("modalDescription")
+        .innerText =
         menu.description;
 
 
-    let stepsHTML = "";
+    let html = "";
 
-    menu.steps.forEach((step,index) => {
 
-        stepsHTML += `
-            <div>
-                <b>${index+1}.</b> ${step}
-            </div>
-        `;
+    menu.steps.forEach(
+        (step,index) => {
 
-    });
+            html += `
 
-    document.getElementById("modalSteps").innerHTML =
-        stepsHTML;
+                <div class="step">
 
-    document.getElementById("modal").style.display =
+                    <b>${index+1}.</b>
+
+                    ${step}
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    document
+        .getElementById("modalSteps")
+        .innerHTML =
+        html;
+
+
+    document
+        .getElementById("modal")
+        .style.display =
         "block";
 
 }
 
 
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
+
 function closeModal(){
 
-    document.getElementById("modal").style.display =
+    document
+        .getElementById("modal")
+        .style.display =
         "none";
 
 }
 
 
-window.onclick = function(event){
+window.onclick =
+function(event){
 
     const modal =
         document.getElementById("modal");
 
     if(event.target === modal){
 
-        modal.style.display = "none";
+        closeModal();
 
     }
 
+};
+
+
+/* =====================================================
+   FAVORITES
+===================================================== */
+
+function getFavorites(){
+
+    return JSON.parse(
+        localStorage.getItem(
+            "phaendinFavorites"
+        ) || "[]"
+    );
+
 }
+
+
+function isFavorite(name){
+
+    return getFavorites()
+        .includes(name);
+
+}
+
+
+function toggleFavorite(name,button){
+
+    let favorites =
+        getFavorites();
+
+
+    if(favorites.includes(name)){
+
+        favorites =
+            favorites.filter(
+                x => x !== name
+            );
+
+        button.innerText = "♡";
+
+        button.classList.remove("saved");
+
+    }else{
+
+        favorites.push(name);
+
+        button.innerText = "❤️";
+
+        button.classList.add("saved");
+
+    }
+
+
+    localStorage.setItem(
+        "phaendinFavorites",
+        JSON.stringify(favorites)
+    );
+
+}
+
+
+/* =====================================================
+   SHOW FAVORITES
+===================================================== */
+
+function showFavorites(){
+
+    const results =
+        document.getElementById("results");
+
+    const favoritesBox =
+        document.getElementById("favorites");
+
+
+    const favorites =
+        getFavorites();
+
+
+    results.style.display =
+        "none";
+
+    favoritesBox.classList.add("show");
+
+
+    let list =
+        menus.filter(
+            menu =>
+            favorites.includes(menu.name)
+        );
+
+
+    let html = `
+
+        <button
+            class="back-btn"
+            onclick="hideFavorites()">
+
+            ← กลับไปหาเมนู
+
+        </button>
+
+        <div class="result-title">
+
+            ❤️ เมนูโปรด
+
+        </div>
+
+    `;
+
+
+    if(!list.length){
+
+        html += `
+
+            <div class="empty">
+
+                ❤️
+                <br><br>
+
+                ยังไม่มีเมนูโปรด
+
+                <br>
+
+                กด ♡ บนเมนูที่ชอบได้เลย
+
+            </div>
+
+        `;
+
+    }else{
+
+        html += `<div class="menu-grid">`;
+
+
+        list.forEach(menu => {
+
+            html += `
+
+                <div class="card">
+
+                    <div class="food-img">
+
+                        ${menu.emoji}
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <h3>
+                            ${menu.name}
+                        </h3>
+
+                        <div class="ingredients">
+
+                            ใช้:
+                            ${menu.ingredients.join(", ")}
+
+                        </div>
+
+                        <button
+                            class="cook-btn"
+                            style="width:100%;margin-top:10px"
+                            onclick="showRecipe('${menu.name}')">
+
+                            👨‍🍳 ดูวิธีทำ
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+
+        html += `</div>`;
+
+    }
+
+
+    favoritesBox.innerHTML =
+        html;
+
+}
+
+
+function hideFavorites(){
+
+    document
+        .getElementById("favorites")
+        .classList.remove("show");
+
+    document
+        .getElementById("results")
+        .style.display =
+        "block";
+
+}
+
 
 </script>
 
