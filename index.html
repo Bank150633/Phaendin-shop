@@ -2,406 +2,117 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>PHAENDIN FOOD AI | มีอะไรในตู้เย็น?</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHAENDIN MARKET | ตลาดปฏิทิน</title>
 <style>
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  font-family:Arial,"Noto Sans Thai",sans-serif;
-  background:#f5f7fb;
-  color:#172033;
-}
-
-header{
-  background:linear-gradient(135deg,#d71920,#123c8c);
-  color:white;
-  padding:22px 16px;
-  text-align:center;
-}
-
-.logo{
-  font-size:25px;
-  font-weight:800;
-}
-
-header p{
-  margin:7px 0 0;
-  opacity:.95;
-}
-
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:18px;
-}
-
-.box{
-  background:white;
-  border-radius:22px;
-  padding:20px;
-  box-shadow:0 8px 30px rgba(0,0,0,.07);
-}
-
-h1{
-  margin:0 0 8px;
-  font-size:25px;
-}
-
-.sub{
-  color:#667085;
-  margin-bottom:18px;
-}
-
-textarea{
-  width:100%;
-  min-height:130px;
-  resize:vertical;
-  border:2px solid #e5e7eb;
-  border-radius:16px;
-  padding:15px;
-  font-size:17px;
-  outline:none;
-}
-
-textarea:focus{
-  border-color:#123c8c;
-}
-
-button{
-  width:100%;
-  border:0;
-  border-radius:15px;
-  padding:15px;
-  margin-top:12px;
-  background:#d71920;
-  color:white;
-  font-size:18px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button:disabled{
-  opacity:.6;
-}
-
-.examples{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
-
-.examples button{
-  width:auto;
-  margin:0;
-  padding:9px 13px;
-  background:#eef2ff;
-  color:#123c8c;
-  font-size:14px;
-}
-
-#loading{
-  display:none;
-  text-align:center;
-  padding:25px;
-  font-weight:bold;
-}
-
-#error{
-  display:none;
-  margin-top:15px;
-  background:#fff0f0;
-  color:#b42318;
-  padding:15px;
-  border-radius:12px;
-}
-
-#result{
-  margin-top:20px;
-}
-
-.recipe{
-  background:#fff;
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:14px;
-  border:1px solid #e8eaf0;
-}
-
-.recipe h2{
-  color:#d71920;
-  margin-top:0;
-  font-size:21px;
-}
-
-.recipe h3{
-  margin-bottom:5px;
-  color:#123c8c;
-  font-size:16px;
-}
-
-.recipe p{
-  line-height:1.7;
-  white-space:pre-wrap;
-}
-
-.ad{
-  margin-top:25px;
-  min-height:100px;
-  border:2px dashed #d0d5dd;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#98a2b3;
-  background:white;
-}
-
-footer{
-  text-align:center;
-  color:#667085;
-  padding:30px 15px;
-  font-size:13px;
-}
-
-@media(max-width:600px){
-  h1{
-    font-size:22px;
-  }
-
-  .container{
-    padding:12px;
-  }
-}
+:root{--blue:#174ea6;--red:#d92d36;--ink:#172033;--muted:#667085;--line:#e5eaf2;--bg:#f5f7fb;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:linear-gradient(120deg,#123c8c,#2166c1);color:white;padding:18px max(16px,calc((100% - 1200px)/2));}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{font-size:22px;font-weight:850;letter-spacing:.4px}.tag{font-size:12px;opacity:.85}
+main{max-width:1200px;margin:22px auto;padding:0 14px}.intro{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px}
+button{border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;cursor:pointer}
+.primary{background:var(--red);color:white}.secondary{background:white;border:1px solid var(--line);color:var(--ink)}
+.monthbar{display:flex;align-items:center;justify-content:space-between;gap:8px;background:white;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.monthbar strong{font-size:18px}.month-actions{display:flex;gap:7px}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.weekday{text-align:center;padding:10px 2px;font-size:13px;font-weight:800;color:#475467}
+.day{background:white;border:1px solid var(--line);border-radius:10px;min-height:130px;padding:7px;overflow:hidden}
+.day.empty{background:#f0f2f6;min-height:90px}.day.today{border:2px solid var(--blue)}
+.daynum{font-size:13px;font-weight:800;margin-bottom:6px;display:flex;justify-content:space-between}
+.todaylabel{font-size:10px;color:var(--blue)}
+.product{border:1px solid #edf0f5;border-radius:8px;overflow:hidden;margin:5px 0;cursor:pointer;background:#fff}
+.product img{width:100%;height:65px;object-fit:cover;display:block;background:#f2f4f7}
+.product .pname{font-size:11px;font-weight:700;padding:4px 5px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product .price{font-size:11px;color:#07834e;font-weight:800;padding:0 5px 5px}
+.more{font-size:10px;color:var(--blue);padding:3px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin:13px 2px}
+.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:15px;margin-top:18px}
+.panel h2{font-size:17px;margin:0 0 5px}.panel p{font-size:13px;color:var(--muted);margin:0 0 12px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
+input,textarea{width:100%;border:1px solid #d7deea;border-radius:9px;padding:10px;font:inherit;background:white}
+textarea{min-height:70px;resize:vertical}.wide{grid-column:1/-1}.form-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hint{font-size:11px;color:var(--muted);margin-top:8px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+.modal{position:fixed;inset:0;background:#10182899;display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
+.modal.show{display:flex}.modalbox{background:white;border-radius:16px;max-width:430px;width:100%;padding:16px;max-height:90vh;overflow:auto}
+.modalbox img{width:100%;max-height:260px;object-fit:cover;border-radius:10px}.modalhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+@media(max-width:700px){main{margin:14px auto;padding:0 7px}.calendar{gap:3px}.day{min-height:91px;padding:4px;border-radius:7px}.day.empty{min-height:65px}.product img{height:42px}.product .pname{font-size:9px;padding:3px 3px 0}.product .price{font-size:9px;padding:0 3px 3px}.weekday{font-size:11px;padding:7px 0}.daynum{font-size:11px;margin-bottom:3px}.monthbar strong{font-size:16px}.monthbar{padding:9px}.secondary,.primary{padding:9px 11px;font-size:13px}}
+@media(max-width:390px){.day{min-height:78px}.product img{height:34px}.product .pname{font-size:8px}.product .price{font-size:8px}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="logo">🍳 PHAENDIN FOOD AI</div>
-  <p>มีอะไรในตู้เย็น? ให้ AI ช่วยคิดเมนูให้</p>
-</header>
-
-<div class="container">
-
-  <div class="box">
-
-    <h1>🥕 วันนี้มีอะไรเหลือบ้าง?</h1>
-
-    <div class="sub">
-      พิมพ์วัตถุดิบที่มีอยู่ แล้วให้ AI ช่วยคิดเมนู
-    </div>
-
-    <textarea
-      id="ingredients"
-      placeholder="เช่น ไข่ไก่ 2 ฟอง หมูสับ มะเขือเทศ น้ำปลา"></textarea>
-
-    <div class="examples">
-      <button onclick="example('ไข่ไก่ หมูสับ น้ำปลา')">
-        🍳 ไข่ + หมู
-      </button>
-
-      <button onclick="example('ไก่ กระเทียม พริก น้ำปลา')">
-        🍗 ไก่
-      </button>
-
-      <button onclick="example('ไข่ เต้าหู้ หมูสับ')">
-        🥚 เต้าหู้
-      </button>
-    </div>
-
-    <button id="askBtn" onclick="askAI()">
-      🤖 ให้ AI คิดเมนู
-    </button>
-
-    <div id="loading">
-      🤖 AI กำลังคิดเมนูให้คุณ...
-    </div>
-
-    <div id="error"></div>
-
-  </div>
-
-  <div id="result"></div>
-
-  <!-- พื้นที่โฆษณา -->
-  <div class="ad">
-    พื้นที่โฆษณา / ร้านค้าที่ต้องการโปรโมต
-  </div>
-
-</div>
-
-<footer>
-  PHAENDIN FOOD AI<br>
-  ของอร่อยจากทั่วไทย • ไอเดียทำอาหารจากวัตถุดิบที่มี
-</footer>
-
-
+<header><div class="top"><div><div class="brand">PHAENDIN MARKET</div><div class="tag">ตลาดซื้อขายสินค้าในรูปแบบปฏิทิน</div></div><button class="primary" onclick="goToForm()">＋ ลงขายสินค้า</button></div></header>
+<main>
+  <section class="intro"><div><h1>ตลาดสินค้ารายเดือน</h1><div class="sub">เลือกวันที่เพื่อดูสินค้า หรือเพิ่มสินค้าลงในวันที่ต้องการ</div></div></section>
+  <div class="monthbar"><button class="secondary" onclick="changeMonth(-1)">‹ ก่อนหน้า</button><strong id="monthTitle"></strong><div class="month-actions"><button class="secondary" onclick="goToday()">วันนี้</button><button class="secondary" onclick="changeMonth(1)">ถัดไป ›</button></div></div>
+  <div class="calendar" id="calendar"></div>
+  <div class="legend"><span>🔵 กรอบสีน้ำเงิน = วันนี้</span><span>🛍️ กดสินค้าเพื่อดูรายละเอียด</span></div>
+  <section class="panel" id="addPanel">
+    <h2>ลงขายสินค้าในปฏิทิน</h2><p>ตัวอย่างระบบลงสินค้าเบื้องต้น ข้อมูลจะบันทึกไว้ในเบราว์เซอร์เครื่องนี้</p>
+    <form id="productForm">
+      <div class="formgrid">
+        <div><label for="date">วันที่ลงสินค้า *</label><input id="date" type="date" required></div>
+        <div><label for="seller">ชื่อร้าน / ผู้ขาย</label><input id="seller" placeholder="เช่น ร้านแผ่นดิน"></div>
+        <div class="wide"><label for="name">ชื่อสินค้า *</label><input id="name" maxlength="70" placeholder="เช่น น้ำพริกปลาย่าง" required></div>
+        <div><label for="price">ราคา (บาท) *</label><input id="price" type="number" min="0" step="1" placeholder="89" required></div>
+        <div><label for="image">ลิงก์รูปสินค้า</label><input id="image" type="url" placeholder="https://..."></div>
+        <div class="wide"><label for="description">รายละเอียดสินค้า</label><textarea id="description" placeholder="รายละเอียดสินค้า วิธีจัดส่ง หรือช่องทางติดต่อ"></textarea></div>
+        <div class="wide form-actions"><button class="primary" type="submit">บันทึกสินค้า</button><button class="secondary" type="reset">ล้างข้อมูล</button></div>
+      </div>
+    </form>
+    <div class="hint">ข้อควรรู้: รุ่นทดลองนี้ยังไม่มีระบบสมาชิก/ชำระเงิน และข้อมูลยังไม่แชร์ข้ามอุปกรณ์ อย่าใส่ข้อมูลส่วนตัวหรือข้อมูลการชำระเงิน</div>
+  </section>
+</main>
+<footer>PHAENDIN MARKET • ตลาดซื้อขายบนปฏิทิน</footer>
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modalbox"><div class="modalhead"><strong>รายละเอียดสินค้า</strong><button class="secondary" onclick="closeModal()">ปิด ✕</button></div><div id="modalContent"></div></div></div>
 <script>
-
-/* =====================================================
-   ใส่ URL Apps Script ของคุณตรงนี้
-===================================================== */
-
-const API_URL =
-"https://script.google.com/macros/s/ใส่_URL_ของคุณตรงนี้/exec";
-
-
-function example(text){
-  document.getElementById("ingredients").value = text;
+const KEY='phaendin_market_products_v1';
+let view=new Date();view.setDate(1);
+let products=loadProducts();
+function loadProducts(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+function saveProducts(){localStorage.setItem(KEY,JSON.stringify(products))}
+function isoLocal(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ const y=view.getFullYear(),m=view.getMonth();
+ document.getElementById('monthTitle').textContent=new Intl.DateTimeFormat('th-TH',{month:'long',year:'numeric'}).format(view);
+ const cal=document.getElementById('calendar');cal.innerHTML='';
+ ['อา','จ','อ','พ','พฤ','ศ','ส'].forEach(x=>{const e=document.createElement('div');e.className='weekday';e.textContent=x;cal.appendChild(e)});
+ const first=new Date(y,m,1).getDay(),count=new Date(y,m+1,0).getDate();
+ for(let i=0;i<first;i++){const e=document.createElement('div');e.className='day empty';cal.appendChild(e)}
+ const today=isoLocal(new Date());
+ for(let day=1;day<=count;day++){
+   const date=isoLocal(new Date(y,m,day));
+   const cell=document.createElement('div');cell.className='day'+(date===today?' today':'');
+   const dayProducts=products.filter(p=>p.date===date);
+   cell.innerHTML=`<div class="daynum"><span>${day}</span>${date===today?'<span class="todaylabel">วันนี้</span>':''}</div>`;
+   dayProducts.slice(0,3).forEach(p=>{
+     const card=document.createElement('div');card.className='product';card.innerHTML=`${p.image?`<img src="${esc(p.image)}" alt="" onerror="this.style.display='none'">`:''}<div class="pname">${esc(p.name)}</div><div class="price">฿${Number(p.price).toLocaleString('th-TH')}</div>`;
+     card.addEventListener('click',()=>showProduct(p.id));cell.appendChild(card);
+   });
+   if(dayProducts.length>3){const more=document.createElement('div');more.className='more';more.textContent=`+ อีก ${dayProducts.length-3} รายการ`;cell.appendChild(more)}
+   cell.addEventListener('dblclick',()=>{document.getElementById('date').value=date;goToForm()});
+   cal.appendChild(cell);
+ }
 }
-
-
-async function askAI(){
-
-  const ingredients =
-    document.getElementById("ingredients").value.trim();
-
-  const btn =
-    document.getElementById("askBtn");
-
-  const loading =
-    document.getElementById("loading");
-
-  const error =
-    document.getElementById("error");
-
-  const result =
-    document.getElementById("result");
-
-
-  error.style.display = "none";
-  result.innerHTML = "";
-
-
-  if(!ingredients){
-
-    error.textContent =
-      "กรุณาพิมพ์วัตถุดิบก่อนครับ";
-
-    error.style.display = "block";
-
-    return;
-  }
-
-
-  btn.disabled = true;
-  loading.style.display = "block";
-
-
-  try{
-
-    const response = await fetch(API_URL, {
-
-      method:"POST",
-
-      headers:{
-        "Content-Type":"text/plain;charset=utf-8"
-      },
-
-      body:JSON.stringify({
-        ingredients:ingredients
-      })
-
-    });
-
-
-    const data = await response.json();
-
-
-    if(!data.success){
-      throw new Error(
-        data.error || "AI ไม่สามารถตอบได้"
-      );
-    }
-
-
-    showResult(data.result);
-
-
-  }catch(err){
-
-    error.textContent =
-      "เกิดข้อผิดพลาด: " + err.message;
-
-    error.style.display = "block";
-
-  }finally{
-
-    btn.disabled = false;
-    loading.style.display = "none";
-
-  }
-
+function changeMonth(n){view.setMonth(view.getMonth()+n);render()}
+function goToday(){view=new Date();view.setDate(1);render()}
+function goToForm(){document.getElementById('date').value ||= isoLocal(new Date());document.getElementById('addPanel').scrollIntoView({behavior:'smooth'})}
+function showProduct(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ document.getElementById('modalContent').innerHTML=`${p.image?`<img src="${esc(p.image)}" alt="">`:''}<h2>${esc(p.name)}</h2><h3 style="color:#07834e">฿${Number(p.price).toLocaleString('th-TH')}</h3><p>${esc(p.description||'ไม่มีรายละเอียด')}</p><p>ร้านค้า: ${esc(p.seller||'ไม่ระบุ')}</p><p>วันที่: ${esc(p.date)}</p><button class="primary" onclick="alert('ระบบสั่งซื้อจะเพิ่มในขั้นตอนเชื่อมต่อฐานข้อมูล')">สนใจสินค้า / สั่งซื้อ</button>`;
+ document.getElementById('modal').classList.add('show');
 }
-
-
-function showResult(text){
-
-  const result =
-    document.getElementById("result");
-
-  /*
-    แปลงคำตอบ AI ให้ดูง่าย
-  */
-
-  const sections =
-    text.split(/\n(?=\d+[\.\)]|\*\*?\d+)/);
-
-  let html = "";
-
-  sections.forEach((section,index)=>{
-
-    if(!section.trim()) return;
-
-    let clean =
-      section
-      .replace(/\*\*/g,"")
-      .trim();
-
-    html += `
-      <div class="recipe">
-
-        <h2>
-          🍽️ ${index + 1}. เมนูแนะนำ
-        </h2>
-
-        <p>${escapeHTML(clean)}</p>
-
-      </div>
-    `;
-
-  });
-
-
-  result.innerHTML =
-    html || `
-      <div class="recipe">
-        <p>${escapeHTML(text)}</p>
-      </div>
-    `;
-}
-
-
-function escapeHTML(text){
-
-  return text
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+document.getElementById('productForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const p={id:Date.now().toString(),date:document.getElementById('date').value,name:document.getElementById('name').value.trim(),price:document.getElementById('price').value,image:document.getElementById('image').value.trim(),description:document.getElementById('description').value.trim(),seller:document.getElementById('seller').value.trim()};
+ if(!p.date||!p.name||p.price==='')return;
+ products.push(p);saveProducts();view=new Date(p.date+'T00:00:00');view.setDate(1);render();e.target.reset();document.getElementById('date').value=p.date;alert('บันทึกสินค้าแล้ว');
+});
+document.getElementById('date').value=isoLocal(new Date());render();
 </script>
-
 </body>
 </html>
